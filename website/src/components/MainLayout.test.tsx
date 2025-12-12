@@ -1,13 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MainLayout } from '../components/Layout/MainLayout';
+import { MainLayout } from './MainLayout';
 
 // Mock the child components
-jest.mock('../components/Header', () => ({
+jest.mock('./Header', () => ({
   Header: () => <header data-testid="header">Header</header>
 }));
 
-jest.mock('../components/Footer', () => ({
+jest.mock('./Footer', () => ({
   Footer: () => <footer data-testid="footer">Footer</footer>
 }));
 
