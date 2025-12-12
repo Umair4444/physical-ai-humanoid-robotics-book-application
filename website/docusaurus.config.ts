@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'Physical AI Humanoid Robotics Textbook',
+  tagline: 'Learn about embodied artificial intelligence and humanoid robotics',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -25,7 +25,7 @@ const config: Config = {
   organizationName: 'facebook', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -75,9 +75,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Site',
+      title: 'Physical AI Textbook',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Physical AI Humanoid Robotics Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -85,7 +85,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Textbook',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
@@ -99,10 +99,10 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Textbook',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Introduction',
               to: '/docs/intro',
             },
           ],
@@ -138,7 +138,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Physical AI Humanoid Robotics Project. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
