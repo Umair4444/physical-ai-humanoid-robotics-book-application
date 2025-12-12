@@ -140,18 +140,18 @@ Per User Story 1:
 
 **Independent Test**: Users can switch between light/dark modes and between English, Urdu, and Chinese languages, improving their learning experience.
 
-- [ ] T060 [US2] Write tests for dark/light theme toggle with smooth transitions
-- [ ] T061 [US2] Implement dark/light theme toggle with smooth transitions
-- [ ] T062 [US2] Apply theme to all UI components consistently
-- [ ] T063 [US2] Write tests for language switching functionality (English, Urdu, Chinese)
-- [ ] T064 [US2] Implement language switching functionality (English, Urdu, Chinese)
-- [ ] T065 [US2] Create translation files for all UI elements per research specs
-- [ ] T066 [US2] Apply translations to all UI components
-- [ ] T067 [US2] Ensure all components respect theme preferences
-- [ ] T068 [US2] Ensure all text elements respect language preferences
-- [ ] T069 [US2] Add theme preference persistence in user settings
-- [ ] T070 [US2] Add language preference persistence in user settings
-- [ ] T071 [US2] Validate theme switching works consistently across all pages per success criteria
+- [x] T060 [US2] Write tests for dark/light theme toggle with smooth transitions
+- [x] T061 [US2] Implement dark/light theme toggle with smooth transitions
+- [x] T062 [US2] Apply theme to all UI components consistently
+- [x] T063 [US2] Write tests for language switching functionality (English, Urdu, Chinese)
+- [x] T064 [US2] Implement language switching functionality (English, Urdu, Chinese)
+- [x] T065 [US2] Create translation files for all UI elements per research specs
+- [x] T066 [US2] Apply translations to all UI components
+- [x] T067 [US2] Ensure all components respect theme preferences
+- [x] T068 [US2] Ensure all text elements respect language preferences
+- [x] T069 [US2] Add theme preference persistence in user settings
+- [x] T070 [US2] Add language preference persistence in user settings
+- [x] T071 [US2] Validate theme switching works consistently across all pages per success criteria
 
 ## Phase 5: User Story 3 - Navigate Easily Through the Platform (P2)
 
