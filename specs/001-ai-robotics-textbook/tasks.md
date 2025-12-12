@@ -159,19 +159,19 @@ Per User Story 1:
 
 **Independent Test**: Users can efficiently navigate between different sections of the application using the navbar and helper UI elements.
 
-- [ ] T072 [US3] Write tests for Navigation component with capsule-like design per research specs
-- [ ] T073 [US3] Create Navigation component with capsule-like design per research specs
-- [ ] T074 [US3] Implement scroll detection for navbar behavior (show/hide)
-- [ ] T075 [US3] Add glass card effect using backdrop-filter for navbar
-- [ ] T076 [US3] Implement responsive navigation for mobile devices
-- [ ] T077 [US3] Add smooth animations for navbar visibility transitions
-- [ ] T078 [US3] Write tests for Footer component with consistent design
-- [ ] T079 [US3] Create Footer component with consistent design
-- [ ] T080 [US3] Write tests for ScrollTopButton component at bottom-right
-- [ ] T081 [US3] Implement ScrollTopButton component at bottom-right
-- [ ] T082 [US3] Add smooth scrolling animation for top navigation
-- [ ] T083 [US3] Ensure navigation works efficiently per success criteria
-- [ ] T084 [US3] Add keyboard navigation support for accessibility
+- [X] T072 [US3] Write tests for Navigation component with capsule-like design per research specs
+- [X] T073 [US3] Create Navigation component with capsule-like design per research specs
+- [X] T074 [US3] Implement scroll detection for navbar behavior (show/hide)
+- [X] T075 [US3] Add glass card effect using backdrop-filter for navbar
+- [X] T076 [US3] Implement responsive navigation for mobile devices
+- [X] T077 [US3] Add smooth animations for navbar visibility transitions
+- [X] T078 [US3] Write tests for Footer component with consistent design
+- [X] T079 [US3] Create Footer component with consistent design
+- [X] T080 [US3] Write tests for ScrollTopButton component at bottom-right
+- [X] T081 [US3] Implement ScrollTopButton component at bottom-right
+- [X] T082 [US3] Add smooth scrolling animation for top navigation
+- [X] T083 [US3] Ensure navigation works efficiently per success criteria
+- [X] T084 [US3] Add keyboard navigation support for accessibility
 
 ## Phase 6: User Story 4 - Engage with Support Resources (P3)
 
