@@ -142,7 +142,7 @@ export const Select: React.FC<SelectProps> = ({
     }
   };
 
-  const baseClasses = 'border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 appearance-none bg-white bg-[url(\'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5bGluZSBwb2ludHM9IjYgOSAxMiAxNSAxOCA5Ij48L3BvbHlsaW5lPjwvc3ZnPg==\')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1rem_1rem]';
+  const baseClasses = 'border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 appearance-none bg-white bg-[url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5bGluZSBwb2ludHM9IjYgOSAxMiAxNSAxOCA5Ij48L3BvbHlsaW5lPjwvc3ZnPg==")] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1rem_1rem]';
   const errorClasses = error ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-ai-primary focus:border-ai-primary';
   const disabledClasses = disabled ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : '';
 
