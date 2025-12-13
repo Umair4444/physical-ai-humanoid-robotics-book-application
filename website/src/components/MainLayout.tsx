@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
-import Navigation from './Navigation';
 import Footer from './Footer';
 import { ThemeApplier } from './ThemeApplier/ThemeApplier';
+import Navigation from './Navigation/Navigation';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -18,7 +18,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     <div className="flex flex-col min-h-screen">
       <ThemeApplier />
       <Navigation />
-      <main className="flex-grow pt-16">
+      <main className="grow pt-24">
         {title && <title>{title}</title>}
         {description && <meta name="description" content={description} />}
         {children}

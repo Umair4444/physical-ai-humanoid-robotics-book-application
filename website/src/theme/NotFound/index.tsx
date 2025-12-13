@@ -14,7 +14,7 @@ export default function NotFound() {
       description="The requested page could not be found"
     >
       <main className={styles.notFoundContainer}>
-        <div className="max-w-2xl w-full text-center">
+        <div className="max-w-2xl w-full text-center pt-14">
           <h1 className={styles.notFoundTitle}>404</h1>
           <h2 className={styles.notFoundSubtitle}>Page Not Found</h2>
           <p className={styles.notFoundText}>
