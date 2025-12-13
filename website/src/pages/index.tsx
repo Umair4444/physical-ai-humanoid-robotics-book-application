@@ -2,7 +2,7 @@ import React from 'react';
 import MainLayout from '../components/MainLayout';
 import { useTheme } from '../contexts/ThemeContext';
 import PricingCard from '../components/Pricing/PricingCard';
-import ScrollTopButton from '../components/ScrollTopButton/ScrollTopButton';
+import ScrollTopButton from '../components/ScrollButton/ScrollTopButton';
 import styles from './index.module.css';
 
 const HomePage: React.FC = () => {
