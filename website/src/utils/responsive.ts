@@ -1,108 +1,75 @@
-// Responsive design utilities
-export const responsiveDesign = {
-  // Breakpoints based on research
+/**
+ * Responsive utility functions for the AI Robotics Textbook application
+ * These functions help ensure responsive design across different screen sizes
+ */
+
+export const responsive = {
+  /**
+   * Breakpoints for responsive design
+   */
   breakpoints: {
-    xs: 0,
-    sm: 640,
-    md: 768,
-    lg: 1024,
-    xl: 1280,
-    '2xl': 1536,
-  } as const,
-  
-  // Media query generator
-  mediaQuery: (minWidth: number, maxWidth?: number) => {
-    if (maxWidth !== undefined) {
-      // Range query
-      return `@media (min-width: ${minWidth}px) and (max-width: ${maxWidth}px)`;
-    } else {
-      // Min-width query
-      return `@media (min-width: ${minWidth}px)`;
-    }
+    xs: '480px',
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    '2xl': '1536px',
   },
-  
-  // Container padding based on screen size
-  containerPadding: (screenWidth: number) => {
-    if (screenWidth < 640) {
-      return '1rem';   // 16px on mobile
-    } else if (screenWidth < 1024) {
-      return '2rem';   // 32px on tablet
-    } else {
-      return '4rem';   // 64px on desktop
-    }
+
+  /**
+   * Media query helper functions
+   */
+  media: {
+    xs: `(min-width: ${480 / 16}rem)`,
+    sm: `(min-width: ${640 / 16}rem)`,
+    md: `(min-width: ${768 / 16}rem)`,
+    lg: `(min-width: ${1024 / 16}rem)`,
+    xl: `(min-width: ${1280 / 16}rem)`,
+    '2xl': `(min-width: ${1536 / 16}rem)`,
+
+    // Max-width versions
+    xsMax: `(max-width: ${(480 - 1) / 16}rem)`,
+    smMax: `(max-width: ${(639) / 16}rem)`,
+    mdMax: `(max-width: ${(767) / 16}rem)`,
+    lgMax: `(max-width: ${(1023) / 16}rem)`,
+    xlMax: `(max-width: ${(1279) / 16}rem)`,
   },
-  
-  // Font sizing based on screen size
-  responsiveFontSize: (baseSize: number, screenWidth: number) => {
-    if (screenWidth < 640) {
-      return `${baseSize * 0.875}px`; // Mobile, 87.5% of base
-    } else if (screenWidth < 1024) {
-      return `${baseSize * 0.9375}px`; // Tablet, 93.75% of base
-    } else {
-      return `${baseSize}px`; // Desktop, 100% of base
-    }
-  },
-  
-  // Component sizing based on screen size
-  responsiveComponentSize: (size: 'sm' | 'md' | 'lg', screenWidth: number) => {
-    const sizes = {
-      sm: { mobile: '0.75rem', tablet: '0.875rem', desktop: '1rem' },
-      md: { mobile: '1rem', tablet: '1rem', desktop: '1rem' },
-      lg: { mobile: '1.25rem', tablet: '1.25rem', desktop: '1.5rem' },
-    };
-    
-    if (screenWidth < 640) {
-      return sizes[size].mobile;
-    } else if (screenWidth < 1024) {
-      return sizes[size].tablet;
-    } else {
-      return sizes[size].desktop;
-    }
+
+  /**
+   * Container widths for different screen sizes
+   */
+  containerMaxWidths: {
+    sm: '540px',
+    md: '720px',
+    lg: '960px',
+    xl: '1140px',
+    '2xl': '1320px',
   }
 };
 
-// Hook to get current screen size
-export const useScreenSize = () => {
-  const [screenSize, setScreenSize] = React.useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  });
+/**
+ * Get responsive class names based on screen size
+ */
+export const getResponsiveClasses = (base: string, responsiveConfig?: {
+  sm?: string;
+  md?: string;
+  lg?: string;
+  xl?: string;
+}): string => {
+  const classes = [base];
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      setScreenSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
-    };
+  if (responsiveConfig?.sm) {
+    classes.push(responsiveConfig.sm);
+  }
+  if (responsiveConfig?.md) {
+    classes.push(responsiveConfig.md);
+  }
+  if (responsiveConfig?.lg) {
+    classes.push(responsiveConfig.lg);
+  }
+  if (responsiveConfig?.xl) {
+    classes.push(responsiveConfig.xl);
+  }
 
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  return screenSize;
+  return classes.join(' ');
 };
-
-// Additional utility: isMobile hook
-export const useIsMobile = () => {
-  const screenSize = useScreenSize();
-  return screenSize.width < 768;
-};
-
-// Additional utility: isTablet hook
-export const useIsTablet = () => {
-  const screenSize = useScreenSize();
-  return screenSize.width >= 768 && screenSize.width < 1024;
-};
-
-// Additional utility: isDesktop hook
-export const useIsDesktop = () => {
-  const screenSize = useScreenSize();
-  return screenSize.width >= 1024;
-};
-
-// Make sure React is available
-import React from 'react';

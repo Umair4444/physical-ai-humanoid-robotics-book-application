@@ -7,33 +7,44 @@ export const ThemeToggle: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="relative inline-flex items-center h-6 rounded-full w-11 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ai-primary"
+      className="relative inline-flex items-center h-6 rounded-full w-11 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+      style={{
+        backgroundColor: isDarkMode
+          ? 'var(--ifm-color-text-muted)'
+          : 'var(--ifm-color-border)',
+      }}
       aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-pressed={isDarkMode}
     >
-      {/* Background based on theme */}
-      <span className={`absolute inset-0 flex items-center justify-center w-full h-full rounded-md transition-opacity duration-300 ${
-        isDarkMode ? 'bg-gray-700 opacity-100' : 'bg-gray-200 opacity-100'
-      }`} />
-      
       {/* Sun Icon */}
-      <span className={`absolute left-1 flex items-center justify-center text-xs transition-all duration-300 ${
-        isDarkMode ? 'opacity-0' : 'opacity-100'
-      }`}>
+      <span
+        className={`absolute left-12 flex items-center justify-center text-base transition-all duration-300 ${
+          isDarkMode ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
         ☀️
       </span>
-      
+
       {/* Moon Icon */}
-      <span className={`absolute right-1 flex items-center justify-center text-xs transition-all duration-300 ${
-        isDarkMode ? 'opacity-100' : 'opacity-0'
-      }`}>
+      <span
+        className={`absolute right-12 flex items-center justify-center text-xs transition-all duration-300 ${
+          isDarkMode ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
         🌙
       </span>
-      
+
       {/* Toggle knob */}
-      <span className={`relative inline-block w-5 h-5 rounded-full bg-white shadow transform transition-transform duration-300 ease-in-out ${
-        isDarkMode ? 'translate-x-5' : 'translate-x-0'
-      }`} />
+      <span
+        className={`relative inline-block w-5 h-5 rounded-full shadow transform transition-transform duration-300 ease-in-out`}
+        style={{
+          backgroundColor: 'var(--ifm-color-background)',
+          transform: isDarkMode ? 'translateX(20px)' : 'translateX(0)',
+          boxShadow: isDarkMode
+            ? '0 2px 4px rgba(0, 0, 0, 0.2)'
+            : '0 2px 4px rgba(0, 0, 0, 0.1)',
+        }}
+      />
     </button>
   );
 };

@@ -12,7 +12,7 @@ export const ThemeApplier: React.FC = () => {
   useEffect(() => {
     // Apply the theme at the document level to ensure consistency across all components
     updateDocumentTheme(isDarkMode);
-  }, [theme]);
+  }, [theme, isDarkMode]);
 
   // This component doesn't render anything, just manages side effects
   return null;

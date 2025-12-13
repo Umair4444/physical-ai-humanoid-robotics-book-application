@@ -27,12 +27,12 @@ export const Button: React.FC<ButtonProps> = ({
   // Base classes
   const baseClasses = 'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
-  // Variant classes
+  // Variant classes - using semantic color variables from theme
   const variantClasses = {
-    primary: 'bg-ai-primary text-white hover:bg-indigo-700 focus:ring-ai-primary',
-    secondary: 'bg-gray-500 text-white hover:bg-gray-600 focus:ring-gray-500',
-    outline: 'border-2 border-ai-primary text-ai-primary bg-transparent hover:bg-ai-primary hover:text-white focus:ring-ai-primary',
-    ghost: 'bg-transparent text-ai-primary hover:bg-ai-primary/10 focus:ring-ai-primary',
+    primary: 'bg-primary text-text-inverse hover:bg-primary-dark focus:ring-primary',
+    secondary: 'bg-secondary text-text-inverse hover:bg-secondary-dark focus:ring-secondary',
+    outline: 'border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-text-inverse focus:ring-primary',
+    ghost: 'bg-transparent text-primary hover:bg-primary/10 focus:ring-primary',
   };
 
   // Size classes

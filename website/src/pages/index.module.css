@@ -8,8 +8,8 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-secondary) 100%);
+  color: var(--ifm-color-text-inverse);
 }
 
 @media screen and (max-width: 996px) {
@@ -43,13 +43,13 @@
 /* Books Section */
 .booksSection {
   padding: 4rem 0;
-  background-color: var(--ifm-background-color);
+  background-color: var(--ifm-color-background);
 }
 
 .sectionTitle {
   text-align: center;
   margin-bottom: 3rem;
-  color: var(--ifm-heading-color);
+  color: var(--ifm-color-text);
 }
 
 .booksGrid {
@@ -90,18 +90,18 @@
 
 .bookContent h3 {
   margin-top: 0;
-  color: var(--ifm-heading-color);
+  color: var(--ifm-color-text);
 }
 
 .bookContent p {
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-color-text-light);
   margin-bottom: 1.5rem;
 }
 
 /* Testimonials Section */
 .testimonialsSection {
   padding: 4rem 0;
-  background-color: #f9fafb;
+  background-color: var(--ifm-color-background);
 }
 
 .testimonialsGrid {
@@ -120,14 +120,14 @@
 }
 
 .stars {
-  color: #f59e0b;
+  color: var(--ifm-color-warning);
   font-size: 1.25rem;
   margin-bottom: 1rem;
 }
 
 .testimonialText {
   font-style: italic;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-color-text-light);
   margin-bottom: 1rem;
 }
 
@@ -138,18 +138,18 @@
 }
 
 .testimonialAuthor strong {
-  color: var(--ifm-color-emphasis-900);
+  color: var(--ifm-color-text);
 }
 
 .testimonialAuthor span {
   font-size: 0.9rem;
-  color: var(--ifm-color-emphasis-600);
+  color: var(--ifm-color-text-light);
 }
 
 /* Pricing Section */
 .pricingSection {
   padding: 4rem 0;
-  background-color: var(--ifm-background-color);
+  background-color: var(--ifm-color-background);
 }
 
 .pricingGrid {
@@ -166,7 +166,7 @@
   box-shadow: var(--ifm-global-shadow-lw);
   text-align: center;
   position: relative;
-  border: 1px solid var(--ifm-color-emphasis-200);
+  border: 1px solid var(--ifm-color-border);
 }
 
 .pricingCard.popular {
@@ -180,7 +180,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: var(--ifm-color-primary);
-  color: white;
+  color: var(--ifm-color-text-inverse);
   padding: 0.25rem 1rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -189,7 +189,7 @@
 
 .pricingCard h3 {
   margin-top: 0;
-  color: var(--ifm-heading-color);
+  color: var(--ifm-color-text);
 }
 
 .price {
@@ -208,7 +208,7 @@
 
 .featuresList li {
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--ifm-color-border);
   position: relative;
   padding-left: 1.5rem;
 }
@@ -224,7 +224,7 @@
 /* Features Section */
 .featuresSection {
   padding: 4rem 0;
-  background-color: var(--ifm-background-color);
+  background-color: var(--ifm-color-background);
 }
 
 .featuresGrid {

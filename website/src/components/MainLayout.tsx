@@ -1,23 +1,31 @@
 import React, { ReactNode } from 'react';
-import { Header } from './Header';
-import { Footer } from './Footer';
+import Navigation from './Navigation';
+import Footer from './Footer';
+import { ThemeApplier } from './ThemeApplier/ThemeApplier';
+
 interface MainLayoutProps {
   children: ReactNode;
-  className?: string;
+  title?: string;
+  description?: string;
 }
 
-export const MainLayout: React.FC<MainLayoutProps> = ({
+const MainLayout: React.FC<MainLayoutProps> = ({
   children,
-  className = '',
+  title,
+  description,
 }) => {
   return (
-    <div
-      className={`min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${className}`}
-      data-testid="main-layout"
-    >
-      <Header />
-      <main className="grow">{children}</main>
+    <div className="flex flex-col min-h-screen">
+      <ThemeApplier />
+      <Navigation />
+      <main className="flex-grow pt-16">
+        {title && <title>{title}</title>}
+        {description && <meta name="description" content={description} />}
+        {children}
+      </main>
       <Footer />
     </div>
   );
 };
+
+export default MainLayout;

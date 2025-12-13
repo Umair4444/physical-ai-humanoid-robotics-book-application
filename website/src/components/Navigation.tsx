@@ -1,61 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from '@docusaurus/router';
-import Link from '@docusaurus/Link';
+import React from 'react';
+import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { ThemeToggle } from './ThemeToggle/ThemeToggle';
 
-export const Navigation: React.FC = () => {
-  const location = useLocation();
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  // Handle scroll behavior for navbar visibility
-  useEffect(() => {
-    const controlNavbar = () => {
-      if (window.scrollY > lastScrollY && window.scrollY > 100) {
-        // Scrolling down
-        setIsVisible(false);
-      } else {
-        // Scrolling up
-        setIsVisible(true);
-      }
-      setLastScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', controlNavbar, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', controlNavbar);
-    };
-  }, [lastScrollY]);
+const Navigation: React.FC = () => {
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
   // Navigation items
   const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Modules', href: '/modules' },
-    { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
+    { label: t('Home') || 'Home', href: '/' },
+    { label: t('Books') || 'Books', href: '/books' },
+    { label: t('Modules') || 'Modules', href: '/modules' },
+    { label: t('About') || 'About', href: '/about' },
+    { label: t('Contact') || 'Contact', href: '/contact' },
   ];
 
   return (
-    <nav
-      className={`transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} bg-white/80 dark:bg-[#0F172A]/80 backdrop-blur-md rounded-full px-4 py-2 shadow-lg`}
-      style={{ position: 'fixed', top: '1rem', left: '50%', transform: 'translateX(-50%)', zIndex: 1000 }}
+    <header
+      className={`sticky top-0 z-50 backdrop-blur-md shadow-md py-4 bg-background/80 dark:bg-background-dark/80 border-b border-border dark:border-border-dark`}
     >
-      <ul className="flex space-x-1">
-        {navItems.map((item, index) => (
-          <li key={index}>
-            <Link
-              to={item.href}
-              className={`px-4 py-2 rounded-full transition-colors ${
-                location.pathname === item.href || (item.href === '/modules' && location.pathname.startsWith('/modules'))
-                  ? 'bg-ai-primary text-white'
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {item.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex justify-between items-center">
+          {/* Logo / Title */}
+          <a href="/">
+            <div className="text-xl font-bold text-primary">
+              AI Robotics Textbook
+            </div>
+          </a>
+
+          {/* Navigation */}
+          <nav>
+            <ul className="flex space-x-6">
+              {navItems.map((item, index) => (
+                <li key={index}>
+                  <a
+                    href={item.href}
+                    className="font-medium text-text hover:text-primary transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Actions */}
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
+          </div>
+        </div>
+      </div>
+    </header>
   );
 };
+
+export default Navigation;

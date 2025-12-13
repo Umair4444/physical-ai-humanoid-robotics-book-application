@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MainLayout } from './MainLayout';
+import MainLayout from './MainLayout';
 import { Tab, TabList, TabButton, TabPanel, TabPanels } from './Tab';
 import { Chapter } from '../types/module';
 
@@ -39,11 +39,15 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-6">
           <nav className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-            <a href={`/modules/${moduleId}`} className="hover:underline">{moduleName}</a>
+            <a href={`/modules/${moduleId}`} className="hover:underline">
+              {moduleName}
+            </a>
             <span className="mx-2">›</span>
             <span>{chapter.title}</span>
           </nav>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{chapter.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            {chapter.title}
+          </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Estimated time: {chapter.duration} min
           </p>
@@ -51,15 +55,15 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
 
         <Tab>
           <TabList>
-            <TabButton 
-              selected={activeTab === 'lesson'} 
+            <TabButton
+              selected={activeTab === 'lesson'}
               onClick={() => setActiveTab('lesson')}
               id="lesson-tab"
             >
               Lesson
             </TabButton>
-            <TabButton 
-              selected={activeTab === 'summary'} 
+            <TabButton
+              selected={activeTab === 'summary'}
               onClick={() => setActiveTab('summary')}
               id="summary-tab"
             >
@@ -69,15 +73,15 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
 
           <TabPanels>
             <TabPanel selected={activeTab === 'lesson'}>
-              <div 
+              <div
                 className="prose dark:prose-invert max-w-none mt-4"
-                dangerouslySetInnerHTML={{ __html: chapter.lessonContent }} 
+                dangerouslySetInnerHTML={{ __html: chapter.lessonContent }}
               />
             </TabPanel>
             <TabPanel selected={activeTab === 'summary'}>
-              <div 
+              <div
                 className="prose dark:prose-invert max-w-none mt-4"
-                dangerouslySetInnerHTML={{ __html: chapter.summaryContent }} 
+                dangerouslySetInnerHTML={{ __html: chapter.summaryContent }}
               />
             </TabPanel>
           </TabPanels>
@@ -94,7 +98,7 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
           ) : (
             <div></div> // Spacer to keep next button aligned right
           )}
-          
+
           {nextChapterId ? (
             <button
               onClick={handleNext}

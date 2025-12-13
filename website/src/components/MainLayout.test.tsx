@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MainLayout } from './MainLayout';
+import  MainLayout  from './MainLayout';
 
 // Mock the child components
 jest.mock('./Header', () => ({
