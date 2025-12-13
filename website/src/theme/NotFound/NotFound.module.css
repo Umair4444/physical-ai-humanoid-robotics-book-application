@@ -1,0 +1,53 @@
+.notFoundContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.notFoundTitle {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+}
+
+.notFoundSubtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-text);
+}
+
+.notFoundText {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: var(--ifm-color-text-light);
+  max-width: 600px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.supportText {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ifm-color-border);
+  color: var(--ifm-color-text-light);
+}
+
+.supportLink {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+}
+
+.supportLink:hover {
+  color: var(--ifm-color-primary-dark);
+}

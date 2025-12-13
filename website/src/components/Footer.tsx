@@ -18,19 +18,17 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3
-              className={`text-lg font-bold mb-4 ${
-                theme === 'dark' ? 'text-[var(--ifm-color-text)]' : 'text-[var(--ifm-color-text)]'
-              }`}
+              className={`text-lg font-bold mb-4 text-[var(--ifm-color-primary)]`}
             >
               AI Robotics Textbook
             </h3>
-            <p className="text-sm">{t('footer.description') || 'Educating the next generation of roboticists'}</p>
+            <p className="text-sm text-[var(--ifm-color-primary)]/90">{ 'Educating the next generation of roboticists'}</p>
           </div>
 
           <div>
             <h4
               className={`font-semibold mb-4 ${
-                theme === 'dark' ? 'text-[var(--ifm-color-text)]' : 'text-[var(--ifm-color-text)]'
+                theme === 'dark' ? 'text-[var(--ifm-color-primary)]' : 'text-[var(--ifm-color-text)]'
               }`}
             >
               {t('footer.navigation') || 'Navigation'}
@@ -90,7 +88,7 @@ const Footer: React.FC = () => {
           <div>
             <h4
               className={`font-semibold mb-4 ${
-                theme === 'dark' ? 'text-[var(--ifm-color-text)]' : 'text-[var(--ifm-color-text)]'
+                theme === 'dark' ? 'text-[var(--ifm-color-primary)]' : 'text-[var(--ifm-color-text)]'
               }`}
             >
               {t('footer.resources') || 'Resources'}
@@ -150,7 +148,7 @@ const Footer: React.FC = () => {
           <div>
             <h4
               className={`font-semibold mb-4 ${
-                theme === 'dark' ? 'text-[var(--ifm-color-text)]' : 'text-[var(--ifm-color-text)]'
+                theme === 'dark' ? 'text-[var(--ifm-color-primary)]' : 'text-[var(--ifm-color-text)]'
               }`}
             >
               {t('footer.contact') || 'Contact'}
