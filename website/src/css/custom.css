@@ -1,33 +1,33 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 /* Custom styles for AI Robotics theme */
 :root {
-  --ifm-color-primary: #2563EB; /* indigo-blue */
-  --ifm-color-primary-dark: #1D4ED8;
-  --ifm-color-primary-darker: #1A3FBB;
+  --ifm-color-primary: #2563eb; /* indigo-blue */
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1a3fbb;
   --ifm-color-primary-darkest: #143199;
-  --ifm-color-primary-light: #3B82F6;
-  --ifm-color-primary-lighter: #60A5FA;
-  --ifm-color-primary-lightest: #93C5FD;
-  --ifm-navbar-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  --ifm-footer-background-color: #0F172A;
-  --ifm-footer-color: #FFFFFF;
-  --ifm-footer-link-color: #CBD5E1;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+  --ifm-navbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --ifm-footer-background-color: #0f172a;
+  --ifm-footer-color: #ffffff;
+  --ifm-footer-link-color: #cbd5e1;
 }
 
 /* Dark mode theme */
 html[data-theme='dark'] {
-  --ifm-color-primary: #60A5FA; /* light blue */
-  --ifm-color-primary-dark: #3B82F6;
-  --ifm-color-primary-darker: #2563EB;
-  --ifm-color-primary-darkest: #1D4ED8;
-  --ifm-color-primary-light: #93C5FD;
-  --ifm-color-primary-lighter: #BFDBFE;
-  --ifm-color-primary-lightest: #DBEAFE;
-  --ifm-background-color: #0F172A;
-  --ifm-footer-background-color: #1E293B;
+  --ifm-color-primary: #60a5fa; /* light blue */
+  --ifm-color-primary-dark: #3b82f6;
+  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary-darkest: #1d4ed8;
+  --ifm-color-primary-light: #93c5fd;
+  --ifm-color-primary-lighter: #bfdbfe;
+  --ifm-color-primary-lightest: #dbeafe;
+  --ifm-background-color: #0f172a;
+  --ifm-footer-background-color: #1e293b;
 }
 
 /* Custom components */
@@ -50,5 +50,8 @@ html[data-theme='dark'] .navbar {
 
 /* Smooth transitions for theme changes */
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }

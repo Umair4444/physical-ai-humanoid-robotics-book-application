@@ -1,7 +1,7 @@
 import React from 'react';
-import Navigation from '../components/Navigation/Navigation';
-import Footer from '../components/Footer/Footer';
-import ScrollTopButton from '../components/ScrollTopButton/ScrollTopButton';
+import Navigation from '../../components/Navigation/Navigation';
+import Footer from '../../components/Footer/Footer';
+import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
 
 interface MainLayoutProps {
   children: React.ReactNode;
