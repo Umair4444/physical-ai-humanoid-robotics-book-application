@@ -1,0 +1,518 @@
+---
+id: chapter-36
+title: "Advanced Motion Planning for Humanoid Robots"
+module: "Module 6: Motion Control and Locomotion"
+lessonTab: true
+summaryTab: true
+duration: 27
+---
+
+## Lesson: Advanced Motion Planning for Humanoid Robots
+
+### Introduction to Advanced Motion Planning
+
+Advanced motion planning for humanoid robots involves sophisticated algorithms and methodologies to generate feasible, safe, and efficient trajectories that account for the robot's complex kinematics, dynamics, balance constraints, and interaction with the environment. Unlike simple path planning, humanoid motion planning must consider high-dimensional configuration spaces, dynamic balance requirements, and multi-objective optimization while operating in real-time with environmental uncertainties.
+
+The core challenges in advanced humanoid motion planning include:
+- **High-Dimensional Motion Planning**: Managing 30+ degrees of freedom efficiently
+- **Dynamic Balance Constraints**: Ensuring stable locomotion throughout planned motions
+- **Real-Time Performance**: Computing plans within strict timing constraints
+- **Multi-Objective Optimization**: Balancing competing requirements (stability, efficiency, safety)
+- **Environmental Adaptation**: Handling dynamic and uncertain environments
+- **Human Safety**: Ensuring collision-free and safe interaction with humans
+
+### Configuration Space and Representation
+
+**High-Dimensional Configuration Space**:
+- 3D representation of humanoid configuration
+- Applications to motion planning
+- Topological properties of C-space
+- Applications to connectivity analysis
+- Obstacle representation in C-space
+- Applications to collision checking
+
+**Reduced-Order Models**:
+- Simplified models for planning efficiency
+- Applications to computational complexity reduction
+- Linear Inverted Pendulum approximation
+- Applications to balance-aware planning
+- Centroidal dynamics models
+- Applications to dynamic planning
+
+**Multi-Modal Configuration Spaces**:
+- Different robot configurations/models
+- Applications to multi-mode locomotion
+- Mode transition planning
+- Applications to walking-crawling transitions
+- Hybrid system representation
+- Applications to complex motion
+
+### Sampling-Based Motion Planning
+
+**Rapidly-Exploring Random Trees (RRT)**:
+- Random sampling for high-dimensional spaces
+- Applications to complex configuration spaces
+- Bi-directional RRT improvements
+- Applications to search efficiency
+- RRT-Connect for faster planning
+- Applications to planning speed
+
+**RRT* and Asymptotic Optimality**:
+- Optimal path planning algorithms
+- Applications to quality improvement
+- Convergence to optimal solutions
+- Applications to path quality
+- Anytime optimization properties
+- Applications to bounded planning
+
+**Multi-Modal RRT Extensions**:
+- Planning across different robot modes
+- Applications to multi-mode locomotion
+- Mode transition optimization
+- Applications to efficient transitions
+- Hybrid system planning
+- Applications to complex behaviors
+
+**Informed Sampling Strategies**:
+- Intelligent sampling for efficiency
+- Applications to planning speed
+- Heuristic-guided sampling
+- Applications to goal-biased planning
+- Adaptive sampling methods
+- Applications to problem-specific planning
+
+### Optimization-Based Motion Planning
+
+**Trajectory Optimization**:
+- Mathematical optimization for motion planning
+- Applications to smooth trajectory generation
+- Direct collocation methods
+- Applications to continuous optimization
+- Pseudospectral methods
+- Applications to high-accuracy planning
+
+**Model Predictive Control Integration**:
+- Predictive optimization for motion
+- Applications to real-time planning
+- Horizon-based trajectory optimization
+- Applications to dynamic planning
+- Constraint handling in MPC
+- Applications to safety assurance
+
+**Multi-Objective Motion Planning**:
+- Balancing competing optimization criteria
+- Applications to complex requirements
+- Pareto-optimal solution sets
+- Applications to trade-off analysis
+- Weighted sum methods
+- Applications to preference incorporation
+
+**Nonlinear Optimization Techniques**:
+- Handling complex system dynamics
+- Applications to realistic planning
+- Sequential quadratic programming
+- Applications to iterative optimization
+- Interior-point methods
+- Applications to constrained optimization
+
+### Balance-Aware Motion Planning
+
+**Stability-Constrained Planning**:
+- Integrating balance constraints in planning
+- Applications to stable motion generation
+- Zero Moment Point (ZMP) constraints
+- Applications to dynamic balance
+- Capture point integration
+- Applications to push recovery planning
+
+**Centroidal Motion Planning**:
+- Planning using centroidal dynamics
+- Applications to balance-aware planning
+- Center of mass trajectory planning
+- Applications to balance maintenance
+- Angular momentum consideration
+- Applications to rotational balance
+
+**Dynamic Feasibility Checking**:
+- Verifying dynamic constraints
+- Applications to physically realizable motions
+- Momentum-based feasibility
+- Applications to dynamic consistency
+- Inverse dynamics validation
+- Applications to motion realizability
+
+### Humanoid-Specific Motion Planning Challenges
+
+**Kinematic Redundancy Management**:
+- Utilizing excess degrees of freedom
+- Applications to motion optimization
+- Task-priority formulation
+- Applications to multi-task planning
+- Null-space optimization
+- Applications to secondary objectives
+
+**Humanoid Kinematics Considerations**:
+- Anthropomorphic joint limitations
+- Applications to realistic motion
+- Reachability and dexterity
+- Applications to task feasibility
+- Singularity avoidance
+- Applications to smooth motion
+
+**Multi-Contact Planning**:
+- Planning with multiple contacts
+- Applications to complex environments
+- Contact sequence optimization
+- Applications to stable locomotion
+- Friction cone constraints
+- Applications to contact stability
+
+### Real-Time Motion Planning
+
+**Incremental Planning Updates**:
+- Continuous plan improvement
+- Applications to dynamic environments
+- D* and D* Lite algorithms
+- Applications to replanning efficiency
+- Incremental heuristic updates
+- Applications to planning speed
+
+**Receding Horizon Motion Planning**:
+- Local planning with global awareness
+- Applications to real-time constraints
+- Horizon length optimization
+- Applications to prediction accuracy
+- Feedback integration
+- Applications to plan correction
+
+**Parallel and Distributed Planning**:
+- Parallel computation for speed
+- Applications to computational efficiency
+- Multi-core processing strategies
+- Applications to planning speed
+- Distributed planning coordination
+- Applications to multi-robot systems
+
+### Learning-Based Motion Planning
+
+**Learning Motion Primitives**:
+- Acquiring reusable motion patterns
+- Applications to efficient planning
+- Demonstration-based primitive learning
+- Applications to skill transfer
+- Hierarchical primitive composition
+- Applications to complex motion
+
+**Neural Network Motion Planning**:
+- Deep learning for motion planning
+- Applications to complex environments
+- Convolutional networks for environment understanding
+- Applications to perception integration
+- Recurrent networks for sequence planning
+- Applications to temporal planning
+
+**Imitation Learning for Motion**:
+- Learning from human demonstrations
+- Applications to natural movement
+- Kinesthetic teaching integration
+- Applications to direct learning
+- Behavior cloning for motion
+- Applications to skill transfer
+
+**Reinforcement Learning Integration**:
+- Learning optimal motion policies
+- Applications to complex tasks
+- Reward function design for motion
+- Applications to quality optimization
+- Safe exploration strategies
+- Applications to real-world learning
+
+### Multi-Modal Motion Planning
+
+**Locomotion Mode Transitions**:
+- Planning transitions between walking, crawling, etc.
+- Applications to adaptive locomotion
+- Stable transition planning
+- Applications to safety
+- Mode selection optimization
+- Applications to task requirements
+
+**Mobile Manipulation Planning**:
+- Coordinating locomotion with manipulation
+- Applications to mobile tasks
+- Balance-manipulation coordination
+- Applications to stable operation
+- Task-lococomotion optimization
+- Applications to efficiency
+
+**Stair and Obstacle Navigation**:
+- Specialized planning for structures
+- Applications to building navigation
+- Handrail coordination planning
+- Applications to safety
+- Step sequence optimization
+- Applications to stable locomotion
+
+### Uncertainty and Robust Planning
+
+**Probabilistic Motion Planning**:
+- Handling uncertainty in planning
+- Applications to robust motion
+- Probabilistic roadmaps
+- Applications to uncertain environments
+- Belief space planning
+- Applications to sensor uncertainty
+
+**Robust Motion Planning**:
+- Planning for worst-case scenarios
+- Applications to safety assurance
+- Chance-constrained optimization
+- Applications to reliability
+- Robust optimization methods
+- Applications to uncertainty handling
+
+**Sensor Uncertainty Integration**:
+- Planning with uncertain sensor data
+- Applications to reliable motion
+- Uncertainty propagation in planning
+- Applications to planning robustness
+- Robust sensor fusion
+- Applications to perception accuracy
+
+### Human-Aware Motion Planning
+
+**Social Motion Planning**:
+- Respecting human social norms
+- Applications to acceptable interaction
+- Proxemics consideration
+- Applications to personal space
+- Social force models
+- Applications to human-like behavior
+
+**Crowd Navigation Planning**:
+- Planning through groups of humans
+- Applications to social environments
+- Human trajectory prediction
+- Applications to collision avoidance
+- Group behavior modeling
+- Applications to safe passage
+
+**Collaborative Motion Planning**:
+- Planning for human-robot collaboration
+- Applications to shared tasks
+- Intent recognition integration
+- Applications to proactive planning
+- Shared workspace optimization
+- Applications to collaborative tasks
+
+### Multi-Robot Motion Planning
+
+**Distributed Motion Planning**:
+- Coordinated planning for multiple robots
+- Applications to robot teams
+- Communication constraint handling
+- Applications to distributed systems
+- Decentralized optimization
+- Applications to scalable planning
+
+**Formation Motion Planning**:
+- Maintaining robot formations
+- Applications to coordinated tasks
+- Formation stability maintenance
+- Applications to team behavior
+- Dynamic formation adaptation
+- Applications to changing requirements
+
+**Multi-Robot Collision Avoidance**:
+- Avoiding collisions between robots
+- Applications to safe coordination
+- Velocity obstacle methods
+- Applications to collision avoidance
+- Priority-based allocation
+- Applications to fair navigation
+
+### Advanced Planning Algorithms
+
+**SMP (Sampling-based Motion Planning)**:
+- Generalized sampling-based approach
+- Applications to complex systems
+- Multi-query planning capabilities
+- Applications to repeated planning
+- Adaptive sampling strategies
+- Applications to problem-specific planning
+
+**CHOMP (Covariant Hamiltonian Optimization for Motion Planning)**:
+- Trajectory optimization approach
+- Applications to smooth motion planning
+- Covariant gradient computation
+- Applications to Riemannian planning
+- Obstacle avoidance integration
+- Applications to collision-free planning
+
+**STOMP (Stochastic Trajectory Optimization for Motion Planning)**:
+- Stochastic optimization approach
+- Applications to complex constraints
+- Stochastic sampling methods
+- Applications to global optimization
+- Multi-modal solution finding
+- Applications to complex planning
+
+**Cross-Entropy Motion Planning**:
+- Cross-entropy optimization method
+- Applications to high-dimensional planning
+- Stochastic sampling improvement
+- Applications to global optimization
+- Convergence properties
+- Applications to solution quality
+
+### Planning Quality Assessment
+
+**Optimality Metrics**:
+- Measuring path optimality
+- Applications to planning quality
+- Path length optimization
+- Applications to efficiency
+- Energy optimality measures
+- Applications to autonomy
+
+**Feasibility Verification**:
+- Checking motion realizability
+- Applications to practical execution
+- Kinematic feasibility checking
+- Applications to joint limit compliance
+- Dynamic feasibility validation
+- Applications to physical realizability
+
+**Real-Time Performance Metrics**:
+- Measuring computational efficiency
+- Applications to system evaluation
+- Planning time assessment
+- Applications to real-time compliance
+- Memory usage tracking
+- Applications to resource optimization
+
+### Integration with Control Systems
+
+**Planning-Control Interface**:
+- Connecting planning with execution
+- Applications to seamless operation
+- Feedback integration strategies
+- Applications to plan correction
+- Control-aware planning
+- Applications to feasible execution
+
+**Trajectory Smoothing and Execution**:
+- Smoothing planned trajectories
+- Applications to smooth motion
+- Timing and synchronization
+- Applications to coordinated execution
+- Interpolation strategies
+- Applications to continuous motion
+
+**Replanning and Recovery**:
+- Handling execution failures
+- Applications to robust operation
+- Failure detection and recovery
+- Applications to safe operation
+- Emergency replanning
+- Applications to immediate adaptation
+
+### Performance Optimization
+
+**Computational Efficiency**:
+- Optimizing planning algorithms
+- Applications to real-time performance
+- Approximation methods
+- Applications to speed improvement
+- Parallel processing strategies
+- Applications to computation distribution
+
+**Memory Optimization**:
+- Efficient data structures
+- Applications to resource management
+- Incremental data structures
+- Applications to memory efficiency
+- Cache-aware algorithms
+- Applications to performance
+
+**Algorithmic Improvements**:
+- Advanced search strategies
+- Applications to planning efficiency
+- Pruning techniques
+- Applications to search space reduction
+- Heuristic improvements
+- Applications to planning speed
+
+### Safety and Risk Management
+
+**Risk-Aware Motion Planning**:
+- Explicit risk consideration
+- Applications to safety optimization
+- Risk probability assessment
+- Applications to safety-critical planning
+- Safety margin optimization
+- Applications to acceptable risk levels
+
+**Safe Motion Execution**:
+- Ensuring safe plan execution
+- Applications to human protection
+- Safety monitoring during execution
+- Applications to immediate response
+- Emergency stop integration
+- Applications to immediate safety
+
+**Failure Mode Planning**:
+- Planning for potential failures
+- Applications to system reliability
+- Fail-safe motion patterns
+- Applications to safe degradation
+- Recovery planning integration
+- Applications to fault tolerance
+
+### Future Directions
+
+**AI-Enhanced Motion Planning**:
+- Advanced AI for complex planning
+- Applications to sophisticated behaviors
+- Large language model integration
+- Applications to natural language planning
+- Multimodal AI for planning
+- Applications to comprehensive understanding
+
+**Quantum Motion Planning**:
+- Quantum algorithms for optimization
+- Applications to complex problems
+- Current research status
+- Integration challenges
+- Potential performance advantages
+
+**Bio-Inspired Planning**:
+- Biological planning strategies
+- Applications to natural efficiency
+- Neural network-inspired planning
+- Applications to biological efficiency
+- Evolutionary planning approaches
+- Applications to adaptive planning
+
+Advanced motion planning for humanoid robots represents one of the most challenging areas of robotics research, requiring sophisticated algorithms that can handle multiple constraints, uncertainties, and real-time requirements while generating safe, efficient, and human-compatible motion patterns.
+
+## Summary
+
+- Advanced motion planning handles high-dimensional, constrained spaces
+- Configuration space representation models robot complexity
+- Sampling-based methods include RRT and optimization variants
+- Optimization approaches use mathematical programming techniques
+- Balance-aware planning integrates stability constraints
+- Humanoid-specific challenges involve kinematic and contact complexities
+- Real-time planning requires computational efficiency strategies
+- Learning approaches adapt to new tasks and environments
+- Multi-modal planning handles different robot modes
+- Uncertainty handling uses probabilistic and robust methods
+- Human-aware planning respects social norms and safety
+- Multi-robot planning enables team coordination
+- Advanced algorithms include CHOMP, STOMP, and SMP
+- Quality assessment measures optimality and feasibility
+- Control integration links planning with execution
+- Performance optimization considers efficiency and memory
+- Safety management ensures risk mitigation and protection
+- Future directions explore AI, quantum, and bio-inspired approaches

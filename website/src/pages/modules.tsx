@@ -1,10 +1,10 @@
 import React from 'react';
-import Layout from '@theme/Layout';
 import PerformanceOptimizedModuleList from '@site/src/components/PerformanceOptimizedModuleList';
+import MainLayout from '../components/MainLayout';
 
 const ModulesPage: React.FC = () => {
   return (
-    <Layout
+    <MainLayout
       title="Modules"
       description="Learn about Physical AI and Humanoid Robotics through our comprehensive modules">
       <main className="container mx-auto px-4 py-8">
@@ -19,7 +19,7 @@ const ModulesPage: React.FC = () => {
           <PerformanceOptimizedModuleList />
         </section>
       </main>
-    </Layout>
+    </MainLayout>
   );
 }
 
