@@ -33,7 +33,7 @@ const Navigation: React.FC = () => {
 
   const navigationItems = [
     { title: 'Home', path: '/' },
-    { title: 'Modules', path: '/modules' },
+    { title: 'Books', path: '/books' },
     { title: 'Pricing', path: '/pricing' },
     { title: 'Contact', path: '/contact' },
     { title: '👤', path: '/login' },

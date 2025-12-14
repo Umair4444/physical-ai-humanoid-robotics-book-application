@@ -210,6 +210,8 @@ Per User Story 1:
 - [x] T106 [US5] Create Homepage component with site features
 - [x] T107 [US5] Write tests for featured books section (4 books) with cards
 - [x] T108 [US5] Implement featured books section (4 books) with cards
+- [x] T121 [US5] Write tests for books page to display all books
+- [x] T122 [US5] Create books page at /books route to display all available books using static content
 - [x] T109 [US5] Write tests for Pricing component with three subscription tiers
 - [x] T110 [US5] Create Pricing component with three subscription tiers
 - [x] T111 [US5] Write tests for testimonial section with ratings and comments
