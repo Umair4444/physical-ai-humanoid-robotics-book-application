@@ -41,7 +41,7 @@ const config: Config = {
       'classic',
       {
         docs: {
-          sidebarPath: './sidebars.ts',
+          sidebarPath: './sidebars.ts', // Path to the sidebars file
           // Use the book sidebar configuration
           sidebarCollapsed: false,
           // Please change this to your repo.

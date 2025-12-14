@@ -23,7 +23,7 @@ const BooksPage: React.FC = () => {
       image: '/img/book1-cover.jpg',
       featured: true,
       tags: ['Physical AI', 'Robotics', 'Humanoid Robotics'],
-      href: '/books/physical-ai-humanoid-robotics-book',
+      href: '/books/physical-ai-humanoid-robotics-book/intro',
     },
     {
       id: 2,
