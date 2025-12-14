@@ -10,6 +10,7 @@ type Book = {
   image?: string;
   featured?: boolean;
   tags?: string[];
+  href?: string;
 };
 
 type BookListProps = {
@@ -25,18 +26,19 @@ const adaptBookToCardProps = (book: Book) => ({
     description: book.description,
     coverImage: book.image || '/img/book-default.jpg',
     rating: 4.5, // Default rating for now
-    price: 29.99 // Default price for now
-  }
+    price: 29.99, // Default price for now
+    href: book.href || '/books',
+  },
 });
 
 export default function BookList({
   books,
-  columns = 3
+  columns = 3,
 }: BookListProps): ReactNode {
   return (
     <div className={styles.bookList}>
       <div className={clsx(styles.bookGrid, styles[`columns-${columns}`])}>
-        {books.map((book) => {
+        {books.map(book => {
           const adaptedProps = adaptBookToCardProps(book);
           return (
             <div key={book.id} className={styles.bookItem}>
