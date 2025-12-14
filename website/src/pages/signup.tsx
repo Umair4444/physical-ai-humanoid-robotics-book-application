@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory } from '@docusaurus/router';
 import Link from '@docusaurus/Link';
-import Layout from '@theme/Layout';
 import { AuthService } from '@site/src/services/AuthService';
 import { Button } from '../components/Button/Button';
 import { useTheme } from '@site/src/contexts/ThemeContext';
+import MainLayout from '../components/MainLayout';
 
 interface FormData {
   firstName: string;
@@ -16,11 +16,11 @@ interface FormData {
 const SignupPage: React.FC = () => {
   const history = useHistory();
   const { isDarkMode } = useTheme();
-  const [formData, setFormData] = useState<FormData>({ 
-    firstName: '', 
-    lastName: '', 
-    email: '', 
-    password: '' 
+  const [formData, setFormData] = useState<FormData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ const SignupPage: React.FC = () => {
     if (!formData.firstName) {
       newErrors.firstName = 'First name is required';
     }
-    
+
     if (!formData.lastName) {
       newErrors.lastName = 'Last name is required';
     }
@@ -48,7 +48,8 @@ const SignupPage: React.FC = () => {
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Password must contain at least 1 uppercase, 1 lowercase, and 1 number';
+      newErrors.password =
+        'Password must contain at least 1 uppercase, 1 lowercase, and 1 number';
     }
 
     setErrors(newErrors);
@@ -84,12 +85,12 @@ const SignupPage: React.FC = () => {
 
     try {
       const response = await AuthService.register(
-        formData.email, 
-        formData.password, 
-        formData.firstName, 
+        formData.email,
+        formData.password,
+        formData.firstName,
         formData.lastName
       );
-      
+
       if (response.success) {
         // Redirect to home or a welcome page
         history.push('/');
@@ -105,141 +106,165 @@ const SignupPage: React.FC = () => {
   };
 
   return (
-    <Layout title="Sign Up - Physical AI Humanoid Robotics" description="Create an account to access personalized learning resources on Physical AI Humanoid Robotics.">
-    <div className={`min-h-screen pt-24 flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} p-4`}>
-      <div className={`w-full max-w-md p-8 rounded-xl shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Create an Account</h1>
-          <p className={`mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Join us to access personalized learning features
-          </p>
-        </div>
-
-        {generalError && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
-            {generalError}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label htmlFor="firstName" className="block mb-2 font-medium">
-                First Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  errors.firstName 
-                    ? 'border-red-500' 
-                    : isDarkMode 
-                      ? 'border-gray-700 bg-gray-700' 
-                      : 'border-gray-300 bg-white'
-                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-                placeholder="John"
-              />
-              {errors.firstName && <p className="mt-1 text-red-500 text-sm">{errors.firstName}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="lastName" className="block mb-2 font-medium">
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  errors.lastName 
-                    ? 'border-red-500' 
-                    : isDarkMode 
-                      ? 'border-gray-700 bg-gray-700' 
-                      : 'border-gray-300 bg-white'
-                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-                placeholder="Doe"
-              />
-              {errors.lastName && <p className="mt-1 text-red-500 text-sm">{errors.lastName}</p>}
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 font-medium">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 rounded-lg border ${
-                errors.email 
-                  ? 'border-red-500' 
-                  : isDarkMode 
-                    ? 'border-gray-700 bg-gray-700' 
-                    : 'border-gray-300 bg-white'
-              } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-              placeholder="you@example.com"
-            />
-            {errors.email && <p className="mt-1 text-red-500 text-sm">{errors.email}</p>}
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="password" className="block mb-2 font-medium">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 rounded-lg border ${
-                errors.password 
-                  ? 'border-red-500' 
-                  : isDarkMode 
-                    ? 'border-gray-700 bg-gray-700' 
-                    : 'border-gray-300 bg-white'
-              } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-              placeholder="At least 8 characters"
-            />
-            {errors.password && <p className="mt-1 text-red-500 text-sm">{errors.password}</p>}
-            <p className={`mt-1 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Password must contain at least 1 uppercase, 1 lowercase, and 1 number
+    <MainLayout
+      title="Sign Up - Physical AI Humanoid Robotics"
+      description="Create an account to access personalized learning resources on Physical AI Humanoid Robotics."
+    >
+      <div
+        className={` flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} p-4`}
+      >
+        <div
+          className={`w-full max-w-md px-8 py-6 rounded-xl shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
+        >
+          <div className="text-center mb-8">
+            <h2 className="font-bold">Create an Account</h2>
+            <p
+              className={`mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
+            >
+              Join us to access personalized learning features
             </p>
           </div>
 
-          <Button 
-            type="submit" 
-            variant="primary" 
-            size="lg" 
-            className="w-full mb-4"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Creating Account...' : 'Sign Up'}
-          </Button>
-        </form>
+          {generalError && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+              {generalError}
+            </div>
+          )}
 
-        <div className={`text-center mt-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          <p>
-            Already have an account?{' '}
-            <Link 
-              to="/login" 
-              className={`${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'} font-medium hover:underline`}
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="firstName" className="block mb-2 font-medium">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    errors.firstName
+                      ? 'border-red-500'
+                      : isDarkMode
+                        ? 'border-gray-700 bg-gray-700'
+                        : 'border-gray-300 bg-white'
+                  } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                  placeholder="John"
+                />
+                {errors.firstName && (
+                  <p className="mt-1 text-red-500 text-sm">
+                    {errors.firstName}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="lastName" className="block mb-2 font-medium">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    errors.lastName
+                      ? 'border-red-500'
+                      : isDarkMode
+                        ? 'border-gray-700 bg-gray-700'
+                        : 'border-gray-300 bg-white'
+                  } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                  placeholder="Doe"
+                />
+                {errors.lastName && (
+                  <p className="mt-1 text-red-500 text-sm">{errors.lastName}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="email" className="block mb-2 font-medium">
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 rounded-lg border ${
+                  errors.email
+                    ? 'border-red-500'
+                    : isDarkMode
+                      ? 'border-gray-700 bg-gray-700'
+                      : 'border-gray-300 bg-white'
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="you@example.com"
+              />
+              {errors.email && (
+                <p className="mt-1 text-red-500 text-sm">{errors.email}</p>
+              )}
+            </div>
+
+            <div className="mb-6">
+              <label htmlFor="password" className="block mb-2 font-medium">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 rounded-lg border ${
+                  errors.password
+                    ? 'border-red-500'
+                    : isDarkMode
+                      ? 'border-gray-700 bg-gray-700'
+                      : 'border-gray-300 bg-white'
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="At least 8 characters"
+              />
+              {errors.password && (
+                <p className="mt-1 text-red-500 text-sm">{errors.password}</p>
+              )}
+              <p
+                className={`mt-1 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
+              >
+                Password must contain at least 1 uppercase, 1 lowercase, and 1
+                number
+              </p>
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              className="w-full mb-4"
+              disabled={isLoading}
             >
-              Sign in
-            </Link>
-          </p>
+              {isLoading ? 'Creating Account...' : 'Sign Up'}
+            </Button>
+          </form>
+
+          <div
+            className={`text-center mt-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
+          >
+            <p>
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className={`${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'} font-medium hover:underline`}
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-    </Layout>
+    </MainLayout>
   );
 };
 

@@ -104,7 +104,7 @@ const ContactPage: React.FC = () => {
   return (
     <MainLayout>
       <div
-        className={`min-h-screen py-12 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}
+        className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}
       >
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">

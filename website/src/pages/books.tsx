@@ -114,7 +114,7 @@ const BooksPage: React.FC = () => {
     <MainLayout
       title="All Books - AI Robotics Textbook"
       description="Browse all available books on AI Robotics and Humanoid Design">
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4">
         <section className="mb-12 text-center">
           <h1 className="text-4xl font-bold mb-4">AI Robotics Textbook Library</h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">

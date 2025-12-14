@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory } from '@docusaurus/router';
 import Link from '@docusaurus/Link';
-import Layout from '@theme/Layout';
 import { AuthService } from '@site/src/services/AuthService';
 import { Button } from '../components/Button/Button';
 import { useTheme } from '@site/src/contexts/ThemeContext';
+import MainLayout from '../components/MainLayout';
 
 interface FormData {
   email: string;
@@ -89,11 +89,12 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Layout
+    <MainLayout
       title="Login"
-      description="Sign in to access your personalized learning experience">
+      description="Sign in to access your personalized learning experience"
+    >
       <div
-        className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} p-4`}
+        className={`flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} p-6`}
       >
         <div
           className={`w-full max-w-md p-8 rounded-xl shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
@@ -196,7 +197,7 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   );
 };
 

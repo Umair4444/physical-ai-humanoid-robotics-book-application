@@ -19,7 +19,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     <div className="flex flex-col min-h-screen">
       <ThemeApplier />
       <Navigation />
-      <main className="grow pt-24">
+      <main className="grow pt-20">
         {title && <title>{title}</title>}
         {description && <meta name="description" content={description} />}
         {children}
