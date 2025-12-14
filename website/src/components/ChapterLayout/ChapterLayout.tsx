@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MainLayout } from '../MainLayout';
+import Layout from '@theme/Layout';
 import { Chapter } from '../../types/module';
 import Link from '@docusaurus/Link';
 
@@ -41,7 +41,7 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
   };
 
   return (
-    <MainLayout>
+    <Layout title={chapter.title}>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Breadcrumb navigation */}
         <nav className="text-sm text-gray-500 dark:text-gray-400 mb-4">
@@ -92,14 +92,14 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
         {/* Tab Content */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
           {activeTab === 'lesson' ? (
-            <div 
+            <div
               className="prose dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: chapter.lessonContent }} 
+              dangerouslySetInnerHTML={{ __html: chapter.lessonContent }}
             />
           ) : (
-            <div 
+            <div
               className="prose dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: chapter.summaryContent }} 
+              dangerouslySetInnerHTML={{ __html: chapter.summaryContent }}
             />
           )}
         </div>
@@ -120,7 +120,7 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
           ) : (
             <div></div> // Spacer to keep next button aligned right
           )}
-          
+
           {nextChapterId ? (
             <Link
               to={`/modules/${moduleId}/${nextChapterId}`}
@@ -137,6 +137,6 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
           )}
         </div>
       </div>
-    </MainLayout>
+    </Layout>
   );
 };

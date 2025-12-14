@@ -1,0 +1,10 @@
+node_modules/
+build/
+dist/
+.docusaurus/
+.cache/
+*.min.js
+coverage/
+*.config.js
+*.config.ts
+__mocks__/

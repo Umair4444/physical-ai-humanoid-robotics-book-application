@@ -35,7 +35,8 @@ const Navigation: React.FC = () => {
     { title: 'Home', path: '/' },
     { title: 'Modules', path: '/modules' },
     { title: 'Pricing', path: '/pricing' },
-    { title: 'About', path: '/about' },
+    { title: 'Contact', path: '/contact' },
+    { title: '👤', path: '/login' },
   ];
 
   // Check if the current path matches the navigation item
@@ -65,7 +66,7 @@ const Navigation: React.FC = () => {
         <div
           className={`${styles.navDesktop} ${isMenuOpen ? styles.navDesktopHidden : ''}`}
         >
-          <ul className={styles.navList}>
+          <ul className={`${styles.navList} flex items-center`}>
             {navigationItems.map((item, index) => (
               <li key={index} className={styles.navItem}>
                 <Link
@@ -77,11 +78,11 @@ const Navigation: React.FC = () => {
                   {item.title}
                 </Link>
               </li>
-            ))}
+            ))}           
           </ul>
         </div>
 
-        {/* Theme Toggle and Mobile Menu Toggle - Always visible */}
+        {/* Theme Toggle and Auth Links - Always visible */}
         <div className={`${styles.navActions} space-x-4`}>
           <ThemeToggle />
 
@@ -133,6 +134,25 @@ const Navigation: React.FC = () => {
                 </Link>
               </li>
             ))}
+            {/* Auth links for mobile */}
+            <li className={styles.navMobileItem}>
+              <Link
+                to="/login"
+                className={styles.navMobileLink}
+                onClick={closeMenu}
+              >
+                👤 Log In
+              </Link>
+            </li>
+            <li className={styles.navMobileItem}>
+              <Link
+                to="/signup"
+                className={`${styles.navMobileLink} bg-indigo-600 text-white rounded-lg px-4 py-2`}
+                onClick={closeMenu}
+              >
+                ✍️ Sign Up
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

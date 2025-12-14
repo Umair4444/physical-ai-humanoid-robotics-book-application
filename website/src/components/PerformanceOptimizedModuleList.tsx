@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { ModuleList } from './ModuleList';
-import { contentService } from '../services/contentService';
-import { Module } from '../types/module';
+import { ContentService } from '../services/ContentService';
+import { Module as ModuleType } from '../types/module';
+
+// Function to convert service Module to ModuleList expected type
+function adaptServiceModuleToModuleType(serviceModule: import('../services/ContentService').Module): ModuleType {
+  return {
+    ...serviceModule,
+    chapters: [] // We don't have chapters at the module level, populate as needed
+  };
+}
 
 // This component implements performance optimizations to ensure content loads within 3 seconds
 const PerformanceOptimizedModuleList: React.FC = () => {
-  const [modules, setModules] = useState<Module[]>([]);
+  const [modules, setModules] = useState<ModuleType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,20 +24,23 @@ const PerformanceOptimizedModuleList: React.FC = () => {
       try {
         // Using performance API to measure loading time
         const startTime = performance.now();
-        
-        const fetchedModules = await contentService.getModules();
-        
+
+        const serviceModules = await ContentService.getModules();
+
+        // Transform service modules to match ModuleList expected type
+        const fetchedModules = serviceModules.map(adaptServiceModuleToModuleType);
+
         const endTime = performance.now();
         const loadTime = endTime - startTime;
-        
+
         // Log performance metrics (in a real application, you might send this to an analytics service)
         console.log(`Modules loaded in ${loadTime.toFixed(2)} milliseconds`);
-        
+
         // Ensure loading time meets success criteria (under 3 seconds)
         if (loadTime > 3000) {
           console.warn('Modules took longer than 3 seconds to load', loadTime);
         }
-        
+
         if (isMounted) {
           setModules(fetchedModules);
           setError(null);

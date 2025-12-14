@@ -1,8 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { ChapterLayout } from './ChapterLayout';
-import { contentService } from '../services/contentService';
+import { ContentService } from '../services/ContentService';
 import { Chapter } from '../types/module';
+import { ChapterContent } from '../services/ContentService';
+
+// Function to convert ChapterContent to Chapter type for compatibility with existing components
+function adaptChapterContentToChapter(chapterContent: ChapterContent): Chapter {
+  return {
+    id: chapterContent.id,
+    moduleId: chapterContent.moduleId,
+    title: chapterContent.title,
+    description: undefined, // Add default if not present
+    order: (chapterContent as any).order || 0, // Add default if not present
+    lessonContent: chapterContent.lessonContent,
+    summaryContent: chapterContent.summaryContent,
+    duration: chapterContent.duration || 0, // Add default if not present
+    imageUrl: (chapterContent as any).imageUrl,
+    isActive: false,
+    isCompleted: false
+  };
+}
 
 const PerformanceOptimizedChapter: React.FC = () => {
   const { moduleId, chapterId } = useParams<{ moduleId: string; chapterId: string }>();
@@ -23,13 +41,13 @@ const PerformanceOptimizedChapter: React.FC = () => {
       // Preload next chapter if it exists
       if (chapterNumber < totalChapters) {
         const nextChapterId = `${moduleId}-chapter-${chapterNumber + 1}`;
-        contentService.getChapter(nextChapterId); // Call but don't wait for it
+        ContentService.getChapter(nextChapterId); // Call but don't wait for it
       }
 
       // Preload previous chapter if it exists
       if (chapterNumber > 1) {
         const prevChapterId = `${moduleId}-chapter-${chapterNumber - 1}`;
-        contentService.getChapter(prevChapterId); // Call but don't wait for it
+        ContentService.getChapter(prevChapterId); // Call but don't wait for it
       }
     };
 
@@ -44,9 +62,9 @@ const PerformanceOptimizedChapter: React.FC = () => {
 
       try {
         const startTime = performance.now();
-        
-        const chapterData = await contentService.getChapter(chapterId);
-        
+
+        const chapterData = await ContentService.getChapter(chapterId);
+
         const endTime = performance.now();
         const loadTime = endTime - startTime;
         
@@ -57,7 +75,7 @@ const PerformanceOptimizedChapter: React.FC = () => {
         }
         
         if (isMounted && chapterData) {
-          setChapter(chapterData);
+          setChapter(adaptChapterContentToChapter(chapterData));
           setError(null);
         } else if (isMounted) {
           setError('Chapter not found');

@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import Footer from './Footer';
 import { ThemeApplier } from './ThemeApplier/ThemeApplier';
 import Navigation from './Navigation/Navigation';
+import ScrollTopButton from './ScrollButton/ScrollTopButton';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -23,6 +24,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         {description && <meta name="description" content={description} />}
         {children}
       </main>
+      <ScrollTopButton />
+
       <Footer />
     </div>
   );

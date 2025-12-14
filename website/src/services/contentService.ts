@@ -1,204 +1,151 @@
-import { Module, Chapter } from '../types/module';
+import { APICache, apiCache } from './APICache';
 
-// Mock data for modules and chapters
-const mockModules: Module[] = [
-  {
-    id: 'module-1',
-    title: 'Introduction to AI Robotics',
-    description: 'Basic concepts and foundations',
-    order: 1,
-    icon: '🤖',
-    chapters: [],
-  },
-  {
-    id: 'module-2',
-    title: 'Robotics Hardware',
-    description: 'Understanding physical components',
-    order: 2,
-    icon: '⚙️',
-    chapters: [],
-  },
-  {
-    id: 'module-3',
-    title: 'Sensors and Perception',
-    description: 'How robots perceive their environment',
-    order: 3,
-    icon: '👁️',
-    chapters: [],
-  },
-  {
-    id: 'module-4',
-    title: 'Motion Planning',
-    description: 'Navigating through space',
-    order: 4,
-    icon: '🧭',
-    chapters: [],
-  },
-  {
-    id: 'module-5',
-    title: 'Control Systems',
-    description: 'Managing robot behavior',
-    order: 5,
-    icon: '🎮',
-    chapters: [],
-  },
-  {
-    id: 'module-6',
-    title: 'Machine Learning in Robotics',
-    description: 'AI algorithms for robotic systems',
-    order: 6,
-    icon: '🧠',
-    chapters: [],
-  },
-  {
-    id: 'module-7',
-    title: 'Human-Robot Interaction',
-    description: 'Designing collaborative systems',
-    order: 7,
-    icon: '🤝',
-    chapters: [],
-  },
-  {
-    id: 'module-8',
-    title: 'Robotics Applications',
-    description: 'Real-world use cases',
-    order: 8,
-    icon: '🏢',
-    chapters: [],
-  },
-  {
-    id: 'module-9',
-    title: 'Ethics in AI Robotics',
-    description: 'Responsible development practices',
-    order: 9,
-    icon: '⚖️',
-    chapters: [],
-  },
-  {
-    id: 'module-10',
-    title: 'Future of Robotics',
-    description: 'Emerging trends and technologies',
-    order: 10,
-    icon: '🚀',
-    chapters: [],
-  },
-];
+interface Module {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  icon: string;
+  chaptersCount: number;
+}
 
-// Generate mock chapters for each module
-const generateMockChapters = (moduleId: string): Chapter[] => {
-  const chapterTitles = [
-    'History and Overview',
-    'Basic Components',
-    'Sensors and Perception',
-    'Actuators and Movement',
-    'Control Systems',
-    'Future Trends'
-  ];
+interface Chapter {
+  id: string;
+  moduleId: string;
+  title: string;
+  order: number;
+  duration: number;
+  imageUrl?: string;
+}
 
-  return chapterTitles.map((title, index) => ({
-    id: `${moduleId}-chapter-${index + 1}`,
-    moduleId: moduleId,
-    title: `${title}`,
-    order: index + 1,
-    lessonContent: `<h2>${title} Lesson</h2><p>This is the detailed lesson content for ${title}. It contains comprehensive information about the topic with examples and illustrations.</p><p>Students will learn fundamental concepts, practical applications, and emerging trends related to this subject area.</p>`,
-    summaryContent: `<p>This is a brief summary of ${title}. Key points include fundamental concepts and practical applications.</p>`,
-    duration: Math.floor(Math.random() * 15) + 10, // Random duration between 10-25 minutes
-    imageUrl: `/img/chapter-${moduleId}-${index + 1}.jpg`
-  }));
-};
+interface ChapterContent {
+  id: string;
+  moduleId: string;
+  title: string;
+  lessonContent: string;
+  summaryContent: string;
+  duration: number;
+  images: string[];
+  previousChapterId: string | null;
+  nextChapterId: string | null;
+}
 
-// Update modules with chapters
-const modulesWithChapters = mockModules.map(module => ({
-  ...module,
-  chapters: generateMockChapters(module.id)
-}));
+// Same helper function for environment variables
+function getEnvVar(varName: string, defaultValue: string): string {
+  // In browser environment, process may not be defined
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[varName] || defaultValue;
+  }
+  // For browser environments where process is not available, return default
+  return defaultValue;
+}
 
-// Simple in-memory cache
-const cache = new Map<string, any>();
+class ContentService {
+  private static API_BASE_URL = getEnvVar('REACT_APP_API_BASE_URL', '/api/v1');
+  private static cache = apiCache;
 
-export const contentService = {
-  /**
-   * Fetch all modules with caching
-   */
-  getModules: async (): Promise<Module[]> => {
-    const cacheKey = 'all-modules';
-    if (cache.has(cacheKey)) {
-      return cache.get(cacheKey);
+  private static async apiCall<T>(url: string, options: RequestInit = {}, useCache: boolean = true, cacheTTL: number = 5 * 60 * 1000): Promise<T> {
+    // Check cache first if caching is enabled
+    if (useCache && this.cache.has(url)) {
+      const cached = this.cache.get<T>(url);
+      if (cached) {
+        console.log(`Cache hit for ${url}`);
+        return cached;
+      }
     }
 
-    const result = await new Promise<Module[]>((resolve) => {
-      setTimeout(() => {
-        resolve(modulesWithChapters);
-      }, 50); // Reduced network delay to simulate better performance
-    });
+    // Implement retry mechanism
+    const maxRetries = 3;
+    let lastError: any;
 
-    cache.set(cacheKey, result);
-    return result;
-  },
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`API call attempt ${attempt} for ${url}`);
+        
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            'Content-Type': 'application/json',
+            ...options.headers,
+          },
+        });
 
-  /**
-   * Fetch a specific module by ID with caching
-   */
-  getModule: async (moduleId: string): Promise<Module | undefined> => {
-    const cacheKey = `module-${moduleId}`;
-    if (cache.has(cacheKey)) {
-      return cache.get(cacheKey);
-    }
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
 
-    const result = await new Promise<Module | undefined>((resolve) => {
-      setTimeout(() => {
-        const module = modulesWithChapters.find(m => m.id === moduleId);
-        cache.set(cacheKey, module);
-        resolve(module);
-      }, 30); // Reduced network delay to simulate better performance
-    });
+        const data = await response.json();
+        
+        // Cache successful response if caching is enabled
+        if (useCache) {
+          this.cache.set(url, data, cacheTTL);
+        }
+        
+        return data as T;
+      } catch (error: any) {
+        console.error(`API call attempt ${attempt} failed for ${url}:`, error.message);
+        lastError = error;
 
-    return result;
-  },
-
-  /**
-   * Fetch all chapters for a specific module with caching
-   */
-  getChapters: async (moduleId: string): Promise<Chapter[]> => {
-    const cacheKey = `chapters-${moduleId}`;
-    if (cache.has(cacheKey)) {
-      return cache.get(cacheKey);
-    }
-
-    const result = await new Promise<Chapter[]>((resolve) => {
-      setTimeout(() => {
-        const module = modulesWithChapters.find(m => m.id === moduleId);
-        const chapters = module?.chapters || [];
-        cache.set(cacheKey, chapters);
-        resolve(chapters);
-      }, 30); // Reduced network delay to simulate better performance
-    });
-
-    return result;
-  },
-
-  /**
-   * Fetch a specific chapter by ID with caching
-   */
-  getChapter: async (chapterId: string): Promise<Chapter | undefined> => {
-    const cacheKey = `chapter-${chapterId}`;
-    if (cache.has(cacheKey)) {
-      return cache.get(cacheKey);
-    }
-
-    const result = await new Promise<Chapter | undefined>((resolve) => {
-      // Find chapter across all modules
-      for (const module of modulesWithChapters) {
-        const chapter = module.chapters.find(c => c.id === chapterId);
-        if (chapter) {
-          cache.set(cacheKey, chapter);
-          resolve(chapter);
-          return;
+        // Don't wait after the last attempt
+        if (attempt < maxRetries) {
+          // Exponential backoff: wait 1s, 2s, 4s between retries
+          const waitTime = Math.pow(2, attempt) * 1000;
+          console.log(`Waiting ${waitTime}ms before retry ${attempt + 1}`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
         }
       }
-      resolve(undefined);
-    });
+    }
 
-    return result;
+    // If all retries failed, throw the last error
+    throw lastError;
   }
-};
+
+  static async getModules(): Promise<Module[]> {
+    const url = `${this.API_BASE_URL}/content/modules`;
+    
+    try {
+      const data = await this.apiCall<{ modules: Module[] }>(url, { method: 'GET' });
+      return data.modules;
+    } catch (error) {
+      console.error('Error fetching modules:', error);
+      throw new Error(`Failed to fetch modules: ${(error as Error).message}`);
+    }
+  }
+
+  static async getChapters(moduleId: string): Promise<Chapter[]> {
+    const url = `${this.API_BASE_URL}/content/modules/${moduleId}/chapters`;
+    
+    try {
+      const data = await this.apiCall<{ moduleId: string, chapters: Chapter[] }>(url, { method: 'GET' });
+      return data.chapters;
+    } catch (error) {
+      console.error(`Error fetching chapters for module ${moduleId}:`, error);
+      throw new Error(`Failed to fetch chapters for module ${moduleId}: ${(error as Error).message}`);
+    }
+  }
+
+  static async getChapter(chapterId: string): Promise<ChapterContent> {
+    const url = `${this.API_BASE_URL}/content/chapters/${chapterId}`;
+    
+    // Use a longer cache TTL for chapter content since it's less likely to change
+    try {
+      const data = await this.apiCall<ChapterContent>(url, { method: 'GET' }, true, 10 * 60 * 1000); // 10 minutes TTL
+      return data;
+    } catch (error) {
+      console.error(`Error fetching chapter ${chapterId}:`, error);
+      throw new Error(`Failed to fetch chapter ${chapterId}: ${(error as Error).message}`);
+    }
+  }
+  
+  // Method to clear content cache
+  static clearCache(): void {
+    this.cache.clear();
+  }
+  
+  // Method to clear specific cache entries
+  static clearCacheEntry(key: string): void {
+    this.cache.delete(key);
+  }
+}
+
+export { ContentService, type Module, type Chapter, type ChapterContent };

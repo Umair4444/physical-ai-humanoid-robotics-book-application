@@ -1,20 +1,91 @@
 # Dependencies
 /node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
 
 # Production
 /build
+/dist
+/out
+.next
+.next/
 
 # Generated files
 .docusaurus
 .cache-loader
+.cache/
 
-# Misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# TypeScript
+*.tsbuildinfo
+*.js
+*.mjs
+*.cjs
 
+# Environment variables
+.env*
+!.env.example
+
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
+
+# Testing
+coverage/
+coverage-final.json
+.nyc_output/
+.jest/
+
+# ESLint
+eslint-cache
+.eslintcache
+
+# Prettier
+.prettierignore
+
+# Editor specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+
+# Docusaurus specific
+.temp/
+.sass-cache/
+*.tgz
+*.zip
+
+# Temp/NPM generated files
+tmp/
+temp/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# System files
+__pycache__/
+*.pyc
+*.bak
+.LSOverride
+
+# Compiled binary addons
+build/Release
+
+# Unit test reports
+test-reports/

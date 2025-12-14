@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainLayout } from '../MainLayout';
+import Layout from '@theme/Layout';
 import { Module, Chapter } from '../../types/module';
 import Link from '@docusaurus/Link';
 
@@ -15,7 +15,7 @@ export const ModuleLayout: React.FC<ModuleLayoutProps> = ({
   children 
 }) => {
   return (
-    <MainLayout>
+    <Layout title={module.title} description={module.description}>
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
           <div className="flex items-center mb-4">
@@ -60,6 +60,6 @@ export const ModuleLayout: React.FC<ModuleLayoutProps> = ({
           </div>
         </div>
       </div>
-    </MainLayout>
+    </Layout>
   );
 };

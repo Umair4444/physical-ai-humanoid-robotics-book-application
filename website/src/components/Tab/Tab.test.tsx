@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Tab, TabList, TabPanel, TabPanels } from './Tab';
+import Tab, { TabList, TabPanel, TabPanels } from '../Tab';
 
 describe('Tab Components', () => {
   test('renders tabs with correct initial state', () => {
