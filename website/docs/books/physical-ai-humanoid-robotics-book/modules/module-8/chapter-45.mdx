@@ -7,6 +7,13 @@ summaryTab: true
 duration: 28
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
 ## Lesson: Reinforcement Learning for Robot Control and Behavior
 
 ### Introduction to Reinforcement Learning in Robotics
@@ -501,7 +508,7 @@ The core challenges of RL in robotics include:
 - Action execution coordination
 - Applications to control integration
 
-### Future Directions and Research Frontiers
+** Future Directions and Research Frontiers
 
 **Neuromorphic RL for Robotics**:
 - Brain-inspired learning architectures
@@ -529,6 +536,11 @@ The core challenges of RL in robotics include:
 
 Reinforcement learning provides powerful tools for creating adaptive, intelligent robot behaviors, though its application in physical systems requires careful consideration of safety, sample efficiency, and real-time performance requirements.
 
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
 ## Summary
 
 - RL enables robots to learn optimal behaviors through environmental interaction
@@ -548,3 +560,7 @@ Reinforcement learning provides powerful tools for creating adaptive, intelligen
 - Advanced techniques include model-based and meta-learning
 - Implementation requires hardware and middleware integration
 - Future directions explore neuromorphic and quantum approaches
+
+</div>
+</TabItem>
+</Tabs>

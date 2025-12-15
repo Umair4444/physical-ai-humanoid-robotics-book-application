@@ -7,6 +7,13 @@ summaryTab: true
 duration: 22
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
 ## Lesson: Humanoid Robot Operating Systems and Middleware
 
 ### Introduction to Robot Operating Systems
@@ -399,6 +406,11 @@ The key requirements for humanoid robot operating systems include:
 
 Robot operating systems and middleware form the essential foundation for humanoid robot development, providing the communication, coordination, and real-time capabilities needed for complex robotic behaviors and safe human interaction.
 
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
 ## Summary
 
 - Robot operating systems provide the foundational infrastructure for robotics
@@ -414,3 +426,7 @@ Robot operating systems and middleware form the essential foundation for humanoi
 - Performance optimization techniques improve efficiency
 - Emerging trends include edge computing and AI integration
 - Fault tolerance ensures system reliability
+
+</div>
+</TabItem>
+</Tabs>

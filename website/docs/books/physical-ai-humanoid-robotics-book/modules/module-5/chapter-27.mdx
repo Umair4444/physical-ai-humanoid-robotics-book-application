@@ -7,6 +7,13 @@ summaryTab: true
 duration: 21
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
 ## Lesson: Gesture Recognition and Body Language in Physical AI
 
 ### Introduction to Gesture and Body Language in Physical AI
@@ -417,6 +424,11 @@ The key components of gesture and body language processing in Physical AI includ
 
 Gesture recognition and body language understanding are crucial for creating humanoid robots that can participate naturally in human social interactions, requiring sophisticated technical approaches and careful attention to cultural, contextual, and safety considerations.
 
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
 ## Summary
 
 - Gesture recognition enables natural human-robot communication
@@ -435,3 +447,7 @@ Gesture recognition and body language understanding are crucial for creating hum
 - Challenges include ambiguity and environmental constraints
 - Evaluation metrics assess accuracy and user experience
 - Future directions involve immersive and neural interfaces
+
+</div>
+</TabItem>
+</Tabs>
