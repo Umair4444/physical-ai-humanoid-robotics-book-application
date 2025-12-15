@@ -3,6 +3,7 @@ import Footer from './Footer';
 import { ThemeApplier } from './ThemeApplier/ThemeApplier';
 import Navigation from './Navigation/Navigation';
 import ScrollTopButton from './ScrollButton/ScrollTopButton';
+import FloatingChatbotButton from './FloatingChatbotButton/FloatingChatbotButton';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -25,7 +26,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         {children}
       </main>
       <ScrollTopButton />
-
+      <FloatingChatbotButton />
       <Footer />
     </div>
   );
