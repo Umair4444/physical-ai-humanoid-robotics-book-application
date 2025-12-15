@@ -78,7 +78,7 @@ const Navigation: React.FC = () => {
                   {item.title}
                 </Link>
               </li>
-            ))}           
+            ))}
           </ul>
         </div>
 
@@ -135,25 +135,6 @@ const Navigation: React.FC = () => {
                 </Link>
               </li>
             ))}
-            {/* Auth links for mobile */}
-            <li className={styles.navMobileItem}>
-              <Link
-                to="/login"
-                className={styles.navMobileLink}
-                onClick={closeMenu}
-              >
-                👤 Log In
-              </Link>
-            </li>
-            <li className={styles.navMobileItem}>
-              <Link
-                to="/signup"
-                className={`${styles.navMobileLink} bg-indigo-600 text-white rounded-lg px-4 py-2`}
-                onClick={closeMenu}
-              >
-                ✍️ Sign Up
-              </Link>
-            </li>
           </ul>
         </div>
       </div>

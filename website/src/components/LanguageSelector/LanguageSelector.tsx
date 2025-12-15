@@ -23,7 +23,10 @@ export const LanguageSelector: React.FC = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
         setFocusedIndex(null);
       }
@@ -50,112 +53,122 @@ export const LanguageSelector: React.FC = () => {
   }, [isOpen]);
 
   // Handle keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        e.preventDefault();
-        setIsOpen(!isOpen);
-        if (!isOpen) {
-          setFocusedIndex(0);
-        }
-        break;
-      case 'Escape':
-        setIsOpen(false);
-        setFocusedIndex(null);
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        if (!isOpen) {
-          setIsOpen(true);
-          setTimeout(() => setFocusedIndex(0), 0);
-        } else {
-          setFocusedIndex(prev =>
-            prev === null || prev >= availableLanguages.length - 1
-              ? 0
-              : prev + 1
-          );
-        }
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        if (!isOpen) {
-          setIsOpen(true);
-          setTimeout(() => setFocusedIndex(availableLanguages.length - 1), 0);
-        } else {
-          setFocusedIndex(prev =>
-            prev === null || prev <= 0
-              ? availableLanguages.length - 1
-              : prev - 1
-          );
-        }
-        break;
-      case 'Home':
-        e.preventDefault();
-        setIsOpen(true);
-        setFocusedIndex(0);
-        break;
-      case 'End':
-        e.preventDefault();
-        setIsOpen(true);
-        setFocusedIndex(availableLanguages.length - 1);
-        break;
-      case 'Tab':
-        setIsOpen(false);
-        setFocusedIndex(null);
-        break;
-      default:
-        // Handle first letter navigation
-        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-          const firstMatchIndex = availableLanguages.findIndex(
-            lang => lang.label.charAt(0).toLowerCase() === e.key.toLowerCase()
-          );
-          if (firstMatchIndex >= 0) {
-            setIsOpen(true);
-            setFocusedIndex(firstMatchIndex);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      switch (e.key) {
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          setIsOpen(!isOpen);
+          if (!isOpen) {
+            setFocusedIndex(0);
           }
-        }
-        break;
-    }
-  }, [isOpen, availableLanguages.length]);
+          break;
+        case 'Escape':
+          setIsOpen(false);
+          setFocusedIndex(null);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          if (!isOpen) {
+            setIsOpen(true);
+            setTimeout(() => setFocusedIndex(0), 0);
+          } else {
+            setFocusedIndex(prev =>
+              prev === null || prev >= availableLanguages.length - 1
+                ? 0
+                : prev + 1
+            );
+          }
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          if (!isOpen) {
+            setIsOpen(true);
+            setTimeout(() => setFocusedIndex(availableLanguages.length - 1), 0);
+          } else {
+            setFocusedIndex(prev =>
+              prev === null || prev <= 0
+                ? availableLanguages.length - 1
+                : prev - 1
+            );
+          }
+          break;
+        case 'Home':
+          e.preventDefault();
+          setIsOpen(true);
+          setFocusedIndex(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          setIsOpen(true);
+          setFocusedIndex(availableLanguages.length - 1);
+          break;
+        case 'Tab':
+          setIsOpen(false);
+          setFocusedIndex(null);
+          break;
+        default:
+          // Handle first letter navigation
+          if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const firstMatchIndex = availableLanguages.findIndex(
+              lang => lang.label.charAt(0).toLowerCase() === e.key.toLowerCase()
+            );
+            if (firstMatchIndex >= 0) {
+              setIsOpen(true);
+              setFocusedIndex(firstMatchIndex);
+            }
+          }
+          break;
+      }
+    },
+    [isOpen, availableLanguages.length]
+  );
 
-  const handleOptionKeyDown = useCallback((e: React.KeyboardEvent, langValue: Language, index: number) => {
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        e.preventDefault();
-        changeLanguage(langValue);
-        setIsOpen(false);
-        setFocusedIndex(null);
-        break;
-      case 'Escape':
-        setIsOpen(false);
-        setFocusedIndex(null);
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        setFocusedIndex(index === availableLanguages.length - 1 ? 0 : index + 1);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setFocusedIndex(index === 0 ? availableLanguages.length - 1 : index - 1);
-        break;
-      case 'Tab':
-        setIsOpen(false);
-        setFocusedIndex(null);
-        break;
-      case 'Home':
-        e.preventDefault();
-        setFocusedIndex(0);
-        break;
-      case 'End':
-        e.preventDefault();
-        setFocusedIndex(availableLanguages.length - 1);
-        break;
-      default:
-        break;
-    }
-  }, [availableLanguages.length]);
+  const handleOptionKeyDown = useCallback(
+    (e: React.KeyboardEvent, langValue: Language, index: number) => {
+      switch (e.key) {
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          changeLanguage(langValue);
+          setIsOpen(false);
+          setFocusedIndex(null);
+          break;
+        case 'Escape':
+          setIsOpen(false);
+          setFocusedIndex(null);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          setFocusedIndex(
+            index === availableLanguages.length - 1 ? 0 : index + 1
+          );
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          setFocusedIndex(
+            index === 0 ? availableLanguages.length - 1 : index - 1
+          );
+          break;
+        case 'Tab':
+          setIsOpen(false);
+          setFocusedIndex(null);
+          break;
+        case 'Home':
+          e.preventDefault();
+          setFocusedIndex(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          setFocusedIndex(availableLanguages.length - 1);
+          break;
+        default:
+          break;
+      }
+    },
+    [availableLanguages.length]
+  );
 
   return (
     <div className={styles.languageSelector} ref={dropdownRef}>
@@ -166,10 +179,10 @@ export const LanguageSelector: React.FC = () => {
         aria-label="Select language"
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
-        className={styles.languageButton}
+        className={`${styles.languageButton} bg-red-500 `}
       >
         <span className="flex items-center">
-          <span className="mr-2">{currentLang?.flag}</span>
+          <span className="mr-2 hidden sm:block">{currentLang?.flag}</span>
           <span>{currentLang?.label}</span>
         </span>
         <svg
@@ -182,23 +195,20 @@ export const LanguageSelector: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div
-          className={styles.languageDropdown}
-          role="listbox"
-        >
+        <div className={styles.languageDropdown} role="listbox">
           <ul className={styles.languageOptions}>
             {availableLanguages.map((lang, index) => (
               <li key={lang.value}>
                 <button
                   type="button"
-                  ref={el => optionsRef.current[index] = el!}
+                  ref={el => (optionsRef.current[index] = el!)}
                   className={styles.languageOption}
                   onClick={() => {
                     changeLanguage(lang.value);
                     setIsOpen(false);
                     setFocusedIndex(null);
                   }}
-                  onKeyDown={(e) => handleOptionKeyDown(e, lang.value, index)}
+                  onKeyDown={e => handleOptionKeyDown(e, lang.value, index)}
                   role="option"
                   aria-selected={language === lang.value}
                 >

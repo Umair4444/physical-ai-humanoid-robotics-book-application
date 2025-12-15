@@ -13,23 +13,59 @@ const translations: Record<Language, Record<string, string>> = {
     welcome: 'Welcome',
     themeToggle: 'Toggle Theme',
     languageSwitch: 'Switch Language',
+    faq: 'FAQ',
+    'footer.navigation': 'Quick Links',
+    'footer.resources': 'Resources',
+    'footer.contact': 'Stay Updated',
+    'footer.copyright': 'All rights reserved.',
+    home: 'Home',
+    modules: 'Modules',
+    about: 'About',
+    contact: 'Contact',
+    documentation: 'Documentation',
+    tutorials: 'Tutorials',
+    blog: 'Blog'
   },
   'ur': {
     welcome: 'خوش آمدید',
     themeToggle: 'تھیم تبدیل کریں',
     languageSwitch: 'زبان تبدیل کریں',
+    faq: 'عمومی سوالات',
+    'footer.navigation': 'فوری روابط',
+    'footer.resources': 'وسائل',
+    'footer.contact': 'تازہ ترین رہیں',
+    'footer.copyright': 'تمام حقوق محفوظ ہیں۔',
+    home: 'ہوم',
+    modules: 'ماڈیولز',
+    about: 'ہمارے بارے میں',
+    contact: 'رابطہ',
+    documentation: 'دستاویزات',
+    tutorials: 'ٹیوٹوریلز',
+    blog: 'بلاگ'
   },
   'zh': {
     welcome: '欢迎',
     themeToggle: '切换主题',
     languageSwitch: '切换语言',
+    faq: '常见问题',
+    'footer.navigation': '快速链接',
+    'footer.resources': '资源',
+    'footer.contact': '保持更新',
+    'footer.copyright': '版权所有。',
+    home: '主页',
+    modules: '模块',
+    about: '关于我们',
+    contact: '联系',
+    documentation: '文档',
+    tutorials: '教程',
+    blog: '博客'
   },
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en-US');
+  const [language, setLanguage] = useState<Language>('en');
 
   // Check for saved language in localStorage
   useEffect(() => {
@@ -49,7 +85,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const t = (key: string) => {
-    const translation = translations[language][key];
+    const langTranslations = translations[language];
+    if (!langTranslations) {
+      return key;
+    }
+    const translation = langTranslations[key];
     return translation || key; // Return the key itself if translation not found
   };
 
