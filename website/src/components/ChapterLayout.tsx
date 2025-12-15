@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MainLayout from './MainLayout';
-import { Tab, TabList, TabButton, TabPanel, TabPanels } from './Tab';
+import { Tab, TabList, TabButton, TabPanel, TabPanels } from './Tabs/Tab';
 import { Chapter } from '../types/module';
 
 interface ChapterLayoutProps {
