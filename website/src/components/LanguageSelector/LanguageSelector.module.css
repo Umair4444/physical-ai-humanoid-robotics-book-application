@@ -1,7 +1,7 @@
 .languageSelector {
   position: relative;
   display: inline-block;
-  min-width: 120px;
+  max-width: fit-content;
 }
 
 .languageButton {
@@ -12,11 +12,13 @@
   background-color: white;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
-  padding: 0.5rem 0.8rem;
+  color: black;
+  padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 120px;
+  max-width: 150px;
 }
 
 .languageButton:focus {
@@ -25,13 +27,14 @@
 }
 
 .languageButton:hover {
-  background-color: #f9fafb;
+  background-color: #f3f4f6;
+  color: black;
+  opacity: 1;
 }
 
 .dark .languageButton {
   background-color: #374151;
   border-color: #4b5563;
-  color: white;
 }
 
 .dark .languageButton:hover {
@@ -45,6 +48,7 @@
   width: 100%;
   background-color: white;
   border: 1px solid #d1d5db;
+  color: rgba(0, 0, 0, 0.8);;
   border-radius: 0.5rem;
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -106,5 +110,29 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .languageButton {
+    min-width: auto;
+    padding: 0.5rem;
+    max-width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .languageButton {
+    max-width: 50px;
+    padding: 0.3rem;
+  }
+
+  .languageButton span:last-child {
+    display: none;
+  }
+
+  .languageButton span:nth-child(2) {
+    display: none;
   }
 }

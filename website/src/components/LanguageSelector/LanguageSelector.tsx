@@ -179,11 +179,12 @@ export const LanguageSelector: React.FC = () => {
         aria-label="Select language"
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
-        className={`${styles.languageButton} bg-red-500 `}
+        className={styles.languageButton}
       >
         <span className="flex items-center">
-          <span className="mr-2 hidden sm:block">{currentLang?.flag}</span>
-          <span>{currentLang?.label}</span>
+          <span className="mr-2 text-lg hidden sm:block">{currentLang?.flag}</span>
+          <span className="sm:hidden">{currentLang?.value.toUpperCase()}</span>
+          <span className="hidden sm:block">{currentLang?.label}</span>
         </span>
         <svg
           className={`fill-current h-4 w-4 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
