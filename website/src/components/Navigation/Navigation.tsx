@@ -5,6 +5,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { ThemeToggle } from './../ThemeToggle/ThemeToggle';
 import Link from '@docusaurus/Link';
 import styles from './Navigation.module.css';
+import { LanguageSelector } from '../LanguageSelector/LanguageSelector';
 
 const Navigation: React.FC = () => {
   const { theme } = useTheme();
@@ -35,8 +36,7 @@ const Navigation: React.FC = () => {
     { title: 'Home', path: '/' },
     { title: 'Books', path: '/books' },
     { title: 'Pricing', path: '/pricing' },
-    { title: 'Contact', path: '/contact' },
-    { title: '👤', path: '/login' },
+    { title: '👤 Login', path: '/login' },
   ];
 
   // Check if the current path matches the navigation item
@@ -84,6 +84,7 @@ const Navigation: React.FC = () => {
 
         {/* Theme Toggle and Auth Links - Always visible */}
         <div className={`${styles.navActions} space-x-4`}>
+          <LanguageSelector />
           <ThemeToggle />
 
           <button

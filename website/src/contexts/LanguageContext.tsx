@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Language = 'en-US' | 'ur-PK' | 'zh-CN';
+type Language = 'en' | 'ur' | 'zh';
 type LanguageContextType = {
   language: Language;
   changeLanguage: (lang: Language) => void;
@@ -9,17 +9,17 @@ type LanguageContextType = {
 
 // Simple translation object - would be expanded in real implementation
 const translations: Record<Language, Record<string, string>> = {
-  'en-US': {
+  'en': {
     welcome: 'Welcome',
     themeToggle: 'Toggle Theme',
     languageSwitch: 'Switch Language',
   },
-  'ur-PK': {
+  'ur': {
     welcome: 'خوش آمدید',
     themeToggle: 'تھیم تبدیل کریں',
     languageSwitch: 'زبان تبدیل کریں',
   },
-  'zh-CN': {
+  'zh': {
     welcome: '欢迎',
     themeToggle: '切换主题',
     languageSwitch: '切换语言',
