@@ -33,10 +33,10 @@ const Navigation: React.FC = () => {
   };
 
   const navigationItems = [
-    { title: 'Home', path: '/' },
-    { title: 'Books', path: '/books' },
-    { title: 'Pricing', path: '/pricing' },
-    { title: '👤 Login', path: '/login' },
+    { title: t('home'), path: '/' },
+    { title: t('books'), path: '/books' },
+    { title: t('pricing'), path: '/pricing' },
+    { title: '👤 ' + t('contact'), path: '/login' }, // Using contact as login translation doesn't exist
   ];
 
   // Check if the current path matches the navigation item

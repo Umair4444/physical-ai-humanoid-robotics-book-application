@@ -163,7 +163,7 @@ const Pricing: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
+    <div className="">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold pb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           Pricing Plan
@@ -188,9 +188,6 @@ const Pricing: React.FC = () => {
             }
             className="relative rounded-full w-14 h-7 bg-indigo-600 focus:outline-none"
           >
-            <span
-              className={`absolute inset-0.5 rounded-full bg-white transition-opacity ${billingCycle === 'annual' ? 'opacity-100' : 'opacity-0'}`}
-            ></span>
             <span
               className={`absolute top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full bg-white transition-transform ${billingCycle === 'annual' ? 'left-7' : 'left-0.5'}`}
             ></span>

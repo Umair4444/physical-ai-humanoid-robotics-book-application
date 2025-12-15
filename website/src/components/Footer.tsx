@@ -74,15 +74,15 @@ const Footer: React.FC = () => {
 
   // Actual pages in the site
   const quickLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Books', path: '/books' },
-    { name: 'Pricing', path: '/pricing' },
-    { name: 'Contact', path: '/contact' },
+    { name: t('home'), path: '/' },
+    { name: t('books'), path: '/books' },
+    { name: t('pricing'), path: '/pricing' },
+    { name: t('contact'), path: '/contact' },
   ];
 
   const resourceLinks = [
-    { name: 'Documentation', path: '/docs/books/physical-ai-humanoid-robotics-book/intro' },
-    { name: 'Blog', path: '/blog' },
+    { name: t('documentation'), path: '/docs/books/physical-ai-humanoid-robotics-book/intro' },
+    { name: t('blog'), path: '/blog' },
     { name: t('faq') || 'FAQ', path: '/contact' }, // Using contact as FAQ since there's no specific FAQ page
   ];
 
