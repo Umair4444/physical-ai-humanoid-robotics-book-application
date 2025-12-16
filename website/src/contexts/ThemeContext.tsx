@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { updateDocumentTheme } from '../utils/themeUtils';
 
 type Theme = 'light' | 'dark';
 type ThemeContextType = {
@@ -17,7 +18,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     if (savedTheme) {
       setThemeState(savedTheme);
     } else if (systemPrefersDark) {
@@ -28,13 +29,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Update localStorage and CSS class when theme changes
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    if (theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.classList.remove('dark');
-    }
+    updateDocumentTheme(theme === 'dark');
   }, [theme]);
 
   const toggleTheme = () => {

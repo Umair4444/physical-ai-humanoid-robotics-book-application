@@ -1,54 +1,454 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-/* Custom styles for AI Robotics theme */
+@custom-variant dark (&:is([data-theme="dark"] *));
+
+/* Custom styles for AI Robotics theme following design system constitution */
 :root {
-  --ifm-color-primary: #2563EB; /* indigo-blue */
-  --ifm-color-primary-dark: #1D4ED8;
-  --ifm-color-primary-darker: #1A3FBB;
+  /* Semantic color variables for design system compliance */
+  --ifm-color-primary: #2563eb; /* indigo-blue primary */
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1a3fbb;
   --ifm-color-primary-darkest: #143199;
-  --ifm-color-primary-light: #3B82F6;
-  --ifm-color-primary-lighter: #60A5FA;
-  --ifm-color-primary-lightest: #93C5FD;
-  --ifm-navbar-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  --ifm-footer-background-color: #0F172A;
-  --ifm-footer-color: #FFFFFF;
-  --ifm-footer-link-color: #CBD5E1;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+
+  /* Background and text colors */
+  --ifm-color-background: #f8fafc;
+  --ifm-color-background-dark: #0f172a;
+  --ifm-color-text: #1e293b;
+  --ifm-color-text-light: #64748b;
+  --ifm-color-text-muted: #94a3b8;
+  --ifm-color-text-inverse: #ffffff;
+
+  /* Border colors */
+  --ifm-color-border: #e2e8f0;
+  --ifm-color-border-light: #f1f5f9;
+  --ifm-color-border-dark: #94a3b8;
+
+  /* Component-specific colors */
+  --ifm-navbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --ifm-footer-background-color: #f8fafc;
+  --ifm-footer-color: #1e293b;
+  --ifm-footer-link-color: #64748b;
+
+  /* Typography */
+  --ifm-font-family-base: 'Inter', system-ui, sans-serif;
+  --ifm-font-family-heading: 'Inter', system-ui, sans-serif;
+
+  /* Transition timing */
+  --ifm-transition-fast: 0.2s ease;
+  --ifm-transition-normal: 0.3s ease;
+  --ifm-transition-slow: 0.5s ease;
+
+  /* Spacing system */
+  --ifm-spacing-xs: 0.5rem;    /* 8px */
+  --ifm-spacing-sm: 0.75rem;   /* 12px */
+  --ifm-spacing-md: 1rem;      /* 16px */
+  --ifm-spacing-lg: 1.5rem;    /* 24px */
+  --ifm-spacing-xl: 2rem;      /* 32px */
+  --ifm-spacing-2xl: 3rem;     /* 48px */
 }
 
 /* Dark mode theme */
 html[data-theme='dark'] {
-  --ifm-color-primary: #60A5FA; /* light blue */
-  --ifm-color-primary-dark: #3B82F6;
-  --ifm-color-primary-darker: #2563EB;
-  --ifm-color-primary-darkest: #1D4ED8;
-  --ifm-color-primary-light: #93C5FD;
-  --ifm-color-primary-lighter: #BFDBFE;
-  --ifm-color-primary-lightest: #DBEAFE;
-  --ifm-background-color: #0F172A;
-  --ifm-footer-background-color: #1E293B;
+  --ifm-color-primary: #60a5fa; /* light blue */
+  --ifm-color-primary-dark: #3b82f6;
+  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary-darkest: #1d4ed8;
+  --ifm-color-background: #0f172a;
+  --ifm-color-text: #e2e8f0;
+  --ifm-color-text-light: #cbd5e1;
+  --ifm-color-text-muted: #94a3b8;
+  --ifm-color-background-dark: #0f172a;
+  --ifm-footer-background-color: #0f172a;
+  --ifm-footer-color: #e2e8f0;
+  --ifm-footer-link-color: #cbd5e1;
 }
 
 /* Custom components */
 .navbar {
   backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(248, 250, 252, 0.85);
+  border-bottom: 1px solid var(--ifm-color-border);
+  transition: background-color var(--ifm-transition-fast), border-color var(--ifm-transition-fast);
 }
 
 html[data-theme='dark'] .navbar {
   background-color: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid var(--ifm-color-border-dark);
 }
 
-/* Capsule-like navigation elements */
+/* Capsule-like navigation elements (as per design system) */
 .navbar__item,
 .navbar__link,
 .menu__link,
 .button {
-  border-radius: 9999px; /* Make them capsule-shaped */
+  border-radius: 9999px; /* Make them capsule-shaped as per design system */
 }
 
-/* Smooth transitions for theme changes */
+/* Responsive design elements */
+.container {
+  max-width: 100%;
+  padding: 0 1rem;
+}
+
+/* Tablet and up */
+@media (min-width: 640px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1280px;
+    padding: 0 2rem;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1500px;
+  }
+}
+
+/* Smooth transitions for theme changes and interactions */
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color var(--ifm-transition-fast),
+    border-color var(--ifm-transition-fast),
+    color var(--ifm-transition-fast),
+    transform var(--ifm-transition-fast);
+}
+
+/* Smooth theme transitions */
+html {
+  scroll-behavior: smooth;
+  transition: background-color var(--ifm-transition-normal);
+}
+
+/* Accessibility and responsive text sizing */
+:root {
+  font-size: 16px;
+}
+
+/* Heading hierarchy for educational content */
+h1 {
+  font-family: var(--ifm-font-family-heading);
+  font-weight: 600;
+  font-size: clamp(1.875rem, 4vw, 3rem); /* Responsive sizing */
+}
+
+h2 {
+  font-family: var(--ifm-font-family-heading);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 2.25rem); /* Responsive sizing */
+}
+
+h3 {
+  font-family: var(--ifm-font-family-heading);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem); /* Responsive sizing */
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Enhanced responsive design for mobile-first approach */
+@media (max-width: 639px) {
+  .flex {
+    flex-direction: column;
+  }
+
+  .md\:flex-row {
+    flex-direction: column;
+  }
+
+  .md\:mb-0 {
+    margin-bottom: 1rem;
+  }
+
+  /* Adjust spacing for mobile */
+  .mb-16 {
+    margin-bottom: 2rem;
+  }
+
+  .mb-10 {
+    margin-bottom: 1.5rem;
+  }
+
+  .py-8 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  /* Mobile-friendly button sizing */
+  .button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Tablet responsive styles */
+@media (min-width: 640px) and (max-width: 1023px) {
+  /* Adjust grid for tablets */
+  .grid.cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Focus accessibility */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Theme toggle button styling */
+.react-toggle {
+  touch-action: pan-x;
+
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.react-toggle-screenreader-only {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.react-toggle--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  -webkit-transition: opacity 0.25s;
+  transition: opacity 0.25s;
+}
+
+.react-toggle-track {
+  width: 50px;
+  height: 24px;
+  padding: 0;
+  border-radius: 30px;
+  background-color: var(--ifm-color-border);
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+html[data-theme='dark'] .react-toggle-track {
+  background-color: var(--ifm-color-text-muted);
+}
+
+.react-toggle-track-check {
+  position: absolute;
+  width: 14px;
+  height: 10px;
+  top: 0px;
+  bottom: 0px;
+  margin-top: auto;
+  margin-bottom: auto;
+  line-height: 0;
+  left: 8px;
+  opacity: 0;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
+}
+
+html[data-theme='dark'] .react-toggle-track-check {
+  opacity: 1;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
+}
+
+.react-toggle-track-x {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 0px;
+  bottom: 0px;
+  margin-top: auto;
+  margin-bottom: auto;
+  line-height: 0;
+  right: 10px;
+  opacity: 1;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
+}
+
+html[data-theme='dark'] .react-toggle-track-x {
+  opacity: 0;
+}
+
+.react-toggle-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--ifm-color-background);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+
+html[data-theme='dark'] .react-toggle-thumb {
+  left: 30px;
+  background-color: var(--ifm-color-background);
+}
+
+.react-toggle--checked .react-toggle-thumb {
+  left: 30px;
+}
+
+html[data-theme='dark'] .react-toggle--checked .react-toggle-thumb {
+  left: 4px;
+}
+
+.react-toggle--focus .react-toggle-thumb {
+  -webkit-box-shadow: 0px 0px 3px 2px var(--ifm-color-primary);
+  -moz-box-shadow: 0px 0px 3px 2px var(--ifm-color-primary);
+  box-shadow: 0px 0px 3px 2px var(--ifm-color-primary);
+}
+
+.react-toggle:active:not(.react-toggle--disabled) .react-toggle-thumb {
+  -webkit-box-shadow: 0px 0px 5px 2px var(--ifm-color-primary);
+  -moz-box-shadow: 0px 0px 5px 2px var(--ifm-color-primary);
+  box-shadow: 0px 0px 5px 2px var(--ifm-color-primary);
+}
+
+/* Card component styling */
+.card {
+  border-radius: var(--ifm-spacing-md);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform var(--ifm-transition-fast), box-shadow var(--ifm-transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive card grid */
+.card-grid {
+  display: grid;
+  gap: var(--ifm-spacing-lg);
+}
+
+@media (min-width: 640px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Button styles */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px; /* Pill shape */
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: all var(--ifm-transition-fast);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--ifm-color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--ifm-color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--ifm-color-primary);
+  border: 2px solid var(--ifm-color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--ifm-color-primary);
+  color: white;
+}
+
+/* Utility classes for responsive spacing */
+.space-y-8 > :not([hidden]) ~ :not([hidden]) {
+  --space-y-reverse: 0;
+  margin-top: calc(2rem * calc(1 - var(--space-y-reverse)));
+  margin-bottom: calc(2rem * var(--space-y-reverse));
+}
+
+@media (min-width: 640px) {
+  .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: calc(4rem * calc(1 - var(--space-y-reverse)));
+    margin-bottom: calc(4rem * var(--space-y-reverse));
+  }
 }

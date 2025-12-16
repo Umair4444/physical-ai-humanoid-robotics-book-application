@@ -1,5 +1,5 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
@@ -34,6 +34,7 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+  plugins: ['./src/plugins/tailwind-config.js'],
 
   presets: [
     [
@@ -75,74 +76,18 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Physical AI Textbook',
-      logo: {
-        alt: 'Physical AI Humanoid Robotics Logo',
-        src: 'img/logo.svg',
-      },
-      items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Textbook',
-        },
-        {to: '/blog', label: 'Blog', position: 'left'},
-        {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
-          position: 'right',
-        },
-      ],
+      // Disable the default Docusaurus navbar since we're using a custom header
+      style: 'primary',
+      hideOnScroll: true,
     },
     footer: {
+      // Disable the default Docusaurus footer since we're using a custom footer
       style: 'dark',
-      links: [
-        {
-          title: 'Textbook',
-          items: [
-            {
-              label: 'Introduction',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} Physical AI Humanoid Robotics Project. Built with Docusaurus.`,
-    },
-    prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      links: [],
+      copyright:
+        'Copyright © ' +
+        new Date().getFullYear() +
+        ' AI Robotics Textbook. All rights reserved.',
     },
   } satisfies Preset.ThemeConfig,
 };

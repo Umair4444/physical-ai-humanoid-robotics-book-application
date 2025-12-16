@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> & CardComposition = ({
   const responsiveClasses = responsive ? 'w-full max-w-full' : '';
 
   const cardClasses = [
-    'bg-white dark:bg-gray-800 rounded-lg shadow-md',
+    'bg-background dark:bg-background-dark rounded-lg shadow-md',
     responsiveClasses,
     paddingClasses[padding],
     className,
@@ -45,7 +45,7 @@ const CardHeader: React.FC<{ children: React.ReactNode; className?: string }> = 
   className = '',
 }) => {
   const headerClasses = [
-    'text-xl font-semibold pb-3 border-b border-gray-200 dark:border-gray-700',
+    'text-xl font-semibold pb-3 border-b border-border dark:border-border-dark',
     className,
   ].filter(Boolean).join(' ');
 
@@ -69,7 +69,7 @@ const CardFooter: React.FC<{ children: React.ReactNode; className?: string }> = 
   className = '',
 }) => {
   const footerClasses = [
-    'pt-3 border-t border-gray-200 dark:border-gray-700',
+    'pt-3 border-t border-border dark:border-border-dark',
     className,
   ].filter(Boolean).join(' ');
 

@@ -1,16 +1,17 @@
-<!-- 
+<!--
 SYNCHRONIZATION IMPACT REPORT
-Version change: 1.0.0 → 1.1.0
-Modified principles: None (new project constitution)
-Added sections: All sections are new for this project
+Version change: 1.1.0 → 1.2.0
+Modified principles: None
+Added sections: Global Design System & Responsiveness Laws (complete new section with 9 rules)
 Removed sections: None
-Templates requiring updates: 
+Templates requiring updates:
 - ✅ plan-template.md - Updated constitution check references
 - ✅ spec-template.md - Aligned requirements sections
 - ⚠ tasks-template.md - May need review for specific task types (pending)
-Templates unchanged: 
+- ⚠ README.md - May need update to reflect new design system requirements (pending)
+Templates unchanged:
 - commands/*.toml - No project-specific changes needed
-Follow-up TODOs: None
+Follow-up TODOs: Update README.md with design system guidelines
 -->
 
 # Physical AI Humanoid Robotics Textbook Constitution
@@ -47,6 +48,44 @@ Use Node/npm for all TypeScript-based packages and dependencies; Use Uv for all 
 - Version Control: GitHub
 - Deployment: Vercel
 - Folder Structure: Organized by functionality and feature domain
+
+## Global Design System & Responsiveness Laws
+
+### 1. Single Theme Rule
+The entire application (Docusaurus frontend, documentation pages, interactive UI, and future components) MUST use one unified design theme. Colors, typography, spacing, headings, and UI tone must be globally consistent. No page, component, or section may introduce isolated styles.
+
+### 2. Theme Definition Source
+The theme must be defined in a single source of truth:
+- Docusaurus theme config
+- CSS variables / Tailwind tokens (if used)
+- Shared design tokens
+Inline styles are forbidden. Hardcoded colors or fonts are forbidden.
+
+### 3. Color System Rules
+Define a primary, secondary, accent, background, and text color palette. All colors must be semantic (e.g. --color-primary, --color-bg). Dark-mode compatibility must be enforced. High contrast and readability is mandatory.
+
+### 4. Typography Rules
+One font family for headings. One font family for body text. Strict heading hierarchy (H1 → H6). No arbitrary font sizes. Line length and spacing optimized for educational reading.
+
+### 5. Heading & Content Style
+Headings must follow a consistent tone across the textbook. Section titles must be descriptive, educational, and consistent. No visual style drift between chapters.
+
+### 6. Responsiveness Law
+Every page MUST be fully responsive. Mobile-first design is mandatory. Breakpoints must support:
+- Mobile
+- Tablet
+- Desktop
+- Large screens
+Horizontal scrolling is forbidden. Images must scale responsively.
+
+### 7. Image & Media Responsiveness
+All images must use responsive sizing, preserve aspect ratio and load efficiently. Images must not overflow containers. Captions must remain readable on small screens.
+
+### 8. Accessibility Rules
+WCAG-inspired contrast ratios must be respected. Text must be readable without zoom. Navigation must remain usable on touch devices.
+
+### 9. Enforcement Rules
+Any feature, page, or component that violates theme or responsiveness rules is considered invalid. AI agents must refuse to generate code that breaks design consistency. Human reviewers must reject PRs violating these rules.
 
 ### Environment Configuration
 - Maintain sample .env file with all required environment variables
@@ -96,4 +135,4 @@ Use Node/npm for all TypeScript-based packages and dependencies; Use Uv for all 
 
 This constitution governs all development and content creation for the Physical AI Humanoid Robotics Textbook project; All changes to this constitution require team consensus and documented approval; Amendments must be recorded with date and rationale; All contributors must acknowledge and abide by these principles.
 
-**Version**: 1.1.0 | **Ratified**: 2025-01-03 | **Last Amended**: 2025-01-03
+**Version**: 1.2.0 | **Ratified**: 2025-01-03 | **Last Amended**: 2025-12-13
