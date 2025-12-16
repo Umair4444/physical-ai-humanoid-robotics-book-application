@@ -41,11 +41,14 @@ const config: Config = {
       'classic',
       {
         docs: {
-          sidebarPath: './sidebars.ts',
+          sidebarPath: './sidebars.ts', // Path to the sidebars file
+          // Use the book sidebar configuration
+          sidebarCollapsed: false,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          routeBasePath: '/', // Serve the docs at the site's root
         },
         blog: {
           showReadingTime: true,
@@ -84,10 +87,7 @@ const config: Config = {
       // Disable the default Docusaurus footer since we're using a custom footer
       style: 'dark',
       links: [],
-      copyright:
-        'Copyright © ' +
-        new Date().getFullYear() +
-        ' AI Robotics Textbook. All rights reserved.',
+      copyright: `Copyright © ${new Date().getFullYear()} Physical AI Humanoid Robotics Textbook. All rights reserved.`,
     },
   } satisfies Preset.ThemeConfig,
 };

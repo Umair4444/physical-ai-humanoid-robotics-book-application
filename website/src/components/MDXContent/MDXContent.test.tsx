@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MDXContent } from './MDXContent';
+import MDXContent from './MDXContent';
 
 describe('MDXContent Component', () => {
   test('renders MDX content correctly', () => {

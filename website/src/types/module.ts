@@ -11,6 +11,7 @@ export interface Chapter {
   id: string;
   moduleId: string;
   title: string;
+  description?: string;
   order: number;
   lessonContent: string;
   summaryContent: string;

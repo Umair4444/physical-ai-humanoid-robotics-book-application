@@ -2,8 +2,11 @@ import React from 'react';
 import MainLayout from '../components/MainLayout';
 import { useTheme } from '../contexts/ThemeContext';
 import PricingCard from '../components/Pricing/PricingCard';
-import ScrollTopButton from '../components/ScrollButton/ScrollTopButton';
 import styles from './index.module.css';
+import BookCard from '../components/BookCard/BookCard';
+import { Link } from 'react-router-dom';
+import NewsletterSignup from '../components/NewsletterSignup/NewsletterSignup';
+import Features from '../components/Features/Features';
 
 const HomePage: React.FC = () => {
   const { theme } = useTheme();
@@ -45,6 +48,46 @@ const HomePage: React.FC = () => {
         'Career guidance',
         'Custom learning paths',
       ],
+    },
+  ];
+
+  // Sample book data
+  const books = [
+    {
+      id: 'book-1',
+      title: 'Introduction to AI Robotics',
+      description:
+        'Learn the fundamentals of artificial intelligence in robotics applications',
+      coverImage: '/img/book1-cover.jpg',
+      rating: 4.8,
+      price: 29.99,
+    },
+    {
+      id: 'book-2',
+      title: 'Humanoid Design Principles',
+      description:
+        'Deep dive into the design and engineering of humanoid robots',
+      coverImage: '/img/book2-cover.jpg',
+      rating: 4.7,
+      price: 39.99,
+    },
+    {
+      id: 'book-3',
+      title: 'Neural Networks in Motion',
+      description:
+        'Explore how neural networks enable complex robotic movements',
+      coverImage: '/img/book3-cover.jpg',
+      rating: 4.9,
+      price: 44.99,
+    },
+    {
+      id: 'book-4',
+      title: 'Ethics in AI Robotics',
+      description:
+        'Critical examination of ethical considerations in AI-powered robotics',
+      coverImage: '/img/book4-cover.jpg',
+      rating: 4.6,
+      price: 34.99,
     },
   ];
 
@@ -142,6 +185,27 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
+        {/* Featured Books Section */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">
+              Featured Books
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {books.map(book => (
+                <BookCard key={book.id} book={book} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-16 bg-gray-100 dark:bg-gray-800">
+          <div className="container mx-auto px-4">
+            <Features />
+          </div>
+        </section>
+
         {/* Pricing Section */}
         <section className="mb-16" id="pricing">
           <div className="container mx-auto px-4">
@@ -174,7 +238,7 @@ const HomePage: React.FC = () => {
 
         {/* Testimonials Section - Scrolling */}
         <section
-          className={`${styles.testimonialsSection} mb-16`}
+          className={`${styles.testimonialsSection} mb-8`}
           id="testimonials"
         >
           <div className="container mx-auto px-4">
@@ -285,8 +349,35 @@ const HomePage: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* Newsletter Signup Section */}
+        <section className="pb-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <NewsletterSignup />
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16 bg-gradient-to-r from-indigo-600 to-purple-700 text-white">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-4">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto">
+              Join thousands of students and professionals learning about the
+              future of robotics.
+            </p>
+            <Link
+              to="/signup"
+              className="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition-colors inline-block"
+            >
+              Create Free Account
+            </Link>
+          </div>
+        </section>
       </div>
-      <ScrollTopButton />
     </MainLayout>
   );
 };

@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import Footer from './Footer';
 import { ThemeApplier } from './ThemeApplier/ThemeApplier';
 import Navigation from './Navigation/Navigation';
+import ScrollTopButton from './ScrollButton/ScrollTopButton';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -18,11 +19,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     <div className="flex flex-col min-h-screen">
       <ThemeApplier />
       <Navigation />
-      <main className="grow pt-24">
+      <main className="grow pt-20">
         {title && <title>{title}</title>}
         {description && <meta name="description" content={description} />}
         {children}
       </main>
+      <ScrollTopButton />
+
       <Footer />
     </div>
   );
