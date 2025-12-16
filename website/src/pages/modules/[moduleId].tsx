@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from '@docusaurus/router';
+import { useParams } from 'react-router-dom';
 import { ModuleLayout } from '../../components/ModuleLayout';
 import { contentService } from '../../services/contentService';
 import { Module, Chapter } from '../../types/module';
