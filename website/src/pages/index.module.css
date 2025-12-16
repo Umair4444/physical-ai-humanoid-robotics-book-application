@@ -1,0 +1,235 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+  color: white;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.themeToggle {
+  margin-top: 1.5rem;
+}
+
+.themeButton {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+}
+
+.themeButton:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Books Section */
+.booksSection {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-color);
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--ifm-heading-color);
+}
+
+.booksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.bookCard {
+  background: var(--ifm-card-background-color);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bookCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--ifm-global-shadow-md);
+}
+
+.bookImage {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.bookImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bookContent {
+  padding: 1.5rem;
+}
+
+.bookContent h3 {
+  margin-top: 0;
+  color: var(--ifm-heading-color);
+}
+
+.bookContent p {
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 1.5rem;
+}
+
+/* Testimonials Section */
+.testimonialsSection {
+  padding: 4rem 0;
+  background-color: #f9fafb;
+}
+
+.testimonialsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.testimonialCard {
+  background: var(--ifm-card-background-color);
+  border-radius: var(--ifm-global-radius);
+  padding: 1.5rem;
+  box-shadow: var(--ifm-global-shadow-lw);
+  position: relative;
+}
+
+.stars {
+  color: #f59e0b;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.testimonialText {
+  font-style: italic;
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 1rem;
+}
+
+.testimonialAuthor {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.testimonialAuthor strong {
+  color: var(--ifm-color-emphasis-900);
+}
+
+.testimonialAuthor span {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* Pricing Section */
+.pricingSection {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-color);
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.pricingCard {
+  background: var(--ifm-card-background-color);
+  border-radius: var(--ifm-global-radius);
+  padding: 2rem;
+  box-shadow: var(--ifm-global-shadow-lw);
+  text-align: center;
+  position: relative;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.pricingCard.popular {
+  border: 2px solid var(--ifm-color-primary);
+  transform: scale(1.03);
+}
+
+.popularTag {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.25rem 1rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.pricingCard h3 {
+  margin-top: 0;
+  color: var(--ifm-heading-color);
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: var(--ifm-color-primary);
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.featuresList li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.featuresList li:before {
+  content: '✓';
+  color: var(--ifm-color-success);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* Features Section */
+.featuresSection {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-color);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}

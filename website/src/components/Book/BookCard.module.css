@@ -1,0 +1,97 @@
+.bookCard {
+  background: var(--ifm-card-background-color);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bookCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--ifm-global-shadow-md);
+}
+
+.bookImage {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.bookImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.bookCard:hover .bookImage img {
+  transform: scale(1.05);
+}
+
+.bookContent {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookTitle {
+  margin-top: 0;
+  color: var(--ifm-heading-color);
+  font-size: 1.25rem;
+  font-weight: var(--ifm-font-weight-bold);
+}
+
+.bookDescription {
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tag {
+  background-color: #e0e7ff;
+  color: #3730a3;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.featured {
+  border: 2px solid var(--ifm-color-primary);
+}
+
+/* Dark mode specific styles */
+.darkMode {
+  background-color: #1e293b;
+}
+
+.darkMode .bookTitle {
+  color: #f8fafc;
+}
+
+.darkMode .bookDescription {
+  color: #cbd5e1;
+}
+
+.darkMode .tag {
+  background-color: #374151;
+  color: #93c5fd;
+}
