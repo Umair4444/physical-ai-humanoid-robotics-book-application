@@ -5,6 +5,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { ThemeToggle } from './../ThemeToggle/ThemeToggle';
 import Link from '@docusaurus/Link';
 import styles from './Navigation.module.css';
+import { LanguageSelector } from '../LanguageSelector/LanguageSelector';
 
 const Navigation: React.FC = () => {
   const { theme } = useTheme();
@@ -32,11 +33,10 @@ const Navigation: React.FC = () => {
   };
 
   const navigationItems = [
-    { title: 'Home', path: '/' },
-    { title: 'Books', path: '/books' },
-    { title: 'Pricing', path: '/pricing' },
-    { title: 'Contact', path: '/contact' },
-    { title: '👤', path: '/login' },
+    { title: t('home'), path: '/' },
+    { title: t('books'), path: '/books' },
+    { title: t('pricing'), path: '/pricing' },
+    { title: '👤 ' + t('contact'), path: '/login' }, // Using contact as login translation doesn't exist
   ];
 
   // Check if the current path matches the navigation item
@@ -78,12 +78,13 @@ const Navigation: React.FC = () => {
                   {item.title}
                 </Link>
               </li>
-            ))}           
+            ))}
           </ul>
         </div>
 
         {/* Theme Toggle and Auth Links - Always visible */}
         <div className={`${styles.navActions} space-x-4`}>
+          <LanguageSelector />
           <ThemeToggle />
 
           <button
@@ -134,25 +135,6 @@ const Navigation: React.FC = () => {
                 </Link>
               </li>
             ))}
-            {/* Auth links for mobile */}
-            <li className={styles.navMobileItem}>
-              <Link
-                to="/login"
-                className={styles.navMobileLink}
-                onClick={closeMenu}
-              >
-                👤 Log In
-              </Link>
-            </li>
-            <li className={styles.navMobileItem}>
-              <Link
-                to="/signup"
-                className={`${styles.navMobileLink} bg-indigo-600 text-white rounded-lg px-4 py-2`}
-                onClick={closeMenu}
-              >
-                ✍️ Sign Up
-              </Link>
-            </li>
           </ul>
         </div>
       </div>

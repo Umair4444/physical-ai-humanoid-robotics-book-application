@@ -67,12 +67,7 @@ const ChatbotComponent: React.FC = () => {
       role="region"
       aria-label="AI Assistant Chat"
     >
-      {/* Chat Header */}
-      <div className="bg-indigo-600 text-white p-4 flex items-center" role="banner">
-        <FaRobot className="mr-2 text-xl" aria-hidden="true" />
-        <h3 className="text-lg font-semibold">AI Assistant</h3>
-      </div>
-
+   
       {/* Messages Container */}
       <div
         className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900"
