@@ -18,7 +18,8 @@ function adaptChapterContentToChapter(chapterContent: ChapterContent): Chapter {
     duration: chapterContent.duration || 0, // Add default if not present
     imageUrl: (chapterContent as any).imageUrl,
     isActive: false,
-    isCompleted: false
+    isCompleted: false,
+    showTitle: (chapterContent as any).showTitle
   };
 }
 

@@ -7,6 +7,13 @@ summaryTab: true
 duration: 17
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
 ## Lesson: Actuation Systems and Control in Humanoid Robots
 
 ### Introduction to Actuation in Humanoid Robotics
@@ -201,6 +208,11 @@ Actuation systems in humanoid robots must meet several challenging requirements:
 
 Actuation systems form the physical foundation of humanoid robotics, and continued advancement in this area is critical for creating more capable, safe, and human-like robots.
 
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
 ## Summary
 
 - Actuation systems convert energy to mechanical motion in humanoid robots
@@ -209,3 +221,7 @@ Actuation systems form the physical foundation of humanoid robotics, and continu
 - Safety and compliance are critical considerations for human interaction
 - Advanced control techniques enable sophisticated behaviors
 - Emerging technologies aim to make actuators more human-like and efficient
+
+</div>
+</TabItem>
+</Tabs>

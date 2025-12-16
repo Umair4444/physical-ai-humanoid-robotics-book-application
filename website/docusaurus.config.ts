@@ -42,13 +42,16 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts', // Path to the sidebars file
-          // Use the book sidebar configuration
+          // Use the textbook sidebar configuration
           sidebarCollapsed: false,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          showLastUpdateTime: true,
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           routeBasePath: '/', // Serve the docs at the site's root
+          // Table of contents settings
+          admonitions: {
+            keywords: ['caution', 'note', 'tip', 'danger', 'info'],
+          },
         },
         blog: {
           showReadingTime: true,

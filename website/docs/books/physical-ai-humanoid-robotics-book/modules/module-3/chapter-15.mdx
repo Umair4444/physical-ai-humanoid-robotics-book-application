@@ -7,6 +7,13 @@ summaryTab: true
 duration: 20
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
 ## Lesson: Sensing and Perception Hardware for Physical AI
 
 ### Introduction to Sensing in Physical AI
@@ -334,6 +341,11 @@ The key requirements for sensing hardware in Physical AI include:
 
 Sensing and perception hardware continue to advance with new technologies, processing capabilities, and integration approaches, enabling humanoid robots to achieve more sophisticated and reliable environmental awareness and interaction capabilities.
 
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
 ## Summary
 
 - Sensing hardware enables humanoid robots to perceive their environment
@@ -348,3 +360,7 @@ Sensing and perception hardware continue to advance with new technologies, proce
 - Safety requires redundancy and security measures
 - Emerging technologies explore biomimetic and quantum sensors
 - Integration challenges involve hardware-software co-design
+
+</div>
+</TabItem>
+</Tabs>

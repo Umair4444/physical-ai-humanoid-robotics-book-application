@@ -7,267 +7,299 @@ summaryTab: true
 duration: 20
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
 ## Lesson: Advanced Sensorimotor Control and Learning
 
-### Introduction to Advanced Sensorimotor Control
+### Introduction to Advanced Control
 
-Advanced sensorimotor control in Physical AI extends beyond basic reactive behaviors to incorporate sophisticated learning and adaptation mechanisms. These systems enable robots to develop increasingly complex and efficient behaviors through experience, similar to how humans and animals improve their motor skills over time.
+Advanced sensorimotor control in physical AI systems represents a significant evolution from basic reflexive responses to sophisticated, adaptive behaviors. This level of control involves complex algorithms that can learn from experience, adapt to new situations, and optimize performance over time.
 
-The key components of advanced sensorimotor control include:
-- **Adaptive control systems** that adjust to changing conditions
-- **Learning algorithms** that improve performance over time
-- **Predictive models** that anticipate consequences of actions
-- **Multisensory integration** for robust perception-action coupling
-- **Hierarchical control architectures** that coordinate multiple levels of behavior
+Key characteristics of advanced sensorimotor control include:
+- **Learning capabilities**: Systems that improve performance through experience
+- **Adaptability**: Ability to adjust to changing environments and conditions
+- **Robustness**: Maintaining functionality despite disturbances and uncertainties
+- **Optimization**: Maximizing performance metrics while respecting constraints
 
-### Learning-Based Motor Control
+### Machine Learning in Sensorimotor Control
 
-**Supervised Learning in Motor Control**:
-- Learning from human demonstrations (kinesthetic teaching)
-- Imitation learning approaches
-- Behavior cloning from expert demonstrations
-- Challenges with distribution mismatch and error accumulation
+#### Supervised Learning Approaches
 
-**Reinforcement Learning**:
-- Learning through trial and error with reward signals
-- Policy gradient methods for continuous control
-- Actor-critic architectures for value-based learning
-- Deep reinforcement learning for complex motor skills
-- Exploration vs. exploitation trade-offs
+Supervised learning techniques can be applied to sensorimotor control by training models on paired input-output datasets:
 
-**Model-Based Learning**:
-- Learning internal models of the body and environment
-- Forward models predicting sensory consequences of actions
-- Inverse models for computing required motor commands
-- System identification techniques
-- Adaptive control using learned models
+**Behavior Cloning**:
+- Trains on demonstrations of expert behavior
+- Maps sensory inputs directly to motor outputs
+- Effective for tasks with clear expert demonstrations
+- Limited by the quality and variety of demonstrations
 
-**Model-Free Learning**:
-- Learning control policies directly from experience
-- Direct optimization of performance metrics
-- Evolution strategies for robot skill learning
-- Black-box optimization methods
+**Inverse Dynamics Learning**:
+- Learns to predict required forces/torques from desired movements
+- Improves model accuracy for feedforward control
+- Requires accurate state estimation
+- Can capture complex dynamic effects
 
-### Optimal Feedback Control
+#### Reinforcement Learning for Control
 
-**Principles of Optimal Feedback Control**:
-- Framework for understanding biological movement
-- Cost function optimization approaches
-- Stochastic optimal control for handling uncertainty
-- Applications to motor adaptation and learning
+Reinforcement learning (RL) has shown remarkable success in sensorimotor control applications:
 
-**Linear-Quadratic Regulator (LQR)**:
-- Optimal control for linear systems with quadratic costs
-- Application to robot balance and manipulation
-- Handling of system constraints
-- Extensions to nonlinear systems (LQR-Trees)
+**Deep Q-Networks (DQN)**:
+- Uses deep neural networks to approximate action-value functions
+- Effective for discrete action spaces
+- Requires careful reward design
+- Memory replay stabilizes training
 
-**Robust Control**:
-- Designing controllers insensitive to model uncertainty
-- H-infinity control approaches
-- Applications to humanoid balance in uncertain environments
-- Trade-offs between performance and robustness
+**Policy Gradient Methods**:
+- Directly optimize policy parameters to maximize expected reward
+- Handle continuous action spaces naturally
+- Include REINFORCE, Actor-Critic, and PPO algorithms
+- Often require many training samples
 
-### Hierarchical Control Architectures
+**Actor-Critic Methods**:
+- Combine value estimation with policy optimization
+- More sample-efficient than pure policy gradient methods
+- Include A3C, A2C, and Soft Actor-Critic (SAC)
+- Balance exploration and exploitation effectively
 
-**Multi-Time Scale Control**:
-- Fast reflexes and reactions (milliseconds)
-- Movement planning and execution (seconds)
-- Long-term learning and adaptation (minutes to hours)
-- Coordination across time scales
+#### Imitation Learning
 
-**Modular Control Structures**:
-- Functional modules for different behaviors
-- Coordination mechanisms between modules
-- Competition and cooperation between behaviors
-- Dynamic module selection based on context
+Imitation learning allows robots to learn from human demonstrations:
 
-**Central Pattern Generators (CPGs)**:
-- Neural circuits producing rhythmic patterns
-- Applications to locomotion control
-- Adaptive CPGs that learn from sensory feedback
-- Coordination of multiple limbs
+**Behavioral Cloning**:
+- Supervised learning approach mapping observations to actions
+- Simple to implement and train
+- Subject to compounding errors over time
+- Requires diverse demonstrations
 
-### Predictive and Anticipatory Control
+**Inverse Reinforcement Learning (IRL)**:
+- Infers reward functions from expert demonstrations
+- Enables generalization beyond demonstration states
+- Computationally intensive
+- Addresses distribution shift problems
 
-**Predictive Processing**:
-- Theory that perception is largely prediction-based
-- Predictive coding in sensorimotor systems
-- Hierarchical prediction-error minimization
-- Applications to robot perception and action
+**Generative Adversarial Imitation Learning (GAIL)**:
+- Uses adversarial training to match expert behavior
+- Combines benefits of supervised and reinforcement learning
+- More stable than traditional IRL
+- Can handle high-dimensional continuous spaces
 
-**Internal Models**:
-- Forward models for prediction
-- Inverse models for control
-- Copy of motor command (efference copy)
-- Applications to sensory attenuation and motor adaptation
+### Model-Based vs. Model-Free Approaches
 
-**Anticipatory Behaviors**:
-- Proactive responses to predicted events
-- Context-dependent action preparation
-- Learning to predict environmental regularities
-- Applications to safe human-robot interaction
+#### Model-Based Control
 
-### Dynamical Systems Approaches
+Model-based approaches use system models for planning and control:
 
-**Attractor Dynamics**:
-- Stable states in motor control
-- Transitions between behavioral modes
-- Applications to movement primitives
-- Robustness through attractor properties
+**Advantages**:
+- Sample efficiency: Can plan without direct interaction
+- Safety: Can evaluate actions before execution
+- Interpretability: Clear physical understanding
+- Predictive capability: Anticipate future states
 
-**Dynamic Movement Primitives (DMPs)**:
-- Mathematical formulation for movement generation
-- Learning and adaptation of movement patterns
-- Coordination of multiple degrees of freedom
-- Applications to imitation learning
+**Challenges**:
+- Modeling complexity: Accurate models are difficult to obtain
+- Reality gap: Models often don't match real systems
+- Computational requirements: Planning can be expensive
+- Maintenance: Models become outdated over time
 
-**Nonlinear Control**:
-- Handling of complex dynamical systems
-- Lyapunov stability theory
-- Applications to balance and locomotion
-- Control Lyapunov functions
+**Applications**:
+- Model Predictive Control (MPC)
+- Trajectory optimization
+- Motion planning with dynamics constraints
+- System identification for adaptive control
 
-### Machine Learning Integration
+#### Model-Free Control
 
-**Deep Learning for Motor Control**:
-- Deep neural networks for policy representation
-- Convolutional networks for processing sensory data
-- Recurrent networks for temporal dependencies
-- Reservoir computing for dynamic pattern generation
+Model-free approaches learn directly from experience:
 
-**Bayesian Approaches**:
-- Uncertainty quantification in motor control
-- Bayesian optimization for control parameter tuning
-- Probabilistic models of action outcomes
-- Active learning for efficient exploration
+**Advantages**:
+- Robustness: Can handle unmodeled dynamics
+- Adaptability: Learns optimal behavior without explicit models
+- Generality: Applicable to various systems
+- Direct optimization: Optimizes actual system performance
 
-**Ensemble Methods**:
-- Combining multiple control strategies
-- Diversity in control approaches
-- Online selection of best controller
-- Applications to adaptive behavior
+**Challenges**:
+- Sample efficiency: Requires substantial interaction time
+- Safety: No guarantee of safe exploration
+- Local optima: May get stuck in suboptimal solutions
+- Transfer: Difficulty transferring to different systems
 
-### Multisensory Integration in Control
+### Advanced Control Architectures
 
-**Cross-Modal Learning**:
-- Learning relationships between sensory modalities
-- Audio-visual coordination
-- Visual-motor learning
-- Tactile-visual integration
+#### Hierarchical Control
 
-**Sensory Substitution**:
-- Using one modality to provide information from another
-- Applications to robot perception enhancement
-- Learning to interpret novel sensor inputs
-- Redundancy and reliability improvement
+Hierarchical control architectures organize control at multiple levels:
 
-**Attention-Based Control**:
-- Selective processing of sensory information
-- Saliency-based attention mechanisms
-- Task-driven attention allocation
-- Applications to efficient processing
+**High-Level Planning**:
+- Task-level decision making
+- Long-term goal setting
+- Path planning and navigation
+- Resource allocation
 
-### Human-Inspired Control Strategies
+**Mid-Level Control**:
+- Skill execution and coordination
+- Behavior switching logic
+- State estimation and filtering
+- Feedback control synthesis
 
-**Motor Synergies**:
-- Coordinated activation of multiple muscles/joints
-- Dimensionality reduction in control
-- Applications to humanoid robot control
-- Learning and adaptation of synergies
+**Low-Level Control**:
+- Joint-level servoing
+- Hardware-specific control
+- Safety monitoring
+- Real-time constraint enforcement
 
-**Stochastic Optimal Control**:
-- Incorporating noise and uncertainty in control
-- Applications to biological motor control
-- Robustness and efficiency trade-offs
-- Risk-sensitivity in control
+#### Distributed Control
 
-**Motor Abstractions**:
-- Hierarchical organization of motor skills
-- Skill libraries and reuse
-- Transfer learning between tasks
-- Composition of primitive skills
+Distributed control systems coordinate multiple controllers:
 
-### Learning from Demonstration
+**Advantages**:
+- Scalability: Add controllers as needed
+- Redundancy: Multiple controllers for robustness
+- Parallelism: Simultaneous processing
+- Specialization: Controllers optimized for specific tasks
 
-**Kinesthetic Teaching**:
-- Physical guidance of robot movements
-- Recording and reproducing demonstrated motions
-- Adaptation to new situations
-- Safety and compliance requirements
+**Challenges**:
+- Coordination: Ensuring controllers work together
+- Communication: Managing information exchange
+- Consistency: Maintaining coherent system state
+- Optimization: Global vs. local objectives
 
-**Visual Imitation**:
-- Learning from observed human demonstrations
-- Vision-based pose estimation
-- Learning to map human to robot kinematics
-- Generalization across different scenarios
+### Adaptive Control Techniques
 
-**Learning Movement Primitives**:
-- Extracting reusable movement patterns
-- Parametric representation of movements
-- Statistical learning approaches
-- Adaptation to new targets and conditions
+#### Model Reference Adaptive Control (MRAC)
 
-### Adaptive Control Systems
+MRAC adjusts controller parameters to match a reference model:
 
-**Gain Scheduling**:
-- Adjusting controller parameters based on operating conditions
-- Applications to varying loads and environments
-- Systematic approaches to scheduling
-- Stability and performance guarantees
+**Architecture**:
+- Reference model defines desired behavior
+- Plant represents actual system
+- Adaptive mechanism adjusts controller parameters
+- Error signal drives adaptation
 
-**Model Reference Adaptive Control**:
-- Adapting to match reference model behavior
-- Applications to changing robot dynamics
-- Parameter convergence and stability
-- Practical implementation considerations
+**Design Considerations**:
+- Reference model stability
+- Adaptation rate vs. tracking performance
+- Persistence of excitation conditions
+- Robustness to unmodeled dynamics
 
-**Self-Organizing Systems**:
-- Emergence of complex behaviors from simple rules
-- Adaptive neural networks
-- Applications to robot development
-- Staged skill acquisition
+#### Self-Organizing Maps (SOMs)
 
-### Applications in Humanoid Robotics
+SOMs enable adaptive sensorimotor mapping:
 
-**Locomotion Learning**:
-- Learning to walk efficiently
-- Adaptation to different terrains
-- Learning from failures and successes
-- Human-like gait patterns
+**Process**:
+- Input layer receives sensory data
+- Competitive learning in hidden layer
+- Output layer generates motor commands
+- Topology-preserving mapping emerges
 
-**Manipulation Skills**:
-- Learning dexterous manipulation
-- Tool use and adaptation
-- Learning from human demonstrations
-- Handling of novel objects
+**Applications**:
+- Sensorimotor coordination learning
+- Novel situation adaptation
+- Robustness to sensor failures
+- Multimodal sensor integration
 
-**Human-Robot Collaboration**:
-- Learning human preferences and styles
-- Predictive modeling of human intentions
-- Adaptive interaction strategies
-- Trust building through consistent behavior
+### Safety Considerations in Advanced Control
 
-### Challenges and Future Directions
+#### Safe Exploration
 
-**Sample Efficiency**: Reducing the amount of experience needed for learning
-**Safety**: Ensuring safe learning in real-world environments
-**Transfer**: Applying learned skills to new situations
-**Scalability**: Handling high-dimensional sensorimotor spaces
-**Robustness**: Maintaining performance under environmental changes
-**Interpretability**: Understanding learned control policies
+Safe exploration techniques prevent dangerous actions during learning:
 
-Advanced sensorimotor control and learning approaches are essential for creating humanoid robots that can adapt, learn, and improve their behaviors over time, moving beyond pre-programmed responses to truly intelligent, adaptive agents.
+**Shielding**:
+- Runtime monitoring and intervention
+- Safety filter on learned policies
+- Formal safety guarantees
+- Backup trajectories for emergencies
 
-## Summary
+**Constrained Reinforcement Learning**:
+- Explicit safety constraints in optimization
+- Risk-sensitive objective functions
+- Chance-constrained formulations
+- Barrier function approaches
 
-- Learning-based control enables robots to improve through experience
-- Optimal feedback control provides frameworks for efficient behavior
-- Hierarchical architectures coordinate multiple levels of control
-- Predictive models allow anticipation of action consequences
-- Dynamical systems approaches model natural movement patterns
-- Machine learning integration enhances adaptability and performance
-- Multisensory integration creates robust perception-action coupling
-- Human-inspired strategies improve naturalness and efficiency
-- Applications span locomotion, manipulation, and collaboration
-- Key challenges include safety, sample efficiency, and transfer
+#### Robust Control Methods
+
+Robust control handles uncertainties and disturbances:
+
+**H-infinity Control**:
+- Minimizes worst-case performance
+- Handles modeling uncertainties
+- Provides formal performance guarantees
+- Conservative, potentially suboptimal solutions
+
+**Sliding Mode Control**:
+- Robust to disturbances and uncertainties
+- Finite-time convergence
+- Chattering reduction techniques
+- Challenging implementation
+
+### Implementation Example: Learning to Manipulate Deformable Objects
+
+Let's examine an advanced implementation example: learning to manipulate deformable objects like cloth or rope.
+
+#### Problem Statement
+Manipulating deformable objects presents unique challenges:
+- High-dimensional state space
+- Complex dynamics
+- Variable number of contact points
+- Partial observability
+
+#### Approach Design
+1. **Sensing**: Vision-based tracking of object features
+2. **State Representation**: Reduced-order model of object shape
+3. **Action Space**: End-effector position and force control
+4. **Learning Algorithm**: Model-based reinforcement learning
+
+#### Implementation Steps
+1. **System Identification**: Learn dynamics model from interaction data
+2. **Model Predictive Control**: Plan actions using learned model
+3. **Exploration Strategy**: Balance exploration with safety constraints
+4. **Adaptation**: Update model as task progresses
+
+#### Results and Challenges
+- Achieved robust manipulation of unknown cloth types
+- Required careful reward shaping to avoid unsafe motions
+- Balancing sample efficiency with safety guarantees
+- Generalization across different object types
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Advanced Sensorimotor Control and Learning
+
+### Key Approaches
+- **Supervised Learning**: Behavior cloning, inverse dynamics learning
+- **Reinforcement Learning**: DQN, policy gradients, actor-critic methods
+- **Imitation Learning**: Behavioral cloning, IRL, GAIL techniques
+
+### Control Architecture Types
+- **Model-Based**: Uses system models for planning (MPC, trajectory optimization)
+- **Model-Free**: Learns directly from experience (more robust but sample-intensive)
+- **Hierarchical**: Organizes control at multiple levels (high/medium/low)
+- **Distributed**: Coordinates multiple controllers for scalability
+
+### Advanced Techniques
+- **Model Reference Adaptive Control (MRAC)**: Adjusts parameters to match reference behavior
+- **Self-Organizing Maps (SOMs)**: Adaptive sensorimotor mapping
+- **Hierarchical Control**: Multi-level decision making and execution
+- **Distributed Control**: Coordinated multiple controllers system
+
+### Safety Considerations
+- **Safe Exploration**: Shielding, constrained RL to prevent dangerous actions
+- **Robust Control**: H-infinity, sliding mode control for uncertainty handling
+- **Runtime Monitoring**: Safety filters on learned policies
+
+### Learning Methods
+- **Behavioral Cloning**: Maps observations to actions from demonstrations
+- **Inverse Reinforcement Learning**: Infers reward functions from expert behavior
+- **Generative Adversarial Imitation Learning**: Adversarial approach to matching expert behavior
+- **Policy Gradient Methods**: Direct policy optimization
+
+</div>
+</TabItem>
+</Tabs>
