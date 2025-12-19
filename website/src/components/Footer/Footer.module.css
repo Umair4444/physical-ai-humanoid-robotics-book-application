@@ -3,17 +3,21 @@
   margin-top: auto;
   padding-top: 4rem;
   padding-bottom: 2rem;
-  background: linear-gradient(to top, 
-    var(--ifm-color-emphasis-100) 0%, 
-    var(--ifm-color-emphasis-0) 100%);
-  color: var(--ifm-color-emphasis-800);
+  background-color: var(--ifm-footer-background-color, var(--ifm-color-emphasis-100));
+  color: var(--ifm-font-color-base, var(--ifm-color-emphasis-800));
+  box-shadow: 0 -4px 6px -6px rgba(0, 0, 0, 0.1);
 }
 
 .footerContainerDark {
-  background: linear-gradient(to top, 
-    var(--ifm-color-emphasis-900) 0%, 
-    var(--ifm-color-emphasis-800) 100%);
-  color: var(--ifm-color-emphasis-0);
+  background-color: var(--ifm-footer-background-color-dark, var(--ifm-color-emphasis-900));
+  color: var(--ifm-font-color-base-inverse, var(--ifm-color-emphasis-0));
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2.5rem;
+  margin-bottom: 3rem;
 }
 
 .footerBrandSection {
@@ -22,15 +26,15 @@
 }
 
 .footerBrandTitle {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: 700;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
 }
 
 .footerBrandTitleGradient {
-  background: linear-gradient(to right, var(--ifm-color-primary) 0%, var(--ifm-color-secondary) 100%);
+  background: linear-gradient(90deg, #2563EB 0%, #DC2626 100%); /* Blue to Red gradient for AI Robotics theme */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -38,23 +42,47 @@
 }
 
 .footerBrandDescription {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   margin-bottom: 1.5rem;
-  opacity: 0.8;
+  opacity: 0.9;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+  transition: color 0.3s ease;
+}
+
+.footerContainerDark .footerBrandDescription {
+  color: var(--ifm-color-emphasis-200);
 }
 
 .footerSocialLinks {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
+  margin-top: 1rem;
 }
 
 .footerSocialLink {
   font-size: 1.5rem;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-800);
+}
+
+.footerContainerDark .footerSocialLink {
+  background: var(--ifm-color-emphasis-700);
+  color: var(--ifm-color-emphasis-0);
 }
 
 .footerSocialLink:hover {
-  opacity: 0.8;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #2563EB 0%, #DC2626 100%); /* Blue to Red gradient for AI Robotics theme */
+  color: white;
 }
 
 .footerSection {
@@ -62,13 +90,26 @@
 }
 
 .footerSectionTitle {
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1.5rem;
   font-size: 1.125rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footerSectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #2563EB 0%, #DC2626 100%); /* Blue to Red gradient for AI Robotics theme */
+  border-radius: 3px;
 }
 
 .footerSectionTitleDark {
-  color: var(--ifm-color-primary);
+  color: #DC2626; /* Red from the AI Robotics theme gradient */
 }
 
 .footerLinksList {
@@ -77,78 +118,62 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .footerLink {
   color: var(--ifm-color-emphasis-700);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   position: relative;
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
 }
 
 .footerLink:hover {
-  color: var(--ifm-color-primary);
+  color: #2563EB; /* Blue from the AI Robotics theme gradient */
+  padding-left: 0.5rem;
 }
 
 .footerLinkDark {
-  color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-200);
 }
 
 .footerLinkDark:hover {
-  color: var(--ifm-color-primary);
-}
-
-.newsletterForm {
-  margin-bottom: 1.5rem;
-}
-
-.newsletterInput {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
-  background-color: var(--ifm-color-emphasis-0);
-  color: var(--ifm-color-emphasis-800);
-}
-
-.newsletterInputDark {
-  background-color: var(--ifm-color-emphasis-800);
-  border-color: var(--ifm-color-emphasis-600);
-  color: var(--ifm-color-emphasis-0);
-}
-
-.newsletterButton {
-  width: 100%;
-  padding: 0.5rem;
-  background-color: var(--ifm-color-primary);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.newsletterButton:hover {
-  opacity: 0.9;
+  color: #2563EB; /* Blue from the AI Robotics theme gradient */
 }
 
 .contactInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .contactInfoItem {
   display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  transition: transform 0.3s ease;
 }
 
+.contactInfoItem:hover {
+  transform: translateX(5px);
+}
+
+.contactInfoText {
+  color: var(--ifm-color-emphasis-800);
+  transition: color 0.3s ease;
+}
+
+.footerContainerDark .contactInfoText {
+  color: var(--ifm-color-emphasis-0);
+}
+
+
+
 .footerBottom {
-  border-top: 1px solid var(--ifm-color-emphasis-300);
+  border-top: 1px solid var(--ifm-toc-border-color, var(--ifm-color-emphasis-300));
   padding-top: 2rem;
   margin-top: 2rem;
   display: flex;
@@ -158,37 +183,58 @@
 }
 
 .footerBottomDark {
-  border-color: var(--ifm-color-emphasis-700);
+  border-color: var(--ifm-toc-border-color-dark, var(--ifm-color-emphasis-700));
 }
 
 .copyrightText {
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-600);
+  transition: color 0.3s ease;
+}
+
+.footerContainerDark .copyrightText {
+  color: var(--ifm-color-emphasis-300);
+}
+
+.themeGradientButton {
+  background: linear-gradient(90deg, #2563EB 0%, #DC2626 100%); /* Blue to Red gradient for AI Robotics theme */
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 0.75rem 1.5rem;
+}
+
+.themeGradientButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 
 .legalLinks {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 @media (min-width: 768px) {
   .footerGrid {
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
   }
-  
+
   .footerBottom {
     flex-direction: row;
     justify-content: space-between;
   }
-  
+
   .copyrightText {
     text-align: left;
   }
-  
+
   .legalLinks {
     justify-content: flex-end;
   }

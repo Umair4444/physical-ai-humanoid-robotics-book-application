@@ -92,12 +92,6 @@ const Footer: React.FC = () => {
     { name: 'Cookie Policy', path: '/' }, // Placeholder - would need actual page
   ];
 
-  // Newsletter signup function
-  const handleNewsletterSignup = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert('Thank you for subscribing to our newsletter!');
-  };
-
   return (
     <footer
       className={`
@@ -188,7 +182,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Newsletter and Contact */}
+          {/* Contact Information */}
           <div className={styles.footerSection}>
             <h4
               className={`
@@ -196,42 +190,20 @@ const Footer: React.FC = () => {
                 ${theme === 'dark' ? styles.footerSectionTitleDark : ''}
               `}
             >
-              {t('footer.contact') || 'Stay Updated'}
+              {t('footer.contact') || 'Contact Us'}
             </h4>
-            <p className="text-sm mb-4 opacity-80">
-              Subscribe to our newsletter for the latest updates and resources.
-            </p>
-            <form onSubmit={handleNewsletterSignup} className={styles.newsletterForm}>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  required
-                  className={`
-                    ${styles.newsletterInput}
-                    ${theme === 'dark' ? styles.newsletterInputDark : ''}
-                  `}
-                />
-                <button
-                  type="submit"
-                  className={styles.newsletterButton}
-                >
-                  Subscribe
-                </button>
-              </div>
-            </form>
             <div className={styles.contactInfo}>
               <p className={styles.contactInfoItem}>
                 <span>📧</span>
-                <span>contact@airoboticstextbook.com</span>
+                <span className={styles.contactInfoText}>contact@airoboticstextbook.com</span>
               </p>
               <p className={styles.contactInfoItem}>
                 <span>📞</span>
-                <span>+1 (555) 123-4567</span>
+                <span className={styles.contactInfoText}>+1 (555) 123-4567</span>
               </p>
               <p className={styles.contactInfoItem}>
                 <span>📍</span>
-                <span>123 Tech Street, AI City</span>
+                <span className={styles.contactInfoText}>123 Tech Street, AI City</span>
               </p>
             </div>
           </div>

@@ -69,4 +69,20 @@ describe('Image Component', () => {
     const img = screen.getByRole('img', { name: /test image/i });
     expect(img).toHaveAttribute('loading', 'lazy');
   });
+
+  test('renders picture element with WebP source and fallback image', () => {
+    render(<Image src="/test-image.jpg" alt="Test image" />);
+
+    const imgElement = screen.getByRole('img', { name: /test image/i });
+    const pictureElement = imgElement.parentElement;
+
+    // Check if the parent element is a picture tag
+    expect(pictureElement?.tagName).toBe('PICTURE');
+
+    // Check for source element with WebP type
+    const sourceElement = pictureElement?.querySelector('source');
+    expect(sourceElement).toBeInTheDocument();
+    expect(sourceElement).toHaveAttribute('type', 'image/webp');
+    expect(sourceElement).toHaveAttribute('srcset', '/test-image.webp');
+  });
 });

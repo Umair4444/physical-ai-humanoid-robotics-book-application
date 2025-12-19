@@ -72,8 +72,8 @@ export const Image: React.FC<ImageProps> = ({
 
   if (isLoading && showPlaceholder) {
     return (
-      <div 
-        className={`bg-gray-200 animate-pulse rounded-xl ${className}`} 
+      <div
+        className={`bg-gray-200 animate-pulse rounded-xl ${className}`}
         style={{ width: imgWidth, height: imgHeight }}
         data-testid="image-placeholder"
       >
@@ -93,16 +93,29 @@ export const Image: React.FC<ImageProps> = ({
     className,
   ].filter(Boolean).join(' ');
 
+  // Generate WebP source from original source if not already WebP
+  const getWebPSource = (source: string): string => {
+    if (source.endsWith('.webp')) {
+      return source; // Already WebP
+    }
+    return source.replace(/\.(jpg|jpeg|png|gif)$/, '.webp');
+  };
+
+  const webpSrc = getWebPSource(src);
+
   return (
-    <img
-      src={src}
-      alt={alt}
-      width={imgWidth}
-      height={imgHeight}
-      className={imageClasses}
-      loading={lazy ? 'lazy' : 'eager'}
-      onLoad={handleLoad}
-      onError={handleError}
-    />
+    <picture>
+      <source srcSet={webpSrc} type="image/webp" />
+      <img
+        src={src}
+        alt={alt}
+        width={imgWidth}
+        height={imgHeight}
+        className={imageClasses}
+        loading={lazy ? 'lazy' : 'eager'}
+        onLoad={handleLoad}
+        onError={handleError}
+      />
+    </picture>
   );
 };
