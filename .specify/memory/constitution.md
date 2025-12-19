@@ -1,8 +1,8 @@
 <!--
 SYNCHRONIZATION IMPACT REPORT
-Version change: 1.1.0 → 1.2.0
-Modified principles: None
-Added sections: Global Design System & Responsiveness Laws (complete new section with 9 rules)
+Version change: 1.2.0 → 1.3.0
+Modified principles: V. Technical Architecture Standards (updated technology stack specifics)
+Added sections: Context7 Documentation Requirement
 Removed sections: None
 Templates requiring updates:
 - ✅ plan-template.md - Updated constitution check references
@@ -33,21 +33,28 @@ TDD mandatory: Tests written → User approved → Tests fail → Then implement
 Educational content must incorporate appropriate visuals (images, diagrams, graphics) where beneficial; All multimedia elements must be properly licensed and attributed; Accessibility considerations for visual content are mandatory.
 
 ### V. Technical Architecture Standards
-Frontend development in TypeScript using Docusaurus for documentation; Backend in Python with FastAPI and OpenAI-Agent SDK; PostgreSQL database for content and user data management; Deployment to Vercel for optimal global accessibility.
+Frontend development in TypeScript using Docusaurus for documentation; Backend in Python using OpenAI Agent SDK (Python) with Google-Gemini-2.5-Flash model for LLM integration; Vercel Neon PostgreSQL for primary database and Qdrant for vector database storage; FastAPI for routing and communication between frontend and backend; Better-Auth for authentication (login/signup); Deployment to Vercel for optimal global accessibility.
 
 ### VI. Multi-Platform Package Management
 Use Node/npm for all TypeScript-based packages and dependencies; Use Uv for all Python-based packages and dependencies; Dependency versions managed through lock files for reproducible builds.
+
+### VII. Context7 Documentation Standard
+All packages, frameworks, software development kits(SDKs), libraries, or dependencies must be documented using Context7; Installation instructions and usage guidelines for external tools must be sourced from Context7 documentation; Development team must utilize Context7-provided documentation for all third-party integrations.
 
 ## Additional Constraints
 
 ### Technology Stack Requirements
 - Frontend: TypeScript with Docusaurus framework
-- Backend: Python with FastAPI and OpenAI-Agent SDK
-- Database: PostgreSQL
+- Backend: Python with OpenAI Agent SDK (Python) and Google-Gemini-2.5-Flash model for LLM
+- Database: Vercel Neon PostgreSQL for primary data storage
+- Vector Database: Qdrant for vector storage and retrieval
+- Authentication: Better-Auth for login/signup functionality
+- Framework: FastAPI for routing and communication between frontend and backend
 - Package Managers: npm for TS, Uv for Python
 - Version Control: GitHub
 - Deployment: Vercel
 - Folder Structure: Organized by functionality and feature domain
+- Documentation: Context7 for all package/framework/SDK/library documentation
 
 ## Global Design System & Responsiveness Laws
 
@@ -135,4 +142,4 @@ Any feature, page, or component that violates theme or responsiveness rules is c
 
 This constitution governs all development and content creation for the Physical AI Humanoid Robotics Textbook project; All changes to this constitution require team consensus and documented approval; Amendments must be recorded with date and rationale; All contributors must acknowledge and abide by these principles.
 
-**Version**: 1.2.0 | **Ratified**: 2025-01-03 | **Last Amended**: 2025-12-13
+**Version**: 1.3.0 | **Ratified**: 2025-01-03 | **Last Amended**: 2025-12-19
