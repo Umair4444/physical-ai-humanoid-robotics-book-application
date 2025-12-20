@@ -45,7 +45,7 @@ The system SHALL integrate with the OpenAI Agent SDK (Python) framework to enabl
 **Acceptance Criteria:**
 - AI agent can receive text input from the chat interface
 - AI agent processes input using the integrated LLM
-- AI agent returns appropriate responses in text format
+- AI agent returns contextually relevant responses with educational value appropriate for robotics textbook users within 5 seconds
 - Integration follows OpenAI Agent SDK (Python) best practices
 
 ### FR-2: LLM Integration
@@ -69,10 +69,10 @@ The system SHALL maintain conversation context during an active session.
 - Session automatically expires after 15 minutes of inactivity
 
 ### FR-4: Real-time Communication
-The system SHALL provide near real-time responses to user queries.
+The system SHALL provide responses within 5 seconds for 95% of user queries.
 
 **Acceptance Criteria:**
-- Response time is under 5 seconds for typical queries
+- Response time is under 5 seconds for 95% of queries
 - System indicates when processing is happening
 - Connection remains stable during extended conversations
 
