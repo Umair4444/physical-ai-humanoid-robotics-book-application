@@ -1,0 +1,308 @@
+# API Contracts: AI Chatbot Integration
+
+## Overview
+This document defines the API contracts for the AI Chatbot Integration feature, specifying endpoints, request/response formats, and error handling for communication between the Docusaurus frontend and FastAPI backend.
+
+## Base URL
+All API endpoints are relative to:
+```
+https://your-backend-domain.com/api/v1
+```
+
+## Common Headers
+All requests should include:
+```
+Content-Type: application/json
+Accept: application/json
+```
+
+## Authentication
+No authentication required for initial implementation.
+
+## API Endpoints
+
+### 1. Create Chat Session
+Creates a new chat session for a user.
+
+**Endpoint:** `POST /sessions`
+
+**Description:** Initializes a new conversation session and returns the session ID.
+
+**Request:**
+```json
+{
+  "user_preferences": {
+    "language": "en",
+    "response_style": "helpful"
+  }
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "created_at": "2025-12-20T10:30:00Z",
+  "status": "active"
+}
+```
+
+**Error Response (400 Bad Request):**
+```json
+{
+  "error_code": "INVALID_PREFERENCES",
+  "message": "Invalid user preferences provided"
+}
+```
+
+### 2. Send Message
+Sends a message to the AI agent and receives a response.
+
+**Endpoint:** `POST /sessions/{session_id}/messages`
+
+**Description:** Sends a user message to the AI agent and returns the AI's response.
+
+**Path Parameters:**
+- `session_id`: The unique identifier of the conversation session
+
+**Request:**
+```json
+{
+  "message": "How does inverse kinematics work in robotics?"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "response": "Inverse kinematics in robotics is the mathematical process of determining the joint parameters needed to position a robot's end effector at a specific location and orientation...",
+  "timestamp": "2025-12-20T10:31:00Z",
+  "status": "success"
+}
+```
+
+**Error Response (400 Bad Request):**
+```json
+{
+  "error_code": "MESSAGE_TOO_LONG",
+  "message": "Message exceeds maximum length of 4000 characters"
+}
+```
+
+**Error Response (404 Not Found):**
+```json
+{
+  "error_code": "SESSION_NOT_FOUND",
+  "message": "The specified session does not exist or has expired"
+}
+```
+
+### 3. Get Conversation History
+Retrieves the conversation history for a specific session.
+
+**Endpoint:** `GET /sessions/{session_id}/history`
+
+**Description:** Returns the complete conversation history for the specified session.
+
+**Path Parameters:**
+- `session_id`: The unique identifier of the conversation session
+
+**Response (200 OK):**
+```json
+{
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "messages": [
+    {
+      "message_id": "m1n2o3p4-q5r6-7890-1234-567890abcdef",
+      "sender": "user",
+      "content": "How does inverse kinematics work in robotics?",
+      "timestamp": "2025-12-20T10:30:30Z",
+      "status": "delivered"
+    },
+    {
+      "message_id": "m1n2o3p4-q5r6-7890-1234-567890abcdef",
+      "sender": "ai",
+      "content": "Inverse kinematics in robotics is the mathematical process of determining the joint parameters needed to position a robot's end effector at a specific location and orientation...",
+      "timestamp": "2025-12-20T10:31:00Z",
+      "status": "delivered"
+    }
+  ],
+  "status": "success"
+}
+```
+
+**Error Response (404 Not Found):**
+```json
+{
+  "error_code": "SESSION_NOT_FOUND",
+  "message": "The specified session does not exist or has expired"
+}
+```
+
+### 4. Clear Conversation History
+Clears the conversation history for a specific session.
+
+**Endpoint:** `DELETE /sessions/{session_id}/history`
+
+**Description:** Clears all messages in the conversation history while keeping the session active.
+
+**Path Parameters:**
+- `session_id`: The unique identifier of the conversation session
+
+**Response (200 OK):**
+```json
+{
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "message": "Conversation history cleared successfully",
+  "status": "success"
+}
+```
+
+**Error Response (404 Not Found):**
+```json
+{
+  "error_code": "SESSION_NOT_FOUND",
+  "message": "The specified session does not exist or has expired"
+}
+```
+
+### 5. Get Session Status
+Checks the status of a specific session.
+
+**Endpoint:** `GET /sessions/{session_id}/status`
+
+**Description:** Returns the current status of the specified session.
+
+**Path Parameters:**
+- `session_id`: The unique identifier of the conversation session
+
+**Response (200 OK):**
+```json
+{
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "status": "active",
+  "last_activity_at": "2025-12-20T10:31:00Z",
+  "message_count": 5
+}
+```
+
+**Error Response (404 Not Found):**
+```json
+{
+  "error_code": "SESSION_NOT_FOUND",
+  "message": "The specified session does not exist or has expired"
+}
+```
+
+## WebSocket Endpoints
+
+### 1. Real-time Chat Connection
+Establishes a real-time connection for chat communication.
+
+**Endpoint:** `WS /ws/chat/{session_id}`
+
+**Description:** Establishes a WebSocket connection for real-time chat communication. This allows for immediate delivery of AI responses without polling.
+
+**Message Format:**
+- Client to Server:
+```json
+{
+  "type": "message",
+  "content": "How does SLAM work in robotics?"
+}
+```
+
+- Server to Client (Success):
+```json
+{
+  "type": "response",
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "content": "SLAM (Simultaneous Localization and Mapping) is a process where a robot builds a map of an unknown environment while simultaneously keeping track of its location within that map...",
+  "timestamp": "2025-12-20T10:32:00Z"
+}
+```
+
+- Server to Client (Error):
+```json
+{
+  "type": "error",
+  "error_code": "SESSION_EXPIRED",
+  "message": "Session has expired due to inactivity"
+}
+```
+
+## Error Codes
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `MESSAGE_TOO_LONG` | 400 | Message exceeds maximum length of 4000 characters |
+| `SESSION_NOT_FOUND` | 404 | Session does not exist or has expired |
+| `SESSION_EXPIRED` | 400 | Session has timed out due to inactivity |
+| `INVALID_PREFERENCES` | 400 | Invalid user preferences provided |
+| `LLM_SERVICE_UNAVAILABLE` | 503 | The LLM service is temporarily unavailable |
+| `INTERNAL_ERROR` | 500 | An unexpected error occurred on the server |
+
+## Data Types
+
+### SessionID
+- Type: string
+- Format: UUID v4
+- Example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+
+### Timestamp
+- Type: string
+- Format: ISO 8601 UTC
+- Example: "2025-12-20T10:30:00Z"
+
+### Message Content
+- Type: string
+- Length: 1-4000 characters
+- Encoding: UTF-8
+
+## Response Format Standards
+
+All API responses follow this standard format:
+
+**Success Response:**
+```json
+{
+  "status": "success",
+  // ... additional response fields
+}
+```
+
+**Error Response:**
+```json
+{
+  "status": "error",
+  "error_code": "<ERROR_CODE>",
+  "message": "Human-readable error message"
+}
+```
+
+## Security Considerations
+
+1. Input validation on all endpoints to prevent injection attacks
+2. Rate limiting to prevent abuse of the API
+3. Message content filtering to prevent inappropriate content
+4. Secure handling of session IDs to prevent session hijacking
+5. HTTPS enforcement for all API communications
+
+## Performance Considerations
+
+1. API responses should return within 5 seconds for 95% of requests
+2. Session timeout after 15 minutes of inactivity
+3. Concurrent session support up to 100 sessions
+4. Efficient memory usage for conversation history storage
+
+## Versioning
+
+This API follows semantic versioning. Breaking changes will increment the major version number (e.g., v1.x.x to v2.x.x). Non-breaking additions will increment the minor version (e.g., v1.0.x to v1.1.x).
+
+## Testing Considerations
+
+1. Unit tests for each endpoint with various input scenarios
+2. Integration tests for end-to-end conversation flow
+3. Load testing to ensure performance requirements are met
+4. Error handling tests for all defined error codes

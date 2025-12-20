@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useChatbot } from '@site/src/contexts/ChatbotContext';
 import ChatbotComponent from '../Chatbot/ChatbotComponent';
-import { FaRobot, FaTimes, FaComments } from 'react-icons/fa';
+import { FaRobot, FaPlus } from 'react-icons/fa';
 
 const FloatingChatbotButton: React.FC = () => {
-  const { messages } = useChatbot();
+  const { messages, clearMessages } = useChatbot();
   const [isOpen, setIsOpen] = useState(false);
   const [hasUnreadMessage, setHasUnreadMessage] = useState(false);
 
@@ -25,37 +25,50 @@ const FloatingChatbotButton: React.FC = () => {
     }
   };
 
+  const closeChat = () => {
+    setIsOpen(false);
+  };
+
+  const handleNewChat = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering header click to close
+    clearMessages(); // Clear chat history
+    // Don't close the chat - just clear the messages
+  };
+
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {isOpen ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 w-80 h-[500px] flex flex-col">
-          {/* Chat Header with Close Button */}
-          <div className="bg-indigo-600 text-white p-3 flex justify-between items-center rounded-t-xl">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 w-96 h-[500px] flex flex-col">
+          {/* Chat Header - clicking anywhere on it will close the chat */}
+          <div
+            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-3 flex justify-between items-center rounded-t-xl cursor-pointer"
+            onClick={closeChat}
+          >
             <div className="flex items-center">
               <FaRobot className="mr-2" />
               <h3 className="font-semibold">AI Assistant</h3>
             </div>
             <button
-              onClick={toggleChat}
+              onClick={handleNewChat}
               className="text-white hover:text-gray-200 focus:outline-none"
-              aria-label="Close chat"
+              aria-label="New chat"
             >
-              <FaTimes />
+              <FaPlus />
             </button>
           </div>
-          
+
           {/* Chat Content */}
           <div className="flex-1 overflow-hidden">
-            <ChatbotComponent />
+            <ChatbotComponent closeChat={closeChat} />
           </div>
         </div>
       ) : (
         <button
           onClick={toggleChat}
           className={`p-4 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-300 ${
-            hasUnreadMessage 
-              ? 'bg-gradient-to-r from-yellow-500 to-orange-500 animate-pulse' 
-              : 'bg-indigo-600 hover:bg-indigo-700'
+            hasUnreadMessage
+              ? 'bg-gradient-to-r from-yellow-500 to-orange-500 animate-pulse'
+              : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700'
           }`}
           aria-label="Open AI Assistant chat"
         >
@@ -70,7 +83,7 @@ const FloatingChatbotButton: React.FC = () => {
           </div>
         </button>
       )}
-      
+
       {/* Optional: Notification badge for unread messages */}
       {hasUnreadMessage && !isOpen && (
         <div className="absolute bottom-12 right-0 flex -mr-2 transform translate-x-1/2">
