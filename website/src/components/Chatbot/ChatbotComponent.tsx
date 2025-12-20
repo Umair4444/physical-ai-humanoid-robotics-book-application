@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useChatbot } from '@site/src/contexts/ChatbotContext';
 import { ChatService } from '@site/src/services/ChatService';
 import ChatMessage from '../ChatMessage/ChatMessage';
-import { FaPaperPlane, FaRobot, FaUser, FaSpinner } from 'react-icons/fa';
+import { FaPaperPlane, FaRobot, FaUser, FaSpinner, FaRedo } from 'react-icons/fa';
 
 const ChatbotComponent: React.FC = () => {
-  const { messages, sendMessage, isTyping, setIsTyping } = useChatbot();
+  const { messages, sendMessage, isTyping, setIsTyping, clearMessages } = useChatbot();
   const [inputValue, setInputValue] = useState('');
   const [sessionId, setSessionId] = useState<string>('');
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -61,13 +61,54 @@ const ChatbotComponent: React.FC = () => {
     }
   };
 
+  const handleNewConversation = async () => {
+    try {
+      // If we have a current session, clear its history on the backend
+      if (sessionId) {
+        await ChatService.clearConversationHistory(sessionId);
+      }
+
+      // Clear local messages
+      clearMessages();
+
+      // Clear the input field
+      setInputValue('');
+
+      // Create a new session on the backend
+      const newSessionId = await ChatService.initializeSession();
+      setSessionId(newSessionId);
+
+      console.log('New conversation started with session ID:', newSessionId);
+    } catch (error) {
+      console.error('Error starting new conversation:', error);
+
+      // Fallback: create a new session ID locally if backend call fails
+      const fallbackSessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      setSessionId(fallbackSessionId);
+      clearMessages();
+      setInputValue('');
+    }
+  };
+
   return (
     <div
       className="flex flex-col h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700"
       role="region"
       aria-label="AI Assistant Chat"
     >
-   
+      {/* Header with New Conversation button */}
+      <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700">
+        <h3 className="font-semibold text-gray-800 dark:text-white">AI Assistant</h3>
+        <button
+          onClick={handleNewConversation}
+          className="flex items-center text-sm bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition-colors"
+          aria-label="Start new conversation"
+        >
+          <FaRedo className="mr-1" aria-hidden="true" />
+          <span>New Chat</span>
+        </button>
+      </div>
+
       {/* Messages Container */}
       <div
         className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900"
