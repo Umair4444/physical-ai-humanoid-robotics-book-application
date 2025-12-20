@@ -87,7 +87,15 @@ class ChatService {
       throw lastError;
     } catch (error) {
       console.error('Error in ChatService.sendMessage:', error);
-      throw error;
+
+      // Return a mock response when the API is not available
+      return {
+        id: `mock-${Date.now()}`,
+        response: `I'm sorry, but I couldn't reach the AI assistant server. This is a mock response for: "${query}". Please make sure the backend service is running at ${this.API_BASE_URL}`,
+        sources: [],
+        timestamp: new Date(),
+        sessionId
+      };
     }
   }
 
