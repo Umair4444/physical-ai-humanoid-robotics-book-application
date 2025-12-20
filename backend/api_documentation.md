@@ -255,11 +255,17 @@ Check if the service is running.
 
 **Endpoint:** `GET /health`
 
+**Description:** Returns the health status of the API service. This endpoint is useful for monitoring tools and deployment health checks.
+
 **Response:**
 ```json
 {
   "status": "healthy",
-  "message": "AI Chatbot API is running"
+  "message": "AI Chatbot API is running",
+  "version": "1.0.0",
+  "python_version": "3.x.x (default, date)",
+  "environment": "production|development|test|unknown",
+  "timestamp": "2023-01-01T12:00:00.000000"
 }
 ```
 
@@ -268,11 +274,17 @@ Check if the service is ready to accept requests.
 
 **Endpoint:** `GET /ready`
 
+**Description:** Provides readiness information for container orchestration. This endpoint indicates that the service is initialized and ready to process requests.
+
 **Response:**
 ```json
 {
   "status": "ready",
-  "message": "AI Chatbot API is ready to accept requests"
+  "message": "AI Chatbot API is ready to accept requests",
+  "version": "1.0.0",
+  "python_version": "3.x.x (default, date)",
+  "environment": "production|development|test|unknown",
+  "timestamp": "2023-01-01T12:00:00.000000"
 }
 ```
 

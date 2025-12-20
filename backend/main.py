@@ -94,16 +94,91 @@ def read_root():
 
 @app.get("/health")
 def health_check():
+    """
+    Health check endpoint for the API.
+    Returns status of the service and basic information.
+    """
+    import sys
+    import os
+    from datetime import datetime
+
     logger.info("Health check endpoint accessed")
-    return {"status": "healthy", "message": "AI Chatbot API is running"}
+
+    # Detect environment automatically based on Vercel environment variables
+    # VERCEL_ENV is set by Vercel: 'production', 'preview', or 'development'
+    vercel_env = os.getenv("VERCEL_ENV")
+    # NODE_ENV might also be set
+    node_env = os.getenv("NODE_ENV")
+    # Custom ENVIRONMENT variable if set by user
+    custom_env = os.getenv("ENVIRONMENT")
+
+    # Determine environment in order of preference
+    environment = custom_env or vercel_env
+    # If no environment is set, determine if running locally
+    if not environment:
+        # Check if we're running locally (not in Vercel environment)
+        if not os.getenv("VERCEL"):
+            environment = "development"
+        else:
+            environment = "unknown"
+
+    # Collect basic system information
+    health_info = {
+        "status": "healthy",
+        "message": "AI Chatbot API is running",
+        "version": "1.0.0",
+        "python_version": sys.version,
+        "environment": environment,
+        "timestamp": datetime.now().isoformat(),
+        "vercel_env": vercel_env,  # Vercel-specific environment
+        "node_env": node_env,      # Node environment if available
+        "custom_env": custom_env   # Custom environment if set
+    }
+
+    return health_info
 
 @app.get("/ready")
 def readiness_check():
     """Readiness check for container orchestration."""
-    # Here you would check if all required services are available
-    # For now, just return that the app is ready
+    import sys
+    import os
+    from datetime import datetime
+
     logger.info("Readiness check endpoint accessed")
-    return {"status": "ready", "message": "AI Chatbot API is ready to accept requests"}
+
+    # Detect environment automatically based on Vercel environment variables
+    # VERCEL_ENV is set by Vercel: 'production', 'preview', or 'development'
+    vercel_env = os.getenv("VERCEL_ENV")
+    # NODE_ENV might also be set
+    node_env = os.getenv("NODE_ENV")
+    # Custom ENVIRONMENT variable if set by user
+    custom_env = os.getenv("ENVIRONMENT")
+
+    # Determine environment in order of preference
+    environment = custom_env or vercel_env
+    # If no environment is set, determine if running locally
+    if not environment:
+        # Check if we're running locally (not in Vercel environment)
+        if not os.getenv("VERCEL"):
+            environment = "development"
+        else:
+            environment = "unknown"
+
+    # In a serverless environment, we can only check basic runtime conditions
+    # More complex readiness checks would require persistent connections to DBs, etc.
+    readiness_info = {
+        "status": "ready",
+        "message": "AI Chatbot API is ready to accept requests",
+        "version": "1.0.0",
+        "python_version": sys.version,
+        "environment": environment,
+        "timestamp": datetime.now().isoformat(),
+        "vercel_env": vercel_env,  # Vercel-specific environment
+        "node_env": node_env,      # Node environment if available
+        "custom_env": custom_env   # Custom environment if set
+    }
+
+    return readiness_info
 
 @app.websocket("/ws/chat/{session_id}")
 async def websocket_endpoint(websocket: WebSocket, session_id: str):
