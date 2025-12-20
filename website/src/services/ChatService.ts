@@ -29,6 +29,7 @@ function getEnvVar(varName: string, defaultValue: string): string {
 
 class ChatService {
   private static API_BASE_URL = getEnvVar('REACT_APP_CHATBOT_API_URL', 'http://localhost:8000/api/v1/chat/query');
+  private static BACKEND_BASE_URL = getEnvVar('REACT_APP_BACKEND_API_URL', 'http://localhost:8000');
 
   static async sendMessage(
     query: string,
@@ -93,7 +94,7 @@ class ChatService {
   static async initializeSession(userId?: string): Promise<string> {
     try {
       // Call the backend to create a new session
-      const response = await fetch('http://localhost:8000/api/v1/sessions', {
+      const response = await fetch(`${this.BACKEND_BASE_URL}/api/v1/sessions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,6 +114,22 @@ class ChatService {
       console.error('Error initializing session:', error);
       // Fallback to client-generated ID if backend call fails
       return `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
+  }
+
+  static async clearConversationHistory(sessionId: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.BACKEND_BASE_URL}/api/v1/sessions/${sessionId}/history`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error('Error clearing conversation history:', error);
+      return false;
     }
   }
 }
