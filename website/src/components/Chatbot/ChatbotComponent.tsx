@@ -2,10 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useChatbot } from '@site/src/contexts/ChatbotContext';
 import { ChatService } from '@site/src/services/ChatService';
 import ChatMessage from '../ChatMessage/ChatMessage';
-import { FaPaperPlane, FaRobot, FaUser, FaSpinner, FaRedo } from 'react-icons/fa';
+import {
+  FaPaperPlane,
+  FaRobot,
+  FaUser,
+  FaSpinner,
+  FaTimes,
+} from 'react-icons/fa';
 
-const ChatbotComponent: React.FC = () => {
-  const { messages, sendMessage, isTyping, setIsTyping, clearMessages } = useChatbot();
+interface ChatbotComponentProps {
+  closeChat?: () => void;
+}
+
+const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
+  const { messages, sendMessage, isTyping, setIsTyping, clearMessages } =
+    useChatbot();
   const [inputValue, setInputValue] = useState('');
   const [sessionId, setSessionId] = useState<string>('');
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -18,6 +29,28 @@ const ChatbotComponent: React.FC = () => {
     };
     initSession();
   }, []);
+
+  // Check for page refresh and clear chat history if needed
+  useEffect(() => {
+    // Check if this is a page refresh by checking session storage
+    const isPageRefresh = sessionStorage.getItem('pageRefreshed') === 'true';
+
+    if (isPageRefresh) {
+      clearMessages(); // Clear chat history on page refresh
+      sessionStorage.removeItem('pageRefreshed');
+    }
+
+    // Set flag for potential refresh
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem('pageRefreshed', 'true');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [clearMessages]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -48,45 +81,19 @@ const ChatbotComponent: React.FC = () => {
       let errorMessage = 'Sorry, I encountered an error. Please try again.';
 
       if (error.message?.includes('Network Error')) {
-        errorMessage = 'Unable to connect to the server. Please check your internet connection.';
+        errorMessage =
+          'Unable to connect to the server. Please check your internet connection.';
       } else if (error.response?.status === 429) {
-        errorMessage = 'You\'ve sent too many requests. Please wait a moment before trying again.';
+        errorMessage =
+          "You've sent too many requests. Please wait a moment before trying again.";
       } else if (error.response?.status >= 500) {
-        errorMessage = 'The server is experiencing issues. Please try again later.';
+        errorMessage =
+          'The server is experiencing issues. Please try again later.';
       }
 
       sendMessage(errorMessage, 'assistant');
     } finally {
       setIsTyping(false);
-    }
-  };
-
-  const handleNewConversation = async () => {
-    try {
-      // If we have a current session, clear its history on the backend
-      if (sessionId) {
-        await ChatService.clearConversationHistory(sessionId);
-      }
-
-      // Clear local messages
-      clearMessages();
-
-      // Clear the input field
-      setInputValue('');
-
-      // Create a new session on the backend
-      const newSessionId = await ChatService.initializeSession();
-      setSessionId(newSessionId);
-
-      console.log('New conversation started with session ID:', newSessionId);
-    } catch (error) {
-      console.error('Error starting new conversation:', error);
-
-      // Fallback: create a new session ID locally if backend call fails
-      const fallbackSessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      setSessionId(fallbackSessionId);
-      clearMessages();
-      setInputValue('');
     }
   };
 
@@ -96,23 +103,11 @@ const ChatbotComponent: React.FC = () => {
       role="region"
       aria-label="AI Assistant Chat"
     >
-      {/* Header with New Conversation button */}
-      <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700">
-        <h3 className="font-semibold text-gray-800 dark:text-white">AI Assistant</h3>
-        <button
-          onClick={handleNewConversation}
-          className="flex items-center text-sm bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition-colors"
-          aria-label="Start new conversation"
-        >
-          <FaRedo className="mr-1" aria-hidden="true" />
-          <span>New Chat</span>
-        </button>
-      </div>
-
+      {/* Header with New Conversation button - removed the header section since it's in the parent */}
       {/* Messages Container */}
       <div
         className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900"
-        style={{ maxHeight: '400px' }}
+        style={{ maxHeight: 'calc(100% - 100px)' }}
         role="log"
         aria-live="polite"
         aria-label="Chat messages"
@@ -124,18 +119,28 @@ const ChatbotComponent: React.FC = () => {
             aria-label="No chat messages"
           >
             <FaRobot className="text-4xl mb-2" aria-hidden="true" />
-            <p>Ask me anything about the Physical AI Humanoid Robotics Textbook!</p>
+            <p>
+              Ask me anything about the Physical AI Humanoid Robotics Textbook!
+            </p>
           </div>
         ) : (
           <>
-            {messages.map((message) => (
+            {messages.map(message => (
               <ChatMessage key={message.id} message={message} />
             ))}
             {isTyping && (
-              <div className="flex justify-start mb-4" data-testid="loading-indicator" role="status" aria-live="polite">
-                <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
+              <div
+                className="flex justify-start mb-4"
+                data-testid="loading-indicator"
+                role="status"
+                aria-live="polite"
+              >
+                <div className="max-w-[85%] rounded-2xl px-4 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
                   <div className="flex items-center">
-                    <FaSpinner className="animate-spin mr-2" aria-hidden="true" />
+                    <FaSpinner
+                      className="animate-spin mr-2"
+                      aria-hidden="true"
+                    />
                     <span>Thinking...</span>
                   </div>
                 </div>
@@ -157,7 +162,7 @@ const ChatbotComponent: React.FC = () => {
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={e => setInputValue(e.target.value)}
             placeholder="Ask about the textbook..."
             className="flex-1 border border-gray-300 dark:border-gray-600 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
             disabled={isTyping}
@@ -173,7 +178,11 @@ const ChatbotComponent: React.FC = () => {
             type="submit"
             className="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
             disabled={isTyping || !inputValue.trim()}
-            aria-label={isTyping ? "Sending message, please wait" : "Send message to AI assistant"}
+            aria-label={
+              isTyping
+                ? 'Sending message, please wait'
+                : 'Send message to AI assistant'
+            }
           >
             {isTyping ? (
               <span className="flex items-center">
@@ -188,9 +197,6 @@ const ChatbotComponent: React.FC = () => {
             )}
           </button>
         </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center" role="note">
-          AI assistant may produce inaccurate information about the textbook
-        </p>
       </form>
     </div>
   );
