@@ -27,6 +27,7 @@ from src.api.routers.history_router import router as history_router
 # Import chat router separately to handle initialization errors
 try:
     from src.api.routers.chat_query_router import router as chat_query_router
+    print("Successfully imported chat_query_router")
 except Exception as e:
     print(f"Error importing chat_query_router: {e}")
     # Create a fallback router for when the AI service fails to initialize
@@ -35,6 +36,17 @@ except Exception as e:
 
     @chat_query_router.post("/chat/query")
     async def chat_query_endpoint(request_data: dict):
+        return {
+            "id": "error",
+            "response": "AI service is not properly configured. Please check environment variables.",
+            "sources": [],
+            "timestamp": "2025-01-01T00:00:00",
+            "sessionId": request_data.get('sessionId', 'unknown')
+        }
+
+    # Also add the fallback to the prefixed path
+    @chat_query_router.post("/api/v1/chat/query")
+    async def chat_query_endpoint_prefixed(request_data: dict):
         return {
             "id": "error",
             "response": "AI service is not properly configured. Please check environment variables.",
@@ -101,6 +113,95 @@ app.include_router(session_router, prefix="/api/v1")
 app.include_router(message_router, prefix="/api/v1")
 app.include_router(history_router, prefix="/api/v1")
 app.include_router(chat_query_router, prefix="/api/v1")
+
+# Additional health and ready endpoints at the root level to ensure they're accessible
+@app.get("/api/v1/health")
+def health_check_api_v1():
+    """
+    Health check endpoint for the API at the prefixed path as well.
+    This ensures the health check works with the API prefix.
+    """
+    import sys
+    import os
+    from datetime import datetime
+
+    logger.info("Health check endpoint accessed (API v1)")
+
+    # Detect environment automatically based on Vercel environment variables
+    # VERCEL_ENV is set by Vercel: 'production', 'preview', or 'development'
+    vercel_env = os.getenv("VERCEL_ENV")
+    # NODE_ENV might also be set
+    node_env = os.getenv("NODE_ENV")
+    # Custom ENVIRONMENT variable if set by user
+    custom_env = os.getenv("ENVIRONMENT")
+
+    # Determine environment in order of preference
+    environment = custom_env or vercel_env
+    # If no environment is set, determine if running locally
+    if not environment:
+        # Check if we're running locally (not in Vercel environment)
+        if not os.getenv("VERCEL"):
+            environment = "development"
+        else:
+            environment = "unknown"
+
+    # Collect basic system information
+    health_info = {
+        "status": "healthy",
+        "message": "AI Chatbot API is running",
+        "version": "1.0.0",
+        "python_version": sys.version,
+        "environment": environment,
+        "timestamp": datetime.now().isoformat(),
+        "vercel_env": vercel_env,  # Vercel-specific environment
+        "node_env": node_env,      # Node environment if available
+        "custom_env": custom_env   # Custom environment if set
+    }
+
+    return health_info
+
+@app.get("/api/v1/ready")
+def readiness_check_api_v1():
+    """Readiness check for container orchestration at the API v1 path."""
+    import sys
+    import os
+    from datetime import datetime
+
+    logger.info("Readiness check endpoint accessed (API v1)")
+
+    # Detect environment automatically based on Vercel environment variables
+    # VERCEL_ENV is set by Vercel: 'production', 'preview', or 'development'
+    vercel_env = os.getenv("VERCEL_ENV")
+    # NODE_ENV might also be set
+    node_env = os.getenv("NODE_ENV")
+    # Custom ENVIRONMENT variable if set by user
+    custom_env = os.getenv("ENVIRONMENT")
+
+    # Determine environment in order of preference
+    environment = custom_env or vercel_env
+    # If no environment is set, determine if running locally
+    if not environment:
+        # Check if we're running locally (not in Vercel environment)
+        if not os.getenv("VERCEL"):
+            environment = "development"
+        else:
+            environment = "unknown"
+
+    # In a serverless environment, we can only check basic runtime conditions
+    # More complex readiness checks would require persistent connections to DBs, etc.
+    readiness_info = {
+        "status": "ready",
+        "message": "AI Chatbot API is ready to accept requests",
+        "version": "1.0.0",
+        "python_version": sys.version,
+        "environment": environment,
+        "timestamp": datetime.now().isoformat(),
+        "vercel_env": vercel_env,  # Vercel-specific environment
+        "node_env": node_env,      # Node environment if available
+        "custom_env": custom_env   # Custom environment if set
+    }
+
+    return readiness_info
 
 @app.get("/")
 def read_root():

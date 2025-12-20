@@ -20,6 +20,13 @@
     "TEMPERATURE": "$TEMPERATURE",
     "MAX_TOKENS": "$MAX_TOKENS",
     "REQUESTS_PER_MINUTE": "$REQUESTS_PER_MINUTE",
-    "TOKENS_PER_MINUTE": "$TOKENS_PER_MINUTE"
+    "TOKENS_PER_MINUTE": "$TOKENS_PER_MINUTE",
+    "ENVIRONMENT": "production"
+  },
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
   }
 }
