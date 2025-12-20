@@ -23,7 +23,25 @@ from src.api.routers.base_router import router as base_router
 from src.api.routers.session_router import router as session_router
 from src.api.routers.message_router import router as message_router
 from src.api.routers.history_router import router as history_router
-from src.api.routers.chat_query_router import router as chat_query_router
+
+# Import chat router separately to handle initialization errors
+try:
+    from src.api.routers.chat_query_router import router as chat_query_router
+except Exception as e:
+    print(f"Error importing chat_query_router: {e}")
+    # Create a fallback router for when the AI service fails to initialize
+    from fastapi import APIRouter
+    chat_query_router = APIRouter()
+
+    @chat_query_router.post("/chat/query")
+    async def chat_query_endpoint(request_data: dict):
+        return {
+            "id": "error",
+            "response": "AI service is not properly configured. Please check environment variables.",
+            "sources": [],
+            "timestamp": "2025-01-01T00:00:00",
+            "sessionId": request_data.get('sessionId', 'unknown')
+        }
 
 # Import exception handlers
 from src.api.handlers.exception_handler import register_exception_handlers

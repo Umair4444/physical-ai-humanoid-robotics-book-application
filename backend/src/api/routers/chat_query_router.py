@@ -5,12 +5,17 @@ from datetime import datetime
 
 from ...models.message import Message
 from ...services.session_manager import SessionManager
-from ...services.ai_service import AIService
 from ...exceptions.chatbot_exceptions import ChatbotException
 
 router = APIRouter()
 session_manager = SessionManager()
-ai_service = AIService()
+
+# Initialize AI service lazily to handle missing environment variables
+def get_ai_service():
+    from ...services.ai_service import AIService
+    return AIService()
+
+ai_service = None  # Will be initialized when needed
 
 @router.post("/chat/query")
 async def chat_query_endpoint(request_data: dict):
@@ -55,19 +60,25 @@ async def chat_query_endpoint(request_data: dict):
         # Format conversation history for the AI service
         formatted_history = session_manager.format_conversation_history(session_id)
 
+        # Get or create the AI service instance
+        try:
+            current_ai_service = get_ai_service()
+        except Exception as e:
+            raise HTTPException(status_code=503, detail={"error": f"AI service unavailable: {str(e)}", "code": 503})
+
         # Process the message with the AI service
-        ai_response_content = await ai_service.process_message_with_context(
+        ai_response_content = await current_ai_service.process_message_with_context(
             formatted_history=formatted_history,
             user_message=query
         )
 
         # Validate the response
-        if not await ai_service.validate_response(ai_response_content):
+        if not await current_ai_service.validate_response(ai_response_content):
             # If validation fails, provide a fallback response
             ai_response_content = "I'm sorry, but I couldn't generate a proper response. Please try again."
 
         # Filter the response
-        ai_response_content = ai_service.filter_response(ai_response_content)
+        ai_response_content = current_ai_service.filter_response(ai_response_content)
 
         # Create AI response message
         ai_message = Message(
