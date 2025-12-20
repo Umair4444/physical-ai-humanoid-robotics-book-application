@@ -9,13 +9,13 @@
 
 ## Technical Context
 
-- **Backend Framework**: [NEEDS CLARIFICATION - FastAPI version and configuration]
-- **AI Agent SDK**: [NEEDS CLARIFICATION - OpenAI-Agent SDK specific version and setup]
-- **LLM Service**: [NEEDS CLARIFICATION - Google Gemini via OpenAI-compatible API setup]
-- **Frontend Integration**: [NEEDS CLARIFICATION - Docusaurus integration points]
-- **Database**: [NEEDS CLARIFICATION - In-memory storage approach for conversation history]
-- **Authentication**: [NEEDS CLARIFICATION - Authentication requirements if any]
-- **Deployment Target**: [NEEDS CLARIFICATION - Vercel deployment specifics]
+- **Backend Framework**: FastAPI 0.115.13 with uvicorn[standard] for serving
+- **AI Agent SDK**: OpenAI Agents Python SDK (latest stable) with Google Gemini via OpenAI-compatible API
+- **LLM Service**: Google Gemini 2.5 Flash via OpenAI-compatible API endpoint
+- **Frontend Integration**: Docusaurus 3.x with WebSocket connection to backend
+- **Database**: In-memory storage using Python dictionaries with threading locks
+- **Authentication**: None initially (as per spec requirements)
+- **Deployment Target**: Vercel for both frontend and backend
 
 ## Architecture Overview
 
@@ -176,29 +176,52 @@ Completed in [quickstart.md](./quickstart.md) with:
 
 ### Tech Stack Finalization
 
-[TO BE COMPLETED AFTER RESEARCH PHASE]
+Completed with the following technologies:
+- Backend: FastAPI 0.115.13 with uvicorn
+- AI Agent: OpenAI Agents Python SDK
+- LLM: Google Gemini 2.5 Flash via OpenAI-compatible API
+- Frontend: Docusaurus 3.x
+- In-memory storage: Python dictionaries with threading locks
 
 ### Infrastructure Setup
 
-[TO BE COMPLETED AFTER RESEARCH PHASE]
+- Local development: Python virtual environment with uv for package management
+- Frontend: Node.js with npm for Docusaurus
+- API access: Google Gemini API key
+- Deployment: Vercel for both frontend and backend
 
 ### Development Environment
 
-[TO BE COMPLETED AFTER RESEARCH PHASE]
+- Python 3.9+ with virtual environment
+- Node.js 18.x+ with npm/yarn
+- Git for version control
+- IDE with Python and TypeScript/JavaScript support
 
 ## Phase 3: Implementation Planning
 
 ### Sprint 1: Basic Chat Functionality
 
-[TO BE COMPLETED AFTER RESEARCH PHASE]
+- Set up FastAPI backend with basic endpoints
+- Implement WebSocket connection handling
+- Create basic Docusaurus chat interface
+- Implement in-memory session storage
+- Basic message sending/receiving functionality
 
 ### Sprint 2: AI Agent Integration
 
-[TO BE COMPLETED AFTER RESEARCH PHASE]
+- Integrate OpenAI Agents SDK with Google Gemini
+- Implement conversation history management
+- Add error handling for API failures
+- Implement session timeout functionality
+- Connect frontend to backend chat functionality
 
 ### Sprint 3: Advanced Features & Optimization
 
-[TO BE COMPLETED AFTER RESEARCH PHASE]
+- Add support for follow-up questions and context
+- Implement rate limiting and caching
+- Add analytics and monitoring
+- Performance optimization
+- Security enhancements
 
 ## Risk Assessment
 
