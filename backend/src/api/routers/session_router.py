@@ -19,7 +19,7 @@ session_manager = SessionManager()
 class SessionCreateRequest(BaseModel):
     user_preferences: Optional[dict] = None
 
-@router.post("/sessions")
+@router.post("/sessions", status_code=201)
 def create_session(request: SessionCreateRequest):
     """Create a new chat session."""
     # Create a new session

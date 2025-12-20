@@ -7,18 +7,25 @@ import logging
 from openai import RateLimitError, APIConnectionError, APITimeoutError
 from ..models.message import Message
 from ..config.ai_config import config
-from .openai_client import client
+from .openai_client import create_openai_client
 from ..exceptions.chatbot_exceptions import LLMServiceUnavailableException
 
 logger = logging.getLogger(__name__)
 
 class AIService:
     def __init__(self):
-        self.client = client
+        # Create client only when needed
+        self._client = None
         self.config = config
         self._request_times = []  # For rate limiting
         self._rate_limit_window = 60  # 60 seconds
         self._max_requests_per_minute = config.requests_per_minute
+
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = create_openai_client()
+        return self._client
 
     def _check_rate_limit(self) -> bool:
         """Check if we're within the rate limit."""

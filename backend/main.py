@@ -23,6 +23,7 @@ from src.api.routers.base_router import router as base_router
 from src.api.routers.session_router import router as session_router
 from src.api.routers.message_router import router as message_router
 from src.api.routers.history_router import router as history_router
+from src.api.routers.chat_query_router import router as chat_query_router
 
 # Import WebSocket handler
 from src.api.websocket_handler import manager, handle_websocket_message
@@ -39,7 +40,12 @@ class SecurityMiddleware(BaseHTTPMiddleware):
     """Middleware to add security headers and sanitize input."""
 
     async def dispatch(self, request: Request, call_next):
-        # Add security headers
+        # Skip security headers for docs and redoc endpoints to ensure they work properly
+        if request.url.path in ["/docs", "/redoc", "/openapi.json"]:
+            response = await call_next(request)
+            return response
+
+        # Add security headers for all other requests
         response = await call_next(request)
 
         # Security headers
@@ -62,6 +68,9 @@ app = FastAPI(
 # Register exception handlers
 register_exception_handlers(app)
 
+# Add security middleware before CORS to ensure it's applied
+app.add_middleware(SecurityMiddleware)
+
 # Add CORS middleware for frontend integration
 app.add_middleware(
     CORSMiddleware,
@@ -76,6 +85,7 @@ app.include_router(base_router)
 app.include_router(session_router, prefix="/api/v1")
 app.include_router(message_router, prefix="/api/v1")
 app.include_router(history_router, prefix="/api/v1")
+app.include_router(chat_query_router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():
