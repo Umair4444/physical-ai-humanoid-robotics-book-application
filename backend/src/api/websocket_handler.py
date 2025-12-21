@@ -2,8 +2,9 @@ import asyncio
 import json
 from datetime import datetime
 import uuid
-from typing import Dict
+from typing import Dict, Optional
 from fastapi import WebSocket, WebSocketDisconnect
+import logging
 
 from ..models.message import Message
 from ..services.session_manager import SessionManager
@@ -16,16 +17,30 @@ from ..exceptions.chatbot_exceptions import (
     ChatbotException,
     LLMServiceUnavailableException
 )
-from ..services.ai_service import AIService
 
 # Import the sanitization function
 from ..utils.sanitization import sanitize_input
+
+logger = logging.getLogger(__name__)
 
 class ConnectionManager:
     def __init__(self):
         self.active_connections: Dict[str, WebSocket] = {}  # session_id -> WebSocket
         self.session_manager = SessionManager()
-        self.ai_service = AIService()
+        # Delay AI service instantiation until it's actually needed
+        self._ai_service = None
+
+    @property
+    def ai_service(self):
+        """Lazily instantiate the AI service to avoid import-time failures."""
+        if self._ai_service is None:
+            try:
+                from ..services.ai_service import AIService
+                self._ai_service = AIService()
+            except Exception as e:
+                logger.error(f"Failed to instantiate AI service: {e}")
+                raise
+        return self._ai_service
 
     async def connect(self, websocket: WebSocket, session_id: str):
         """Accept a WebSocket connection for a specific session."""
@@ -90,10 +105,20 @@ async def handle_websocket_message(websocket: WebSocket, session_id: str, data: 
             formatted_history = manager.session_manager.format_conversation_history(session_id)
 
             # Process the message with the AI service
-            ai_response_content = await manager.ai_service.process_message_with_context(
-                formatted_history=formatted_history,
-                user_message=sanitized_content
-            )
+            # This will now properly handle initialization errors
+            try:
+                ai_response_content = await manager.ai_service.process_message_with_context(
+                    formatted_history=formatted_history,
+                    user_message=sanitized_content
+                )
+            except Exception as e:
+                logger.error(f"Error processing message with AI service: {e}")
+                await manager.send_personal_message({
+                    "type": "error",
+                    "error_code": "LLM_SERVICE_UNAVAILABLE",
+                    "message": "AI service is not properly configured. Please check environment variables."
+                }, session_id)
+                return
 
             # Validate the response
             if not await manager.ai_service.validate_response(ai_response_content):
@@ -137,6 +162,7 @@ async def handle_websocket_message(websocket: WebSocket, session_id: str, data: 
                 "message": e.message
             }, session_id)
         except Exception as e:
+            logger.error(f"Unexpected error in websocket handler: {e}")
             await manager.send_personal_message({
                 "type": "error",
                 "error_code": "INTERNAL_ERROR",
