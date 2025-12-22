@@ -3,7 +3,7 @@
 **Contract Date**: 2025-12-12  
 **Feature**: 001-ai-robotics-textbook
 
-## External API Contracts (Frontend-Backend)
+## External API Contracts (Frontend)
 
 ### 1. RAG Chatbot Service
 

@@ -4,6 +4,21 @@
 
 This comprehensive textbook covers all aspects of Physical AI and humanoid robotics, from fundamental principles to advanced applications and future outlook. The book is organized into 10 modules with 6 chapters each, totaling 60 chapters of in-depth coverage.
 
+## Technology Stack
+
+- **Frontend**: TypeScript deployed on Vercel
+- **Backend**: Hugging Face for AI model integration and processing
+- **Database**: Vercel Neon PostgreSQL for primary data storage
+- **Vector Database**: Qdrant for vector storage and retrieval
+- **Authentication**: Better-Auth for login/signup functionality
+- **Framework**: FastAPI for routing and communication between frontend and backend
+- **Package Managers**: npm for TS, Uv for Python
+- **Version Control**: GitHub
+- **Deployment**: Vercel
+- **Documentation**: Context7 for all package/framework/SDK/library documentation
+
+*Note: The technology stack is optional and not must-use, allowing flexibility based on project needs and team expertise.*
+
 ## Book Structure
 
 ### Module 1: Foundations of Physical AI and Humanoid Robotics

@@ -76,23 +76,16 @@ const ContactPage: React.FC = () => {
     setSubmitError('');
 
     try {
-      // In a real implementation, you would send the data to your backend
-      // For now, we'll simulate the API call
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      // Simulate form submission
+      // In a real implementation, you might use a service like Formspree, Netlify Forms, or email.js
+      console.log('Contact form submitted:', formData);
 
-      if (response.ok) {
-        setSubmitSuccess(true);
-        // Reset form on successful submission
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        setSubmitError('Failed to send message. Please try again later.');
-      }
+      // Simulate a successful submission
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+
+      setSubmitSuccess(true);
+      // Reset form on successful submission
+      setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       console.error('Error submitting contact form:', error);
       setSubmitError('An error occurred. Please try again later.');
