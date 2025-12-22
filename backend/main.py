@@ -74,7 +74,12 @@ app.add_middleware(SecurityMiddleware)
 # Add CORS middleware for frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=[
+        "http://localhost:3000",  # Local development
+        "http://localhost:3001",  # Alternative local dev port
+        "https://physical-ai-humanoid-robotics-book-nu-ashy.vercel.app",  # Deployed frontend
+        "https://your-domain.com"  # Production domain (replace with actual domain)
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

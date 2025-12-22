@@ -91,7 +91,7 @@ class ChatService {
       // Return a mock response when the API is not available
       return {
         id: `mock-${Date.now()}`,
-        response: `I'm sorry, but I couldn't reach the AI assistant server. This is a mock response for: "${query}". Please make sure the backend service is running at ${this.API_BASE_URL}`,
+        response: `I'm sorry, but I couldn't reach the AI assistant server.`,
         sources: [],
         timestamp: new Date(),
         sessionId

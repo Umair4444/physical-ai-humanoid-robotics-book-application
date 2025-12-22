@@ -3,30 +3,13 @@
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.11" }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/api/index.py"
+      "dest": "api/index.py"
     }
-  ],
-  "env": {
-    "GEMINI_API_KEY": "$GEMINI_API_KEY",
-    "OPENAI_BASE_URL": "$OPENAI_BASE_URL",
-    "MODEL_NAME": "$MODEL_NAME",
-    "TEMPERATURE": "$TEMPERATURE",
-    "MAX_TOKENS": "$MAX_TOKENS",
-    "REQUESTS_PER_MINUTE": "$REQUESTS_PER_MINUTE",
-    "TOKENS_PER_MINUTE": "$TOKENS_PER_MINUTE",
-    "ENVIRONMENT": "production"
-  },
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 60,
-      "memory": 1024
-    }
-  }
+  ]
 }
