@@ -4,6 +4,8 @@ from logging import config
 
 def setup_logging():
     """Set up logging configuration for the application."""
+    # In serverless environments like Vercel, we can't write to files
+    # So we only configure console logging
     logging_config = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -19,19 +21,13 @@ def setup_logging():
             "console": {
                 "class": "logging.StreamHandler",
                 "level": "INFO",
-                "formatter": "default",
+                "formatter": "detailed",  # Use detailed formatter for serverless
                 "stream": sys.stdout,
-            },
-            "file": {
-                "class": "logging.FileHandler",
-                "level": "DEBUG",
-                "formatter": "detailed",
-                "filename": "app.log",
             },
         },
         "root": {
             "level": "INFO",
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
         },
     }
 
