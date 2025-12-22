@@ -5,6 +5,16 @@
 **Status**: Draft
 **Input**: User description: "Create a complete backend specification for an AI-powered chatbot backend deployed on Hugging Face. Build an AI chatbot backend using OpenAI Agent SDK (Python), integrate Google Gemini via OpenAI-compatible API, use FastAPI framework, and deploy on Hugging Face Spaces (Python backend). Architecture must be stateless with no background workers, WebSockets, or long-running processes. The AI agent should receive user chat messages, manage short-lived conversational context per request, and produce structured chatbot responses via HTTP-based POST requests. Define clear API contracts with request/response schemas and error handling compatible with frontend chatbot UI."
 
+## Clarifications
+
+### Session 2025-12-22
+
+- Q: For the LLM integration, which approach should the system take when both OpenAI Agent SDK and Google Gemini are specified? → A: Use Google Gemini as the primary LLM with OpenAI as fallback
+- Q: How should the system handle the Hugging Face Spaces execution time limit during processing? → A: Implement request timeout handling and return partial responses if approaching limit
+- Q: What should be the detailed structure of the ChatMessage and ChatResponse entities? → A: Include sender, content, timestamp, and conversation context in ChatMessage; include response content, metadata, and suggested follow-ups in ChatResponse
+- Q: How should the system handle input messages that exceed the maximum token limit for the LLM? → A: Truncate input messages that exceed token limits and notify the user
+- Q: What security measures should be implemented for the chatbot API? → A: Implement input sanitization and basic rate limiting to prevent abuse
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Chat with AI Assistant (Priority: P1)
@@ -54,7 +64,6 @@ When errors occur in the backend, the system should return appropriate error res
 
 ### Edge Cases
 
-- What happens when the input message exceeds the maximum token limit for the LLM?
 - How does the system handle malformed JSON in the request?
 - What happens when the Hugging Face Spaces execution time limit is approached during processing?
 
@@ -64,7 +73,7 @@ When errors occur in the backend, the system should return appropriate error res
 
 - **FR-001**: System MUST accept user chat messages via HTTP POST requests to the chat endpoint
 - **FR-002**: System MUST integrate with OpenAI Agent SDK (Python) for AI agent functionality
-- **FR-003**: System MUST use Google Gemini via OpenAI-compatible API for AI responses
+- **FR-003**: System MUST use Google Gemini as the primary LLM via OpenAI-compatible API for AI responses, with OpenAI as fallback
 - **FR-004**: System MUST use FastAPI as the backend framework
 - **FR-005**: System MUST be deployable on Hugging Face Spaces (Python backend)
 - **FR-006**: System MUST maintain statelessness with no background workers, WebSockets, or long-running processes
@@ -72,6 +81,9 @@ When errors occur in the backend, the system should return appropriate error res
 - **FR-008**: System MUST return structured chatbot responses in JSON format
 - **FR-009**: System MUST be compatible with a frontend chatbot UI
 - **FR-010**: System MUST handle errors gracefully and return appropriate HTTP status codes
+- **FR-013**: System MUST implement request timeout handling and return partial responses if approaching Hugging Face execution time limit
+- **FR-014**: System MUST truncate input messages that exceed token limits and notify the user
+- **FR-015**: System MUST implement input sanitization and basic rate limiting to prevent abuse
 
 *Example of marking unclear requirements:*
 
@@ -80,8 +92,8 @@ When errors occur in the backend, the system should return appropriate error res
 
 ### Key Entities *(include if feature involves data)*
 
-- **ChatMessage**: Represents a single message in the conversation with properties like sender, content, timestamp
-- **ChatResponse**: Structured response from the AI agent containing the reply and any metadata
+- **ChatMessage**: Represents a single message in the conversation with properties: sender (user identifier), content (message text), timestamp (when sent), and conversation context (short-lived context per request)
+- **ChatResponse**: Structured response from the AI agent containing: response content (AI-generated text), metadata (confidence, sources, processing info), and suggested follow-ups (potential next questions/interactions)
 
 ## Success Criteria *(mandatory)*
 
