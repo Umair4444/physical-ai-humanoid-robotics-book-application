@@ -8,7 +8,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Create the Mangum adapter for serverless
-handler = Mangum(app)
+try:
+    handler = Mangum(app, lifespan="off")
+    logger.info("Mangum handler created successfully")
+except Exception as e:
+    logger.error(f"Error creating Mangum handler: {e}")
+    raise
 
 def main(event, context):
     logger.info(f"Received event: {event}")
