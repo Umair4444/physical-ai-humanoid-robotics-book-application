@@ -72,8 +72,8 @@ When errors occur in the backend, the system should return appropriate error res
 ### Functional Requirements
 
 - **FR-001**: System MUST accept user chat messages via HTTP POST requests to the chat endpoint
-- **FR-002**: System MUST integrate with OpenAI Agent SDK (Python) for AI agent functionality
-- **FR-003**: System MUST use Google Gemini as the primary LLM via OpenAI-compatible API for AI responses, with OpenAI as fallback
+- **FR-002**: System MUST integrate with openai-agents (Python) for AI agent functionality
+- **FR-003**: System MUST use Google Gemini as the primary LLM via OpenAI-compatible API for AI responses, with openai-agents as fallback
 - **FR-004**: System MUST use FastAPI as the backend framework
 - **FR-005**: System MUST be deployable on Hugging Face Spaces (Python backend)
 - **FR-006**: System MUST maintain statelessness with no background workers, WebSockets, or long-running processes

@@ -12,6 +12,7 @@ This comprehensive textbook covers all aspects of Physical AI and humanoid robot
 - **Vector Database**: Qdrant for vector storage and retrieval
 - **Authentication**: Better-Auth for login/signup functionality
 - **Framework**: FastAPI for routing and communication between frontend and backend
+- **AI Agent**: openai-agents for AI agent functionality
 - **Package Managers**: npm for TS, Uv for Python
 - **Version Control**: GitHub
 - **Deployment**: Vercel

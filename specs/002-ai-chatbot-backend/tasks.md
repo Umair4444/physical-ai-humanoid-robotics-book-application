@@ -132,7 +132,7 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T031 [P] Add timeout handling for Hugging Face execution limits in backend/src/services/chat_service.py
 - [ ] T032 [P] Implement tool registry and calling mechanism in backend/src/agents/
 - [ ] T033 [P] Add health check endpoint in backend/src/api/health.py
-- [ ] T034 Integrate OpenAI Agent SDK with Google Gemini fallback in backend/src/agents/
+- [ ] T034 Integrate openai-agents with Google Gemini fallback in backend/src/agents/
 
 ---
 

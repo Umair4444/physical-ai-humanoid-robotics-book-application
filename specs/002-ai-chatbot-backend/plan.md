@@ -12,7 +12,7 @@ Implementation of an AI-powered chatbot backend for the Physical AI Humanoid Rob
 ## Technical Context
 
 **Language/Version**: Python 3.11, TypeScript for frontend integration
-**Primary Dependencies**: OpenAI Agent SDK (Python), FastAPI, Google-Gemini-2.5-Flash model via OpenAI-compatible API, Hugging Face Spaces for deployment
+**Primary Dependencies**: openai-agents (Python), FastAPI, Google-Gemini-2.5-Flash model via OpenAI-compatible API, Hugging Face Spaces for deployment
 **Storage**: N/A (stateless architecture, no database requirement)
 **Testing**: pytest for backend testing
 **Target Platform**: Hugging Face Spaces (Python backend), with Docusaurus frontend integration
@@ -26,7 +26,7 @@ Implementation of an AI-powered chatbot backend for the Physical AI Humanoid Rob
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
 - [x] Education-First Content Development: Chatbot responses will focus on educational value related to the textbook
-- [x] AI-Assisted Development: Using OpenAI Agent SDK and Qwen CLI for development
+- [x] AI-Assisted Development: Using openai-agents and Qwen CLI for development
 - [x] Test-First: Backend will be developed with TDD approach
 - [x] Technical Architecture Standards: Using FastAPI backend with Google Gemini integration
 - [x] Multi-Platform Package Management: Using Uv for Python dependencies
@@ -73,10 +73,10 @@ backend/
 
 ## Phase 0: Research
 
-### 0.1 OpenAI Agent SDK Research
-- Decision: Use OpenAI Agent SDK for the AI agent functionality
+### 0.1 openai-agents Research
+- Decision: Use openai-agents for the AI agent functionality
 - Rationale: Provides the required agent capabilities for the chatbot system
-- Alternatives considered: Custom agent implementation vs OpenAI Agent SDK
+- Alternatives considered: Custom agent implementation vs openai-agents
 
 ### 0.2 Google Gemini OpenAI-Compatible API Research
 - Decision: Use Google Gemini via OpenAI-compatible API as primary LLM
@@ -108,7 +108,7 @@ backend/
 
 ### 1.2 AI Agent Design Plan
 - Agent responsibilities:
-  - Interpret user queries
+  - Interpret user queries using openai-agents framework
   - Determine if tools are needed
   - Call appropriate tools
   - Synthesize final responses
@@ -116,7 +116,7 @@ backend/
   - System prompt: Define role as textbook expert
   - User prompts: Forward user queries with context
 - Tool selection and invocation:
-  - Use function calling capabilities of the LLM
+  - Use function calling capabilities of the LLM through openai-agents
   - Maintain a registry of available tools
 - Hallucination minimization:
   - Require tool usage for factual queries
@@ -180,7 +180,7 @@ backend/
 ### 1.8 Implementation Roadmap
 1. Set up FastAPI project structure
 2. Implement basic chat endpoint
-3. Integrate OpenAI Agent SDK
+3. Integrate openai-agents
 4. Connect to Google Gemini via OpenAI-compatible API
 5. Implement tool registry and calling mechanism
 6. Add anti-hallucination mechanisms

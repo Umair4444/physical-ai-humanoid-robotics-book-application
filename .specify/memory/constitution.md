@@ -33,7 +33,7 @@ TDD mandatory: Tests written → User approved → Tests fail → Then implement
 Educational content must incorporate appropriate visuals (images, diagrams, graphics) where beneficial; All multimedia elements must be properly licensed and attributed; Accessibility considerations for visual content are mandatory.
 
 ### V. Technical Architecture Standards
-Frontend development in TypeScript deployed on Vercel for optimal global accessibility; Backend leveraging Hugging Face for AI model integration and processing; Vercel Neon PostgreSQL for primary database and Qdrant for vector database storage; FastAPI for routing and communication between frontend and backend; Better-Auth for authentication (login/signup); Technology stack is optional and not must-use, allowing flexibility based on project needs and team expertise. Deployment to Vercel for optimal global accessibility. Use of Context7 documentation standard for all packages, frameworks, SDKs, libraries, or dependencies is mandatory for accurate and up-to-date information on tools and frameworks used in the project.
+Frontend development in TypeScript deployed on Vercel for optimal global accessibility; Backend leveraging Hugging Face for AI model integration and processing; Vercel Neon PostgreSQL for primary database and Qdrant for vector database storage; FastAPI for routing and communication between frontend and backend; Better-Auth for authentication (login/signup); openai-agents for AI agent functionality; Technology stack is optional and not must-use, allowing flexibility based on project needs and team expertise. Deployment to Vercel for optimal global accessibility. Use of Context7 documentation standard for all packages, frameworks, SDKs, libraries, or dependencies is mandatory for accurate and up-to-date information on tools and frameworks used in the project.
 
 
 ### VI. Multi-Platform Package Management
@@ -51,6 +51,7 @@ All packages, frameworks, software development kits(SDKs), libraries, or depende
 - Vector Database: Qdrant for vector storage and retrieval
 - Authentication: Better-Auth for login/signup functionality
 - Framework: FastAPI for routing and communication between frontend and backend
+- AI Agent: openai-agents for AI agent functionality
 - Package Managers: npm for TS, Uv for Python
 - Version Control: GitHub
 - Deployment: Vercel
