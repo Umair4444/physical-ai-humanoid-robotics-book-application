@@ -103,6 +103,11 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
       } else if (error.response?.status >= 500) {
         errorMessage =
           'The server is experiencing issues. Please try again later.';
+      } else if (error.message?.includes('AI service is not properly configured')) {
+        errorMessage =
+          'The AI service is temporarily unavailable due to configuration issues. Please contact the administrator.';
+      } else if (error.message) {
+        errorMessage = error.message;
       }
 
       sendMessage(errorMessage, 'assistant');

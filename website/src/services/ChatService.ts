@@ -64,6 +64,11 @@ class ChatService {
       // This allows the backend to control behavior based on the toggle
       const response: BackendChatResponse = await apiService.post('/api/v1/chat', request);
 
+      // Check if the response indicates an API key error
+      if (response.response.startsWith("Error: API key not configured")) {
+        throw new Error("AI service is not properly configured. Contact administrator to set up API keys.");
+      }
+
       return {
         id: `response-${Date.now()}`,
         response: response.response,
