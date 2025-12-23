@@ -49,13 +49,15 @@ class APIService {
         ...options.headers,
       },
       ...options,
+      // Ensure credentials are handled properly for cross-origin requests
+      credentials: 'omit', // Explicitly set to 'omit' for cross-origin requests
     };
 
     try {
       // Create an AbortController for timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
-      
+
       requestOptions.signal = controller.signal;
 
       const response = await fetch(url, requestOptions);
@@ -80,8 +82,13 @@ class APIService {
       if (error instanceof TypeError && error.message.includes('fetch')) {
         throw new Error('Failed to fetch data from server. Please check your connection.');
       }
+      // Handle CORS and network errors more specifically
+      if (error instanceof TypeError && (error.message.includes('NetworkError') || error.message.includes('CORS'))) {
+        throw new Error('Network error occurred. This might be due to CORS restrictions or server connectivity issues.');
+      }
       throw error;
     }
+  }
   }
 
   get<T>(endpoint: string, params?: Record<string, string>): Promise<T> {

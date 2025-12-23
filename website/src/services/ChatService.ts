@@ -78,6 +78,7 @@ class ChatService {
       };
     } catch (error) {
       console.error('Error in ChatService.sendMessage:', error);
+      // Re-throw the error to be handled by the component
       throw error;
     }
   }
