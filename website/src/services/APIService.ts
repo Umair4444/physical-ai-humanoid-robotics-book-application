@@ -1,4 +1,5 @@
 import { apiCache } from './APICache';
+import { envConfig } from '../utils/envConfig';
 
 interface APIConfig {
   baseURL: string;
@@ -13,9 +14,7 @@ class APIService {
   constructor(config?: Partial<APIConfig>) {
     // Use environment variable if available, otherwise default to localhost
     // For browser environments, we check if process is defined
-    const apiBaseUrl = typeof process !== 'undefined'
-      ? (config?.baseURL || process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000')
-      : (config?.baseURL || 'http://localhost:8000');
+    const apiBaseUrl = config?.baseURL || envConfig.apiBaseUrl;
 
     this.config = {
       baseURL: apiBaseUrl,
