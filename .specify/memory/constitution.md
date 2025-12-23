@@ -1,17 +1,17 @@
 <!--
 SYNCHRONIZATION IMPACT REPORT
-Version change: 1.2.0 → 1.3.0
-Modified principles: V. Technical Architecture Standards (updated technology stack specifics)
-Added sections: Context7 Documentation Requirement
+Version change: 1.3.0 → 1.4.0
+Modified principles: V. Technical Architecture Standards (technology stack updated to Hugging Face backend and Vercel frontend)
+Added sections: None
 Removed sections: None
 Templates requiring updates:
 - ✅ plan-template.md - Updated constitution check references
 - ✅ spec-template.md - Aligned requirements sections
-- ⚠ tasks-template.md - May need review for specific task types (pending)
-- ⚠ README.md - May need update to reflect new design system requirements (pending)
+- ✅ tasks-template.md - Updated task categorization to reflect new stack
+- ⚠ README.md - May need update to reflect new technology stack requirements (pending)
 Templates unchanged:
 - commands/*.toml - No project-specific changes needed
-Follow-up TODOs: Update README.md with design system guidelines
+Follow-up TODOs: Update README.md with technology stack guidelines
 -->
 
 # Physical AI Humanoid Robotics Textbook Constitution
@@ -19,7 +19,7 @@ Follow-up TODOs: Update README.md with design system guidelines
 ## Core Principles
 
 ### I. Education-First Content Development
-All content begins with pedagogical value; Educational materials must be accurate, accessible, comprehensible to target audience; Clear learning objectives required - no content without defined educational purpose. 
+All content begins with pedagogical value; Educational materials must be accurate, accessible, comprehensible to target audience; Clear learning objectives required - no content without defined educational purpose.
 *RATIONALE: Our primary mission is education. All features must serve student learning outcomes first.*
 
 ### II. AI-Assisted Development (Spec-Kit Plus & Qwen CLI)
@@ -33,7 +33,8 @@ TDD mandatory: Tests written → User approved → Tests fail → Then implement
 Educational content must incorporate appropriate visuals (images, diagrams, graphics) where beneficial; All multimedia elements must be properly licensed and attributed; Accessibility considerations for visual content are mandatory.
 
 ### V. Technical Architecture Standards
-Frontend development in TypeScript using Docusaurus for documentation; Backend in Python using OpenAI Agent SDK (Python) with Google-Gemini-2.5-Flash model for LLM integration; Vercel Neon PostgreSQL for primary database and Qdrant for vector database storage; FastAPI for routing and communication between frontend and backend; Better-Auth for authentication (login/signup); Deployment to Vercel for optimal global accessibility.
+Frontend development in TypeScript deployed on Vercel for optimal global accessibility; Backend leveraging Hugging Face for AI model integration and processing; Vercel Neon PostgreSQL for primary database and Qdrant for vector database storage; FastAPI for routing and communication between frontend and backend; Better-Auth for authentication (login/signup); openai-agents for AI agent functionality; Technology stack is optional and not must-use, allowing flexibility based on project needs and team expertise. Deployment to Vercel for optimal global accessibility. Use of Context7 documentation standard for all packages, frameworks, SDKs, libraries, or dependencies is mandatory for accurate and up-to-date information on tools and frameworks used in the project.
+
 
 ### VI. Multi-Platform Package Management
 Use Node/npm for all TypeScript-based packages and dependencies; Use Uv for all Python-based packages and dependencies; Dependency versions managed through lock files for reproducible builds.
@@ -43,23 +44,26 @@ All packages, frameworks, software development kits(SDKs), libraries, or depende
 
 ## Additional Constraints
 
-### Technology Stack Requirements
-- Frontend: TypeScript with Docusaurus framework
-- Backend: Python with OpenAI Agent SDK (Python) and Google-Gemini-2.5-Flash model for LLM
+### Technology Stack Requirements (Optional)
+- Frontend: TypeScript deployed on Vercel
+- Backend: Hugging Face for AI model integration and processing
 - Database: Vercel Neon PostgreSQL for primary data storage
 - Vector Database: Qdrant for vector storage and retrieval
 - Authentication: Better-Auth for login/signup functionality
 - Framework: FastAPI for routing and communication between frontend and backend
+- AI Agent: openai-agents for AI agent functionality
 - Package Managers: npm for TS, Uv for Python
 - Version Control: GitHub
 - Deployment: Vercel
 - Folder Structure: Organized by functionality and feature domain
 - Documentation: Context7 for all package/framework/SDK/library documentation
 
+*Note: The technology stack is optional and not must-use, allowing flexibility based on project needs and team expertise.*
+
 ## Global Design System & Responsiveness Laws
 
 ### 1. Single Theme Rule
-The entire application (Docusaurus frontend, documentation pages, interactive UI, and future components) MUST use one unified design theme. Colors, typography, spacing, headings, and UI tone must be globally consistent. No page, component, or section may introduce isolated styles.
+The entire application (frontend, documentation pages, interactive UI, and future components) MUST use one unified design theme. Colors, typography, spacing, headings, and UI tone must be globally consistent. No page, component, or section may introduce isolated styles.
 
 ### 2. Theme Definition Source
 The theme must be defined in a single source of truth:
@@ -83,7 +87,7 @@ Every page MUST be fully responsive. Mobile-first design is mandatory. Breakpoin
 - Tablet
 - Desktop
 - Large screens
-Horizontal scrolling is forbidden. Images must scale responsively.
+Horizontal scrolling is forbidden. Images must not overflow containers. Captions must remain readable on small screens.
 
 ### 7. Image & Media Responsiveness
 All images must use responsive sizing, preserve aspect ratio and load efficiently. Images must not overflow containers. Captions must remain readable on small screens.
@@ -142,4 +146,4 @@ Any feature, page, or component that violates theme or responsiveness rules is c
 
 This constitution governs all development and content creation for the Physical AI Humanoid Robotics Textbook project; All changes to this constitution require team consensus and documented approval; Amendments must be recorded with date and rationale; All contributors must acknowledge and abide by these principles.
 
-**Version**: 1.3.0 | **Ratified**: 2025-01-03 | **Last Amended**: 2025-12-19
+**Version**: 1.4.0 | **Ratified**: 2025-01-03 | **Last Amended**: 2025-12-22

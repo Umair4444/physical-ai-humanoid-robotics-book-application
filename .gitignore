@@ -84,21 +84,6 @@ env.bak/
 .pytest_cache/
 .coverage
 
-# Backend specific
-backend/__pycache__/
-backend/*.py[cod]
-backend/*$py.class
-backend/*.so
-backend/.Python
-backend/env/
-backend/venv/
-backend/ENV/
-backend/.venv/
-backend/env.bak/
-backend/.ENV
-backend/.python-version
-backend/.pytest_cache/
-backend/.coverage
 
 # IDE
 *.swp
