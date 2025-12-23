@@ -24,9 +24,12 @@ export const updateDocumentTheme = (isDarkMode: boolean) => {
  * @returns The current theme: 'light' or 'dark'
  */
 export const getCurrentTheme = (): 'light' | 'dark' => {
-  const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-  if (savedTheme) {
-    return savedTheme;
+  // Check if we're in the browser environment
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      return savedTheme;
+    }
   }
 
   // Check system preference
@@ -43,8 +46,13 @@ export const getCurrentTheme = (): 'light' | 'dark' => {
  * @returns The current language as a string
  */
 export const getCurrentLanguage = (): string => {
-  const savedLanguage = localStorage.getItem('language');
-  return savedLanguage || 'en-US'; // Default to English
+  // Check if we're in the browser environment
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    const savedLanguage = localStorage.getItem('language');
+    return savedLanguage || 'en-US'; // Default to English
+  }
+
+  return 'en-US'; // Default to English when not in browser
 };
 
 /**
@@ -52,7 +60,10 @@ export const getCurrentLanguage = (): string => {
  * @param theme The theme to save ('light' or 'dark')
  */
 export const saveThemePreference = (theme: 'light' | 'dark'): void => {
-  localStorage.setItem('theme', theme);
+  // Check if we're in the browser environment
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    localStorage.setItem('theme', theme);
+  }
 };
 
 /**
@@ -60,5 +71,8 @@ export const saveThemePreference = (theme: 'light' | 'dark'): void => {
  * @param language The language to save
  */
 export const saveLanguagePreference = (language: string): void => {
-  localStorage.setItem('language', language);
+  // Check if we're in the browser environment
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    localStorage.setItem('language', language);
+  }
 };

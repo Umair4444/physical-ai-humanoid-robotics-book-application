@@ -9,7 +9,17 @@ interface ChatMessage {
 
 const CHAT_HISTORY_KEY = 'chatbot-history';
 
+// Helper function to check if we're in a browser environment
+const isBrowser = (): boolean => {
+  return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+};
+
 export const saveChatHistory = (messages: ChatMessage[]): void => {
+  if (!isBrowser()) {
+    // Skip saving if we're not in a browser environment (e.g., SSR)
+    return;
+  }
+
   try {
     // Convert Date objects to ISO strings for serialization
     const serializableMessages = messages.map(msg => ({
@@ -24,6 +34,11 @@ export const saveChatHistory = (messages: ChatMessage[]): void => {
 };
 
 export const loadChatHistory = (): ChatMessage[] => {
+  if (!isBrowser()) {
+    // Return empty array if we're not in a browser environment (e.g., SSR)
+    return [];
+  }
+
   try {
     const serializedMessages = localStorage.getItem(CHAT_HISTORY_KEY);
     if (serializedMessages === null) {
@@ -42,6 +57,11 @@ export const loadChatHistory = (): ChatMessage[] => {
 };
 
 export const clearChatHistory = (): void => {
+  if (!isBrowser()) {
+    // Skip clearing if we're not in a browser environment (e.g., SSR)
+    return;
+  }
+
   try {
     localStorage.removeItem(CHAT_HISTORY_KEY);
   } catch (error) {

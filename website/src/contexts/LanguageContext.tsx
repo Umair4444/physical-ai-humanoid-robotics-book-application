@@ -75,15 +75,21 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Check for saved language in localStorage
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language | null;
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      const savedLanguage = localStorage.getItem('language') as Language | null;
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
+      }
     }
   }, []);
 
   // Update localStorage when language changes
   useEffect(() => {
-    localStorage.setItem('language', language);
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      localStorage.setItem('language', language);
+    }
   }, [language]);
 
   const changeLanguage = (lang: Language) => {

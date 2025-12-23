@@ -16,19 +16,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Check for saved theme in localStorage or respect system preference
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme') as Theme | null;
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    if (savedTheme) {
-      setThemeState(savedTheme);
-    } else if (systemPrefersDark) {
-      setThemeState('dark');
+      if (savedTheme) {
+        setThemeState(savedTheme);
+      } else if (systemPrefersDark) {
+        setThemeState('dark');
+      }
     }
   }, []);
 
   // Update localStorage and CSS class when theme changes
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      localStorage.setItem('theme', theme);
+    }
     updateDocumentTheme(theme === 'dark');
   }, [theme]);
 

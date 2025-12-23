@@ -72,12 +72,15 @@ class AuthService {
       }
 
       const data: RegisterResponse = await response.json();
-      
+
       // Store the token in localStorage
       if (data.token) {
-        localStorage.setItem(this.TOKEN_KEY, data.token);
+        // Check if we're in the browser environment
+        if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+          localStorage.setItem(this.TOKEN_KEY, data.token);
+        }
       }
-      
+
       return data;
     } catch (error) {
       console.error('Registration error:', error);
@@ -104,12 +107,15 @@ class AuthService {
       }
 
       const data: LoginResponse = await response.json();
-      
+
       // Store the token in localStorage
       if (data.token) {
-        localStorage.setItem(this.TOKEN_KEY, data.token);
+        // Check if we're in the browser environment
+        if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+          localStorage.setItem(this.TOKEN_KEY, data.token);
+        }
       }
-      
+
       return data;
     } catch (error) {
       console.error('Login error:', error);
@@ -118,11 +124,18 @@ class AuthService {
   }
 
   static logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      localStorage.removeItem(this.TOKEN_KEY);
+    }
   }
 
   static getAuthToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      return localStorage.getItem(this.TOKEN_KEY);
+    }
+    return null;
   }
 
   static isAuthenticated(): boolean {

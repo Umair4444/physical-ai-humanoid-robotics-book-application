@@ -68,6 +68,7 @@ These are configured in the `.env` file in the `website/` directory.
 1. **CORS Errors**: The backend's `allowed_origins` in `src/config/settings.py` already include both local and production frontend domains
 2. **Connection Refused**: Verify the backend server is running and accessible
 3. **Environment Not Loading**: Check that environment variables are properly prefixed with `REACT_APP_`
+4. **API Key Missing**: The backend requires either `GEMINI_API_KEY` or `OPENAI_API_KEY` to function. If you get a 500 error with "API key not configured", set the appropriate environment variable in your deployment environment.
 
 ### Testing the Connection
 
