@@ -57,7 +57,7 @@ const chatbotReducer = (state: ChatbotState, action: ChatbotAction): ChatbotStat
       const welcomeMessage: ChatMessage = {
         id: 'welcome-' + Date.now(),
         role: 'assistant',
-        content: 'Hello! I\'m your AI assistant for the Physical AI Humanoid Robotics Textbook. How can I help you today?',
+        content: 'Hello! I\'m your AI Tutor for the Physical AI Humanoid Robotics Textbook. How can I help you today?',
         timestamp: new Date(),
       };
       saveChatHistory([welcomeMessage]); // Save the welcome message

@@ -22,6 +22,14 @@ class ChatContextRequest(BaseModel):
         default=None,
         description="Previous messages in the conversation (short-lived context)"
     )
+    tool_names: Optional[List[str]] = Field(
+        default=None,
+        description="List of specific tool names to use for this request"
+    )
+    use_specialized_knowledge: Optional[bool] = Field(
+        default=True,
+        description="Whether to use specialized textbook knowledge or general site knowledge only"
+    )
 
 
 class ChatRequest(BaseModel):

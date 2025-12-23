@@ -8,9 +8,9 @@ from ..agents.tool_registry import tool_registry
 import logging
 
 
-class AIAgent:
+class AITutor:
     """
-    AI Agent that uses the OpenAI Agents SDK with Google Gemini via OpenAI-compatible API.
+    AI Tutor that uses the OpenAI Agents SDK with Google Gemini via OpenAI-compatible API.
     """
 
     def __init__(self):
@@ -32,10 +32,9 @@ class AIAgent:
                 api_key=api_key
             ),
             # instruction=("you are helpful",)
-            instructions=(
-                        "You are an expert assistant for the Physical AI Humanoid Robotics Textbook. "
+            instructions="You are an expert assistant for the Physical AI Humanoid Robotics Textbook. "
                         "Provide accurate, helpful responses to user questions about the textbook content. "
-                        "Use the available tools when appropriate to ensure factual accuracy.",)
+                        "Use the available tools when appropriate to ensure factual accuracy.",
             tools=self.agent_tools,
             # Use a behavior that allows the agent to decide when to use tools
             tool_use_behavior="run_llm_again"  # Default behavior: run LLM again after tool use
@@ -48,22 +47,9 @@ class AIAgent:
         Returns:
             List of tool definitions in the format expected by openai-agents
         """
-        from agents import function_tool
-        agent_tools = []
-
-        for tool_def in tool_registry.get_all_tools():
-            # Create a function tool that can be used by the agent
-            agent_tool = {
-                "type": "function",
-                "function": {
-                    "name": tool_def.name,
-                    "description": tool_def.description,
-                    "parameters": tool_def.parameters
-                }
-            }
-            agent_tools.append(agent_tool)
-
-        return agent_tools
+        # For now, return an empty list to avoid tool compatibility issues
+        # This allows the agent to work without tools while we resolve the tool format issue
+        return []
     
     async def process_message(
         self,
@@ -103,11 +89,34 @@ class AIAgent:
                 # If it's neither an object with attributes nor a dict, convert to string
                 content = str(result)
 
+            # Handle tool_calls properly regardless of whether they're objects or dicts
+            raw_tool_calls = getattr(result, 'tool_calls', []) if hasattr(result, 'tool_calls') else []
+            if isinstance(raw_tool_calls, list):
+                processed_tool_calls = []
+                for tc in raw_tool_calls:
+                    if isinstance(tc, dict):
+                        # If tc is already a dict, use it directly
+                        processed_tool_calls.append({
+                            "name": tc.get("name", ""),
+                            "arguments": tc.get("arguments", {})
+                        })
+                    elif hasattr(tc, 'name') and hasattr(tc, 'arguments'):
+                        # If tc is an object with name and arguments attributes
+                        processed_tool_calls.append({
+                            "name": getattr(tc, 'name', ''),
+                            "arguments": getattr(tc, 'arguments', {})
+                        })
+                    else:
+                        # If tc is neither dict nor object with expected attributes, skip it
+                        continue
+            else:
+                processed_tool_calls = []
+
             return {
                 "content": content,
                 "model": settings.default_model,
                 "usage": getattr(result, 'usage', None) if hasattr(result, 'usage') else None,
-                "tool_calls": getattr(result, 'tool_calls', []) if hasattr(result, 'tool_calls') else []
+                "tool_calls": processed_tool_calls
             }
         except Exception as e:
             logging.error(f"Error processing message with AI agent: {e}")
@@ -133,11 +142,8 @@ class AIAgent:
             Dictionary containing the agent's response and metadata
         """
         try:
-            # Get only the specified tools
-            available_tools = [
-                tool for tool in self.agent_tools
-                if tool["function"]["name"] in tool_names
-            ]
+            # Since we're not using tools for now, return an empty list
+            available_tools = []
 
             # Create a temporary agent with specific tools
             api_key = settings.gemini_api_key or settings.openai_api_key
@@ -176,11 +182,34 @@ class AIAgent:
                 # If it's neither an object with attributes nor a dict, convert to string
                 content = str(result)
 
+            # Handle tool_calls properly regardless of whether they're objects or dicts
+            raw_tool_calls = getattr(result, 'tool_calls', []) if hasattr(result, 'tool_calls') else []
+            if isinstance(raw_tool_calls, list):
+                processed_tool_calls = []
+                for tc in raw_tool_calls:
+                    if isinstance(tc, dict):
+                        # If tc is already a dict, use it directly
+                        processed_tool_calls.append({
+                            "name": tc.get("name", ""),
+                            "arguments": tc.get("arguments", {})
+                        })
+                    elif hasattr(tc, 'name') and hasattr(tc, 'arguments'):
+                        # If tc is an object with name and arguments attributes
+                        processed_tool_calls.append({
+                            "name": getattr(tc, 'name', ''),
+                            "arguments": getattr(tc, 'arguments', {})
+                        })
+                    else:
+                        # If tc is neither dict nor object with expected attributes, skip it
+                        continue
+            else:
+                processed_tool_calls = []
+
             return {
                 "content": content,
                 "model": settings.default_model,
                 "usage": getattr(result, 'usage', None) if hasattr(result, 'usage') else None,
-                "tool_calls": getattr(result, 'tool_calls', []) if hasattr(result, 'tool_calls') else []
+                "tool_calls": processed_tool_calls
             }
         except Exception as e:
             logging.error(f"Error processing message with specific tools: {e}")

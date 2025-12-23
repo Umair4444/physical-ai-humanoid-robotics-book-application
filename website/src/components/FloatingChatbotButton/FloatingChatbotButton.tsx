@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useChatbot } from '@site/src/contexts/ChatbotContext';
 import ChatbotComponent from '../Chatbot/ChatbotComponent';
-import { FaRobot, FaPlus } from 'react-icons/fa';
+import { FaRobot, FaComments, FaTimes } from 'react-icons/fa';
 
 const FloatingChatbotButton: React.FC = () => {
-  const { messages, clearMessages } = useChatbot();
+  const { messages, clearMessages, initializeChat } = useChatbot();
   const [isOpen, setIsOpen] = useState(false);
   const [hasUnreadMessage, setHasUnreadMessage] = useState(false);
 
@@ -31,30 +31,41 @@ const FloatingChatbotButton: React.FC = () => {
 
   const handleNewChat = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering header click to close
-    clearMessages(); // Clear chat history
-    // Don't close the chat - just clear the messages
+    initializeChat(); // Initialize a new chat session
   };
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {isOpen ? (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 w-96 h-[500px] flex flex-col">
-          {/* Chat Header - clicking anywhere on it will close the chat */}
-          <div
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-3 flex justify-between items-center rounded-t-xl cursor-pointer"
-            onClick={closeChat}
-          >
+          {/* Chat Header */}
+          <div className="bg-gradient-to-r from-blue-500 to-violet-600 text-white p-3 flex justify-between items-center rounded-t-xl">
             <div className="flex items-center">
               <FaRobot className="mr-2" />
-              <h3 className="font-semibold">AI Assistant</h3>
+              <h3 className="font-semibold">AI Tutor</h3>
             </div>
-            <button
-              onClick={handleNewChat}
-              className="text-white hover:text-gray-200 focus:outline-none"
-              aria-label="New chat"
-            >
-              <FaPlus />
-            </button>
+            <div className="flex space-x-2">
+              {/* New Chat Button */}
+              <button
+                type="button"
+                onClick={handleNewChat}
+                className="p-1.5 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+                aria-label="Start new conversation"
+                title="New Chat"
+              >
+                <FaComments aria-hidden="true" />
+              </button>
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={closeChat}
+                className="p-1.5 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+                aria-label="Close chat"
+                title="Close"
+              >
+                <FaTimes aria-hidden="true" />
+              </button>
+            </div>
           </div>
 
           {/* Chat Content */}
@@ -68,9 +79,9 @@ const FloatingChatbotButton: React.FC = () => {
           className={`p-4 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-300 ${
             hasUnreadMessage
               ? 'bg-gradient-to-r from-yellow-500 to-orange-500 animate-pulse'
-              : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700'
+              : 'bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700'
           }`}
-          aria-label="Open AI Assistant chat"
+          aria-label="Open AI Tutor chat"
         >
           <div className="relative">
             <FaRobot className="text-xl" />

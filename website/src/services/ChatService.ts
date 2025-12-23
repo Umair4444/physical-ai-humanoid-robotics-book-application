@@ -42,7 +42,8 @@ class ChatService {
   static async sendMessage(
     query: string,
     sessionId: string,
-    context: string = ''
+    context: string = '',
+    useTutor: boolean = false  // New parameter to control AI Tutor behavior
   ): Promise<FrontendChatResponse> {
     try {
       const request: ChatRequest = {
@@ -52,10 +53,15 @@ class ChatService {
           previous_messages: context.split('\n').map(msg => ({
             sender: 'user',
             content: msg
-          }))
-        } : undefined
+          })),
+          use_specialized_knowledge: useTutor  // Pass the toggle state to the backend
+        } : {
+          use_specialized_knowledge: useTutor  // Pass the toggle state to the backend even without other context
+        }
       };
 
+      // Always use the same endpoint but pass the toggle state as context
+      // This allows the backend to control behavior based on the toggle
       const response: BackendChatResponse = await apiService.post('/api/v1/chat', request);
 
       return {

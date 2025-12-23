@@ -67,80 +67,6 @@ class ChatService:
             logging.error(f"Error processing chat message: {e}")
             raise
 
-    async def process_chat_message_with_tools(
-        self,
-        user_message: str,
-        tool_names: Optional[List[str]] = None,
-        conversation_context: Optional[Dict[str, Any]] = None
-    ) -> ChatResponseModel:
-        """
-        Process a user's chat message using available tools and return an AI-generated response.
-
-        Args:
-            user_message: The message from the user
-            tool_names: Optional list of tool names that the AI can use
-            conversation_context: Optional context from the conversation
-
-        Returns:
-            ChatResponseModel containing the AI-generated response
-        """
-        # Truncate message if needed
-        truncated_message = truncate_message_if_needed(user_message)
-
-        # Create the prompt for the AI
-        prompt = self._build_prompt(truncated_message, conversation_context)
-
-        # Track processing time
-        start_time = time.time()
-
-        try:
-            # Get tools from the tool registry based on tool_names
-            from ..agents.tool_registry import tool_registry
-            tools = []
-            if tool_names:
-                for tool_name in tool_names:
-                    try:
-                        tool_def = tool_registry.get_tool(tool_name)
-                        tools.append({
-                            "type": "function",
-                            "function": {
-                                "name": tool_def.name,
-                                "description": tool_def.description,
-                                "parameters": tool_def.parameters
-                            }
-                        })
-                    except KeyError:
-                        # If tool doesn't exist, continue without it
-                        continue
-
-            # Generate response from the Gemini client using tools if available
-            response_data = await self.gemini_client.generate_response(
-                prompt=prompt,
-                tools=tools if tools else None,
-                max_tokens=1000,
-                temperature=0.7
-            )
-
-            processing_time = time.time() - start_time
-
-            # Create metadata for the response
-            metadata = {
-                "confidence": 0.9,  # Placeholder - in a real implementation, this would come from the AI
-                "sources": [],  # Placeholder - in a real implementation, this would come from the AI
-                "processing_time": processing_time,
-                "tool_calls": response_data.get("tool_calls", [])
-            }
-
-            # Create and return the response model
-            return ChatResponseModel(
-                response_content=response_data["content"],
-                metadata=metadata,
-                suggested_follow_ups=self._generate_suggestions(response_data["content"]),
-                tool_calls=self._process_tool_calls(response_data.get("tool_calls", []))
-            )
-        except Exception as e:
-            logging.error(f"Error processing chat message with tools: {e}")
-            raise
 
     def _build_prompt(
         self,
@@ -157,10 +83,34 @@ class ChatService:
         Returns:
             Formatted prompt string for the AI
         """
-        # For now, just return the user message as the prompt
-        # In a more sophisticated implementation, we would include conversation history
-        # and context to provide better responses
-        return f"User question: {user_message}\n\nPlease provide an accurate, helpful response related to Physical AI and Humanoid Robotics."
+        # Check if specialized textbook knowledge should be used
+        use_specialized_knowledge = True  # Default to using specialized knowledge
+        if conversation_context and "use_specialized_knowledge" in conversation_context:
+            use_specialized_knowledge = conversation_context.get("use_specialized_knowledge", True)
+
+        if use_specialized_knowledge:
+            # For specialized knowledge (toggle ON) - expert in textbook content
+            return (
+                f"User question: {user_message}\n\n"
+                "You are an expert assistant for the Physical AI Humanoid Robotics Textbook. "
+                "You can answer questions about the textbook content, site navigation, pricing, contact information, book overview, and related topics. "
+                "For questions about the textbook content, provide detailed and accurate information. "
+                "For site-related questions (pricing, contact, book overview), provide helpful responses. "
+                "For general queries outside the scope of the textbook and website, respond with 'Sorry, this is not in my knowledge'. "
+                "Be concise but thorough in your explanations. "
+                "If the question is unclear, ask for clarification. "
+                "When appropriate, relate concepts to practical applications in robotics."
+            )
+        else:
+            # For general knowledge (toggle OFF) - only site-related, no textbook content
+            return (
+                f"User question: {user_message}\n\n"
+                "You are a helpful assistant for the Physical AI Humanoid Robotics Textbook website. "
+                "You can answer questions about site navigation, pricing, contact information, book overview, and related topics. "
+                "For questions about the textbook content, respond with 'Sorry, this is not in my knowledge'. "
+                "For general queries outside the scope of the website, respond with 'Sorry, this is not in my knowledge'. "
+                "If the question is unclear, ask for clarification."
+            )
 
     def _generate_suggestions(self, response_content: str) -> List[str]:
         """

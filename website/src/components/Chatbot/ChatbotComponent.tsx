@@ -8,6 +8,8 @@ import {
   FaUser,
   FaSpinner,
   FaTimes,
+  FaGraduationCap,
+  FaComments,
 } from 'react-icons/fa';
 
 interface ChatbotComponentProps {
@@ -15,10 +17,17 @@ interface ChatbotComponentProps {
 }
 
 const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
-  const { messages, sendMessage, isTyping, setIsTyping, clearMessages } =
-    useChatbot();
+  const {
+    messages,
+    sendMessage,
+    isTyping,
+    setIsTyping,
+    clearMessages,
+    initializeChat,
+  } = useChatbot();
   const [inputValue, setInputValue] = useState('');
   const [sessionId, setSessionId] = useState<string>('');
+  const [useAgent, setUseAgent] = useState<boolean>(true); // Default to using agent
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   // Initialize session on component mount
@@ -70,7 +79,12 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
       setIsTyping(true);
 
       // Get response from API
-      const response = await ChatService.sendMessage(userMessage, sessionId);
+      const response = await ChatService.sendMessage(
+        userMessage,
+        sessionId,
+        '',
+        useAgent
+      );
 
       // Add the response to the chat
       sendMessage(response.response, 'assistant', response.sources || []);
@@ -101,9 +115,8 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
     <div
       className="flex flex-col h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700"
       role="region"
-      aria-label="AI Assistant Chat"
+      aria-label="AI Tutor Chat"
     >
-      {/* Header with New Conversation button - removed the header section since it's in the parent */}
       {/* Messages Container */}
       <div
         className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900"
@@ -152,52 +165,77 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
       </div>
 
       {/* Input Area */}
-      <form
-        onSubmit={handleSubmit}
-        className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800"
-        role="form"
-        aria-label="Chat input form"
-      >
-        <div className="flex">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-            placeholder="Ask about the textbook..."
-            className="flex-1 border border-gray-300 dark:border-gray-600 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-            disabled={isTyping}
-            aria-label="Type your message to the AI assistant"
-            autoComplete="off"
-            autoCapitalize="off"
-            autoCorrect="off"
-            spellCheck="false"
-            role="textbox"
-            aria-multiline="false"
-          />
-          <button
-            type="submit"
-            className="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-            disabled={isTyping || !inputValue.trim()}
-            aria-label={
-              isTyping
-                ? 'Sending message, please wait'
-                : 'Send message to AI assistant'
-            }
-          >
-            {isTyping ? (
-              <span className="flex items-center">
-                <FaSpinner className="animate-spin mr-1" aria-hidden="true" />
-                <span className="sr-only">Sending...</span>
+      <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800">
+        <div className="flex items-center mb-2">
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={useAgent}
+                onChange={e => setUseAgent(e.target.checked)}
+              />
+              <div
+                className={`block w-10 h-5 rounded-full transition-colors duration-300 ${
+                  useAgent ? 'bg-indigo-600' : 'bg-gray-300'
+                }`}
+              ></div>
+              <div
+                className={`absolute left-0.5 top-0.5 bg-white w-4 h-4 rounded-full transition-transform duration-300 ${
+                  useAgent ? 'transform translate-x-5' : ''
+                }`}
+              ></div>
+            </div>
+            <div className="ml-2 flex items-center">
+              <FaGraduationCap className="mr-1 text-sm" aria-hidden="true" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Use Specialized Knowledge
               </span>
-            ) : (
-              <>
-                <span className="hidden sm:inline mr-1">Send</span>
-                <FaPaperPlane aria-hidden="true" />
-              </>
-            )}
-          </button>
+            </div>
+          </label>
         </div>
-      </form>
+        <form onSubmit={handleSubmit} role="form" aria-label="Chat input form">
+          <div className="flex">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={e => setInputValue(e.target.value)}
+              placeholder="Ask about the textbook..."
+              className="flex-1 border border-gray-300 dark:border-gray-600 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+              disabled={isTyping}
+              aria-label="Type your message to the AI assistant"
+              autoComplete="off"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck="false"
+              role="textbox"
+              aria-multiline="false"
+            />
+            <button
+              type="submit"
+              className="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+              disabled={isTyping || !inputValue.trim()}
+              aria-label={
+                isTyping
+                  ? 'Sending message, please wait'
+                  : 'Send message to AI assistant'
+              }
+            >
+              {isTyping ? (
+                <span className="flex items-center">
+                  <FaSpinner className="animate-spin mr-1" aria-hidden="true" />
+                  <span className="sr-only">Sending...</span>
+                </span>
+              ) : (
+                <>
+                  <span className="hidden sm:inline mr-1">Send</span>
+                  <FaPaperPlane aria-hidden="true" />
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
