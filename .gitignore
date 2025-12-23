@@ -52,86 +52,6 @@ Thumbs.db
 ehthumbs.db
 Icon?
 ._*
-
-# Temporary folders
-tmp/
-temp/
-
-# npm
-npm-debug.log*
-npm ERR!*
-.npmrc
-
-# ESLint
-eslint-cache
-
-# Prettier
-.prettierignore
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-.venv/
-env.bak/
-.ENV
-.python-version
-.pytest_cache/
-.coverage
-
-
-# IDE
-*.swp
-*.swo
-*~
-
-# Build outputs
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.dylib
-*.ncb
-*.sdf
-*.suo
-*.pdb
-*.idb
-*.eunit
-*.beam
-*.bin
-*.hex
-*.elf
-*.axf
-*.out
-*.iobj
-*.ipdb
-*.ilk
-*.manifest
-*.res
-*.pch
-*.exp
-*.lib
-*.map
-*.lst
-*.sym
-*.xSYM
-*.d
-*.cache
-*.i
-*.ii
-*.sln.cache
-*.VC.db
-*.VC.VC.opendb
-
-# OS generated files
-.DS_Store?
-._*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
@@ -146,3 +66,6 @@ desktop.ini
 *.swo
 USERPROFILE*
 .vercel
+
+# Backend repository (separate Hugging Face Space)
+ai-textbook-backend/
