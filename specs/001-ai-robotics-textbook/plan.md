@@ -34,7 +34,7 @@ This plan outlines the implementation of the frontend for the Physical AI Humano
 - i18next (for internationalization)
 
 **Integrations**:
-- RAG system backend (to be implemented separately)
+- RAG system (to be implemented separately)
 - Authentication system (to be implemented separately)
 - Analytics provider (to be determined)
 
@@ -81,7 +81,7 @@ This plan outlines the implementation of the frontend for the Physical AI Humano
    - **Alternatives**: Variable sizes per content type vs standardized dimensions
 
 2. **RAG Chatbot Integration Method**
-   - **Decision**: Choose how to connect frontend with RAG backend
+   - **Decision**: Choose how to connect frontend with RAG system
    - **Rationale**: Need to establish communication protocol and data format
    - **Alternatives**: REST API vs WebSocket vs GraphQL for real-time chat
 
@@ -134,7 +134,7 @@ This plan outlines the implementation of the frontend for the Physical AI Humano
 
 ### API Contracts
 
-#### Frontend-Backend Interfaces
+#### Frontend Interfaces
 - **GET /api/chat/query**: Send query to RAG system, receive response
 - **POST /api/user/preferences**: Save theme and language preferences
 - **GET /api/content/{module}/{chapter}**: Retrieve chapter content with lesson/summary tabs
@@ -242,7 +242,7 @@ This plan outlines the implementation of the frontend for the Physical AI Humano
 ## Risk Assessment
 
 ### High-Risk Items
-1. **RAG Integration Complexity**: Connecting to backend RAG system may require complex implementation - mitigate with phased integration
+1. **RAG Integration Complexity**: Connecting to RAG system may require complex implementation - mitigate with phased integration
 2. **Performance with Rich Content**: 60 chapters with images may affect load times - mitigate with lazy loading and optimization
 3. **Translation Workload**: Managing content in 3 languages creates significant maintenance burden - mitigate with early automation setup
 

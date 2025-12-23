@@ -25,22 +25,15 @@ const NewsletterSignup: React.FC = () => {
     setError('');
     
     try {
-      // In a real implementation, you would send the email to your backend
-      // For now, we'll simulate the API call
-      const response = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      // Simulate newsletter subscription
+      // In a real implementation, you might use a service like Mailchimp, ConvertKit, or email.js
+      console.log('Newsletter signup:', { email });
 
-      if (response.ok) {
-        setSuccess(true);
-        setEmail(''); // Clear the email field
-      } else {
-        setError('Failed to subscribe. Please try again.');
-      }
+      // Simulate a successful subscription
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+
+      setSuccess(true);
+      setEmail(''); // Clear the email field
     } catch (err) {
       setError('An error occurred. Please try again.');
     } finally {
