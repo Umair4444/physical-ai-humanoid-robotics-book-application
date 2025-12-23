@@ -77,6 +77,9 @@ class APIService {
       if (error instanceof TypeError && error.message.includes('AbortError')) {
         throw new Error('Request timeout');
       }
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        throw new Error('Failed to fetch data from server. Please check your connection.');
+      }
       throw error;
     }
   }

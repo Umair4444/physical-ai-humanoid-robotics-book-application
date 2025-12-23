@@ -94,9 +94,9 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
       // Show error message to user based on error type
       let errorMessage = 'Sorry, I encountered an error. Please try again.';
 
-      if (error.message?.includes('Network Error')) {
+      if (error.message?.includes('Network Error') || error.message?.includes('Failed to fetch')) {
         errorMessage =
-          'Unable to connect to the server. Please check your internet connection.';
+          'Unable to connect to the server. The AI service may be temporarily unavailable or experiencing connectivity issues.';
       } else if (error.response?.status === 429) {
         errorMessage =
           "You've sent too many requests. Please wait a moment before trying again.";
