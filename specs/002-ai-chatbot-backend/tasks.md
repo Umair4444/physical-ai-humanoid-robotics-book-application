@@ -29,9 +29,9 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan in backend/
-- [ ] T002 Initialize Python 3.11 project with FastAPI dependencies using uv
-- [ ] T003 [P] Configure pytest for backend testing in backend/tests/
+- [X] T001 Create project structure per implementation plan in backend/
+- [X] T002 Initialize Python 3.11 project with FastAPI dependencies using uv
+- [X] T003 [P] Configure pytest for backend testing in backend/tests/
 
 ---
 
@@ -43,12 +43,12 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T004 Setup basic FastAPI application structure in backend/src/api/main.py
-- [ ] T005 [P] Implement API request/response models in backend/src/api/models.py
-- [ ] T006 [P] Setup environment configuration management in backend/src/config/
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure in backend/src/utils/
-- [ ] T009 Setup Google Gemini API client in backend/src/clients/
+- [X] T004 Setup basic FastAPI application structure in backend/src/api/main.py
+- [X] T005 [P] Implement API request/response models in backend/src/api/models.py
+- [X] T006 [P] Setup environment configuration management in backend/src/config/
+- [X] T007 Create base models/entities that all stories depend on
+- [X] T008 Configure error handling and logging infrastructure in backend/src/utils/
+- [X] T009 Setup Google Gemini API client in backend/src/clients/
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -64,17 +64,17 @@ Examples of foundational tasks (adjust based on your project):
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T010 [P] [US1] Contract test for chat endpoint in backend/tests/contract/test_chat.py
-- [ ] T011 [P] [US1] Integration test for chat flow in backend/tests/integration/test_chat_flow.py
+- [X] T010 [P] [US1] Contract test for chat endpoint in backend/tests/contract/test_chat.py
+- [X] T011 [P] [US1] Integration test for chat flow in backend/tests/integration/test_chat_flow.py
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create ChatMessage model in backend/src/models/chat_message.py
-- [ ] T013 [P] [US1] Create ChatResponse model in backend/src/models/chat_response.py
-- [ ] T014 [US1] Implement ChatService in backend/src/services/chat_service.py (depends on T012, T013)
-- [ ] T015 [US1] Implement chat endpoint in backend/src/api/chat_endpoint.py
-- [ ] T016 [US1] Add validation and error handling to chat endpoint
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [X] T012 [P] [US1] Create ChatMessage model in backend/src/models/chat_message.py
+- [X] T013 [P] [US1] Create ChatResponse model in backend/src/models/chat_response.py
+- [X] T014 [US1] Implement ChatService in backend/src/services/chat_service.py (depends on T012, T013)
+- [X] T015 [US1] Implement chat endpoint in backend/src/api/chat_endpoint.py
+- [X] T016 [US1] Add validation and error handling to chat endpoint
+- [X] T017 [US1] Add logging for user story 1 operations
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -88,15 +88,15 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T018 [P] [US2] Contract test for structured response format in backend/tests/contract/test_response_format.py
-- [ ] T019 [P] [US2] Integration test for response structure in backend/tests/integration/test_response_structure.py
+- [X] T018 [P] [US2] Contract test for structured response format in backend/tests/contract/test_response_format.py
+- [X] T019 [P] [US2] Integration test for response structure in backend/tests/integration/test_response_structure.py
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Enhance ChatResponse model with metadata fields in backend/src/models/chat_response.py
-- [ ] T021 [US2] Implement response formatting service in backend/src/services/response_formatter.py
-- [ ] T022 [US2] Update chat endpoint to return structured responses in backend/src/api/chat_endpoint.py
-- [ ] T023 [US2] Add metadata generation to ChatService (integrate with US1 components)
+- [X] T020 [P] [US2] Enhance ChatResponse model with metadata fields in backend/src/models/chat_response.py
+- [X] T021 [US2] Implement response formatting service in backend/src/services/response_formatter.py
+- [X] T022 [US2] Update chat endpoint to return structured responses in backend/src/api/chat_endpoint.py
+- [X] T023 [US2] Add metadata generation to ChatService (integrate with US1 components)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -110,15 +110,15 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T024 [P] [US3] Contract test for error response format in backend/tests/contract/test_error_responses.py
-- [ ] T025 [P] [US3] Integration test for error handling in backend/tests/integration/test_error_handling.py
+- [X] T024 [P] [US3] Contract test for error response format in backend/tests/contract/test_error_responses.py
+- [X] T025 [P] [US3] Integration test for error handling in backend/tests/integration/test_error_handling.py
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create error response models in backend/src/models/error_models.py
-- [ ] T027 [US3] Implement error handling middleware in backend/src/middleware/error_handler.py
-- [ ] T028 [US3] Update chat endpoint to handle specific error cases in backend/src/api/chat_endpoint.py
-- [ ] T029 [US3] Add rate limiting functionality to prevent abuse in backend/src/middleware/rate_limiter.py
+- [X] T026 [P] [US3] Create error response models in backend/src/models/error_models.py
+- [X] T027 [US3] Implement error handling middleware in backend/src/middleware/error_handler.py
+- [X] T028 [US3] Update chat endpoint to handle specific error cases in backend/src/api/chat_endpoint.py
+- [X] T029 [US3] Add rate limiting functionality to prevent abuse in backend/src/middleware/rate_limiter.py
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -128,11 +128,11 @@ Examples of foundational tasks (adjust based on your project):
 
 **Goal**: Implement additional requirements identified in the specification
 
-- [ ] T030 [P] Implement token truncation for messages exceeding limits in backend/src/utils/token_handler.py
-- [ ] T031 [P] Add timeout handling for Hugging Face execution limits in backend/src/services/chat_service.py
-- [ ] T032 [P] Implement tool registry and calling mechanism in backend/src/agents/
-- [ ] T033 [P] Add health check endpoint in backend/src/api/health.py
-- [ ] T034 Integrate openai-agents with Google Gemini fallback in backend/src/agents/
+- [X] T030 [P] Implement token truncation for messages exceeding limits in backend/src/utils/token_handler.py
+- [X] T031 [P] Add timeout handling for Hugging Face execution limits in backend/src/services/chat_service.py
+- [X] T032 [P] Implement tool registry and calling mechanism in backend/src/agents/
+- [X] T033 [P] Add health check endpoint in backend/src/api/health.py
+- [X] T034 Integrate openai-agents with Google Gemini fallback in backend/src/agents/
 
 ---
 
@@ -140,12 +140,12 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T035 [P] Documentation updates in docs/
-- [ ] T036 Code cleanup and refactoring
-- [ ] T037 Performance optimization across all stories
-- [ ] T038 [P] Additional unit tests (if requested) in backend/tests/unit/
-- [ ] T039 Security hardening
-- [ ] T040 Run quickstart.md validation
+- [X] T035 [P] Documentation updates in docs/
+- [X] T036 Code cleanup and refactoring
+- [X] T037 Performance optimization across all stories
+- [X] T038 [P] Additional unit tests (if requested) in backend/tests/unit/
+- [X] T039 Security hardening
+- [X] T040 Run quickstart.md validation
 
 ---
 
