@@ -69,3 +69,10 @@ USERPROFILE*
 
 # Backend repository (separate Hugging Face Space)
 ai-textbook-backend/
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python

@@ -10,14 +10,14 @@ The application consists of:
 
 ## Connection Configuration
 
-### Environment Variables
+### Configuration
 
-The frontend uses environment variables to determine the backend API URL:
+The frontend uses a dynamic configuration to determine the backend API URL:
 
-- **Local Development**: `REACT_APP_API_BASE_URL=http://localhost:8000`
-- **Production Deployment**: `REACT_APP_API_BASE_URL=https://umair44-ai-textbook-backend.hf.space`
+- **Production Deployment** (when accessed from any domain other than localhost): `https://umair44-ai-textbook-backend.hf.space`
+- **Local Development** (when accessed from localhost): Uses the `REACT_APP_API_BASE_URL` environment variable, defaulting to `http://localhost:8000`
 
-These are configured in the `.env` file in the `website/` directory.
+The configuration is handled in `website/src/utils/envConfig.ts` to allow both production and development environments to work seamlessly.
 
 ### How It Works
 
@@ -67,8 +67,18 @@ These are configured in the `.env` file in the `website/` directory.
 
 1. **CORS Errors**: The backend's `allowed_origins` in `src/config/settings.py` already include both local and production frontend domains
 2. **Connection Refused**: Verify the backend server is running and accessible
-3. **Environment Not Loading**: Check that environment variables are properly prefixed with `REACT_APP_`
+3. **Environment Not Loading**:
+   - For local development: ensure environment variables are properly prefixed with `REACT_APP_`
+   - For production: ensure the environment variable is set in the Vercel project settings
 4. **API Key Missing**: The backend requires either `GEMINI_API_KEY` or `OPENAI_API_KEY` to function. If you get a 500 error with "API key not configured", set the appropriate environment variable in your deployment environment.
+
+### Fixing the Connection Issue
+
+If the deployed frontend shows "Unable to connect to the server", ensure that:
+
+1. Your Vercel deployment has been updated with the latest code changes
+2. For local development, the `REACT_APP_API_BASE_URL` environment variable is set in your `.env` file if you want to use a different backend URL
+3. The production deployment will automatically use the deployed backend URL when accessed from the production domain
 
 ### Testing the Connection
 

@@ -3,7 +3,9 @@
 
 // Export the configuration
 export const envConfig = {
-  apiBaseUrl: typeof process !== 'undefined'
-    ? (process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000')
-    : 'http://localhost:8000',
+  apiBaseUrl: typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? 'https://umair44-ai-textbook-backend.hf.space'  // Production URL when not on localhost
+    : (typeof process !== 'undefined'
+        ? (process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000')  // Use env var or localhost for dev
+        : 'http://localhost:8000'),
 };
