@@ -89,7 +89,6 @@ class APIService {
       throw error;
     }
   }
-  }
 
   get<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
     const queryString = params ? `?${new URLSearchParams(params).toString()}` : '';
