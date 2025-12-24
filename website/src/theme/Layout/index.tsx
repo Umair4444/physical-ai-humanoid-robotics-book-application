@@ -1,0 +1,19 @@
+import React, { ReactNode } from 'react';
+import OriginalLayout from '@theme-original/Layout';
+import FloatingChatbotButton from '@site/src/components/FloatingChatbotButton/FloatingChatbotButton';
+import ScrollTopButton from '@site/src/components/ScrollButton/ScrollTopButton';
+import Footer from '@site/src/components/Footer';
+
+// Custom Layout that wraps the original layout with our additional components
+export default function Layout({ children, ...props }: { children: ReactNode }) {
+  return (
+    <OriginalLayout {...props}>
+      <>
+        {children}
+        <ScrollTopButton />
+        <FloatingChatbotButton />
+        <Footer />
+      </>
+    </OriginalLayout>
+  );
+}
