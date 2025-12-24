@@ -99,10 +99,8 @@ const config: Config = {
       hideOnScroll: true,
     },
     footer: {
-      // Disable the default Docusaurus footer since we're using a custom footer
-      style: 'dark',
-      links: [],
-      copyright: `Copyright © ${new Date().getFullYear()} Physical AI Humanoid Robotics Textbook. All rights reserved.`,
+      // Disable the default Docusaurus footer since we're using a custom footer in MainLayout and theme Footer
+      style: 'none',
     },
   } satisfies Preset.ThemeConfig,
 };
