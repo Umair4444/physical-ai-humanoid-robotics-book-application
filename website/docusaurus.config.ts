@@ -39,23 +39,7 @@ const config: Config = {
     [
       'classic',
       {
-        docs: {
-          // Set up the main docs instance to serve as a placeholder
-          // The actual landing page is served via React at /src/pages/index.tsx
-          path: 'docs/placeholder',
-          routeBasePath: 'placeholder', // Don't use '/' to avoid conflicts with book routes
-          sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce docs best practices
-          sidebarCollapsed: false,
-          showLastUpdateTime: true,
-          // Options for the MDX structure
-          admonitions: {
-            keywords: ['caution', 'note', 'tip', 'danger', 'info'],
-          },
-        },
+        docs: false, // Disable the main docs plugin to avoid conflicts
         blog: {
           showReadingTime: true,
           feedOptions: {

@@ -11,14 +11,7 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // Placeholder sidebar for the main docs instance
-  placeholderSidebar: [
-    {
-      type: 'doc',
-      id: 'index',
-      label: 'Welcome',
-    },
-  ],
+  // Empty sidebar since we're not using the main docs plugin
 };
 
 export default sidebars;
