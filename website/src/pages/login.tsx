@@ -145,7 +145,7 @@ const LoginPage: React.FC = () => {
                   Password
                 </label>
                 <Link
-                  to="/forgot-password"
+                  to="/contact"
                   className={`text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'} hover:underline`}
                 >
                   Forgot password?

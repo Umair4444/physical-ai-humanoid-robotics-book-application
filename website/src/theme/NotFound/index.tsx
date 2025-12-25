@@ -26,8 +26,8 @@ export default function NotFound() {
             <Link to="/">
               <Button variant="primary">Go to Homepage</Button>
             </Link>
-            <Link to="/docs">
-              <Button variant="outline">Browse Documentation</Button>
+            <Link to="/books">
+              <Button variant="outline">Browse Books</Button>
             </Link>
           </div>
 
@@ -36,10 +36,6 @@ export default function NotFound() {
               Need help?{' '}
               <Link to="/contact" className={styles.supportLink}>
                 Contact us
-              </Link>{' '}
-              or{' '}
-              <Link to="/support" className={styles.supportLink}>
-                visit our support center
               </Link>
             </p>
           </div>
