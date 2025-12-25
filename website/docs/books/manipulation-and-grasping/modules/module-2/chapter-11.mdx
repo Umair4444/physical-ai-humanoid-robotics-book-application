@@ -1,0 +1,420 @@
+---
+id: chapter-11
+title: "Sensor-Based Grasp Planning and Feedback Control"
+module: "Module 2: Grasp Analysis and Planning"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Sensor-Based Grasp Planning and Feedback Control
+
+### Introduction to Sensor-Based Grasping
+
+Sensor-based grasp planning and feedback control represent a paradigm shift from purely model-based approaches to approaches that incorporate real-time sensory information during the grasping process. This integration allows robots to adapt to uncertainties in object properties, environment conditions, and grasp execution, resulting in more robust and reliable manipulation. Sensor-based systems can detect and respond to unexpected situations that purely pre-planned approaches might not handle effectively.
+
+Sensor-based grasping involves:
+- **Real-time perception**: Continuous sensing during grasp execution
+- **Adaptive planning**: Adjusting grasp plans based on sensory feedback
+- **Closed-loop control**: Using feedback to maintain grasp stability
+- **Uncertainty handling**: Managing uncertainties through sensing
+
+### Sensing Technologies for Grasping
+
+#### Tactile Sensing
+Sensing contact and force information at the gripper-object interface:
+
+**Force/Torque Sensors**:
+- **Location**: Typically mounted at the wrist or fingertips
+- **Measurement**: 6-axis force/torque measurements
+- **Application**: Detecting contact, measuring grasp force, detecting slip
+- **Advantage**: Provides direct measurement of interaction forces
+
+**Tactile Arrays**:
+- **Technology**: Arrays of pressure sensors on gripper surfaces
+- **Resolution**: Can provide spatial distribution of contact forces
+- **Application**: Detecting contact location, slip, object shape
+- **Advantage**: High spatial resolution of contact information
+
+**Slip Detection Sensors**:
+- **Technology**: Accelerometers, vibration sensors, or optical sensors
+- **Function**: Detecting when objects begin to slip from the grasp
+- **Application**: Triggering corrective actions before object loss
+- **Advantage**: Prevents object dropping through early detection
+
+#### Vision-Based Sensing
+Visual information for grasp planning and execution:
+
+**3D Vision Systems**:
+- **Stereo vision**: Using two cameras to estimate depth
+- **Time-of-flight**: Measuring distance using light travel time
+- **Structured light**: Projecting patterns to measure surface geometry
+- **Application**: Object pose estimation, shape modeling, grasp planning
+
+**RGB-D Cameras**:
+- **Functionality**: Providing both color and depth information
+- **Resolution**: High-resolution spatial information
+- **Application**: Object recognition, scene understanding, grasp planning
+- **Advantage**: Rich information for perception and planning
+
+**High-Speed Vision**:
+- **Purpose**: Capturing fast dynamic events during grasping
+- **Application**: Monitoring rapid changes during grasp execution
+- **Advantage**: Detecting fast events that normal cameras might miss
+- **Use case**: High-speed manipulation and impact analysis
+
+#### Proximity and Range Sensing
+Pre-contact information about object location:
+
+**Proximity Sensors**:
+- **Technology**: Capacitive, inductive, or optical sensors
+- **Function**: Detecting objects before physical contact
+- **Application**: Pre-grasp positioning and approach planning
+- **Advantage**: Non-contact detection of object presence
+
+**Ultrasonic Sensors**:
+- **Range**: Longer range than proximity sensors
+- **Function**: Measuring distance to objects
+- **Application**: Approach planning and collision avoidance
+- **Advantage**: Works in various lighting conditions
+
+### Sensor-Based Grasp Planning Approaches
+
+#### Reactive Grasp Planning
+Adjusting grasp plans based on immediate sensory feedback:
+
+**Contact-based planning**:
+- **Trigger**: Initial contact detection with object
+- **Adjustment**: Modifying grasp based on contact location
+- **Application**: Adapting to uncertain object pose
+- **Advantage**: Simple and effective for many scenarios
+
+**Force-based planning**:
+- **Trigger**: Measured forces during approach or contact
+- **Adjustment**: Modifying grasp based on force feedback
+- **Application**: Adapting to object compliance and weight
+- **Advantage**: Direct force information for control
+
+#### Predictive Sensor-Based Planning
+Using sensor information to predict future states:
+
+**State estimation**:
+- **Process**: Estimating object pose, velocity, and other states
+- **Method**: Using filtering techniques like Kalman filters
+- **Application**: Predicting object motion during grasp
+- **Advantage**: Proactive rather than reactive control
+
+**Uncertainty quantification**:
+- **Process**: Estimating uncertainty in object and environment states
+- **Method**: Probabilistic estimation techniques
+- **Application**: Planning robust grasps under uncertainty
+- **Advantage**: Accounting for sensing and model uncertainties
+
+#### Learning-Based Sensor Integration
+Using machine learning to process sensor information:
+
+**Deep learning for sensor fusion**:
+- **Approach**: Neural networks that process multiple sensor modalities
+- **Training**: Learning to extract relevant features from sensors
+- **Application**: Complex sensor interpretation tasks
+- **Advantage**: Learning complex relationships between sensors and grasps
+
+**Reinforcement learning with sensors**:
+- **Approach**: Learning optimal sensor-based grasp policies
+- **Reward**: Learning from grasp success/failure outcomes
+- **Application**: Adaptive grasp strategies
+- **Advantage**: Learning from experience and improving over time
+
+### Feedback Control Strategies
+
+#### Impedance Control
+Controlling the mechanical impedance of the gripper:
+
+**Impedance parameters**:
+- **Stiffness**: Controlling the apparent spring constant
+- **Damping**: Controlling the apparent damping coefficient
+- **Inertia**: Controlling the apparent mass
+- **Application**: Safe interaction and compliance control
+
+**Adaptive impedance**:
+- **Adjustment**: Changing impedance based on task requirements
+- **Situation**: Adjusting to different objects and tasks
+- **Application**: Optimizing for different manipulation scenarios
+- **Advantage**: Flexible behavior for different situations
+
+#### Force Control
+Direct control of interaction forces:
+
+**Impedance control**:
+- **Approach**: Controlling the relationship between position and force
+- **Application**: Maintaining desired contact forces
+- **Advantage**: Safe interaction with environment
+- **Use case**: Assembly and delicate manipulation
+
+**Admittance control**:
+- **Approach**: Controlling velocity response to applied forces
+- **Application**: Compliant behavior in response to external forces
+- **Advantage**: Natural compliance to environmental forces
+- **Use case**: Human-robot interaction and safe manipulation
+
+#### Slip Control
+Maintaining grasp stability through slip prevention:
+
+**Slip detection and response**:
+- **Detection**: Using tactile sensors to detect slip onset
+- **Response**: Increasing grip force when slip is detected
+- **Application**: Maintaining stable grasps on smooth objects
+- **Advantage**: Preventing object loss
+
+**Proactive slip control**:
+- **Prediction**: Predicting slip based on force analysis
+- **Prevention**: Adjusting grip force before slip occurs
+- **Application**: Preventing slip in the first place
+- **Advantage**: More efficient than reactive control
+
+### Closed-Loop Grasp Execution
+
+#### Grasp Monitoring
+Continuous assessment of grasp quality during execution:
+
+**Force monitoring**:
+- **Process**: Continuously monitoring grasp forces
+- **Detection**: Identifying changes that indicate problems
+- **Application**: Detecting object slip or loss
+- **Response**: Triggering corrective actions
+
+**Tactile monitoring**:
+- **Process**: Continuously monitoring tactile sensor data
+- **Detection**: Identifying changes in contact patterns
+- **Application**: Detecting object deformation or slip
+- **Response**: Adjusting grip parameters
+
+#### Adaptive Grasp Adjustment
+Modifying grasp parameters during execution:
+
+**Grip force adaptation**:
+- **Trigger**: Changes in object weight or external forces
+- **Adjustment**: Modifying grip force to maintain stability
+- **Application**: Transporting objects with varying loads
+- **Advantage**: Energy-efficient and safe grasping
+
+**Gripper position adjustment**:
+- **Trigger**: Changes in object position or orientation
+- **Adjustment**: Modifying gripper position to maintain grasp
+- **Application**: Grasping moving or compliant objects
+- **Advantage**: Maintaining grasp despite object changes
+
+#### Recovery Strategies
+Responding to grasp failures or instabilities:
+
+**Slip recovery**:
+- **Detection**: Identifying when slip begins
+- **Action**: Increasing grip force or adjusting grasp
+- **Application**: Recovering from minor instabilities
+- **Success**: Preventing complete grasp failure
+
+**Regrasp planning**:
+- **Trigger**: Complete grasp failure or instability
+- **Planning**: Computing new grasp configuration
+- **Execution**: Executing regrasp motion
+- **Application**: Recovering from complete grasp failure
+
+### Sensor Fusion in Grasping
+
+#### Multi-Modal Sensing
+Combining information from different sensor types:
+
+**Vision-Tactile fusion**:
+- **Process**: Combining visual and tactile information
+- **Application**: Robust grasp planning and execution
+- **Advantage**: Combining global and local information
+- **Example**: Using vision for initial approach and tactile for fine adjustment
+
+**Force-Vision fusion**:
+- **Process**: Combining force and visual feedback
+- **Application**: Precise manipulation with safety
+- **Advantage**: Combining contact and positional information
+- **Example**: Assembly tasks requiring both precision and compliance
+
+#### Data Integration Strategies
+Methods for combining sensor information:
+
+**Bayesian fusion**:
+- **Approach**: Using Bayesian methods to combine sensor information
+- **Application**: Estimating object states with uncertainty
+- **Advantage**: Properly handling uncertainty in sensor data
+- **Method**: Probabilistic integration of multiple sources
+
+**Kalman filtering**:
+- **Approach**: Using Kalman filters for state estimation
+- **Application**: Estimating object pose and motion
+- **Advantage**: Optimal estimation under linear assumptions
+- **Method**: Recursive estimation of states
+
+#### Sensor Management
+Optimizing sensor usage for grasping tasks:
+
+**Active sensing**:
+- **Approach**: Controlling sensors to gather needed information
+- **Application**: Directing vision systems or tactile exploration
+- **Advantage**: Gathering relevant information efficiently
+- **Example**: Moving cameras to get better views
+
+**Sensor scheduling**:
+- **Approach**: Optimizing when to use different sensors
+- **Application**: Managing computational and communication resources
+- **Advantage**: Efficient use of sensor resources
+- **Method**: Prioritizing sensors based on task needs
+
+### Challenges in Sensor-Based Grasping
+
+#### Sensor Limitations
+Dealing with imperfect sensor information:
+
+**Noise and uncertainty**:
+- **Challenge**: Sensor noise affects decision making
+- **Solution**: Filtering and uncertainty modeling
+- **Impact**: Reduced reliability of sensor-based decisions
+- **Mitigation**: Robust algorithms that handle uncertainty
+
+**Limited field of view**:
+- **Challenge**: Sensors may not see the entire scene
+- **Solution**: Multiple sensors or active sensing
+- **Impact**: Missing important information
+- **Mitigation**: Strategic sensor placement and movement
+
+**Temporal delays**:
+- **Challenge**: Sensor processing introduces delays
+- **Solution**: Prediction and compensation algorithms
+- **Impact**: Reduced responsiveness of control
+- **Mitigation**: Fast processing and predictive control
+
+#### Integration Complexity
+Managing multiple sensors and feedback loops:
+
+**Computational requirements**:
+- **Challenge**: Processing multiple sensor streams in real-time
+- **Solution**: Efficient algorithms and parallel processing
+- **Impact**: High computational demands
+- **Mitigation**: Approximation and prioritization
+
+**Synchronization**:
+- **Challenge**: Coordinating multiple sensors and control loops
+- **Solution**: Proper timing and data management
+- **Impact**: Inconsistent information if not synchronized
+- **Mitigation**: Time-stamped data and coordinated updates
+
+#### Environmental Factors
+Dealing with changing environmental conditions:
+
+**Lighting changes**:
+- **Challenge**: Vision systems affected by lighting
+- **Solution**: Robust vision algorithms and multiple lighting conditions
+- **Impact**: Reduced vision performance
+- **Mitigation**: Adaptive vision algorithms
+
+**Surface properties**:
+- **Challenge**: Different surfaces affect different sensors
+- **Solution**: Multi-modal sensing and surface adaptation
+- **Impact**: Sensor performance varies with surface
+- **Mitigation**: Sensor selection based on surface properties
+
+### Applications and Case Studies
+
+#### Industrial Applications
+Sensor-based grasping in manufacturing:
+
+**Assembly tasks**: Precise manipulation with force feedback
+**Quality control**: Grasping objects for inspection
+**Packaging**: Handling diverse products with varying properties
+**Machine tending**: Loading/unloading machines with feedback
+
+#### Service Robotics
+Sensor-based grasping in everyday tasks:
+
+**Household tasks**: Kitchen and cleaning applications
+**Healthcare**: Assisting elderly and disabled individuals
+**Food service**: Handling food items safely and hygienically
+**Retail**: Assisting customers and managing inventory
+
+#### Research Platforms
+Advanced sensor-based grasping research:
+
+**Humanoid robots**: Multi-modal grasping with anthropomorphic hands
+**Soft robotics**: Grasping with compliant, sensorized grippers
+**Learning systems**: Robots that improve grasping through experience
+**Collaborative robots**: Safe human-robot interaction during grasping
+
+### Future Directions
+
+#### Advanced Sensing Technologies
+Emerging sensor technologies:
+
+**Electronic skin**: High-resolution tactile sensing over large areas
+**Haptic feedback**: Providing tactile feedback to operators
+**Multi-modal sensors**: Sensors that provide multiple types of information
+**Bio-inspired sensors**: Sensors inspired by biological sensing systems
+
+#### Intelligent Control Systems
+Advanced control approaches:
+
+**Deep reinforcement learning**: Learning complex sensor-based control policies
+**Neuromorphic computing**: Brain-inspired computing for sensor processing
+**Edge AI**: Processing sensor data on gripper-integrated computers
+**Predictive control**: Advanced prediction of grasp outcomes
+
+#### Human-Robot Collaboration
+Sensor-based grasping for human-robot interaction:
+
+**Shared control**: Humans and robots collaborating on grasping tasks
+**Intent recognition**: Recognizing human intentions from sensor data
+**Trust building**: Building trust through reliable sensor-based performance
+**Safety**: Ensuring safety through sensor-based monitoring
+
+Sensor-based grasp planning and feedback control are essential for creating robust and adaptable robotic manipulation systems.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Sensor-based grasping integrates real-time sensory information during execution.
+- Sensing technologies include tactile, vision, and proximity sensors.
+- Planning approaches range from reactive to learning-based methods.
+- Feedback control uses impedance, force, and slip control strategies.
+- Closed-loop execution involves monitoring, adjustment, and recovery.
+- Sensor fusion combines information from multiple modalities.
+- Challenges include sensor limitations and integration complexity.
+- Applications span industrial, service, and research domains.
+- Future directions involve advanced sensors and intelligent control.
+- Human-robot collaboration benefits from sensor-based approaches.
+
+</div>
+</TabItem>
+</Tabs>

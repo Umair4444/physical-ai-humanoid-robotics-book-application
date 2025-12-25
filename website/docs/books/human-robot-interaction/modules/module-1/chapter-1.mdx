@@ -1,0 +1,222 @@
+---
+id: chapter-1
+title: "Introduction to Human-Robot Interaction"
+module: "Module 1: Foundations of Human-Robot Interaction"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Introduction to Human-Robot Interaction
+
+### What is Human-Robot Interaction?
+
+Human-Robot Interaction (HRI) is an interdisciplinary field that examines the design, development, and evaluation of robots intended to interact with humans. Unlike traditional human-computer interaction (HCI), HRI involves embodied agents that can move in physical space, manipulate objects, and potentially form social relationships with humans.
+
+HRI encompasses several key elements:
+- **Physical presence**: Robots exist in shared physical spaces with humans
+- **Social behavior**: Robots may exhibit behaviors that humans interpret as social
+- **Embodied interaction**: Interaction involves physical actions and spatial relationships
+- **Long-term relationships**: Humans may form ongoing relationships with robots over time
+
+### Historical Context and Evolution
+
+The field of HRI has evolved significantly over the past few decades, driven by advances in robotics technology and growing interest in social robotics.
+
+**Early Foundations (1940s-1980s)**:
+- Isaac Asimov's fictional Three Laws of Robotics (1942)
+- Early industrial robots focused on task efficiency rather than human interaction
+- Limited consideration of human factors in robot design
+
+**Emergence of HRI (1990s-2000s)**:
+- Recognition that robots needed to interact effectively with humans
+- Development of research methodologies for studying human-robot interaction
+- Early social robots like Sony's AIBO (1999) and Honda's ASIMO (2000)
+
+**Modern HRI (2000s-present)**:
+- Systematic study of human-robot interaction as a distinct field
+- Development of HRI-specific theories and design principles
+- Proliferation of service robots in homes, hospitals, and workplaces
+
+### Key Research Areas in HRI
+
+#### Social Robotics
+Focuses on robots that exhibit social behaviors and can engage in social interactions with humans. Social robots may have human-like features, exhibit emotional responses, or engage in conversation.
+
+**Applications**:
+- Companion robots for elderly care
+- Educational robots for children
+- Therapeutic robots for autism therapy
+- Receptionist robots in businesses
+
+#### Collaborative Robotics
+Examines how robots and humans can work together effectively on shared tasks, emphasizing safety, communication, and coordination.
+
+**Characteristics**:
+- Safe physical interaction with humans
+- Adaptive behavior based on human actions
+- Clear communication of intentions and capabilities
+- Shared control and decision-making
+
+#### Assistive Robotics
+Focuses on robots that assist humans with daily activities, particularly for people with disabilities or older adults.
+
+**Areas**:
+- Mobility assistance
+- Cognitive support
+- Communication aids
+- Environmental control
+
+### Fundamental Principles of HRI
+
+#### The Uncanny Valley
+First proposed by Masahiro Mori, the uncanny valley describes the phenomenon where human-like objects that are not quite human can evoke feelings of eeriness or revulsion. Understanding this principle is crucial for robot design.
+
+**Implications**:
+- Avoid designs that fall into the uncanny valley
+- Consider the relationship between appearance and behavior
+- Recognize cultural differences in uncanny valley effects
+
+#### Anthropomorphism
+Humans tend to attribute human-like characteristics to non-human entities, including robots. This can be leveraged to facilitate interaction but may also lead to unrealistic expectations.
+
+**Considerations**:
+- Appropriate levels of anthropomorphism for different tasks
+- Managing user expectations about robot capabilities
+- Cultural variations in anthropomorphism
+
+#### Theory of Mind
+Humans naturally attribute mental states (beliefs, intentions, desires) to others, including robots. This affects how people interact with and expect robots to behave.
+
+**Implications**:
+- Design robots that clearly communicate their capabilities and limitations
+- Consider how robot behavior affects human mental models
+- Address mismatches between perceived and actual robot capabilities
+
+### Challenges in HRI
+
+#### Natural Interaction
+Creating robots that can interact with humans using natural communication modalities (speech, gesture, gaze) remains challenging due to the complexity and variability of human communication.
+
+**Technical Challenges**:
+- Robust speech recognition in noisy environments
+- Real-time gesture and emotion recognition
+- Context-aware interpretation of human behavior
+
+#### Safety and Trust
+Ensuring that robots are safe to interact with and building trust between humans and robots are critical for successful HRI.
+
+**Safety Considerations**:
+- Physical safety during close interaction
+- Psychological safety and comfort
+- Privacy and data protection
+
+**Trust Building**:
+- Consistent and predictable behavior
+- Transparent communication of capabilities
+- Recovery from errors and failures
+
+#### Social Acceptance
+For HRI to be successful, robots must be accepted by users and society at large, which depends on cultural, social, and individual factors.
+
+**Acceptance Factors**:
+- Cultural attitudes toward robots
+- Perceived benefits versus risks
+- Familiarity and experience with robots
+- Demographic characteristics of users
+
+### HRI Research Methods
+
+#### Experimental Studies
+Controlled studies comparing different robot behaviors, appearances, or interaction modalities to understand their effects on human users.
+
+**Common Measures**:
+- User performance metrics
+- Subjective satisfaction ratings
+- Physiological responses
+- Behavioral observations
+
+#### Long-term Deployments
+Studies of robots in real-world settings over extended periods to understand long-term interaction patterns and effects.
+
+**Considerations**:
+- Robot maintenance and reliability
+- User adaptation over time
+- Context-specific factors
+- Ethical considerations for long-term studies
+
+#### Mixed-Methods Approaches
+Combining quantitative and qualitative methods to gain comprehensive understanding of HRI phenomena.
+
+### Applications of HRI
+
+#### Healthcare
+Robots assist in patient care, rehabilitation, and therapy, requiring sensitive and appropriate interaction with vulnerable populations.
+
+#### Education
+Educational robots serve as tutors, companions, and tools for learning, adapting to individual student needs and learning styles.
+
+#### Domestic Service
+Home robots for cleaning, security, and companionship must integrate seamlessly into family life and routines.
+
+#### Industrial Collaboration
+Cobots work alongside human workers in manufacturing, requiring safe and efficient collaboration.
+
+### Future Directions in HRI
+
+#### Multimodal Interaction
+Future robots will likely use multiple communication channels simultaneously (speech, gesture, touch, gaze) to create more natural interactions.
+
+#### Personalization
+Robots that adapt to individual users' preferences, communication styles, and needs will become more prevalent.
+
+#### Social Integration
+As robots become more common, the focus will shift from basic interaction to integration into human social structures and communities.
+
+#### Ethical Considerations
+As robots become more sophisticated and integrated into society, ethical questions about human-robot relationships will become increasingly important.
+
+Understanding these foundational concepts sets the stage for deeper exploration of specific aspects of human-robot interaction.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Human-Robot Interaction examines design, development, and evaluation of robots for human interaction.
+- Key areas include social robotics, collaborative robotics, and assistive robotics.
+- Fundamental principles include the uncanny valley, anthropomorphism, and theory of mind.
+- Challenges involve natural interaction, safety/trust, and social acceptance.
+- Research methods include experimental studies, long-term deployments, and mixed approaches.
+- Applications span healthcare, education, domestic service, and industry.
+- Future directions include multimodal interaction, personalization, and ethical considerations.
+
+</div>
+</TabItem>
+</Tabs>

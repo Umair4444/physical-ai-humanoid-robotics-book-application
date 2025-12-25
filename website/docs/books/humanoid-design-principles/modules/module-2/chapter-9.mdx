@@ -1,0 +1,373 @@
+---
+id: chapter-9
+title: "Joint Design and Degrees of Freedom in Humanoid Robots"
+module: "Module 2: Biomechanics and Kinematics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Joint Design and Degrees of Freedom in Humanoid Robots
+
+### Introduction to Joint Design
+
+Joint design is fundamental to humanoid robot functionality, determining the robot's range of motion, load capacity, and overall performance. The design of joints in humanoid robots must balance multiple competing requirements: achieving human-like motion, supporting necessary loads, providing precise control, and maintaining durability. Understanding the relationship between joint design and degrees of freedom is crucial for creating effective humanoid robots.
+
+Joint design considerations include:
+- **Type of joint**: How the joint enables movement
+- **Range of motion**: The extent of movement possible
+- **Load capacity**: The forces and torques the joint can handle
+- **Control precision**: The accuracy with which the joint can be positioned
+
+### Types of Robot Joints
+
+#### Revolute Joints
+The most common type of joint in humanoid robots, allowing rotation around a single axis:
+
+**Mechanical Design**:
+- **Servo motors**: Direct drive or gear-reduced motors
+- **Harmonic drives**: High-ratio, low-backlash gear systems
+- **Planetary gears**: Compact, high-torque gear systems
+
+**Applications in Humanoid Robots**:
+- **Elbow joints**: Single DOF for flexion/extension
+- **Knee joints**: Single DOF for flexion/extension
+- **Shoulder joints**: Multiple revolute joints for complex motion
+
+**Advantages**:
+- **Precision**: Can achieve precise angular positioning
+- **Efficiency**: Direct conversion of motor rotation to joint motion
+- **Reliability**: Well-understood mechanical principles
+
+**Disadvantages**:
+- **Limited motion**: Only one DOF per joint
+- **Singularity issues**: Potential for singular configurations
+- **Backlash**: Potential for mechanical play in gear systems
+
+#### Prismatic Joints
+Joints that allow linear motion along a single axis:
+
+**Mechanical Design**:
+- **Lead screws**: Converting rotation to linear motion
+- **Ball screws**: High-efficiency linear motion systems
+- **Linear actuators**: Direct linear motion devices
+
+**Applications in Humanoid Robots**:
+- **Spine extension**: Vertical adjustment of torso height
+- **Telescoping limbs**: Adjusting limb length
+- **Specialized mechanisms**: Specific applications requiring linear motion
+
+**Advantages**:
+- **Linear motion**: Direct translation without conversion
+- **High precision**: Excellent positioning accuracy
+- **High load capacity**: Can handle significant axial loads
+
+**Disadvantages**:
+- **Limited applications**: Few humanoid applications require pure linear motion
+- **Space requirements**: Often require more space than revolute joints
+- **Complexity**: May require more complex mechanical systems
+
+#### Spherical Joints
+Joints that allow rotation around multiple axes:
+
+**Mechanical Design**:
+- **Ball joints**: Ball-and-socket mechanisms
+- **Universal joints**: Cross-shaped joints allowing two DOF
+- **Multi-axis systems**: Multiple revolute joints in parallel
+
+**Applications in Humanoid Robots**:
+- **Shoulder joints**: Complex multi-DOF motion
+- **Hip joints**: Multi-DOF for walking and balance
+- **Head joints**: Looking and nodding motions
+
+**Advantages**:
+- **Multiple DOF**: Achieving multiple degrees of freedom in a single joint
+- **Compact design**: More compact than multiple serial joints
+- **Natural motion**: Mimicking biological ball-and-socket joints
+
+**Disadvantages**:
+- **Complexity**: More complex mechanical design
+- **Control challenges**: More complex control requirements
+- **Load limitations**: May have lower load capacity in some directions
+
+### Degrees of Freedom in Humanoid Robots
+
+#### Human Comparison
+Understanding the DOF requirements by comparing to human capabilities:
+
+**Human joints**:
+- **Shoulder**: 3 DOF (flexion/extension, abduction/adduction, internal/external rotation)
+- **Elbow**: 1 DOF (flexion/extension)
+- **Wrist**: 2-3 DOF (flexion/extension, abduction/adduction, rotation)
+- **Hip**: 3 DOF (flexion/extension, abduction/adduction, internal/external rotation)
+- **Knee**: 1 DOF (flexion/extension)
+- **Ankle**: 2 DOF (dorsiflexion/plantarflexion, inversion/eversion)
+
+**Total human DOF**: The human body has over 200 DOF, though not all are independently controlled.
+
+#### DOF Distribution in Humanoid Robots
+How DOF is typically distributed in humanoid robot designs:
+
+**Torso DOF**: 0-6 DOF depending on design:
+- **Fixed torso**: 0 DOF, rigid connection between hips and shoulders
+- **Flexible spine**: 1-6 DOF for more natural movement
+- **Complex torso**: Multiple DOF for breathing, bending, and twisting
+
+**Arm DOF**: Typically 6-7 DOF per arm:
+- **Shoulder**: 3 DOF (pitch, yaw, roll)
+- **Elbow**: 1 DOF (flexion/extension)
+- **Forearm**: 1 DOF (pronation/supination) or 2 DOF
+- **Wrist**: 1-2 DOF (flexion/extension, abduction/adduction)
+
+**Leg DOF**: Typically 6 DOF per leg:
+- **Hip**: 3 DOF (flexion/extension, abduction/adduction, internal/external rotation)
+- **Knee**: 1 DOF (flexion/extension)
+- **Ankle**: 2 DOF (dorsiflexion/plantarflexion, inversion/eversion)
+
+### Joint Design Trade-offs
+
+#### Mobility vs. Stability
+A fundamental trade-off in joint design:
+
+**Mobility**: The range of motion and flexibility of the joint:
+- **Advantages**: Greater range of motion, more human-like behavior
+- **Disadvantages**: More complex control, potential for instability
+- **Design implications**: More DOF, wider joint limits
+
+**Stability**: The ability to maintain position and resist disturbances:
+- **Advantages**: Better control, more predictable behavior
+- **Disadvantages**: Limited range of motion, less human-like
+- **Design implications**: Fewer DOF, restrictive joint limits
+
+#### Precision vs. Power
+Balancing control accuracy with force capability:
+
+**Precision**: The ability to achieve exact positions:
+- **High gear ratios**: Better position control but reduced speed
+- **High-resolution encoders**: Better position feedback
+- **Stiff systems**: Less deflection under load
+
+**Power**: The ability to generate force and move quickly:
+- **Low gear ratios**: Higher speed and power but reduced precision
+- **Large motors**: Higher torque capability
+- **Flexible systems**: May allow for more compliant behavior
+
+#### Weight vs. Strength
+Managing the trade-off between lightweight design and structural integrity:
+
+**Weight considerations**:
+- **Motor size**: Larger motors provide more power but add weight
+- **Structural materials**: Lighter materials may be less strong
+- **Transmission systems**: Complex transmissions add weight
+
+**Strength considerations**:
+- **Load capacity**: Joints must support static and dynamic loads
+- **Impact resistance**: Ability to handle unexpected forces
+- **Durability**: Long-term performance under repeated loading
+
+### Joint Actuation Systems
+
+#### Direct Drive Systems
+Motors connected directly to the joint:
+
+**Advantages**:
+- **Backlash elimination**: No gear play in the system
+- **High bandwidth**: Fast response to control commands
+- **Energy efficiency**: No transmission losses
+
+**Disadvantages**:
+- **Motor size**: Requires large, high-torque motors
+- **Weight**: Heavy motors at each joint
+- **Cost**: Expensive high-torque motors
+
+**Applications**: Critical joints where precision is more important than weight.
+
+#### Geared Systems
+Motors connected through gear reductions:
+
+**Harmonic Drive Systems**:
+- **High reduction ratios**: 50:1 to 300:1 typical
+- **Zero backlash**: High precision positioning
+- **Compact design**: High reduction in small package
+- **Efficiency**: Good efficiency despite high reduction
+
+**Planetary Gear Systems**:
+- **High torque density**: High torque in compact package
+- **Multiple reduction stages**: Achieving high ratios
+- **Efficiency**: Good efficiency characteristics
+- **Complexity**: More complex than harmonic drives
+
+**Worm Gear Systems**:
+- **High reduction**: Very high reduction ratios possible
+- **Self-locking**: Prevents back-driving
+- **Efficiency**: Lower efficiency due to sliding contact
+- **Backlash**: Potential for backlash in the system
+
+#### Series Elastic Actuators (SEA)
+Incorporating springs in series with the actuator:
+
+**Advantages**:
+- **Compliance**: Inherent compliance for safe interaction
+- **Force control**: Better force control capabilities
+- **Energy storage**: Can store and return energy
+- **Shock absorption**: Absorbs impact forces
+
+**Disadvantages**:
+- **Complexity**: More complex mechanical design
+- **Control**: More complex control algorithms required
+- **Position accuracy**: Reduced position accuracy due to compliance
+
+**Applications**: Joints requiring safe human interaction or energy-efficient locomotion.
+
+### Joint Sensing and Feedback
+
+#### Position Sensing
+Critical for joint control:
+
+**Absolute Encoders**:
+- **Multi-turn**: Track multiple rotations without homing
+- **Single-turn**: Measure position within one rotation
+- **Contactless**: No wear from contact-based systems
+
+**Incremental Encoders**:
+- **High resolution**: Very fine position measurement
+- **Cost-effective**: Lower cost than absolute encoders
+- **Homing required**: Need to find reference position
+
+#### Torque Sensing
+Important for force control and safety:
+
+**Strain Gauges**: Measure deformation to determine applied forces:
+- **High accuracy**: Precise force measurement
+- **Integration**: Can be integrated into joint structure
+- **Calibration**: Requires careful calibration
+
+**Motor current sensing**: Indirect torque measurement through motor current:
+- **Cost-effective**: Uses existing motor components
+- **Accuracy**: Less accurate than direct sensing
+- **Simplicity**: Simple implementation
+
+#### Temperature and Health Monitoring
+Ensuring joint reliability:
+
+**Temperature sensors**: Monitor for overheating:
+- **Prevent damage**: Avoid overheating that could damage components
+- **Performance**: Monitor performance degradation due to temperature
+- **Safety**: Ensure safe operating temperatures
+
+**Vibration monitoring**: Detect wear and damage:
+- **Early detection**: Identify problems before failure
+- **Predictive maintenance**: Schedule maintenance based on condition
+- **Performance**: Monitor for changes in joint characteristics
+
+### Advanced Joint Technologies
+
+#### Variable Stiffness Actuators (VSA)
+Joints with controllable compliance:
+
+**Mechanical implementations**:
+- **Dual actuator systems**: Two actuators to control position and stiffness
+- **Variable transmission**: Changing the mechanical advantage
+- **Controllable dampers**: Adjusting damping characteristics
+
+**Advantages**:
+- **Adaptive behavior**: Can adapt to different tasks and environments
+- **Energy efficiency**: Can store and return energy appropriately
+- **Safety**: Can be compliant when needed for safety
+
+**Challenges**:
+- **Complexity**: More complex mechanical and control systems
+- **Control**: More complex control algorithms required
+- **Cost**: Higher cost than traditional actuators
+
+#### Pneumatic and Hydraulic Systems
+Alternative actuation technologies:
+
+**Pneumatic muscles**:
+- **Compliance**: Inherently compliant actuation
+- **Power density**: Good power-to-weight ratio
+- **Control**: More complex control requirements
+
+**Hydraulic systems**:
+- **High power**: Very high power density
+- **Precision**: Good precision control
+- **Complexity**: Complex plumbing and control systems
+
+### Design Guidelines
+
+#### Joint Selection Criteria
+Factors to consider when selecting joint types:
+
+**Task requirements**: What motions are needed for the intended tasks:
+- **Range of motion**: Required joint angles
+- **Torque requirements**: Needed force generation capability
+- **Speed requirements**: Needed movement speed
+
+**Environmental factors**: Operating conditions:
+- **Temperature**: Operating temperature range
+- **Humidity**: Moisture protection requirements
+- **Dust/particles**: Protection from contaminants
+
+**Integration considerations**: How joints fit into overall system:
+- **Space constraints**: Available space for joint mechanisms
+- **Weight limits**: Overall robot weight constraints
+- **Power consumption**: Available power budget
+
+#### Optimization Strategies
+Approaches to optimizing joint design:
+
+**Multi-objective optimization**: Balancing competing requirements:
+- **Pareto optimization**: Finding optimal trade-offs
+- **Weighted optimization**: Prioritizing different objectives
+- **Constraint satisfaction**: Meeting all requirements
+
+**Biomimetic optimization**: Learning from biological systems:
+- **Efficiency**: Mimicking energy-efficient biological systems
+- **Robustness**: Mimicking robust biological systems
+- **Adaptability**: Mimicking adaptive biological systems
+
+Understanding joint design and DOF distribution is crucial for creating effective and capable humanoid robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Joint design determines robot motion, load capacity, and performance.
+- Types include revolute, prismatic, and spherical joints.
+- DOF distribution affects robot capability and human-likeness.
+- Key trade-offs include mobility vs. stability, precision vs. power, weight vs. strength.
+- Actuation systems include direct drive, geared, and series elastic.
+- Sensing includes position, torque, temperature, and health monitoring.
+- Advanced technologies include variable stiffness and pneumatic/hydraulic systems.
+- Design guidelines involve selection criteria and optimization strategies.
+
+</div>
+</TabItem>
+</Tabs>

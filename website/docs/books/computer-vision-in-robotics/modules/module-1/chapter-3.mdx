@@ -1,0 +1,233 @@
+---
+id: chapter-3
+title: "Lighting and Color in Robotic Vision"
+module: "Module 1: Foundations of Computer Vision in Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Lighting and Color in Robotic Vision
+
+### Introduction to Lighting in Computer Vision
+
+Lighting conditions significantly affect how robots perceive their environment through vision systems. Understanding and managing lighting variations is crucial for developing robust computer vision applications in robotics. Poor lighting can lead to inaccurate recognition, false detections, or complete failure of visual systems.
+
+Lighting considerations in robotics include:
+- **Natural lighting**: Sunlight variations throughout the day
+- **Artificial lighting**: Indoor and outdoor artificial sources
+- **Dynamic lighting**: Moving light sources and changing conditions
+- **Color temperature**: Different light sources affecting color perception
+
+### Light Sources and Their Properties
+
+#### Natural Light Sources
+Natural light is the most common source of illumination in outdoor robotic applications. However, it presents several challenges due to its variability.
+
+**Sunlight Characteristics**:
+- **Intensity variation**: Changes with time of day, season, and weather
+- **Direction**: Creates shadows that can obscure important features
+- **Color temperature**: Ranges from warm (3000K at sunrise/sunset) to cool (5500K at noon)
+- **Atmospheric effects**: Scattering, absorption, and weather impacts
+
+#### Artificial Light Sources
+Indoor and controlled environments typically use artificial lighting, each with specific properties that affect robotic vision.
+
+**Common Artificial Sources**:
+- **Incandescent**: Warm color temperature, good color rendering, but inefficient
+- **Fluorescent**: Cool color temperature, energy efficient, but may flicker
+- **LED**: Energy efficient, long life, tunable color temperature
+- **Halogen**: Similar to incandescent but more efficient and brighter
+
+### Color Models and Spaces
+
+Understanding color representation is essential for robotic vision systems that need to process and interpret color information.
+
+#### RGB Color Model
+The Red-Green-Blue model represents colors as combinations of the three primary colors. This model is natural for digital cameras and displays.
+
+**Advantages**:
+- Direct correspondence to camera sensor outputs
+- Efficient for display and storage
+- Simple to implement in hardware
+
+**Disadvantages**:
+- Not perceptually uniform
+- Separating color from brightness is difficult
+- Sensitive to lighting changes
+
+#### HSV Color Model
+The Hue-Saturation-Value model separates color information from brightness, making it more robust to lighting variations.
+
+**Components**:
+- **Hue**: The color type (red, green, blue, etc.)
+- **Saturation**: The purity or intensity of the color
+- **Value**: The brightness of the color
+
+**Advantages**:
+- More intuitive for color-based segmentation
+- Better separation of color and brightness
+- More robust to lighting changes
+
+**Disadvantages**:
+- More complex mathematical operations
+- Conversion from RGB adds computational cost
+
+#### YUV Color Model
+The YUV model separates luminance (Y) from chrominance (U, V), making it useful for separating brightness from color information.
+
+### Color Perception in Robotics
+
+Robots perceive color differently than humans due to differences in sensors and processing. Understanding these differences is crucial for designing effective color-based algorithms.
+
+#### Spectral Sensitivity
+Camera sensors have different spectral responses than human eyes, which affects how colors are captured and interpreted.
+
+**Bayer Filter Pattern**:
+Most digital cameras use a Bayer filter pattern with alternating red, green, and blue filters over pixels. This means each pixel only captures one color component, requiring demosaicing algorithms to reconstruct full color information.
+
+#### White Balance
+White balance is the process of removing color casts to ensure that white objects appear white under different lighting conditions.
+
+**Auto White Balance**:
+Automatic algorithms attempt to determine the appropriate color balance, but can fail in scenes with dominant colors or unusual lighting.
+
+**Manual White Balance**:
+More reliable but requires knowledge of the scene or a reference white object.
+
+### Lighting Challenges in Robotics
+
+#### Shadows and Highlights
+Shadows can hide important features and create false edges, while highlights can saturate sensors and lose texture information.
+
+**Shadow Mitigation**:
+- Multiple light sources to reduce harsh shadows
+- Shadow detection and removal algorithms
+- Using infrared or other non-visible light sources
+
+**Highlight Management**:
+- Automatic exposure control
+- High dynamic range (HDR) imaging
+- Polarizing filters to reduce specular reflections
+
+#### Dynamic Range
+The range between the darkest and brightest parts of a scene often exceeds the dynamic range of camera sensors, leading to loss of detail in shadows or highlights.
+
+**Solutions**:
+- **Exposure bracketing**: Multiple images at different exposures
+- **Local tone mapping**: Adjusting brightness locally in the image
+- **Multi-sensor systems**: Using different sensors for different brightness ranges
+
+### Adaptive Lighting Systems
+
+Modern robotic systems increasingly incorporate adaptive lighting to control the visual environment.
+
+#### Active Illumination
+Robots can carry their own light sources to illuminate scenes as needed.
+
+**Advantages**:
+- Consistent lighting conditions
+- Control over shadows and highlights
+- Ability to use specialized lighting (e.g., structured light)
+
+**Disadvantages**:
+- Additional power consumption
+- Potential for creating reflections
+- Limited range of illumination
+
+#### Structured Light
+Projecting known patterns of light onto surfaces to aid in depth estimation and 3D reconstruction.
+
+**Applications**:
+- Precise depth measurement
+- Surface texture analysis
+- Feature enhancement for recognition
+
+### Color Constancy
+
+Color constancy is the ability to perceive colors consistently despite changes in illumination. This is challenging for robotic systems but essential for robust color-based recognition.
+
+#### Algorithms for Color Constancy
+- **Gray world assumption**: Scene average is gray
+- **White patch assumption**: Brightest patch is white
+- **Retinex theory**: Based on human visual system
+- **Learning-based methods**: Using training data to adapt to lighting
+
+### Practical Considerations for Robotic Applications
+
+#### Outdoor Robotics
+Outdoor robots face the greatest lighting challenges due to variable natural light conditions.
+
+**Strategies**:
+- Robust algorithms that work across lighting conditions
+- Multiple exposure techniques
+- Infrared or multispectral imaging
+- Time-of-day dependent parameter adjustments
+
+#### Indoor Robotics
+Indoor environments offer more controlled lighting but still present challenges.
+
+**Considerations**:
+- Consistent artificial lighting design
+- Handling mixed lighting conditions
+- Managing reflections from surfaces
+- Energy efficiency of robot-mounted lights
+
+### Future Directions
+
+Emerging technologies are addressing lighting challenges in robotic vision:
+
+- **Computational photography**: Advanced algorithms to handle challenging lighting
+- **Neuromorphic vision**: Sensors that adapt dynamically to lighting changes
+- **AI-based enhancement**: Learning to improve images under poor lighting
+- **Hyperspectral imaging**: Capturing more detailed spectral information
+
+Understanding lighting and color properties is fundamental for developing robust computer vision systems in robotics that can operate reliably across diverse environments and conditions.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Lighting and Color in Robotic Vision
+
+### Key Concepts
+- **Lighting Variability**: Major factor affecting robotic vision performance
+- **Color Models**: RGB, HSV, and YUV for different processing needs
+- **Color Constancy**: Consistent color perception across lighting changes
+
+### Light Sources
+- **Natural**: Sunlight with time-dependent variations
+- **Artificial**: Incandescent, fluorescent, LED with different properties
+- **Active**: Robot-mounted lighting for controlled illumination
+
+### Color Models
+- **RGB**: Direct sensor correspondence but lighting-sensitive
+- **HSV**: Better color-brightness separation
+- **YUV**: Luminance-chrominance separation for processing
+
+### Challenges
+- **Shadows/Highlights**: Occlusion and sensor saturation issues
+- **Dynamic Range**: Scene range exceeding sensor capabilities
+- **White Balance**: Correcting color casts under different lighting
+
+### Solutions
+- **Adaptive Systems**: Active lighting and exposure control
+- **Structured Light**: Pattern projection for depth estimation
+- **Constancy Algorithms**: Gray world, white patch, Retinex methods
+
+### Applications
+- **Outdoor**: Managing natural light variability
+- **Indoor**: Handling artificial lighting conditions
+- **Specialized**: Infrared and multispectral approaches
+
+</div>
+</TabItem>
+</Tabs>

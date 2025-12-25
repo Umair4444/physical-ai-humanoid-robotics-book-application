@@ -1,0 +1,1242 @@
+---
+id: chapter-6
+title: "Simulation Validation and Verification"
+module: "Module 1: Foundations of Robotics Simulation"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Simulation Validation and Verification
+
+### Introduction to Simulation Validation and Verification
+
+Simulation validation and verification (V&V) is the process of ensuring that a simulation model is both accurate (valid) and correctly implemented (verified). In robotics simulation, V&V is critical for establishing confidence that simulation results can be trusted for decision-making, design validation, and system development. This chapter explores the methodologies, techniques, and best practices for validating and verifying robotics simulation environments.
+
+### Verification vs. Validation
+
+#### Verification
+
+**Definition**:
+Verification is the process of ensuring that a simulation model is correctly implemented and solves the equations it claims to solve.
+
+**Question Asked**: "Are we building the model correctly?"
+
+**Focus**:
+- **Implementation**: Is the code correctly implementing the model?
+- **Mathematics**: Are the equations solved correctly?
+- **Algorithms**: Are numerical methods implemented properly?
+- **Software Quality**: Are there bugs in the implementation?
+
+**Verification Techniques**:
+- **Code Reviews**: Manual inspection of source code
+- **Unit Testing**: Testing individual components
+- **Regression Testing**: Ensuring changes don't break existing functionality
+- **Code Coverage**: Measuring how much code is exercised by tests
+- **Static Analysis**: Analyzing code without executing it
+
+**Mathematical Verification**:
+```
+Example: Verifying numerical integration
+Analytical solution: dx/dt = ax, x(0) = x₀ → x(t) = x₀e^(at)
+Numerical solution: x_{n+1} = x_n + h * a * x_n = x_n(1 + ah)
+For small h: (1 + ah) ≈ e^(ah), so x_n ≈ x₀e^(ahn) = x₀e^(at)
+```
+
+**Implementation Example**:
+```cpp
+// Verification test for numerical integration
+bool testEulerIntegration() {
+    // Simple ODE: dx/dt = -x, x(0) = 1
+    // Analytical solution: x(t) = e^(-t)
+    
+    double dt = 0.001;
+    double x = 1.0;  // Initial condition
+    double t = 0.0;
+    
+    for (int i = 0; i < 1000; i++) {
+        // Euler integration: x_{n+1} = x_n + dt * (-x_n)
+        x = x + dt * (-x);
+        t += dt;
+        
+        // Analytical solution at time t
+        double analytical = exp(-t);
+        
+        // Check if numerical solution is close to analytical
+        if (abs(x - analytical) > 0.01) {
+            return false;  // Failed verification
+        }
+    }
+    
+    return true;  // Passed verification
+}
+```
+
+#### Validation
+
+**Definition**:
+Validation is the process of ensuring that a simulation model accurately represents the real-world system it is intended to represent.
+
+**Question Asked**: "Are we building the right model?"
+
+**Focus**:
+- **Accuracy**: How well does the model represent reality?
+- **Fidelity**: Does the model capture relevant real-world behaviors?
+- **Usefulness**: Is the model suitable for its intended purpose?
+- **Comparisons**: How do simulation results compare to real data?
+
+**Validation Techniques**:
+- **Comparison with Analytical Solutions**: Compare with known solutions
+- **Comparison with Experimental Data**: Compare with real-world measurements
+- **Cross-validation**: Compare with other validated models
+- **Sensitivity Analysis**: Test response to parameter changes
+- **Uncertainty Quantification**: Characterize model uncertainties
+
+**Validation Process**:
+```
+1. Define validation requirements
+2. Identify validation metrics
+3. Collect reference data
+4. Run simulation experiments
+5. Compare results quantitatively
+6. Assess model adequacy
+7. Document validation findings
+```
+
+### Types of Validation
+
+#### Face Validation
+
+**Definition**:
+Subjective validation based on expert opinion about whether the model looks realistic.
+
+**Approach**:
+- **Expert Review**: Domain experts assess model realism
+- **Visual Inspection**: Check if visual output looks realistic
+- **Behavioral Assessment**: Evaluate if behaviors seem reasonable
+- **Qualitative Feedback**: Gather opinions from users
+
+**Advantages**:
+- **Quick**: Can be done rapidly
+- **Inexpensive**: Low cost compared to other methods
+- **Intuitive**: Based on human perception
+- **Early Assessment**: Can be done early in development
+
+**Limitations**:
+- **Subjective**: Based on personal opinion
+- **Deceptive**: Model may look good but be inaccurate
+- **Limited Scope**: May miss important quantitative aspects
+- **Bias**: Experts may have preconceptions
+
+#### Construct Validation
+
+**Definition**:
+Validation of individual components or subsystems in isolation.
+
+**Approach**:
+- **Component Testing**: Test individual simulation components
+- **Subsystem Validation**: Validate subsystems separately
+- **Unit Validation**: Validate fundamental modeling elements
+- **Modular Testing**: Test modules independently
+
+**Example - Physics Engine Validation**:
+```cpp
+// Test conservation of momentum
+bool testMomentumConservation() {
+    // Create two identical objects approaching each other
+    RigidBody obj1, obj2;
+    obj1.mass = 1.0;
+    obj1.velocity = Vector3d(1.0, 0.0, 0.0);
+    obj2.mass = 1.0;
+    obj2.velocity = Vector3d(-1.0, 0.0, 0.0);
+    
+    // Initial momentum
+    Vector3d initial_momentum = obj1.mass * obj1.velocity + 
+                                obj2.mass * obj2.velocity;
+    
+    // Simulate collision (elastic)
+    simulateCollision(obj1, obj2);
+    
+    // Final momentum
+    Vector3d final_momentum = obj1.mass * obj1.velocity + 
+                              obj2.mass * obj2.velocity;
+    
+    // Check conservation (should be same within numerical precision)
+    return (initial_momentum - final_momentum).magnitude() < 1e-6;
+}
+```
+
+#### Predictive Validation
+
+**Definition**:
+Validation based on the model's ability to predict future behavior or unknown scenarios.
+
+**Approach**:
+- **Forecasting**: Predict outcomes for which real data is not yet available
+- **Extrapolation**: Test model behavior beyond calibration range
+- **Scenario Testing**: Validate for scenarios not used in development
+- **Long-term Behavior**: Assess long-term model stability
+
+**Example - Trajectory Prediction**:
+```cpp
+bool testTrajectoryPrediction() {
+    // Use known initial conditions and physics model
+    // to predict trajectory over time
+    
+    Robot robot;
+    robot.setPosition(Vector3d(0, 0, 1));  // Start at height 1m
+    robot.setVelocity(Vector3d(5, 0, 0));  // Start moving horizontally
+    
+    // Simulate for 1 second
+    double dt = 0.01;
+    for (int i = 0; i < 100; i++) {
+        robot.update(dt);
+    }
+    
+    // Analytical solution for projectile motion
+    double expected_x = 5.0 * 1.0;  // Horizontal motion (no drag)
+    double expected_y = 0.0;
+    double expected_z = 1.0 - 0.5 * 9.81 * 1.0 * 1.0;  // Vertical motion
+    
+    Vector3d expected_pos(expected_x, expected_y, expected_z);
+    Vector3d actual_pos = robot.getPosition();
+    
+    // Check if prediction matches analytical solution
+    return (expected_pos - actual_pos).magnitude() < 0.01;
+}
+```
+
+### Validation Metrics and Methods
+
+#### Quantitative Validation Metrics
+
+**Root Mean Square Error (RMSE)**:
+```
+RMSE = sqrt(Σ(y_simulated - y_reference)² / N)
+```
+
+**Mean Absolute Error (MAE)**:
+```
+MAE = Σ|y_simulated - y_reference| / N
+```
+
+**Mean Absolute Percentage Error (MAPE)**:
+```
+MAPE = 100% * Σ|y_simulated - y_reference| / |y_reference| / N
+```
+
+**Coefficient of Determination (R²)**:
+```
+R² = 1 - Σ(y_reference - y_simulated)² / Σ(y_reference - y_mean)²
+```
+
+**Implementation Example**:
+```cpp
+class ValidationMetrics {
+public:
+    static double rmse(const std::vector<double>& simulated, 
+                      const std::vector<double>& reference) {
+        if (simulated.size() != reference.size()) {
+            throw std::invalid_argument("Vectors must have same size");
+        }
+        
+        double sum_squared_errors = 0.0;
+        for (size_t i = 0; i < simulated.size(); i++) {
+            double error = simulated[i] - reference[i];
+            sum_squared_errors += error * error;
+        }
+        
+        return sqrt(sum_squared_errors / simulated.size());
+    }
+    
+    static double mae(const std::vector<double>& simulated, 
+                     const std::vector<double>& reference) {
+        if (simulated.size() != reference.size()) {
+            throw std::invalid_argument("Vectors must have same size");
+        }
+        
+        double sum_abs_errors = 0.0;
+        for (size_t i = 0; i < simulated.size(); i++) {
+            sum_abs_errors += abs(simulated[i] - reference[i]);
+        }
+        
+        return sum_abs_errors / simulated.size();
+    }
+    
+    static double r_squared(const std::vector<double>& simulated, 
+                           const std::vector<double>& reference) {
+        if (simulated.size() != reference.size()) {
+            throw std::invalid_argument("Vectors must have same size");
+        }
+        
+        // Calculate mean of reference values
+        double ref_mean = 0.0;
+        for (double val : reference) {
+            ref_mean += val;
+        }
+        ref_mean /= reference.size();
+        
+        // Calculate total sum of squares
+        double ss_total = 0.0;
+        for (double val : reference) {
+            ss_total += (val - ref_mean) * (val - ref_mean);
+        }
+        
+        // Calculate residual sum of squares
+        double ss_residual = 0.0;
+        for (size_t i = 0; i < simulated.size(); i++) {
+            ss_residual += (reference[i] - simulated[i]) * (reference[i] - simulated[i]);
+        }
+        
+        return 1.0 - (ss_residual / ss_total);
+    }
+    
+    static double correlation(const std::vector<double>& x, 
+                             const std::vector<double>& y) {
+        if (x.size() != y.size() || x.size() == 0) {
+            throw std::invalid_argument("Invalid input vectors");
+        }
+        
+        // Calculate means
+        double x_mean = 0.0, y_mean = 0.0;
+        for (size_t i = 0; i < x.size(); i++) {
+            x_mean += x[i];
+            y_mean += y[i];
+        }
+        x_mean /= x.size();
+        y_mean /= y.size();
+        
+        // Calculate correlation
+        double numerator = 0.0, x_denominator = 0.0, y_denominator = 0.0;
+        for (size_t i = 0; i < x.size(); i++) {
+            double x_diff = x[i] - x_mean;
+            double y_diff = y[i] - y_mean;
+            numerator += x_diff * y_diff;
+            x_denominator += x_diff * x_diff;
+            y_denominator += y_diff * y_diff;
+        }
+        
+        double denominator = sqrt(x_denominator * y_denominator);
+        if (denominator == 0.0) return 0.0;
+        
+        return numerator / denominator;
+    }
+};
+```
+
+#### Statistical Validation Methods
+
+**Chi-Square Test**:
+Compare observed vs. expected distributions.
+
+**Kolmogorov-Smirnov Test**:
+Compare two distributions to see if they're significantly different.
+
+**Implementation**:
+```cpp
+class StatisticalValidation {
+public:
+    // Kolmogorov-Smirnov test
+    static double kolmogorovSmirnovTest(
+        const std::vector<double>& sample1,
+        const std::vector<double>& sample2) {
+        
+        // Sort samples
+        std::vector<double> s1 = sample1;
+        std::vector<double> s2 = sample2;
+        std::sort(s1.begin(), s1.end());
+        std::sort(s2.begin(), s2.end());
+        
+        // Calculate empirical CDFs
+        size_t n1 = s1.size();
+        size_t n2 = s2.size();
+        size_t total = n1 + n2;
+        
+        // Combine and sort all values
+        std::vector<double> all_values;
+        all_values.insert(all_values.end(), s1.begin(), s1.end());
+        all_values.insert(all_values.end(), s2.begin(), s2.end());
+        std::sort(all_values.begin(), all_values.end());
+        
+        // Calculate KS statistic
+        double max_diff = 0.0;
+        size_t i1 = 0, i2 = 0;
+        
+        for (double val : all_values) {
+            // Calculate CDF values
+            while (i1 < n1 && s1[i1] <= val) i1++;
+            while (i2 < n2 && s2[i2] <= val) i2++;
+            
+            double cdf1 = static_cast<double>(i1) / n1;
+            double cdf2 = static_cast<double>(i2) / n2;
+            double diff = abs(cdf1 - cdf2);
+            
+            max_diff = std::max(max_diff, diff);
+        }
+        
+        return max_diff;
+    }
+    
+    // Chi-square goodness of fit test
+    static double chiSquareTest(
+        const std::vector<int>& observed,
+        const std::vector<double>& expected) {
+        
+        if (observed.size() != expected.size()) {
+            throw std::invalid_argument("Observed and expected must have same size");
+        }
+        
+        double chi_square = 0.0;
+        for (size_t i = 0; i < observed.size(); i++) {
+            if (expected[i] == 0.0) {
+                throw std::invalid_argument("Expected frequency cannot be zero");
+            }
+            
+            double diff = observed[i] - expected[i];
+            chi_square += (diff * diff) / expected[i];
+        }
+        
+        return chi_square;
+    }
+};
+```
+
+### Validation Methodologies
+
+#### Code-to-Code Verification
+
+**Purpose**:
+Compare results between different simulation codes to verify implementation.
+
+**Approach**:
+- **Multiple Implementations**: Implement same model in different codes
+- **Cross-Comparison**: Compare results between implementations
+- **Consistency Check**: Ensure consistent results across platforms
+- **Bug Detection**: Identify discrepancies indicating bugs
+
+**Example - Multi-Physics Comparison**:
+```cpp
+class CodeComparisonValidator {
+public:
+    struct SimulationResults {
+        std::vector<double> time;
+        std::vector<Vector3d> position;
+        std::vector<Vector3d> velocity;
+        std::vector<double> energy;
+    };
+    
+    static bool validateAcrossCodes(
+        const std::vector<SimulationResults>& results,
+        double tolerance = 1e-6) {
+        
+        if (results.empty()) return true;
+        
+        // Use first result as reference
+        const auto& reference = results[0];
+        
+        for (size_t i = 1; i < results.size(); i++) {
+            const auto& test_result = results[i];
+            
+            // Check if time vectors match
+            if (reference.time.size() != test_result.time.size()) {
+                return false;
+            }
+            
+            // Compare each time step
+            for (size_t t = 0; t < reference.time.size(); t++) {
+                if (abs(reference.time[t] - test_result.time[t]) > tolerance) {
+                    return false;
+                }
+                
+                if ((reference.position[t] - test_result.position[t]).magnitude() > tolerance) {
+                    return false;
+                }
+                
+                if ((reference.velocity[t] - test_result.velocity[t]).magnitude() > tolerance) {
+                    return false;
+                }
+                
+                if (abs(reference.energy[t] - test_result.energy[t]) > tolerance) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+};
+```
+
+#### Solution Verification
+
+**Purpose**:
+Verify that numerical solutions converge to the correct solution as discretization is refined.
+
+**Techniques**:
+- **Grid Convergence Studies**: Refine spatial/temporal discretization
+- **Richardson Extrapolation**: Estimate exact solution from discretized solutions
+- **Order of Accuracy**: Verify that numerical method has expected convergence rate
+
+**Implementation**:
+```cpp
+class SolutionVerification {
+public:
+    // Grid convergence study
+    static std::vector<double> performGridStudy(
+        std::function<double(double)> simulation_function,
+        const std::vector<double>& grid_sizes) {
+        
+        std::vector<double> results;
+        
+        for (double h : grid_sizes) {
+            double result = simulation_function(h);
+            results.push_back(result);
+        }
+        
+        return results;
+    }
+    
+    // Calculate convergence order
+    static double calculateConvergenceOrder(
+        const std::vector<double>& grid_sizes,
+        const std::vector<double>& results) {
+        
+        if (grid_sizes.size() < 3 || results.size() < 3) {
+            throw std::invalid_argument("Need at least 3 data points");
+        }
+        
+        // Calculate order of accuracy using three grid refinements
+        // O = ln(|E2-E1|/|E3-E2|) / ln(r)
+        // where E1,E2,E3 are errors on finest, medium, coarse grids
+        // and r is refinement ratio
+        
+        double h1 = grid_sizes[0];  // finest
+        double h2 = grid_sizes[1];  // medium  
+        double h3 = grid_sizes[2];  // coarse
+        
+        // Assume results converge to exact solution, use finest as reference
+        double e1 = abs(results[1] - results[0]);  // error medium vs finest
+        double e2 = abs(results[2] - results[1]);  // error coarse vs medium
+        
+        double refinement_ratio = h2 / h1;  // Should be same as h3/h2 for geometric refinement
+        
+        if (abs(e2) < 1e-12) return std::numeric_limits<double>::infinity();
+        
+        return log(abs(e1 / e2)) / log(refinement_ratio);
+    }
+};
+```
+
+#### Experimental Validation
+
+**Purpose**:
+Compare simulation results with real-world experimental data.
+
+**Approach**:
+- **Controlled Experiments**: Conduct experiments with controlled conditions
+- **Data Collection**: Carefully measure relevant quantities
+- **Uncertainty Analysis**: Characterize measurement uncertainties
+- **Comparison**: Compare simulation and experimental results
+
+**Experimental Design**:
+```cpp
+class ExperimentalValidation {
+public:
+    struct ExperimentalSetup {
+        std::string experiment_name;
+        std::string description;
+        std::vector<std::string> measured_quantities;
+        double measurement_uncertainty;
+        std::vector<double> parameters;
+        std::vector<std::vector<double>> measurements;  // time series data
+    };
+    
+    struct SimulationSetup {
+        std::string simulation_name;
+        std::vector<double> parameters;
+        std::vector<std::vector<double>> results;  // time series data
+    };
+    
+    static bool validateAgainstExperiment(
+        const ExperimentalSetup& experiment,
+        const SimulationSetup& simulation,
+        double confidence_level = 0.95) {
+        
+        if (experiment.parameters != simulation.parameters) {
+            throw std::invalid_argument("Parameters must match between experiment and simulation");
+        }
+        
+        // Calculate validation metrics
+        std::vector<double> rmse_values;
+        std::vector<double> r_squared_values;
+        
+        // Compare each measured quantity
+        for (size_t i = 0; i < experiment.measured_quantities.size(); i++) {
+            if (i >= experiment.measurements.size() || 
+                i >= simulation.results.size()) {
+                continue;
+            }
+            
+            const auto& exp_data = experiment.measurements[i];
+            const auto& sim_data = simulation.results[i];
+            
+            // Calculate RMSE
+            double rmse = ValidationMetrics::rmse(sim_data, exp_data);
+            rmse_values.push_back(rmse);
+            
+            // Calculate R-squared
+            double r2 = ValidationMetrics::r_squared(sim_data, exp_data);
+            r_squared_values.push_back(r2);
+        }
+        
+        // Check if validation criteria are met
+        bool passed = true;
+        for (double rmse : rmse_values) {
+            // RMSE should be less than measurement uncertainty
+            if (rmse > experiment.measurement_uncertainty) {
+                passed = false;
+                break;
+            }
+        }
+        
+        for (double r2 : r_squared_values) {
+            // R-squared should be above threshold (e.g., 0.9)
+            if (r2 < 0.9) {
+                passed = false;
+                break;
+            }
+        }
+        
+        return passed;
+    }
+};
+```
+
+### Uncertainty Quantification
+
+#### Sources of Uncertainty
+
+**Aleatory Uncertainty**:
+Irreducible randomness inherent in the system.
+
+**Types**:
+- **Physical Randomness**: Natural variability in physical processes
+- **Initial Conditions**: Uncertainty in initial state
+- **Boundary Conditions**: Uncertainty in boundary conditions
+- **Material Properties**: Natural variability in material characteristics
+
+**Epistemic Uncertainty**:
+Reducible uncertainty due to lack of knowledge.
+
+**Types**:
+- **Model Form**: Uncertainty in model structure
+- **Parameters**: Uncertainty in model parameters
+- **Numerical**: Uncertainty due to numerical approximations
+- **Data**: Uncertainty due to limited data
+
+#### Uncertainty Propagation Methods
+
+**Monte Carlo Simulation**:
+Use random sampling to propagate uncertainty.
+
+**Implementation**:
+```cpp
+class UncertaintyPropagation {
+public:
+    struct ParameterDistribution {
+        std::string name;
+        std::string distribution_type;  // "normal", "uniform", "lognormal", etc.
+        std::vector<double> parameters; // Distribution parameters (mean, std for normal)
+    };
+    
+    static std::vector<double> monteCarloPropagation(
+        std::function<double(const std::vector<double>&)> model,
+        const std::vector<ParameterDistribution>& distributions,
+        int num_samples = 10000) {
+        
+        std::vector<double> outputs;
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        
+        for (int i = 0; i < num_samples; i++) {
+            // Sample parameters
+            std::vector<double> sample_params;
+            for (const auto& dist : distributions) {
+                double sample = sampleFromDistribution(dist, gen);
+                sample_params.push_back(sample);
+            }
+            
+            // Evaluate model
+            double output = model(sample_params);
+            outputs.push_back(output);
+        }
+        
+        return outputs;
+    }
+
+private:
+    static double sampleFromDistribution(const ParameterDistribution& dist, 
+                                       std::mt19937& gen) {
+        if (dist.distribution_type == "normal") {
+            std::normal_distribution<double> d(dist.parameters[0], dist.parameters[1]);
+            return d(gen);
+        } else if (dist.distribution_type == "uniform") {
+            std::uniform_real_distribution<double> d(dist.parameters[0], dist.parameters[1]);
+            return d(gen);
+        } else if (dist.distribution_type == "lognormal") {
+            std::lognormal_distribution<double> d(dist.parameters[0], dist.parameters[1]);
+            return d(gen);
+        }
+        // Add more distributions as needed
+        return 0.0;
+    }
+};
+```
+
+**Polynomial Chaos Expansion**:
+Represent uncertain outputs as series expansions.
+
+**Concept**:
+```
+Y(ξ) = Σᵢ αᵢ * Φᵢ(ξ)
+```
+
+Where Y is the output, ξ represents uncertain parameters, αᵢ are coefficients, and Φᵢ are orthogonal polynomials.
+
+**Implementation**:
+```cpp
+class PolynomialChaos {
+public:
+    // Simple example with Legendre polynomials (for uniform distribution)
+    static double evaluateExpansion(const std::vector<double>& coefficients,
+                                  double xi, int order) {
+        // Legendre polynomials: P₀(ξ)=1, P₁(ξ)=ξ, P₂(ξ)=(3ξ²-1)/2, etc.
+        std::vector<double> basis_functions(order + 1);
+        
+        // P₀(ξ) = 1
+        basis_functions[0] = 1.0;
+        
+        if (order >= 1) {
+            // P₁(ξ) = ξ
+            basis_functions[1] = xi;
+        }
+        
+        if (order >= 2) {
+            // P₂(ξ) = (3ξ² - 1) / 2
+            basis_functions[2] = (3.0 * xi * xi - 1.0) / 2.0;
+        }
+        
+        // Higher order Legendre polynomials can be computed recursively
+        for (int i = 3; i <= order; i++) {
+            // P_i(ξ) = ((2i-1)ξP_{i-1}(ξ) - (i-1)P_{i-2}(ξ)) / i
+            basis_functions[i] = ((2*i - 1) * xi * basis_functions[i-1] - 
+                                 (i - 1) * basis_functions[i-2]) / i;
+        }
+        
+        // Evaluate expansion
+        double result = 0.0;
+        for (int i = 0; i <= order && i < coefficients.size(); i++) {
+            result += coefficients[i] * basis_functions[i];
+        }
+        
+        return result;
+    }
+    
+    // Compute statistical moments from chaos coefficients
+    static double computeMean(const std::vector<double>& coefficients) {
+        // Mean = coefficient of P₀ (which is 1)
+        return coefficients.empty() ? 0.0 : coefficients[0];
+    }
+    
+    static double computeVariance(const std::vector<double>& coefficients) {
+        // Variance = Σᵢ>0 αᵢ² * E[Φᵢ²]
+        // For normalized Legendre polynomials: E[Φᵢ²] = 1/(2i+1)
+        double variance = 0.0;
+        for (size_t i = 1; i < coefficients.size(); i++) {
+            variance += coefficients[i] * coefficients[i] / (2*i + 1);
+        }
+        return variance;
+    }
+};
+```
+
+### Sensitivity Analysis
+
+#### Purpose and Methods
+
+**Purpose**:
+Determine how variations in input parameters affect model outputs.
+
+**Types**:
+- **Local Sensitivity**: Sensitivity at specific parameter values
+- **Global Sensitivity**: Sensitivity over parameter ranges
+- **Deterministic**: Fixed parameter variations
+- **Probabilistic**: Parameter variations as distributions
+
+**Sobol Sensitivity Indices**:
+Quantify contribution of each parameter to output variance.
+
+**Implementation**:
+```cpp
+class SensitivityAnalysis {
+public:
+    // Elementary Effects Method (Morris Screening)
+    static std::vector<double> morrisScreening(
+        std::function<double(const std::vector<double>&)> model,
+        const std::vector<std::pair<double, double>>& parameter_ranges,
+        int num_trajectories = 10,
+        int num_levels = 4) {
+        
+        std::vector<double> elementary_effects;
+        elementary_effects.resize(parameter_ranges.size(), 0.0);
+        
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        
+        for (int traj = 0; traj < num_trajectories; traj++) {
+            // Generate trajectory in parameter space
+            auto trajectory = generateTrajectory(parameter_ranges, num_levels, gen);
+            
+            for (size_t param = 0; param < parameter_ranges.size(); param++) {
+                // Calculate elementary effect for this parameter
+                std::vector<double> params_plus = trajectory[param];
+                std::vector<double> params_minus = trajectory[param + 1];
+                
+                double y_plus = model(params_plus);
+                double y_minus = model(params_minus);
+                
+                double effect = (y_plus - y_minus) / (params_plus[param] - params_minus[param]);
+                
+                elementary_effects[param] += abs(effect);
+            }
+        }
+        
+        // Normalize by number of trajectories
+        for (auto& effect : elementary_effects) {
+            effect /= num_trajectories;
+        }
+        
+        return elementary_effects;
+    }
+
+private:
+    static std::vector<std::vector<double>> generateTrajectory(
+        const std::vector<std::pair<double, double>>& ranges,
+        int num_levels,
+        std::mt19937& gen) {
+        
+        size_t num_params = ranges.size();
+        std::vector<std::vector<double>> trajectory;
+        
+        // Generate random starting point
+        std::vector<double> start_point(num_params);
+        for (size_t i = 0; i < num_params; i++) {
+            double range = ranges[i].second - ranges[i].first;
+            double delta = range / (num_levels - 1);
+            
+            std::uniform_int_distribution<> dist(0, num_levels - 2);
+            int level = dist(gen);
+            
+            start_point[i] = ranges[i].first + level * delta;
+        }
+        
+        // Generate trajectory by changing one parameter at a time
+        trajectory.push_back(start_point);
+        
+        for (size_t param = 0; param < num_params; param++) {
+            std::vector<double> next_point = trajectory.back();
+            
+            // Change parameter by one level
+            double range = ranges[param].second - ranges[param].first;
+            double delta = range / (num_levels - 1);
+            
+            next_point[param] += delta;
+            if (next_point[param] > ranges[param].second) {
+                next_point[param] = ranges[param].second;
+            }
+            
+            trajectory.push_back(next_point);
+        }
+        
+        return trajectory;
+    }
+};
+```
+
+### Validation Reporting and Documentation
+
+#### Validation Plan
+
+**Components**:
+- **Scope**: What is being validated
+- **Requirements**: Validation criteria and standards
+- **Methods**: Techniques to be used for validation
+- **Resources**: Personnel, equipment, and time needed
+- **Schedule**: Timeline for validation activities
+- **Acceptance Criteria**: What constitutes successful validation
+
+**Example Validation Plan Structure**:
+```cpp
+class ValidationPlan {
+public:
+    struct ValidationRequirement {
+        std::string id;
+        std::string description;
+        std::string acceptance_criteria;
+        std::string test_method;
+        std::string priority;  // high, medium, low
+        std::string status;    // planned, in_progress, completed
+    };
+    
+    struct ValidationTest {
+        std::string id;
+        std::string requirement_ref;
+        std::string description;
+        std::string procedure;
+        std::vector<std::string> pass_fail_criteria;
+        std::string test_setup;
+        std::string data_requirements;
+    };
+    
+    struct ValidationReport {
+        std::string validation_id;
+        std::string date;
+        std::vector<ValidationTest> tests_performed;
+        std::vector<std::string> results;
+        std::vector<std::string> deviations;
+        std::string overall_assessment;
+        std::string recommendations;
+        std::vector<std::string> signatures;
+    };
+    
+    std::string plan_id;
+    std::string title;
+    std::string description;
+    std::vector<ValidationRequirement> requirements;
+    std::vector<ValidationTest> validation_tests;
+    std::string schedule;
+    std::vector<std::string> resources_needed;
+    std::string approval_authority;
+    
+    ValidationPlan(const std::string& id, const std::string& title_str) 
+        : plan_id(id), title(title_str) {}
+    
+    void addRequirement(const ValidationRequirement& req) {
+        requirements.push_back(req);
+    }
+    
+    void addTest(const ValidationTest& test) {
+        validation_tests.push_back(test);
+    }
+    
+    ValidationReport executePlan() {
+        ValidationReport report;
+        report.validation_id = plan_id + "_report";
+        report.date = getCurrentDate();
+        
+        // Execute each validation test
+        for (const auto& test : validation_tests) {
+            // In a real implementation, this would execute the test
+            // and record the results
+            report.tests_performed.push_back(test);
+            report.results.push_back("PASS");  // Placeholder
+        }
+        
+        // Generate overall assessment
+        report.overall_assessment = "Validation plan completed successfully";
+        
+        return report;
+    }
+
+private:
+    std::string getCurrentDate() {
+        auto now = std::chrono::system_clock::now();
+        auto time_t = std::chrono::system_clock::to_time_t(now);
+        return std::ctime(&time_t);
+    }
+};
+```
+
+#### Model Credibility Assessment
+
+**Factors**:
+- **Fidelity**: How well model represents reality
+- **Scope**: Range of applicability
+- **Uncertainty**: Quantified model uncertainties
+- **Validation**: Extent of validation activities
+- **Maturity**: Development and testing history
+- **Usage History**: Performance in previous applications
+
+**Credibility Matrix**:
+```cpp
+class CredibilityAssessment {
+public:
+    enum CredibilityLevel { LOW, MEDIUM, HIGH, VERY_HIGH };
+    
+    struct AssessmentFactor {
+        std::string name;
+        CredibilityLevel level;
+        std::string justification;
+        double weight;  // 0.0 to 1.0
+    };
+    
+    static CredibilityLevel assessModelCredibility(
+        const std::vector<AssessmentFactor>& factors) {
+        
+        double weighted_score = 0.0;
+        double total_weight = 0.0;
+        
+        for (const auto& factor : factors) {
+            double factor_score = getCredibilityScore(factor.level);
+            weighted_score += factor_score * factor.weight;
+            total_weight += factor.weight;
+        }
+        
+        if (total_weight == 0.0) return LOW;
+        
+        double average_score = weighted_score / total_weight;
+        
+        if (average_score >= 3.5) return VERY_HIGH;
+        else if (average_score >= 2.5) return HIGH;
+        else if (average_score >= 1.5) return MEDIUM;
+        else return LOW;
+    }
+
+private:
+    static double getCredibilityScore(CredibilityLevel level) {
+        switch (level) {
+            case VERY_HIGH: return 4.0;
+            case HIGH: return 3.0;
+            case MEDIUM: return 2.0;
+            case LOW: return 1.0;
+            default: return 1.0;
+        }
+    }
+};
+```
+
+### Continuous Validation and Maintenance
+
+#### Regression Testing
+
+**Purpose**:
+Ensure that changes to the simulation code don't break existing functionality.
+
+**Implementation**:
+```cpp
+class RegressionTester {
+public:
+    struct TestCase {
+        std::string name;
+        std::string description;
+        std::function<bool()> test_function;
+        bool enabled;
+        std::string category;  // physics, graphics, controls, etc.
+    };
+    
+    void addTestCase(const TestCase& test_case) {
+        test_cases.push_back(test_case);
+    }
+    
+    struct TestResult {
+        std::string test_name;
+        bool passed;
+        std::string message;
+        double execution_time;
+    };
+    
+    std::vector<TestResult> runAllTests() {
+        std::vector<TestResult> results;
+        
+        for (const auto& test_case : test_cases) {
+            if (!test_case.enabled) continue;
+            
+            TestResult result;
+            result.test_name = test_case.name;
+            
+            auto start_time = std::chrono::high_resolution_clock::now();
+            
+            try {
+                result.passed = test_case.test_function();
+                result.message = result.passed ? "Passed" : "Failed";
+            } catch (const std::exception& e) {
+                result.passed = false;
+                result.message = std::string("Exception: ") + e.what();
+            }
+            
+            auto end_time = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                end_time - start_time);
+            result.execution_time = duration.count() / 1000000.0;  // seconds
+            
+            results.push_back(result);
+        }
+        
+        return results;
+    }
+    
+    void generateReport(const std::vector<TestResult>& results) {
+        int total_tests = results.size();
+        int passed_tests = 0;
+        int failed_tests = 0;
+        
+        for (const auto& result : results) {
+            if (result.passed) passed_tests++;
+            else failed_tests++;
+        }
+        
+        std::cout << "Regression Test Report:" << std::endl;
+        std::cout << "Total tests: " << total_tests << std::endl;
+        std::cout << "Passed: " << passed_tests << std::endl;
+        std::cout << "Failed: " << failed_tests << std::endl;
+        std::cout << "Success rate: " << (passed_tests * 100.0 / total_tests) << "%" << std::endl;
+        
+        if (failed_tests > 0) {
+            std::cout << "\nFailed tests:" << std::endl;
+            for (const auto& result : results) {
+                if (!result.passed) {
+                    std::cout << "  - " << result.test_name << ": " << result.message << std::endl;
+                }
+            }
+        }
+    }
+
+private:
+    std::vector<TestCase> test_cases;
+};
+```
+
+#### Model Evolution and Updates
+
+**Version Control**:
+Track changes to models and validation status.
+
+**Implementation**:
+```cpp
+class ModelVersionControl {
+public:
+    struct ModelVersion {
+        std::string version_id;
+        std::string date;
+        std::string author;
+        std::string description;
+        std::vector<std::string> changes;
+        std::string validation_status;  // validated, partially_validated, unvalidated
+        std::string validation_report;  // reference to validation report
+    };
+    
+    void recordChange(const std::string& author,
+                     const std::string& description,
+                     const std::vector<std::string>& changes) {
+        
+        ModelVersion version;
+        version.version_id = generateVersionId();
+        version.date = getCurrentDate();
+        version.author = author;
+        version.description = description;
+        version.changes = changes;
+        version.validation_status = "unvalidated";  // New version needs validation
+        
+        versions.push_back(version);
+    }
+    
+    std::vector<ModelVersion> getChangeHistory() const {
+        return versions;
+    }
+    
+    void updateValidationStatus(const std::string& version_id,
+                               const std::string& status,
+                               const std::string& report) {
+        for (auto& version : versions) {
+            if (version.version_id == version_id) {
+                version.validation_status = status;
+                version.validation_report = report;
+                break;
+            }
+        }
+    }
+
+private:
+    std::vector<ModelVersion> versions;
+    
+    std::string generateVersionId() {
+        static int counter = 0;
+        return "v" + std::to_string(counter++);
+    }
+    
+    std::string getCurrentDate() {
+        auto now = std::chrono::system_clock::now();
+        auto time_t = std::chrono::system_clock::to_time_t(now);
+        return std::ctime(&time_t);
+    }
+};
+```
+
+Understanding simulation validation and verification is essential for creating trustworthy robotics simulation environments that can be confidently used for research, development, and decision-making.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Simulation Validation and Verification
+
+### Verification vs. Validation
+- **Verification**: "Are we building the model correctly?"
+- **Validation**: "Are we building the right model?"
+- **Focus**: Implementation correctness vs. real-world accuracy
+- **Methods**: Code reviews, unit tests vs. experimental comparison
+
+### Validation Types
+- **Face**: Subjective expert assessment
+- **Construct**: Component-level validation
+- **Predictive**: Future scenario prediction accuracy
+- **Cross-code**: Comparison between different implementations
+
+### Validation Metrics
+- **RMSE**: Root mean square error
+- **MAE**: Mean absolute error
+- **R²**: Coefficient of determination
+- **Correlation**: Linear relationship strength
+- **Statistical**: Distribution comparison tests
+
+### Uncertainty Quantification
+- **Aleatory**: Irreducible random uncertainty
+- **Epistemic**: Reducible knowledge uncertainty
+- **Monte Carlo**: Random sampling propagation
+- **Polynomial Chaos**: Series expansion methods
+
+### Sensitivity Analysis
+- **Local**: Sensitivity at specific parameter values
+- **Global**: Sensitivity over parameter ranges
+- **Morris Screening**: Parameter importance ranking
+- **Sobol Indices**: Variance decomposition
+
+### Validation Documentation
+- **Plans**: Scope, methods, criteria, schedule
+- **Reports**: Results, deviations, assessments
+- **Credibility**: Fidelity, scope, uncertainty assessment
+- **Traceability**: Requirements to test results
+
+### Continuous Validation
+- **Regression Testing**: Ensuring changes don't break functionality
+- **Version Control**: Tracking model evolution
+- **Maintenance**: Ongoing validation activities
+- **Reporting**: Documenting validation status
+
+### Implementation Techniques
+- **Automated Testing**: Systematic validation procedures
+- **Statistical Methods**: Quantitative comparison approaches
+- **Uncertainty Analysis**: Characterizing model limitations
+- **Quality Assurance**: Process and procedure implementation
+
+</div>
+</TabItem>
+</Tabs>

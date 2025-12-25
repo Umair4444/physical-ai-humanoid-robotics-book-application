@@ -1,0 +1,363 @@
+---
+id: chapter-11
+title: "Dynamic Modeling and Control of Humanoid Robots"
+module: "Module 2: Biomechanics and Kinematics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Dynamic Modeling and Control of Humanoid Robots
+
+### Introduction to Dynamic Modeling
+
+Dynamic modeling in humanoid robotics involves creating mathematical representations of how the robot moves and responds to forces. Unlike kinematics, which only considers motion, dynamics takes into account the forces, torques, masses, and inertias that cause motion. Accurate dynamic modeling is essential for controlling humanoid robots, especially when they interact with the environment or need to maintain balance during movement.
+
+Dynamic modeling encompasses:
+- **Equations of motion**: Mathematical relationships describing robot movement
+- **Force analysis**: Understanding how forces affect robot motion
+- **Stability analysis**: Ensuring robot remains stable during operation
+- **Control design**: Using models to design effective control systems
+
+### Fundamental Dynamic Principles
+
+#### Newton-Euler Equations
+The foundation of dynamic modeling for rigid body systems:
+
+**Newton's laws for translation**:
+- **First law**: An object at rest stays at rest unless acted upon by a force
+- **Second law**: F = ma, force equals mass times acceleration
+- **Third law**: For every action, there is an equal and opposite reaction
+
+**Euler's laws for rotation**:
+- **First law**: The rate of change of angular momentum equals the applied torque
+- **Second law**: The rate of change of linear momentum equals the applied force
+
+**Application to humanoid robots**:
+- **Multi-body systems**: Each robot link is treated as a rigid body
+- **Joint forces**: Forces and torques at joints affect motion
+- **External forces**: Forces from environment interaction
+
+#### Lagrangian Mechanics
+An alternative approach to deriving equations of motion:
+
+**Lagrangian function**: L = T - V, where T is kinetic energy and V is potential energy.
+
+**Euler-Lagrange equations**: d/dt(∂L/∂q̇) - ∂L/∂q = τ, where q represents generalized coordinates and τ represents generalized forces.
+
+**Advantages**:
+- **Systematic approach**: Can be applied systematically to complex systems
+- **Coordinate independence**: Formulation is independent of coordinate choice
+- **Constraint handling**: Constraints can be handled elegantly
+
+**Disadvantages**:
+- **Complexity**: Can become very complex for systems with many DOF
+- **Computation**: More computationally intensive than Newton-Euler for some applications
+
+### Dynamic Equations of Humanoid Robots
+
+#### The General Dynamic Equation
+The fundamental equation governing humanoid robot motion:
+
+**M(q)q̈ + C(q, q̇)q̇ + g(q) = τ + Jᵀ(q)Fₑₓₜ**
+
+Where:
+- **M(q)**: Mass matrix (inertia properties)
+- **C(q, q̇)**: Coriolis and centrifugal forces matrix
+- **g(q)**: Gravity forces vector
+- **τ**: Joint torques vector
+- **Jᵀ(q)**: Transpose of Jacobian matrix
+- **Fₑₓₜ**: External forces vector
+
+#### Mass Matrix (M(q))
+Represents the inertial properties of the robot:
+
+**Properties**:
+- **Symmetric**: M(q) = Mᵀ(q)
+- **Positive definite**: All eigenvalues are positive
+- **Configuration dependent**: Changes with robot configuration
+
+**Components**:
+- **Link masses**: Mass of each robot link
+- **Link inertias**: Rotational inertia of each link
+- **Coupling effects**: How motion of one joint affects others
+
+#### Coriolis and Centrifugal Forces (C(q, q̇))
+Forces due to motion of the robot:
+
+**Coriolis forces**: Forces due to velocity of one joint affecting another
+**Centrifugal forces**: Forces due to rotation of the system
+**Velocity dependence**: Proportional to joint velocities squared
+
+#### Gravity Vector (g(q))
+Forces due to gravitational field:
+
+**Configuration dependence**: Changes with robot configuration
+**Potential energy**: Related to robot's potential energy in gravitational field
+**Balance considerations**: Critical for maintaining balance
+
+### Dynamic Modeling Approaches
+
+#### Recursive Newton-Euler Algorithm (RNEA)
+Efficient method for computing inverse dynamics:
+
+**Process**:
+- **Forward recursion**: Calculate velocities and accelerations from base to end-effector
+- **Backward recursion**: Calculate forces and torques from end-effector to base
+
+**Applications**:
+- **Inverse dynamics**: Computing required joint torques for given motion
+- **Validation**: Validating dynamic models
+- **Control**: Computing feedforward terms in control
+
+#### Composite Rigid Body Algorithm (CRBA)
+Efficient method for computing the mass matrix:
+
+**Process**: 
+- **Bottom-up approach**: Builds mass matrix from distal to proximal links
+- **Composite bodies**: Treats groups of links as composite rigid bodies
+
+**Applications**:
+- **Mass matrix computation**: Computing M(q) efficiently
+- **Forward dynamics**: Used in forward dynamic simulation
+- **Controller design**: Needed for many control algorithms
+
+#### Articulated Body Algorithm (ABA)
+Efficient method for computing forward dynamics:
+
+**Process**:
+- **Forward sweep**: Computes articulated body inertias
+- **Backward sweep**: Computes accelerations and internal forces
+- **Forward sweep**: Computes joint accelerations
+
+**Applications**:
+- **Forward dynamics**: Computing accelerations from applied forces
+- **Simulation**: Real-time simulation of robot motion
+- **Control**: Real-time control implementation
+
+### Control Strategies for Humanoid Robots
+
+#### Computed Torque Control
+Linearizing the dynamic equations through feedback:
+
+**Approach**:
+- **Feedback linearization**: Compensate for nonlinear dynamics
+- **PD control**: Apply PD control to the linearized system
+- **τ = M(q)α + C(q, q̇)q̇ + g(q) + Kp(qd - q) + Kd(q̇d - q̇)**
+
+**Advantages**:
+- **Exact compensation**: Compensates for known dynamics
+- **Linear behavior**: Creates linear closed-loop system
+- **Performance**: Good tracking performance
+
+**Disadvantages**:
+- **Model dependency**: Requires accurate dynamic model
+- **Computation**: Computationally intensive
+- **Uncertainty**: Sensitive to model uncertainties
+
+#### Operational Space Control
+Controlling motion in task space rather than joint space:
+
+**Concept**:
+- **Task coordinates**: Control in Cartesian space or other task coordinates
+- **Dynamic consistency**: Maintain dynamic consistency between spaces
+- **Null-space motion**: Use redundancy for secondary objectives
+
+**Mathematical formulation**:
+- **Task Jacobian**: J(q) relating joint velocities to task velocities
+- **Task dynamics**: Mₓ(q)ẍ + Cₓ(q, q̇)q̇ + gₓ(q) = F + J(q)τ
+- **Null-space projection**: Maintain joint space objectives
+
+#### Impedance Control
+Controlling the robot's mechanical impedance:
+
+**Concept**:
+- **Mechanical impedance**: Relationship between force and motion
+- **Desired impedance**: Specifying desired force-motion relationship
+- **Compliance**: Creating desired compliance characteristics
+
+**Applications**:
+- **Safe interaction**: Safe interaction with humans and environment
+- **Force control**: Controlling interaction forces
+- **Adaptive behavior**: Adapting to environmental changes
+
+### Balance Control in Humanoid Robots
+
+#### Zero Moment Point (ZMP)
+A critical concept for bipedal balance:
+
+**Definition**: The point on the ground where the moment of the ground reaction force is zero.
+
+**Balance condition**: For stable stance, the ZMP must lie within the support polygon (typically the area of the feet in contact with the ground).
+
+**ZMP equation**: ZMP = (x - (g/zmp) * (z - zmp)), where x is CoM position, g is gravity, and zmp is the height of the CoM.
+
+#### Center of Mass (CoM) Control
+Managing the robot's center of mass:
+
+**Stability**: Keeping CoM over the support base
+**Motion planning**: Planning CoM trajectories for stable movement
+**Disturbance rejection**: Recovering from balance disturbances
+
+#### Capture Point
+A concept for understanding balance recovery:
+
+**Definition**: The point where the robot must step to come to a complete stop.
+
+**Capture region**: The area where a step can be taken to stop motion.
+
+**Applications**: Balance recovery and walking pattern generation.
+
+### Walking Dynamics and Control
+
+#### Walking Pattern Generation
+Creating stable walking gaits:
+
+**Preview control**: Using future reference trajectories for control
+**Linear inverted pendulum model**: Simplified model for CoM motion
+**Foot placement**: Determining optimal foot placement for stability
+
+#### Dynamic Walking
+Walking that uses dynamic principles for efficiency:
+
+**Passive dynamic walking**: Using gravity and mechanical design for walking
+**Limit cycle walking**: Creating stable periodic walking patterns
+**Energy efficiency**: Minimizing energy consumption during walking
+
+#### Multi-contact Control
+Managing multiple contact points:
+
+**Contact transitions**: Managing transitions between different contact configurations
+**Contact force distribution**: Distributing forces among multiple contact points
+**Stability during transitions**: Maintaining stability during contact changes
+
+### Challenges in Dynamic Modeling and Control
+
+#### Model Uncertainty
+Dealing with imperfect knowledge of robot dynamics:
+
+**Parameter uncertainty**: Uncertainty in mass, inertia, and other parameters
+**Model structure errors**: Errors in model structure or assumptions
+**Environmental uncertainty**: Uncertainty about environment and contacts
+
+#### Computational Complexity
+Managing the computational requirements:
+
+**Real-time constraints**: Computing control commands in real-time
+**Algorithm efficiency**: Using efficient algorithms for complex computations
+**Hardware limitations**: Working within computational constraints
+
+#### Contact Modeling
+Managing the complexity of contact mechanics:
+
+**Rigid contact**: Modeling contact as perfectly rigid
+**Soft contact**: Modeling contact with compliance
+**Friction modeling**: Accurately modeling friction forces
+
+### Advanced Control Techniques
+
+#### Adaptive Control
+Controllers that adapt to changing conditions:
+
+**Direct adaptive control**: Adjusting controller parameters directly
+**Indirect adaptive control**: Estimating model parameters and adjusting controller
+**Applications**: Handling parameter variations and wear
+
+#### Robust Control
+Controllers that maintain performance despite uncertainties:
+
+**H-infinity control**: Minimizing worst-case performance
+**Sliding mode control**: Robust control using discontinuous control laws
+**Applications**: Handling model uncertainties and disturbances
+
+#### Learning-Based Control
+Using machine learning for control:
+
+**Reinforcement learning**: Learning optimal control policies
+**Neural networks**: Learning complex control mappings
+**Applications**: Learning from experience and adaptation
+
+### Simulation and Validation
+
+#### Dynamic Simulation
+Testing control strategies in simulation:
+
+**Physics engines**: Using accurate physics simulation
+**Real-time simulation**: Simulating in real-time for HIL testing
+**Validation**: Validating control strategies before hardware implementation
+
+#### Hardware Validation
+Testing on physical robots:
+
+**Safety considerations**: Ensuring safe testing procedures
+**Gradual implementation**: Gradually increasing complexity
+**Performance metrics**: Quantifying control performance
+
+### Future Directions
+
+#### Bio-inspired Control
+Learning from biological systems:
+
+**Neuromechanical models**: Combining neural and mechanical models
+**Central pattern generators**: Biological rhythm generation
+**Motor synergies**: Coordinated control of multiple DOF
+
+#### Advanced Materials
+Using new materials for better dynamics:
+
+**Variable stiffness**: Materials with controllable stiffness
+**Artificial muscles**: Materials that behave like biological muscles
+**Smart materials**: Materials that respond to environmental conditions
+
+#### Computational Advances
+Improving computational capabilities:
+
+**Parallel computing**: Using parallel processing for dynamics
+**Specialized hardware**: Hardware designed for robotic dynamics
+**Approximation methods**: Efficient approximations for real-time control
+
+Understanding dynamic modeling and control is essential for creating humanoid robots that can move efficiently and maintain balance in complex environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Dynamic modeling considers forces, torques, masses, and inertias affecting robot motion.
+- Fundamental principles include Newton-Euler and Lagrangian mechanics.
+- Dynamic equations involve mass matrix, Coriolis forces, and gravity.
+- Modeling approaches include RNEA, CRBA, and ABA for efficient computation.
+- Control strategies include computed torque, operational space, and impedance control.
+- Balance control uses ZMP, CoM, and capture point concepts.
+- Walking dynamics involve pattern generation and multi-contact control.
+- Challenges include model uncertainty, computational complexity, and contact modeling.
+
+</div>
+</TabItem>
+</Tabs>

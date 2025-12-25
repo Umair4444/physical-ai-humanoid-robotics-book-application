@@ -1,0 +1,136 @@
+---
+id: chapter-1
+title: "Introduction to Computer Vision in Robotics"
+module: "Module 1: Foundations of Computer Vision in Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Introduction to Computer Vision in Robotics
+
+### What is Computer Vision in Robotics?
+
+Computer vision in robotics refers to the integration of visual perception capabilities into robotic systems, enabling them to interpret and understand their visual environment. Unlike traditional computer vision that operates on static images or videos, robotic computer vision involves real-time processing of visual information to guide robot behavior and decision-making.
+
+Computer vision systems in robotics typically combine:
+- Cameras and other visual sensors to capture the environment
+- Image processing algorithms to extract meaningful information
+- Machine learning models to recognize patterns and objects
+- Control systems to act on visual information
+
+The field encompasses various domains including autonomous navigation, object manipulation, human-robot interaction, and environmental monitoring. What makes computer vision in robotics unique is its focus on understanding how visual perception enables intelligent, embodied agents to interact with the physical world.
+
+### Historical Context and Evolution
+
+The development of computer vision in robotics has evolved through several key phases:
+
+1. **Early Foundations (1960s-1980s)**: Basic image processing and pattern recognition
+2. **Feature-Based Approaches (1990s-2000s)**: Edge detection, corner detection, and feature matching
+3. **Learning-Based Methods (2000s-2010s)**: Statistical learning and SVM-based recognition
+4. **Deep Learning Revolution (2010s-present)**: Convolutional Neural Networks and end-to-end learning
+
+Each phase brought significant improvements in accuracy, robustness, and applicability to real-world robotic systems.
+
+### Core Components of Robotic Vision Systems
+
+A typical robotic vision system consists of several interconnected components:
+
+**Hardware Components**:
+- **Cameras**: RGB, stereo, thermal, and specialized sensors
+- **Processing Units**: GPUs, FPGAs, and embedded vision chips
+- **Mounting Systems**: Fixed, pan-tilt, and integrated robot mounts
+- **Lighting**: Controlled and environmental lighting considerations
+
+**Software Components**:
+- **Image Acquisition**: Camera drivers and synchronization
+- **Preprocessing**: Noise reduction, calibration, and enhancement
+- **Feature Extraction**: Key point detection and descriptor computation
+- **Recognition and Understanding**: Object detection, scene interpretation
+- **Integration**: Sensor fusion and robot control interfaces
+
+### Key Applications of Computer Vision in Robotics
+
+Computer vision enables robots to perform a wide range of tasks:
+
+**Navigation and Mapping**: Visual SLAM for localization and environment mapping
+**Object Recognition**: Identifying and categorizing objects in the environment
+**Manipulation**: Visual servoing for precise object handling
+**Human-Robot Interaction**: Facial recognition, gesture interpretation, and emotion detection
+**Quality Control**: Inspection and defect detection in manufacturing
+**Agriculture**: Crop monitoring, harvesting, and weed detection
+**Healthcare**: Surgical assistance, patient monitoring, and rehabilitation
+
+### Technical Challenges
+
+Creating effective computer vision systems for robotics presents several challenges:
+
+- **Real-time Processing**: Meeting strict timing constraints for robot control
+- **Environmental Variability**: Handling changes in lighting, weather, and scenes
+- **Computational Constraints**: Balancing accuracy with available processing power
+- **Robustness**: Operating reliably in unstructured environments
+- **Calibration**: Maintaining accuracy of visual sensors over time
+- **Integration**: Combining vision with other sensors and control systems
+
+### Future Directions
+
+The future of computer vision in robotics is promising with emerging trends toward:
+
+- **Edge AI**: On-device processing for real-time, privacy-preserving applications
+- **Multimodal Perception**: Integrating vision with other sensory modalities
+- **Learning from Interaction**: Robots learning visual concepts through physical interaction
+- **Explainable Vision**: Making computer vision decisions interpretable to humans
+- **Simulation-to-Reality Transfer**: Training in simulation for real-world deployment
+
+### Ethical Considerations
+
+As computer vision in robotics becomes more sophisticated, ethical questions arise:
+
+- How do we ensure privacy when robots can see and remember?
+- What are the implications of autonomous systems making visual-based decisions?
+- How do we address bias in visual recognition systems?
+- What impact will visual robotic systems have on employment?
+
+Understanding these foundations sets the stage for deeper exploration of the technical aspects of computer vision in robotics.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Computer vision in robotics integrates visual perception capabilities into robotic systems for environmental understanding.
+- Key applications include navigation, object recognition, manipulation, and human-robot interaction.
+- Core components include cameras, processing units, and software for image acquisition and analysis.
+- Technical challenges include real-time processing, environmental variability, and computational constraints.
+- Future directions focus on edge AI, multimodal perception, and explainable vision.
+- Ethical considerations involve privacy, bias, and societal impact of visual robotic systems.
+
+</div>
+</TabItem>
+</Tabs>

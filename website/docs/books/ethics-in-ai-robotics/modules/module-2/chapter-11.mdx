@@ -1,0 +1,290 @@
+---
+id: chapter-11
+title: "Case Studies in Bias and Fairness"
+module: "Module 2: Bias, Fairness, and Algorithmic Justice"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Case Studies in Bias and Fairness
+
+### Introduction to Real-World Cases
+
+Case studies provide concrete examples of how bias manifests in AI and robotic systems and the approaches used to address it. These real-world examples illustrate both the potential harm caused by biased systems and the strategies for developing fairer technologies. By examining these cases, we can better understand the complex interplay between technical design, social context, and ethical considerations.
+
+### Case Study 1: Facial Recognition Systems
+
+#### Background
+Facial recognition technology has been widely deployed for security, identification, and access control applications. However, numerous studies have revealed significant disparities in accuracy across demographic groups.
+
+#### The Problem
+Research by Joy Buolamwini and Timnit Gebru revealed that commercial facial recognition systems showed higher error rates for women and people with darker skin tones. Their study found:
+- Error rates up to 34.7% for darker-skinned women compared to 0.8% for lighter-skinned men
+- Higher false positive rates for African American and Asian faces compared to Caucasian faces
+- Disproportionate impact on marginalized communities
+
+#### Technical Analysis
+The bias stemmed from multiple sources:
+- **Training data**: Datasets with disproportionate representation of lighter-skinned individuals
+- **Historical bias**: Reflecting societal beauty standards that emphasize lighter skin
+- **Feature extraction**: Algorithms optimized for features more prominent in lighter skin
+
+#### Impact
+- **Security**: Wrongful identification leading to security breaches or false accusations
+- **Surveillance**: Disproportionate targeting of minority communities
+- **Access**: Barriers to services that use facial recognition for authentication
+- **Social**: Reinforcement of existing discriminatory practices
+
+#### Response and Solutions
+- **Dataset improvement**: Companies began expanding training datasets to include more diverse faces
+- **Algorithmic improvements**: Development of fairness-aware algorithms
+- **Regulatory action**: Moratoriums on facial recognition use by some governments
+- **Industry standards**: Development of bias testing requirements
+
+#### Lessons Learned
+- The importance of diverse training data
+- The need for inclusive testing across demographic groups
+- The role of regulatory oversight in high-stakes applications
+
+### Case Study 2: Healthcare AI Systems
+
+#### Background
+AI systems in healthcare promise to improve diagnosis, treatment, and patient outcomes. However, these systems can perpetuate existing health disparities if not carefully designed.
+
+#### The Problem
+A widely used healthcare algorithm was found to be racially biased, systematically discriminating against Black patients. The algorithm used healthcare spending as a proxy for medical need, but since Black patients historically receive less medical care due to systemic barriers, they appeared healthier to the algorithm despite having the same or worse health conditions.
+
+#### Technical Analysis
+The bias resulted from:
+- **Proxy variables**: Using spending as a proxy for health needs
+- **Historical bias**: Reflecting historical disparities in healthcare access
+- **Measurement bias**: Different data collection patterns across populations
+
+#### Impact
+- **Resource allocation**: Black patients received less care despite greater need
+- **Health outcomes**: Worsened health outcomes for minority patients
+- **Trust**: Reduced trust in healthcare technology among affected communities
+- **Cost**: Increased long-term healthcare costs due to delayed care
+
+#### Response and Solutions
+- **Algorithm redesign**: Using more direct measures of health needs
+- **Bias audits**: Regular auditing of healthcare algorithms
+- **Stakeholder involvement**: Including diverse healthcare providers and patients in design
+- **Regulatory oversight**: Increased scrutiny of healthcare AI systems
+
+#### Lessons Learned
+- The dangers of using proxy variables in sensitive applications
+- The importance of understanding historical context in data
+- The need for domain expertise in bias identification
+
+### Case Study 3: Hiring Algorithms
+
+#### Background
+Many companies use AI systems to screen job applications, promising to make hiring more efficient and objective. However, these systems can perpetuate or amplify existing employment biases.
+
+#### The Problem
+Amazon developed an AI recruiting tool that systematically downgraded resumes containing words associated with women, such as "women's" (as in "women's chess club captain"). The system learned this bias from historical hiring data that reflected past gender discrimination in technical roles.
+
+#### Technical Analysis
+The bias occurred because:
+- **Historical data**: Training on historical hiring decisions that reflected gender bias
+- **Feature selection**: The algorithm learned to associate gender-coded language with lower quality
+- **Feedback loops**: The system reinforced existing discriminatory patterns
+
+#### Impact
+- **Opportunity denial**: Qualified women candidates were filtered out
+- **Workplace diversity**: Reduced diversity in technical roles
+- **Economic impact**: Economic losses from missed talent
+- **Legal risks**: Potential discrimination lawsuits
+
+#### Response and Solutions
+- **System abandonment**: Amazon discontinued the system
+- **Process review**: Re-examination of hiring processes
+- **Diverse teams**: Increased diversity in AI development teams
+- **Bias testing**: Implementation of bias testing protocols
+
+#### Lessons Learned
+- The risks of training on historical data that reflects discrimination
+- The importance of diverse development teams
+- The need for regular bias testing
+
+### Case Study 4: Criminal Justice Risk Assessment
+
+#### Background
+Risk assessment algorithms are used in criminal justice systems to inform decisions about bail, sentencing, and parole. These tools aim to make the system more consistent and objective.
+
+#### The Problem
+The COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) algorithm was found to have racial bias. ProPublica's investigation revealed that the algorithm was almost twice as likely to incorrectly flag Black defendants as future criminals compared to white defendants.
+
+#### Technical Analysis
+The bias manifested as:
+- **False positive disparity**: Higher false positive rates for Black defendants
+- **Proxy variables**: Use of factors that correlate with race
+- **Historical bias**: Reflection of historical disparities in the criminal justice system
+
+#### Impact
+- **Incarceration**: Longer sentences and reduced bail for minority defendants
+- **Justice**: Compromised fairness in the justice system
+- **Trust**: Reduced trust in the justice system
+- **Social**: Perpetuation of racial disparities in incarceration
+
+#### Response and Solutions
+- **Public scrutiny**: Increased public and academic scrutiny of risk assessment tools
+- **Algorithmic transparency**: Calls for greater transparency in algorithmic decision-making
+- **Legal challenges**: Legal challenges to the use of biased algorithms
+- **Alternative approaches**: Development of fairer risk assessment methods
+
+#### Lessons Learned
+- The high-stakes nature of criminal justice applications
+- The importance of transparency in algorithmic decision-making
+- The need for rigorous testing of high-impact systems
+
+### Case Study 5: Assistive Robotics
+
+#### Background
+Assistive robots are designed to help people with disabilities or elderly individuals with daily activities. These robots need to be particularly sensitive to the diverse needs of their users.
+
+#### The Problem
+Research has shown that many assistive robots are designed with able-bodied assumptions, making them less effective for users with different physical capabilities. For example, some robots may not recognize sign language or may position themselves at heights that are inaccessible to wheelchair users.
+
+#### Technical Analysis
+The bias resulted from:
+- **Designer assumptions**: Designers who don't consider diverse user needs
+- **Testing populations**: Testing with non-representative user groups
+- **Standard interfaces**: Interfaces designed for typical users
+
+#### Impact
+- **Accessibility**: Reduced effectiveness for users with diverse needs
+- **Independence**: Decreased ability to maintain independence
+- **Exclusion**: Exclusion from the benefits of assistive technology
+- **Dignity**: Potential loss of dignity when systems don't work properly
+
+#### Response and Solutions
+- **Universal design**: Adoption of universal design principles
+- **Diverse testing**: Involvement of diverse user groups in testing
+- **Customization**: Development of customizable interfaces and behaviors
+- **Co-design**: Involving users with disabilities in design processes
+
+#### Lessons Learned
+- The importance of universal design in assistive technology
+- The need for diverse user involvement in design and testing
+- The impact of exclusion in sensitive applications
+
+### Case Study 6: Social Robotics in Education
+
+#### Background
+Educational robots are increasingly used in classrooms to assist with teaching and learning. These robots need to be effective for students from diverse backgrounds.
+
+#### The Problem
+Studies have shown that educational robots may be more effective for certain demographic groups than others. For example, robots with certain voices or appearances may be more engaging for some students than others, potentially creating educational disparities.
+
+#### Technical Analysis
+The bias stemmed from:
+- **Cultural assumptions**: Assumptions about what is engaging or authoritative
+- **Language patterns**: Voice synthesis that may not be optimized for diverse accents
+- **Interaction styles**: Interaction patterns that may not be culturally appropriate
+
+#### Impact
+- **Educational outcomes**: Unequal learning opportunities
+- **Engagement**: Reduced engagement for some student groups
+- **Self-esteem**: Potential impacts on student self-esteem
+- **Digital divide**: Exacerbation of existing educational inequalities
+
+#### Response and Solutions
+- **Cultural adaptation**: Development of culturally adaptable robots
+- **Diverse voices**: Inclusion of diverse voices and interaction styles
+- **Adaptive systems**: Systems that adapt to individual student needs
+- **Inclusive design**: Design processes that consider diverse student populations
+
+#### Lessons Learned
+- The importance of cultural sensitivity in educational technology
+- The need for adaptive systems that work for diverse populations
+- The potential for technology to exacerbate educational inequalities
+
+### Common Themes Across Cases
+
+#### Data-Related Issues
+- Historical bias in training data
+- Underrepresentation of certain groups
+- Proxy variables that correlate with protected attributes
+
+#### Design and Development Issues
+- Lack of diverse development teams
+- Insufficient testing across demographic groups
+- Assumptions about users that don't reflect diversity
+
+#### Social and Institutional Issues
+- Reflection of existing societal inequalities
+- High-stakes applications with significant consequences
+- Limited oversight and accountability
+
+#### Technical Solutions
+- Improved datasets with better representation
+- Fairness-aware algorithms
+- Regular bias testing and auditing
+
+### Prevention Strategies
+
+#### Proactive Measures
+- Inclusive design processes
+- Diverse development teams
+- Stakeholder engagement
+- Regular bias testing
+
+#### Reactive Measures
+- Algorithmic audits
+- Impact assessments
+- Community feedback mechanisms
+- Continuous monitoring
+
+#### Institutional Measures
+- Ethical guidelines and standards
+- Regulatory oversight
+- Transparency requirements
+- Accountability mechanisms
+
+These case studies demonstrate the real-world consequences of bias in AI and robotics and highlight the importance of proactive measures to ensure fairness.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Case studies illustrate real-world bias in AI/robotics systems and their impacts.
+- Key cases include facial recognition, healthcare AI, hiring algorithms, criminal justice, assistive robotics, and educational robots.
+- Common issues include historical bias, underrepresentation, and proxy variables.
+- Impacts range from opportunity denial to perpetuation of social inequalities.
+- Solutions involve improved data, fairness-aware algorithms, and diverse teams.
+- Prevention requires proactive, reactive, and institutional measures.
+- Lessons emphasize the importance of inclusive design and regular testing.
+
+</div>
+</TabItem>
+</Tabs>

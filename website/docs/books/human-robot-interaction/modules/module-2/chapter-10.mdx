@@ -1,0 +1,346 @@
+---
+id: chapter-10
+title: "Speech and Prosody in Robot Communication"
+module: "Module 2: Social Cues and Communication Modalities"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Speech and Prosody in Robot Communication
+
+### Introduction to Speech in HRI
+
+Speech is one of the most natural and intuitive communication modalities for humans, making it a critical component of human-robot interaction (HRI). Effective speech communication in robots involves not only the ability to recognize and generate speech but also the capacity to use prosodic features to convey emotion, emphasis, and social meaning. Prosody, the melody and rhythm of speech, plays a crucial role in human communication by adding emotional and social nuance to verbal content.
+
+Speech communication in HRI encompasses:
+- **Speech recognition**: Understanding spoken input from users
+- **Natural language processing**: Interpreting the meaning of speech
+- **Speech synthesis**: Generating appropriate verbal responses
+- **Prosodic expression**: Adding emotional and social nuance to speech
+
+### Speech Recognition in Robots
+
+#### Automatic Speech Recognition (ASR)
+The foundation of speech-based interaction:
+
+**Acoustic Modeling**: Recognizing speech sounds from audio input:
+- **Feature extraction**: Converting audio signals to linguistic features
+- **Phonetic modeling**: Understanding how sounds map to phonetic units
+- **Acoustic-phonetic knowledge**: Incorporating knowledge about speech production
+
+**Language Modeling**: Understanding word sequences and probabilities:
+- **N-gram models**: Statistical models of word sequences
+- **Neural language models**: Deep learning models for language understanding
+- **Context modeling**: Using context to improve recognition accuracy
+
+**Challenges in HRI Contexts**:
+- **Noisy environments**: Operating in real-world environments with background noise
+- **Accented speech**: Understanding diverse accents and dialects
+- **Speech disfluencies**: Handling "ums," "uhs," and self-corrections
+- **Cross-talk**: Distinguishing between multiple speakers
+
+#### Speech Enhancement Techniques
+Improving recognition performance:
+
+**Noise Reduction**: Reducing background noise to improve speech clarity:
+- **Spectral subtraction**: Removing noise from the frequency spectrum
+- **Beamforming**: Using microphone arrays to focus on desired speakers
+- **Deep learning enhancement**: Using neural networks for noise reduction
+
+**Robust Feature Extraction**: Extracting features that are resilient to noise:
+- **Perceptual features**: Features that mimic human auditory processing
+- **Noise-robust features**: Features designed to be insensitive to noise
+- **Adaptive features**: Features that adapt to changing acoustic conditions
+
+### Natural Language Understanding (NLU)
+
+#### Intent Recognition
+Understanding what users want to accomplish:
+
+**Classification Approaches**: Determining user intentions:
+- **Supervised learning**: Training classifiers on labeled intent data
+- **Sequence labeling**: Identifying intent and entities simultaneously
+- **Multi-task learning**: Learning multiple NLU tasks together
+
+**Context-Aware Understanding**: Using context to improve understanding:
+- **Dialogue context**: Understanding references to previous conversation
+- **Physical context**: Understanding references to objects and locations
+- **User context**: Understanding based on user preferences and history
+
+#### Entity Recognition
+Identifying important objects, people, or concepts:
+
+**Named Entity Recognition**: Identifying people, places, organizations:
+- **Rule-based approaches**: Using linguistic rules to identify entities
+- **Machine learning**: Training models to recognize entity patterns
+- **Knowledge base integration**: Using external knowledge to improve recognition
+
+**Domain-Specific Entities**: Recognizing objects and concepts relevant to the application:
+- **Object references**: Identifying objects in the robot's environment
+- **Action parameters**: Recognizing parameters for robot actions
+- **Temporal references**: Understanding time-related references
+
+### Speech Synthesis and Generation
+
+#### Text-to-Speech (TTS) Systems
+Converting text to natural-sounding speech:
+
+**Concatenative Synthesis**: Combining pre-recorded speech segments:
+- **Unit selection**: Choosing the best segments to concatenate
+- **Prosodic modification**: Adjusting timing and intonation
+- **Smoothing**: Making transitions between segments smooth
+
+**Parametric Synthesis**: Generating speech from acoustic parameters:
+- **Formant synthesis**: Modeling vocal tract characteristics
+- **Articulatory synthesis**: Modeling speech production mechanisms
+- **Statistical parametric**: Using statistical models of speech production
+
+**Neural TTS**: Using deep learning for natural speech generation:
+- **WaveNet**: Autoregressive neural models for high-quality audio
+- **Tacotron**: Sequence-to-sequence models for speech synthesis
+- **FastSpeech**: Non-autoregressive models for faster generation
+
+#### Dialog Management
+Structuring and managing conversations:
+
+**Rule-Based Systems**: Predefined conversation flows:
+- **Finite state machines**: Managing conversation states
+- **Script-based interaction**: Following predefined dialog patterns
+- **Hierarchical structures**: Organizing complex conversation flows
+
+**Statistical Systems**: Learning conversation patterns from data:
+- **Markov models**: Statistical models of conversation transitions
+- **Reinforcement learning**: Learning optimal conversation strategies
+- **Neural dialog models**: Using neural networks for conversation
+
+### Prosody in Robot Communication
+
+#### Components of Prosody
+The acoustic features that convey emotional and social meaning:
+
+**Intonation**: The rise and fall of pitch:
+- **Tonal patterns**: How pitch changes over the course of utterances
+- **Question vs. statement**: Different intonation for different sentence types
+- **Emphasis patterns**: Using pitch to emphasize important information
+
+**Rhythm and Timing**: The temporal structure of speech:
+- **Speech rate**: How fast or slow the speech is delivered
+- **Pausing**: Strategic pauses for emphasis or processing
+- **Stress patterns**: Emphasizing certain syllables or words
+
+**Loudness**: Variations in volume and intensity:
+- **Dynamic range**: The range between soft and loud speech
+- **Emphasis**: Using volume to highlight important information
+- **Emotional expression**: Conveying emotion through volume changes
+
+#### Functions of Prosody in HRI
+
+**Emotional Expression**: Conveying emotional states:
+- **Happiness**: Higher pitch, faster rate, varied intonation
+- **Sadness**: Lower pitch, slower rate, flatter intonation
+- **Anger**: Higher intensity, varied pitch, faster rate
+- **Surprise**: Higher pitch, varied intonation, increased intensity
+
+**Social Signaling**: Conveying social information:
+- **Politeness**: Using appropriate prosodic patterns for respectful interaction
+- **Authority**: Conveying confidence and authority through speech patterns
+- **Friendliness**: Using warm, varied prosody to appear approachable
+
+**Information Structure**: Organizing information in speech:
+- **Focus marking**: Using prosody to highlight important information
+- **Discourse markers**: Using prosodic cues to structure conversations
+- **Contrast**: Using prosody to highlight differences or contrasts
+
+#### Prosodic Control in Robots
+
+**Parametric Control**: Directly controlling prosodic parameters:
+- **Fundamental frequency (F0)**: Controlling pitch contours
+- **Duration**: Controlling speech timing and rhythm
+- **Intensity**: Controlling loudness variations
+
+**Style Transfer**: Applying prosodic patterns from human speech:
+- **Speaker adaptation**: Adapting to different speaking styles
+- **Emotional transfer**: Applying emotional prosodic patterns
+- **Cultural adaptation**: Using culturally appropriate prosodic patterns
+
+**Learning-Based Approaches**: Using machine learning for prosodic generation:
+- **Neural prosody models**: Learning to generate appropriate prosody
+- **Emotional prosody**: Learning emotional expression patterns
+- **Contextual prosody**: Learning context-dependent prosodic patterns
+
+### Cultural and Individual Considerations
+
+#### Cultural Variations in Speech
+Speech patterns vary significantly across cultures:
+
+**Prosodic Patterns**: Different intonation and rhythm patterns:
+- **Pitch ranges**: Different comfortable pitch ranges across cultures
+- **Speech rate preferences**: Different preferred speaking rates
+- **Pausing patterns**: Different norms for silence and pauses
+
+**Politeness Strategies**: Different approaches to respectful communication:
+- **Direct vs. indirect**: Different preferences for directness
+- **Formality levels**: Different expectations for formal vs. informal speech
+- **Power distance**: Different expectations for authority-related speech
+
+**Cultural Adaptation Strategies**:
+- **Prosodic libraries**: Culturally appropriate prosodic patterns
+- **Adaptive systems**: Learning user cultural preferences
+- **Explicit cultural information**: Allowing users to specify preferences
+
+#### Individual Differences
+Accommodating individual user preferences:
+
+**Personalization**: Adapting to individual user preferences:
+- **Voice preference learning**: Learning preferred voice characteristics
+- **Interaction style**: Adapting to user communication preferences
+- **Accessibility needs**: Accommodating different communication abilities
+
+**User Modeling**: Building models of individual users:
+- **Preference learning**: Learning what speech styles users prefer
+- **Adaptation algorithms**: Adjusting speech based on user feedback
+- **Long-term adaptation**: Learning preferences over extended interactions
+
+### Applications of Speech and Prosody
+
+#### Service Robotics
+Speech communication in service contexts:
+
+**Customer Service**: Using speech to provide information and assistance:
+- **Information provision**: Clearly communicating relevant information
+- **Problem resolution**: Using appropriate tone to address concerns
+- **Relationship building**: Using prosody to build rapport with customers
+
+**Healthcare**: Supporting patient communication and care:
+- **Reassurance**: Using appropriate prosody to comfort patients
+- **Clarity**: Ensuring speech is clear and easily understood
+- **Empathy**: Using prosody to convey understanding and care
+
+#### Educational Robotics
+Speech in educational contexts:
+
+**Teaching Assistance**: Using speech to enhance learning:
+- **Clarity and emphasis**: Using prosody to highlight important information
+- **Engagement**: Using varied prosody to maintain attention
+- **Adaptation**: Adjusting speech to different age groups and learning styles
+
+**Language Learning**: Supporting language acquisition:
+- **Pronunciation modeling**: Providing clear pronunciation examples
+- **Prosodic modeling**: Teaching appropriate intonation and rhythm
+- **Interactive practice**: Engaging users in speech practice activities
+
+#### Social Robotics
+Speech in social interaction contexts:
+
+**Companionship**: Using speech to create social bonds:
+- **Emotional expression**: Conveying appropriate emotional responses
+- **Conversational skills**: Using appropriate turn-taking and back-channeling
+- **Personal connection**: Using speech to build and maintain relationships
+
+**Entertainment**: Using speech for engaging experiences:
+- **Character voices**: Creating distinctive voices for different characters
+- **Narrative delivery**: Using prosody to enhance storytelling
+- **Interactive games**: Using speech in game-like interactions
+
+### Evaluation of Speech and Prosody
+
+#### Recognition Performance
+Assessing speech recognition capabilities:
+
+**Word Error Rate**: The standard measure of ASR performance:
+- **Overall WER**: Overall recognition accuracy
+- **Per-speaker WER**: Performance across different speakers
+- **Per-condition WER**: Performance in different acoustic conditions
+
+**Robustness**: Performance under varying conditions:
+- **Noise robustness**: Performance in noisy environments
+- **Accented speech**: Performance with diverse accents
+- **Real-time performance**: Processing speed and responsiveness
+
+#### Synthesis Quality
+Assessing the quality of generated speech:
+
+**Naturalness**: How natural the speech sounds:
+- **Mean Opinion Score**: Subjective ratings of speech naturalness
+- **Intelligibility**: How easily the speech is understood
+- **Similarity**: How similar to human speech
+
+**Prosodic Quality**: How well prosody conveys meaning:
+- **Emotional appropriateness**: How well emotions are conveyed
+- **Information structure**: How well information is organized
+- **Social appropriateness**: How well social meaning is conveyed
+
+### Challenges and Future Directions
+
+#### Technical Challenges
+Ongoing challenges in speech communication:
+
+**Recognition Challenges**:
+- **Multi-party interaction**: Recognizing speech in multi-person conversations
+- **Distant speech**: Recognizing speech from a distance
+- **Code-switching**: Handling multiple languages in conversation
+
+**Synthesis Challenges**:
+- **Expressive speech**: Generating truly expressive, emotionally appropriate speech
+- **Conversational speech**: Generating natural-sounding conversational speech
+- **Personalization**: Creating personalized voices that match user preferences
+
+#### Research Directions
+Future research in speech communication:
+
+**Advanced Recognition**:
+- **End-to-end learning**: Learning recognition directly from audio
+- **Multi-modal integration**: Combining speech with other modalities
+- **Context-aware recognition**: Understanding speech in interaction context
+
+**Enhanced Synthesis**:
+- **Emotional intelligence**: Synthesizing speech that reflects emotional understanding
+- **Conversational intelligence**: Generating more natural conversational speech
+- **Cultural sensitivity**: Synthesizing culturally appropriate speech
+
+Understanding and implementing effective speech and prosody is crucial for creating robots that can communicate naturally and effectively with humans.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Speech communication involves recognition, understanding, synthesis, and prosody.
+- ASR systems must handle noise, accents, and disfluencies in HRI contexts.
+- NLU involves intent recognition and entity extraction.
+- TTS systems range from concatenative to neural approaches.
+- Prosody includes intonation, rhythm, and loudness for emotional/social meaning.
+- Cultural and individual variations require adaptation strategies.
+- Applications span service, education, and social robotics.
+- Evaluation includes recognition accuracy and synthesis quality.
+
+</div>
+</TabItem>
+</Tabs>

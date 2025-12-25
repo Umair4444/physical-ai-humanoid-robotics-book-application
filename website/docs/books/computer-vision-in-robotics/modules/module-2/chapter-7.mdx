@@ -1,0 +1,1283 @@
+---
+id: chapter-7
+title: "Advanced Image Processing Techniques"
+module: "Module 2: Advanced Computer Vision Techniques"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Advanced Image Processing Techniques
+
+### Introduction to Advanced Image Processing
+
+Advanced image processing techniques go beyond basic operations like filtering and enhancement to encompass sophisticated methods for extracting meaningful information from images. These techniques are crucial for robotics applications where robots need to understand complex visual scenes, recognize objects, and navigate through dynamic environments. This chapter explores advanced algorithms and methodologies that enable robots to perform complex visual tasks.
+
+### Mathematical Foundations
+
+#### Convolution in Image Processing
+
+**Definition**:
+Convolution is a mathematical operation that combines two functions to produce a third function that expresses how the shape of one is modified by the other.
+
+**Discrete Convolution Formula**:
+```
+(g * f)[x, y] = Σ Σ g[i, j] * f[x-i, y-j]
+          i j
+```
+
+Where:
+- g is the input image
+- f is the kernel/filter
+- (g * f) is the output image
+
+**Properties**:
+- **Commutativity**: g * f = f * g
+- **Associativity**: (g * f₁) * f₂ = g * (f₁ * f₂)
+- **Distributivity**: g * (f₁ + f₂) = g * f₁ + g * f₂
+- **Identity Element**: g * δ = g (where δ is the Dirac delta function)
+
+**Implementation Example**:
+```cpp
+cv::Mat convolution2D(const cv::Mat& image, const cv::Mat& kernel) {
+    cv::Mat output(image.rows, image.cols, CV_32F);
+    
+    int kernel_radius = kernel.rows / 2;
+    
+    for (int y = kernel_radius; y < image.rows - kernel_radius; y++) {
+        for (int x = kernel_radius; x < image.cols - kernel_radius; x++) {
+            float sum = 0.0f;
+            
+            for (int ky = -kernel_radius; ky <= kernel_radius; ky++) {
+                for (int kx = -kernel_radius; kx <= kernel_radius; kx++) {
+                    float pixel = image.at<float>(y + ky, x + kx);
+                    float weight = kernel.at<float>(ky + kernel_radius, kx + kernel_radius);
+                    sum += pixel * weight;
+                }
+            }
+            
+            output.at<float>(y, x) = sum;
+        }
+    }
+    
+    return output;
+}
+```
+
+#### Fourier Transform in Image Processing
+
+**Concept**:
+The Fourier Transform decomposes an image into its sine and cosine components, representing the image in the frequency domain.
+
+**2D Discrete Fourier Transform**:
+```
+F(u, v) = Σ Σ f(x, y) * e^(-j2π(ux/M + vy/N))
+         x=0 y=0
+```
+
+Where:
+- f(x, y) is the input image
+- F(u, v) is the frequency domain representation
+- M, N are image dimensions
+
+**Applications**:
+- **Filtering**: Applying filters in frequency domain
+- **Compression**: JPEG compression uses DCT (related to DFT)
+- **Analysis**: Frequency analysis of image content
+- **Deconvolution**: Removing blur and noise
+
+**Implementation**:
+```cpp
+cv::Mat computeFFT(const cv::Mat& input) {
+    cv::Mat padded;
+    int m = cv::getOptimalDFTSize(input.rows);
+    int n = cv::getOptimalDFTSize(input.cols);
+    
+    // Expand input image to optimal size
+    cv::copyMakeBorder(input, padded, 0, m - input.rows, 0, n - input.cols, 
+                       cv::BORDER_CONSTANT, cv::Scalar::all(0));
+    
+    cv::Mat planes[] = {cv::Mat_<float>(padded), cv::Mat::zeros(padded.size(), CV_32F)};
+    cv::Mat complexI;
+    cv::merge(planes, 2, complexI);
+    
+    // Forward DFT
+    cv::dft(complexI, complexI);
+    
+    return complexI;
+}
+
+cv::Mat computeMagnitude(const cv::Mat& complexI) {
+    std::vector<cv::Mat> planes;
+    cv::split(complexI, planes);  // planes[0] = Re(DFT(I)), planes[1] = Im(DFT(I))
+    
+    cv::Mat mag;
+    cv::magnitude(planes[0], planes[1], mag);  // sqrt(Re^2 + Im^2)
+    
+    // Switch to logarithmic scale: log(1 + magnitude)
+    mag += cv::Scalar::all(1);
+    cv::log(mag, mag);
+    
+    // Crop the spectrum, if it has an odd number of rows or columns
+    mag = mag(cv::Rect(0, 0, mag.cols & -2, mag.rows & -2));
+    
+    // Rearrange the quadrants of Fourier image
+    int cx = mag.cols / 2;
+    int cy = mag.rows / 2;
+    
+    cv::Mat q0(mag, cv::Rect(0, 0, cx, cy));       // Top-Left - Create ROI
+    cv::Mat q1(mag, cv::Rect(cx, 0, cx, cy));      // Top-Right
+    cv::Mat q2(mag, cv::Rect(0, cy, cx, cy));      // Bottom-Left
+    cv::Mat q3(mag, cv::Rect(cx, cy, cx, cy));     // Bottom-Right
+    
+    cv::Mat tmp;                                    // swap quadrants (Top-Left with Bottom-Right)
+    q0.copyTo(tmp);
+    q3.copyTo(q0);
+    tmp.copyTo(q3);
+    
+    q1.copyTo(tmp);                                 // swap quadrant (Top-Right with Bottom-Left)
+    q2.copyTo(q1);
+    tmp.copyTo(q2);
+    
+    return mag;
+}
+```
+
+### Feature Extraction Techniques
+
+#### Scale-Invariant Feature Transform (SIFT)
+
+**Concept**:
+SIFT detects and describes local features in images that are invariant to scale, rotation, and illumination changes.
+
+**Algorithm Steps**:
+1. **Scale-Space Extrema Detection**: Find potential interest points
+2. **Keypoint Localization**: Refine keypoint locations and eliminate low-contrast
+3. **Orientation Assignment**: Assign one or more orientations to each keypoint
+4. **Keypoint Descriptor**: Local image gradient statistics
+
+**Mathematical Foundation**:
+The Difference of Gaussians (DoG) approximates the Laplacian of Gaussian:
+```
+DoG(x, y, σ) ≈ σ² * ∇²G(x, y, σ)
+```
+
+Where G is the Gaussian kernel and σ is the scale parameter.
+
+**Implementation**:
+```cpp
+class SIFTExtractor {
+private:
+    std::vector<cv::Mat> gaussian_pyramid;
+    std::vector<cv::Mat> dog_pyramid;
+    std::vector<cv::KeyPoint> keypoints;
+    cv::Mat descriptors;
+
+public:
+    void buildGaussianPyramid(const cv::Mat& base, int octaves, int intervals) {
+        gaussian_pyramid.clear();
+        float sigma = 1.6f;  // Base sigma
+        float k = pow(2.0, 1.0 / intervals);  // Scale factor between intervals
+        
+        for (int o = 0; o < octaves; o++) {
+            for (int i = 0; i < intervals; i++) {
+                float sigma_total = sigma * pow(k, i) * pow(2.0, o);
+                cv::Mat gaussian_img;
+                
+                if (o == 0 && i == 0) {
+                    gaussian_img = base.clone();
+                } else if (i == 0) {
+                    // Downsample previous octave
+                    cv::Mat prev_octave = gaussian_pyramid[gaussian_pyramid.size() - intervals];
+                    cv::resize(prev_octave, gaussian_img, cv::Size(0, 0), 0.5, 0.5, cv::INTER_NEAREST);
+                } else {
+                    gaussian_img = gaussian_pyramid[gaussian_pyramid.size() - 1].clone();
+                }
+                
+                cv::GaussianBlur(gaussian_img, gaussian_img, cv::Size(0, 0), sigma_total, sigma_total);
+                gaussian_pyramid.push_back(gaussian_img);
+            }
+        }
+    }
+    
+    void buildDoGPyramid(int intervals) {
+        dog_pyramid.clear();
+        
+        for (size_t i = 0; i < gaussian_pyramid.size() - 1; i++) {
+            cv::Mat dog;
+            cv::subtract(gaussian_pyramid[i + 1], gaussian_pyramid[i], dog);
+            dog_pyramid.push_back(dog);
+        }
+    }
+    
+    void detectKeypoints(int intervals, float contrast_threshold = 0.04, 
+                        float edge_threshold = 10.0, float sigma = 1.6) {
+        keypoints.clear();
+        
+        for (int o = 0; o < gaussian_pyramid.size() / intervals - 1; o++) {
+            for (int i = 1; i < intervals - 1; i++) {
+                int img_index = o * intervals + i;
+                
+                // Check local extrema across scale
+                for (int y = 1; y < dog_pyramid[img_index].rows - 1; y++) {
+                    for (int x = 1; x < dog_pyramid[img_index].cols - 1; x++) {
+                        if (isExtremum(x, y, img_index)) {
+                            cv::Point2f location(x, y);
+                            float response = dog_pyramid[img_index].at<float>(y, x);
+                            
+                            if (abs(response) > contrast_threshold) {
+                                // Subpixel refinement
+                                cv::Point2f refined_location = subpixelRefinement(x, y, img_index);
+                                
+                                // Eliminate edge responses
+                                if (isEdgeResponse(refined_location.x, refined_location.y, img_index, edge_threshold)) {
+                                    continue;
+                                }
+                                
+                                cv::KeyPoint kp;
+                                kp.pt = refined_location;
+                                kp.octave = o;
+                                kp.response = abs(response);
+                                keypoints.push_back(kp);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+private:
+    bool isExtremum(int x, int y, int img_index) {
+        float center_val = dog_pyramid[img_index].at<float>(y, x);
+        float prev_val = dog_pyramid[img_index - 1].at<float>(y, x);
+        float next_val = dog_pyramid[img_index + 1].at<float>(y, x);
+        
+        // Check if center is local max or min
+        bool is_max = (center_val > prev_val && center_val > next_val);
+        bool is_min = (center_val < prev_val && center_val < next_val);
+        
+        if (!is_max && !is_min) return false;
+        
+        // Check 3x3 neighborhood in current image
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                if (dy == 0 && dx == 0) continue;
+                
+                float neighbor = dog_pyramid[img_index].at<float>(y + dy, x + dx);
+                
+                if (is_max && neighbor >= center_val) return false;
+                if (is_min && neighbor <= center_val) return false;
+            }
+        }
+        
+        // Check 3x3 neighborhood in previous image
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                float neighbor = dog_pyramid[img_index - 1].at<float>(y + dy, x + dx);
+                
+                if (is_max && neighbor >= center_val) return false;
+                if (is_min && neighbor <= center_val) return false;
+            }
+        }
+        
+        // Check 3x3 neighborhood in next image
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                float neighbor = dog_pyramid[img_index + 1].at<float>(y + dy, x + dx);
+                
+                if (is_max && neighbor >= center_val) return false;
+                if (is_min && neighbor <= center_val) return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    cv::Point2f subpixelRefinement(int x, int y, int img_index) {
+        // Simplified implementation - full implementation requires solving 3x3 system
+        return cv::Point2f(x, y);
+    }
+    
+    bool isEdgeResponse(float x, float y, int img_index, float edge_threshold) {
+        // Compute Hessian matrix
+        float dxx = dog_pyramid[img_index].at<float>(y, x+1) + 
+                   dog_pyramid[img_index].at<float>(y, x-1) - 
+                   2.0f * dog_pyramid[img_index].at<float>(y, x);
+        float dyy = dog_pyramid[img_index].at<float>(y+1, x) + 
+                   dog_pyramid[img_index].at<float>(y-1, x) - 
+                   2.0f * dog_pyramid[img_index].at<float>(y, x);
+        float dxy = (dog_pyramid[img_index].at<float>(y+1, x+1) - 
+                    dog_pyramid[img_index].at<float>(y+1, x-1) - 
+                    dog_pyramid[img_index].at<float>(y-1, x+1) + 
+                    dog_pyramid[img_index].at<float>(y-1, x-1)) / 4.0f;
+        
+        float trace = dxx + dyy;
+        float det = dxx * dyy - dxy * dxy;
+        
+        if (det <= 0) return true;
+        
+        float ratio = trace * trace / det;
+        return ratio > (edge_threshold + 1) * (edge_threshold + 1) / edge_threshold;
+    }
+};
+```
+
+#### Speeded Up Robust Features (SURF)
+
+**Concept**:
+SURF is a faster alternative to SIFT using integral images for speed improvement.
+
+**Key Improvements**:
+- **Integral Images**: Fast computation of box filters
+- **Haar Wavelets**: Efficient gradient computation
+- **Fast Hessian Matrix**: Quick corner detection
+
+**Mathematical Foundation**:
+The determinant of the Hessian matrix is used for keypoint detection:
+```
+Det(H) = L_xx * L_yy - (L_xy)²
+```
+
+Where L is the image convolved with the second derivative of Gaussian.
+
+**Implementation**:
+```cpp
+class SURFExtractor {
+private:
+    cv::Mat integral_image;
+    std::vector<cv::KeyPoint> keypoints;
+    
+public:
+    void computeIntegralImage(const cv::Mat& img) {
+        cv::integral(img, integral_image, CV_32F);
+    }
+    
+    void detectKeypoints(const cv::Mat& img, float threshold = 0.0004f) {
+        computeIntegralImage(img);
+        keypoints.clear();
+        
+        int step_size = 4;  // Process every 4th pixel
+        
+        for (int y = 5; y < img.rows - 5; y += step_size) {
+            for (int x = 5; x < img.cols - 5; x += step_size) {
+                float hessian_response = computeHessianResponse(x, y);
+                
+                if (abs(hessian_response) > threshold) {
+                    // Apply non-maximum suppression
+                    if (isLocalMaximum(x, y, hessian_response)) {
+                        cv::KeyPoint kp;
+                        kp.pt = cv::Point2f(x, y);
+                        kp.response = abs(hessian_response);
+                        keypoints.push_back(kp);
+                    }
+                }
+            }
+        }
+    }
+    
+    float computeHessianResponse(int x, int y) {
+        // SURF uses 9x9, 15x15, 21x21, etc. filters
+        int filter_size = 9;  // Can be adjusted based on scale
+        float scale = filter_size / 9.0f;
+        
+        // Compute determinant of Hessian
+        float dxx = computeBoxFilter(x, y, filter_size, 0, 2);  // L_xx
+        float dyy = computeBoxFilter(x, y, filter_size, 2, 0);  // L_yy
+        float dxy = computeBoxFilter(x, y, filter_size, 1, 1);  // L_xy
+        
+        // Weight by scale
+        dxx /= (scale * scale);
+        dyy /= (scale * scale);
+        dxy /= (scale * scale);
+        
+        return dxx * dyy - dxy * dxy;
+    }
+
+private:
+    float computeBoxFilter(int x, int y, int size, int dx_order, int dy_order) {
+        // Simplified box filter computation using integral image
+        // dx_order and dy_order determine the derivative order
+        
+        int half_size = size / 2;
+        int x1 = x - half_size;
+        int y1 = y - half_size;
+        int x2 = x + half_size;
+        int y2 = y + half_size;
+        
+        // Clamp to image boundaries
+        x1 = std::max(0, x1);
+        y1 = std::max(0, y1);
+        x2 = std::min(integral_image.cols - 1, x2);
+        y2 = std::min(integral_image.rows - 1, y2);
+        
+        // Compute integral image sum
+        float sum = integral_image.at<float>(y2, x2) - 
+                   integral_image.at<float>(y1, x2) - 
+                   integral_image.at<float>(y2, x1) + 
+                   integral_image.at<float>(y1, x1);
+        
+        // Apply Haar wavelet response based on derivative order
+        // This is a simplified implementation
+        if (dx_order == 2) {  // L_xx
+            return computeHaarResponseXX(x, y, size);
+        } else if (dy_order == 2) {  // L_yy
+            return computeHaarResponseYY(x, y, size);
+        } else if (dx_order == 1 && dy_order == 1) {  // L_xy
+            return computeHaarResponseXY(x, y, size);
+        }
+        
+        return sum;
+    }
+    
+    float computeHaarResponseXX(int x, int y, int size) {
+        // Haar wavelet response in x direction (second derivative)
+        int half_size = size / 2;
+        int quarter_size = size / 4;
+        
+        // Create a Haar-like filter for L_xx
+        // Positive in center, negative in sides
+        int x1 = std::max(0, x - half_size);
+        int x2 = std::min(integral_image.cols - 1, x + half_size);
+        int y1 = std::max(0, y - half_size);
+        int y2 = std::min(integral_image.rows - 1, y + half_size);
+        
+        // Simplified computation
+        return integral_image.at<float>(y2, x2) - 
+               integral_image.at<float>(y1, x2) - 
+               integral_image.at<float>(y2, x1) + 
+               integral_image.at<float>(y1, x1);
+    }
+    
+    float computeHaarResponseYY(int x, int y, int size) {
+        // Similar to L_xx but for y direction
+        return computeHaarResponseXX(x, y, size);  // Simplified
+    }
+    
+    float computeHaarResponseXY(int x, int y, int size) {
+        // Diagonal Haar wavelet response
+        return computeHaarResponseXX(x, y, size);  // Simplified
+    }
+    
+    bool isLocalMaximum(int x, int y, float value) {
+        // Check 3x3 neighborhood for maximum
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                if (dx == 0 && dy == 0) continue;
+                
+                if (abs(computeHessianResponse(x + dx, y + dy)) >= abs(value)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+```
+
+### Morphological Operations
+
+#### Advanced Morphological Operations
+
+**Mathematical Foundation**:
+Morphological operations are based on set theory and are used to process binary and grayscale images.
+
+**Basic Operations**:
+- **Dilation**: Expands bright regions
+- **Erosion**: Shrinks bright regions
+- **Opening**: Erosion followed by dilation
+- **Closing**: Dilation followed by erosion
+
+**Mathematical Definition**:
+```
+(A (+) B)(x, y) = max{'{'}A(x-s, y-t) + B(s, t){'}'}
+(A (-) B)(x, y) = min{'{'}A(x+s, y+t) - B(s, t){'}'}
+```
+
+Where A is the image, B is the structuring element, ⊕ is dilation, and ⊖ is erosion.
+
+**Implementation**:
+```cpp
+class MorphologicalProcessor {
+public:
+    enum OperationType {
+        DILATION,
+        EROSION,
+        OPENING,
+        CLOSING,
+        TOP_HAT,
+        BLACK_HAT
+    };
+    
+    static cv::Mat morphologicalOperation(const cv::Mat& input, 
+                                         const cv::Mat& structuring_element,
+                                         OperationType operation) {
+        cv::Mat result;
+        
+        switch (operation) {
+            case DILATION:
+                cv::dilate(input, result, structuring_element);
+                break;
+            case EROSION:
+                cv::erode(input, result, structuring_element);
+                break;
+            case OPENING:
+                cv::morphologyEx(input, result, cv::MORPH_OPEN, structuring_element);
+                break;
+            case CLOSING:
+                cv::morphologyEx(input, result, cv::MORPH_CLOSE, structuring_element);
+                break;
+            case TOP_HAT:
+                cv::morphologyEx(input, result, cv::MORPH_TOPHAT, structuring_element);
+                break;
+            case BLACK_HAT:
+                cv::morphologyEx(input, result, cv::MORPH_BLACKHAT, structuring_element);
+                break;
+        }
+        
+        return result;
+    }
+    
+    // Advanced morphological operations
+    static cv::Mat morphologicalGradient(const cv::Mat& input, 
+                                        const cv::Mat& structuring_element) {
+        cv::Mat dilated, eroded;
+        cv::dilate(input, dilated, structuring_element);
+        cv::erode(input, eroded, structuring_element);
+        
+        cv::Mat gradient;
+        cv::subtract(dilated, eroded, gradient);
+        
+        return gradient;
+    }
+    
+    static cv::Mat topHat(const cv::Mat& input, const cv::Mat& structuring_element) {
+        cv::Mat opened;
+        cv::morphologyEx(input, opened, cv::MORPH_OPEN, structuring_element);
+        
+        cv::Mat tophat;
+        cv::subtract(input, opened, tophat);
+        
+        return tophat;
+    }
+    
+    static cv::Mat blackHat(const cv::Mat& input, const cv::Mat& structuring_element) {
+        cv::Mat closed;
+        cv::morphologyEx(input, closed, cv::MORPH_CLOSE, structuring_element);
+        
+        cv::Mat blackhat;
+        cv::subtract(closed, input, blackhat);
+        
+        return blackhat;
+    }
+    
+    // Hit-or-Miss Transform
+    static cv::Mat hitOrMissTransform(const cv::Mat& input, 
+                                     const cv::Mat& hit_template,
+                                     const cv::Mat& miss_template) {
+        // Create complement of input
+        cv::Mat input_complement;
+        cv::bitwise_not(input, input_complement);
+        
+        // Erode with hit template
+        cv::Mat hit_eroded;
+        cv::erode(input, hit_eroded, hit_template);
+        
+        // Erode complement with miss template
+        cv::Mat miss_eroded;
+        cv::erode(input_complement, miss_eroded, miss_template);
+        
+        // Intersect results
+        cv::Mat hitmiss;
+        cv::bitwise_and(hit_eroded, miss_eroded, hitmiss);
+        
+        return hitmiss;
+    }
+};
+```
+
+### Advanced Filtering Techniques
+
+#### Adaptive Filtering
+
+**Concept**:
+Filters whose parameters change based on local image characteristics.
+
+**Wiener Filter**:
+Optimal linear filter for noise reduction.
+
+**Mathematical Foundation**:
+```
+H(u, v) = S_f(u, v) / [S_f(u, v) + S_n(u, v)]
+```
+
+Where S_f is the power spectrum of the original image and S_n is the power spectrum of noise.
+
+**Implementation**:
+```cpp
+class AdaptiveFilter {
+public:
+    // Wiener filter implementation
+    static cv::Mat wienerFilter(const cv::Mat& input, 
+                               double noise_variance = 0.01,
+                               int window_size = 8) {
+        cv::Mat output = input.clone();
+        
+        for (int y = window_size/2; y < input.rows - window_size/2; y++) {
+            for (int x = window_size/2; x < input.cols - window_size/2; x++) {
+                // Extract local window
+                cv::Rect roi(x - window_size/2, y - window_size/2, 
+                            window_size, window_size);
+                cv::Mat local_window = input(roi);
+                
+                // Calculate local statistics
+                cv::Scalar mean, stddev;
+                cv::meanStdDev(local_window, mean, stddev);
+                
+                double local_variance = stddev[0] * stddev[0];
+                
+                // Wiener filter coefficient
+                double wiener_coeff = (local_variance > noise_variance) ? 
+                                    (local_variance - noise_variance) / local_variance : 0.0;
+                
+                // Apply filter
+                float original_pixel = input.at<float>(y, x);
+                float filtered_pixel = mean[0] + wiener_coeff * (original_pixel - mean[0]);
+                
+                output.at<float>(y, x) = filtered_pixel;
+            }
+        }
+        
+        return output;
+    }
+    
+    // Bilateral filter implementation
+    static cv::Mat bilateralFilter(const cv::Mat& input, 
+                                  int window_size = 5,
+                                  double sigma_color = 25.0,
+                                  double sigma_space = 25.0) {
+        cv::Mat output = input.clone();
+        
+        int half_window = window_size / 2;
+        
+        for (int y = half_window; y < input.rows - half_window; y++) {
+            for (int x = half_window; x < input.cols - half_window; x++) {
+                float center_value = input.at<float>(y, x);
+                
+                float weighted_sum = 0.0f;
+                float weight_sum = 0.0f;
+                
+                for (int dy = -half_window; dy <= half_window; dy++) {
+                    for (int dx = -half_window; dx <= half_window; dx++) {
+                        float neighbor_value = input.at<float>(y + dy, x + dx);
+                        
+                        // Spatial distance weight
+                        float spatial_dist = sqrt(dx*dx + dy*dy);
+                        float spatial_weight = exp(-(spatial_dist * spatial_dist) / (2 * sigma_space * sigma_space));
+                        
+                        // Intensity distance weight
+                        float intensity_diff = abs(center_value - neighbor_value);
+                        float intensity_weight = exp(-(intensity_diff * intensity_diff) / (2 * sigma_color * sigma_color));
+                        
+                        // Combined weight
+                        float weight = spatial_weight * intensity_weight;
+                        
+                        weighted_sum += neighbor_value * weight;
+                        weight_sum += weight;
+                    }
+                }
+                
+                output.at<float>(y, x) = weighted_sum / weight_sum;
+            }
+        }
+        
+        return output;
+    }
+    
+    // Anisotropic diffusion filter (Perona-Malik)
+    static cv::Mat anisotropicDiffusion(const cv::Mat& input, 
+                                       int iterations = 10,
+                                       double kappa = 15.0,
+                                       double lambda = 0.25) {
+        cv::Mat current = input.clone();
+        cv::Mat next = input.clone();
+        
+        for (int iter = 0; iter < iterations; iter++) {
+            // Compute gradients
+            cv::Mat grad_x, grad_y;
+            cv::Sobel(current, grad_x, CV_32F, 1, 0, 3);
+            cv::Sobel(current, grad_y, CV_32F, 0, 1, 3);
+            
+            // Compute conduction coefficients
+            cv::Mat c_x = cv::Mat::zeros(grad_x.size(), CV_32F);
+            cv::Mat c_y = cv::Mat::zeros(grad_y.size(), CV_32F);
+            
+            for (int y = 0; y < current.rows; y++) {
+                for (int x = 0; x < current.cols; x++) {
+                    float gx = grad_x.at<float>(y, x);
+                    float gy = grad_y.at<float>(y, x);
+                    
+                    // Perona-Malik conduction functions
+                    float c_x_val = exp(-(gx * gx) / (kappa * kappa));
+                    float c_y_val = exp(-(gy * gy) / (kappa * kappa));
+                    
+                    c_x.at<float>(y, x) = c_x_val;
+                    c_y.at<float>(y, x) = c_y_val;
+                }
+            }
+            
+            // Update image
+            for (int y = 1; y < current.rows - 1; y++) {
+                for (int x = 1; x < current.cols - 1; x++) {
+                    float c_x_neg = c_x.at<float>(y, x-1);
+                    float c_x_pos = c_x.at<float>(y, x);
+                    float c_y_neg = c_y.at<float>(y-1, x);
+                    float c_y_pos = c_y.at<float>(y, x);
+                    
+                    float diff_x = current.at<float>(y, x+1) - current.at<float>(y, x);
+                    float diff_x_prev = current.at<float>(y, x) - current.at<float>(y, x-1);
+                    float diff_y = current.at<float>(y+1, x) - current.at<float>(y, x);
+                    float diff_y_prev = current.at<float>(y, x) - current.at<float>(y-1, x);
+                    
+                    float update = lambda * (
+                        c_x_pos * diff_x - c_x_neg * diff_x_prev +
+                        c_y_pos * diff_y - c_y_neg * diff_y_prev
+                    );
+                    
+                    next.at<float>(y, x) = current.at<float>(y, x) + update;
+                }
+            }
+            
+            current = next.clone();
+        }
+        
+        return current;
+    }
+};
+```
+
+#### Wavelet Transform
+
+**Concept**:
+Multi-resolution analysis that decomposes an image into different frequency bands.
+
+**Mathematical Foundation**:
+Wavelet transform represents a signal as a sum of scaled and translated wavelet functions.
+
+**Continuous Wavelet Transform (CWT)**:
+```
+CWT_f(a, b) = ∫ f(t) * ψ*((t-b)/a) * dt
+```
+
+Where ψ is the mother wavelet, a is scale, and b is translation.
+
+**Discrete Wavelet Transform (DWT)**:
+```
+W_f(j, k) = integral f(t) * psi_{'{j,k}'}(t) * dt
+```
+
+Where psi_{'{j,k}'}(t) = 2^{'{j/2}'} * psi(2^j * t - k).
+
+**Implementation**:
+```cpp
+class WaveletTransform {
+public:
+    // Haar wavelet transform (simplest wavelet)
+    static void haar2DForward(cv::Mat& image) {
+        // Ensure image dimensions are powers of 2
+        cv::Mat padded;
+        int rows = cv::getOptimalDFTSize(image.rows);
+        int cols = cv::getOptimalDFTSize(image.cols);
+        cv::copyMakeBorder(image, padded, 0, rows - image.rows, 0, cols - image.cols, 
+                          cv::BORDER_CONSTANT, cv::Scalar::all(0));
+        
+        // Perform 2D Haar transform
+        haar2D(padded, true);  // true for forward transform
+        
+        image = padded;
+    }
+    
+    static void haar2DInverse(cv::Mat& coeffs) {
+        // Perform inverse 2D Haar transform
+        haar2D(coeffs, false);  // false for inverse transform
+    }
+
+private:
+    static void haar1D(std::vector<float>& signal, bool forward) {
+        int n = signal.size();
+        std::vector<float> temp(n);
+        
+        while (n > 1) {
+            n /= 2;
+            
+            for (int i = 0; i < n; i++) {
+                if (forward) {
+                    temp[i] = (signal[2*i] + signal[2*i+1]) / sqrt(2.0f);
+                    temp[i+n] = (signal[2*i] - signal[2*i+1]) / sqrt(2.0f);
+                } else {
+                    temp[2*i] = (signal[i] + signal[i+n]) / sqrt(2.0f);
+                    temp[2*i+1] = (signal[i] - signal[i+n]) / sqrt(2.0f);
+                }
+            }
+            
+            for (int i = 0; i < 2*n; i++) {
+                signal[i] = temp[i];
+            }
+        }
+    }
+    
+    static void haar2D(cv::Mat& image, bool forward) {
+        int rows = image.rows;
+        int cols = image.cols;
+        
+        // Process rows
+        for (int y = 0; y < rows; y++) {
+            std::vector<float> row(cols);
+            for (int x = 0; x < cols; x++) {
+                row[x] = image.at<float>(y, x);
+            }
+            
+            haar1D(row, forward);
+            
+            for (int x = 0; x < cols; x++) {
+                image.at<float>(y, x) = row[x];
+            }
+        }
+        
+        // Process columns
+        for (int x = 0; x < cols; x++) {
+            std::vector<float> col(rows);
+            for (int y = 0; y < rows; y++) {
+                col[y] = image.at<float>(y, x);
+            }
+            
+            haar1D(col, forward);
+            
+            for (int y = 0; y < rows; y++) {
+                image.at<float>(y, x) = col[y];
+            }
+        }
+    }
+    
+public:
+    // Multi-level wavelet decomposition
+    static std::vector<cv::Mat> waveletDecomposition(const cv::Mat& input, int levels) {
+        std::vector<cv::Mat> decomposition;
+        cv::Mat current = input.clone();
+        
+        for (int level = 0; level < levels; level++) {
+            cv::Mat LL, LH, HL, HH;
+            
+            // Perform one level of decomposition
+            decomposeLevel(current, LL, LH, HL, HH);
+            
+            // Store detail coefficients
+            decomposition.push_back(LH);  // Horizontal details
+            decomposition.push_back(HL);  // Vertical details
+            decomposition.push_back(HH);  // Diagonal details
+            
+            current = LL;  // Use LL for next level
+        }
+        
+        // Store the final low-frequency component
+        decomposition.push_back(LL);
+        
+        return decomposition;
+    }
+    
+    static cv::Mat waveletReconstruction(const std::vector<cv::Mat>& decomposition, int levels) {
+        // Start with the lowest frequency component
+        cv::Mat LL = decomposition.back();  // The final LL component
+        
+        int start_idx = decomposition.size() - 2;  // Skip the final LL
+        
+        // Reconstruct level by level
+        for (int level = levels - 1; level >= 0; level--) {
+            cv::Mat LH = decomposition[start_idx - 3*level];
+            cv::Mat HL = decomposition[start_idx - 3*level + 1];
+            cv::Mat HH = decomposition[start_idx - 3*level + 2];
+            
+            LL = reconstructLevel(LL, LH, HL, HH);
+        }
+        
+        return LL;
+    }
+
+private:
+    static void decomposeLevel(const cv::Mat& input, cv::Mat& LL, cv::Mat& LH, 
+                              cv::Mat& HL, cv::Mat& HH) {
+        // Simplified implementation using downsampling
+        // In practice, proper wavelet filters would be used
+        
+        // Downsample by 2
+        cv::Mat temp;
+        cv::resize(input, temp, cv::Size(input.cols/2, input.rows/2), 0, 0, cv::INTER_LINEAR);
+        
+        LL = temp.clone();
+        LH = temp.clone();  // Would be computed from horizontal high-pass
+        HL = temp.clone();  // Would be computed from vertical high-pass
+        HH = temp.clone();  // Would be computed from diagonal high-pass
+        
+        // This is a simplified placeholder - proper implementation would use wavelet filters
+    }
+    
+    static cv::Mat reconstructLevel(const cv::Mat& LL, const cv::Mat& LH, 
+                                   const cv::Mat& HL, const cv::Mat& HH) {
+        // Upsample and combine
+        cv::Mat upsampled;
+        cv::resize(LL, upsampled, cv::Size(LL.cols*2, LL.rows*2), 0, 0, cv::INTER_LINEAR);
+        
+        // This is a simplified placeholder - proper implementation would use wavelet synthesis filters
+        return upsampled;
+    }
+};
+```
+
+### Image Enhancement Techniques
+
+#### Histogram Processing
+
+**Histogram Equalization**:
+Improves contrast by spreading out the most frequent intensity values.
+
+**Mathematical Foundation**:
+```
+p_r(r_k) = n_k / MN
+s_k = T(r_k) = (L-1) * Σ p_r(r_j)
+        j=0
+```
+
+Where p_r(r_k) is the probability of intensity r_k, n_k is the number of pixels with intensity r_k, M×N is the image size, and L is the number of intensity levels.
+
+**Implementation**:
+```cpp
+class HistogramProcessor {
+public:
+    static cv::Mat histogramEqualization(const cv::Mat& input) {
+        cv::Mat output = input.clone();
+        
+        // Calculate histogram
+        std::vector<int> histogram(256, 0);
+        for (int y = 0; y < input.rows; y++) {
+            for (int x = 0; x < input.cols; x++) {
+                int intensity = static_cast<int>(input.at<uchar>(y, x));
+                histogram[intensity]++;
+            }
+        }
+        
+        // Calculate cumulative distribution function
+        std::vector<float> cdf(256);
+        cdf[0] = static_cast<float>(histogram[0]);
+        for (int i = 1; i < 256; i++) {
+            cdf[i] = cdf[i-1] + histogram[i];
+        }
+        
+        // Normalize CDF
+        float total_pixels = input.rows * input.cols;
+        for (int i = 0; i < 256; i++) {
+            cdf[i] = cdf[i] / total_pixels;
+        }
+        
+        // Apply transformation
+        for (int y = 0; y < output.rows; y++) {
+            for (int x = 0; x < output.cols; x++) {
+                int old_intensity = input.at<uchar>(y, x);
+                int new_intensity = static_cast<int>(cdf[old_intensity] * 255);
+                output.at<uchar>(y, x) = static_cast<uchar>(new_intensity);
+            }
+        }
+        
+        return output;
+    }
+    
+    // Adaptive histogram equalization (AHE)
+    static cv::Mat adaptiveHistogramEqualization(const cv::Mat& input, 
+                                                int tile_size = 8) {
+        cv::Mat output = input.clone();
+        
+        for (int y = 0; y < input.rows; y += tile_size) {
+            for (int x = 0; x < input.cols; x += tile_size) {
+                // Define tile boundaries
+                int y_end = std::min(y + tile_size, input.rows);
+                int x_end = std::min(x + tile_size, input.cols);
+                
+                // Extract tile
+                cv::Rect tile_roi(x, y, x_end - x, y_end - y);
+                cv::Mat tile = input(tile_roi);
+                
+                // Equalize this tile
+                cv::Mat equalized_tile = histogramEqualization(tile);
+                
+                // Copy back to output
+                equalized_tile.copyTo(output(tile_roi));
+            }
+        }
+        
+        return output;
+    }
+    
+    // Contrast Limited Adaptive Histogram Equalization (CLAHE)
+    static cv::Mat clahe(const cv::Mat& input, 
+                        float clip_limit = 3.0,
+                        cv::Size tile_grid_size = cv::Size(8, 8)) {
+        cv::Ptr<cv::CLAHE> clahe_processor = cv::createCLAHE();
+        clahe_processor->setClipLimit(clip_limit);
+        clahe_processor->setTilesGridSize(tile_grid_size);
+        
+        cv::Mat output;
+        clahe_processor->apply(input, output);
+        
+        return output;
+    }
+    
+    // Gamma correction
+    static cv::Mat gammaCorrection(const cv::Mat& input, float gamma = 1.0) {
+        cv::Mat output = input.clone();
+        
+        // Create lookup table
+        uchar lut[256];
+        for (int i = 0; i < 256; i++) {
+            lut[i] = cv::saturate_cast<uchar>(pow(i / 255.0, gamma) * 255.0);
+        }
+        
+        // Apply lookup table
+        for (int y = 0; y < output.rows; y++) {
+            for (int x = 0; x < output.cols; x++) {
+                output.at<uchar>(y, x) = lut[input.at<uchar>(y, x)];
+            }
+        }
+        
+        return output;
+    }
+    
+    // Unsharp masking for enhancement
+    static cv::Mat unsharpMasking(const cv::Mat& input, 
+                                 float strength = 1.5,
+                                 float sigma = 1.0,
+                                 int kernel_size = 0) {
+        cv::Mat blurred;
+        cv::GaussianBlur(input, blurred, cv::Size(kernel_size, kernel_size), sigma);
+        
+        cv::Mat mask;
+        cv::subtract(input, blurred, mask);
+        
+        cv::Mat output;
+        cv::addWeighted(input, 1.0 + strength, mask, -strength, 0, output);
+        
+        return output;
+    }
+};
+```
+
+### Noise Reduction and Restoration
+
+#### Total Variation Denoising
+
+**Concept**:
+Minimizes the total variation of the image while preserving edges.
+
+**Mathematical Foundation**:
+```
+min ∫ |∇u| dx + λ/2 ∫ (u - f)² dx
+```
+
+Where u is the restored image, f is the noisy image, and λ is a regularization parameter.
+
+**Implementation**:
+```cpp
+class NoiseReduction {
+public:
+    // Rudin-Osher-Fatemi (ROF) model for TV denoising
+    static cv::Mat totalVariationDenoising(const cv::Mat& input, 
+                                          float lambda = 0.1,
+                                          int iterations = 50) {
+        cv::Mat u = input.clone();
+        cv::Mat u_prev = input.clone();
+        
+        for (int iter = 0; iter < iterations; iter++) {
+            // Compute gradients
+            cv::Mat grad_x, grad_y;
+            cv::Sobel(u, grad_x, CV_32F, 1, 0, 3);
+            cv::Sobel(u, grad_y, CV_32F, 0, 1, 3);
+            
+            // Compute normalization factors to avoid division by zero
+            cv::Mat norm = grad_x.mul(grad_x) + grad_y.mul(grad_y);
+            cv::sqrt(norm, norm);
+            
+            // Add small epsilon to avoid division by zero
+            norm += cv::Scalar(1e-8);
+            
+            // Compute divergence of normalized gradient
+            cv::Mat div_x, div_y;
+            cv::Sobel(grad_x / norm, div_x, CV_32F, 1, 0, 3);
+            cv::Sobel(grad_y / norm, div_y, CV_32F, 0, 1, 3);
+            
+            cv::Mat divergence = div_x + div_y;
+            
+            // Update u
+            u = u + 0.24 * (lambda * divergence - (u - input));
+        }
+        
+        return u;
+    }
+    
+    // Non-local means denoising
+    static cv::Mat nonLocalMeansDenoising(const cv::Mat& input,
+                                         int patch_size = 7,
+                                         int search_window = 21,
+                                         float h = 10.0) {
+        cv::Mat output = input.clone();
+        
+        int half_patch = patch_size / 2;
+        int half_window = search_window / 2;
+        
+        for (int y = half_window; y < input.rows - half_window; y++) {
+            for (int x = half_window; x < input.cols - half_window; x++) {
+                float weighted_sum = 0.0f;
+                float weight_sum = 0.0f;
+                
+                // Center patch
+                cv::Rect center_roi(x - half_patch, y - half_patch, 
+                                   patch_size, patch_size);
+                cv::Mat center_patch = input(center_roi);
+                
+                for (int dy = -half_window; dy <= half_window; dy++) {
+                    for (int dx = -half_window; dx <= half_window; dx++) {
+                        if (dy == 0 && dx == 0) continue;  // Skip center
+                        
+                        // Compare patch
+                        cv::Rect compare_roi(x + dx - half_patch, y + dy - half_patch,
+                                            patch_size, patch_size);
+                        cv::Mat compare_patch = input(compare_roi);
+                        
+                        // Calculate similarity (negative squared difference)
+                        cv::Mat diff;
+                        cv::subtract(center_patch, compare_patch, diff);
+                        diff = diff.mul(diff);  // Square differences
+                        cv::Scalar sum_diff = cv::sum(diff);
+                        
+                        float similarity = exp(-std::min(sum_diff[0] / (patch_size * patch_size), h*h));
+                        
+                        float pixel_value = input.at<float>(y + dy, x + dx);
+                        weighted_sum += similarity * pixel_value;
+                        weight_sum += similarity;
+                    }
+                }
+                
+                output.at<float>(y, x) = weighted_sum / weight_sum;
+            }
+        }
+        
+        return output;
+    }
+    
+    // Bilateral total variation
+    static cv::Mat bilateralTotalVariation(const cv::Mat& input,
+                                          float lambda = 0.1,
+                                          float sigma_color = 25.0,
+                                          float sigma_space = 25.0,
+                                          int iterations = 50) {
+        cv::Mat u = input.clone();
+        
+        for (int iter = 0; iter < iterations; iter++) {
+            cv::Mat grad_x, grad_y;
+            cv::Sobel(u, grad_x, CV_32F, 1, 0, 3);
+            cv::Sobel(u, grad_y, CV_32F, 0, 1, 3);
+            
+            // Compute bilateral-weighted gradients
+            cv::Mat norm = grad_x.mul(grad_x) + grad_y.mul(grad_y);
+            cv::sqrt(norm, norm);
+            norm += cv::Scalar(1e-8);  // Avoid division by zero
+            
+            // Compute bilateral weights
+            cv::Mat bilateral_weights = computeBilateralWeights(input, sigma_color, sigma_space);
+            
+            // Apply bilateral weights to gradient
+            grad_x = grad_x / norm;
+            grad_y = grad_y / norm;
+            
+            // Compute divergence
+            cv::Mat div_x, div_y;
+            cv::Sobel(grad_x, div_x, CV_32F, 1, 0, 3);
+            cv::Sobel(grad_y, div_y, CV_32F, 0, 1, 3);
+            
+            cv::Mat divergence = div_x + div_y;
+            
+            // Update with bilateral weighting
+            u = u + 0.24 * (lambda * bilateral_weights.mul(divergence) - (u - input));
+        }
+        
+        return u;
+    }
+
+private:
+    static cv::Mat computeBilateralWeights(const cv::Mat& image,
+                                          float sigma_color, float sigma_space) {
+        cv::Mat weights = cv::Mat::ones(image.size(), CV_32F);
+        // Simplified implementation - would normally compute bilateral weights
+        return weights;
+    }
+};
+```
+
+Advanced image processing techniques are essential for robotics applications where high-quality image analysis is required for navigation, object recognition, and environmental understanding. These techniques enable robots to extract meaningful information from visual data even in challenging conditions.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Advanced Image Processing Techniques
+
+### Mathematical Foundations
+- **Convolution**: Mathematical operation for filtering and feature extraction
+- **Fourier Transform**: Frequency domain analysis and filtering
+- **Wavelets**: Multi-resolution analysis techniques
+- **Statistics**: Statistical methods for image analysis
+
+### Feature Extraction
+- **SIFT**: Scale-invariant feature detection and description
+- **SURF**: Speeded up robust features with integral images
+- **Descriptors**: Local feature characterization methods
+- **Matching**: Feature correspondence algorithms
+
+### Morphological Operations
+- **Dilation/Erosion**: Expanding and shrinking operations
+- **Opening/Closing**: Noise removal and gap filling
+- **Advanced**: Hit-or-miss, top-hat, black-hat transforms
+- **Applications**: Shape analysis and noise reduction
+
+### Filtering Techniques
+- **Adaptive**: Wiener, bilateral, anisotropic diffusion filters
+- **Non-linear**: Median, morphological, and rank filters
+- **Multi-scale**: Wavelet-based filtering methods
+- **Edge-preserving**: Noise reduction while preserving details
+
+### Enhancement Methods
+- **Histogram**: Equalization, adaptive, and CLAHE methods
+- **Gamma Correction**: Non-linear intensity adjustment
+- **Unsharp Masking**: Contrast enhancement techniques
+- **Contrast**: Local and global contrast enhancement
+
+### Restoration Techniques
+- **TV Denoising**: Total variation for edge-preserving denoising
+- **Non-local Means**: Patch-based similarity denoising
+- **Regularization**: Mathematical optimization approaches
+- **Multi-frame**: Temporal integration methods
+
+### Implementation Considerations
+- **Efficiency**: Computational complexity and optimization
+- **Real-time**: Performance requirements for robotics
+- **Robustness**: Handling various image conditions
+- **Integration**: Combining multiple techniques
+
+</div>
+</TabItem>
+</Tabs>

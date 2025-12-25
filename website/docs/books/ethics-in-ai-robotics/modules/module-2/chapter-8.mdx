@@ -1,0 +1,236 @@
+---
+id: chapter-8
+title: "Algorithmic Fairness and Its Measures"
+module: "Module 2: Bias, Fairness, and Algorithmic Justice"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Algorithmic Fairness and Its Measures
+
+### Understanding Algorithmic Fairness
+
+Algorithmic fairness refers to the principle that automated decision-making systems should not systematically disadvantage certain individuals or groups. It's a complex concept that encompasses multiple, sometimes conflicting, definitions and approaches. In the context of AI and robotics, fairness becomes particularly important as these systems increasingly make decisions that affect human lives.
+
+Fairness in algorithms involves:
+- **Equitable treatment**: Similar individuals receiving similar outcomes
+- **Equal opportunity**: Equal positive outcomes for all groups
+- **Non-discrimination**: Absence of bias based on protected characteristics
+- **Transparency**: Clear understanding of how decisions are made
+
+### Mathematical Definitions of Fairness
+
+#### Individual Fairness
+Individual fairness requires that similar individuals receive similar outcomes. This is formalized as:
+
+For any two individuals x and x' who are similar according to some distance metric d(x, x'), their outcomes should be similar according to some distance metric D on the outcome space: D(A(x), A(x')) ≤ d(x, x')
+
+This approach requires a well-defined similarity metric, which can be challenging to establish in practice.
+
+#### Group Fairness (Statistical Parity)
+Group fairness, also known as statistical parity, requires that the probability of a positive outcome is the same across different groups defined by protected attributes (e.g., race, gender).
+
+P(Ŷ = 1 | A = 0) = P(Ŷ = 1 | A = 1)
+
+Where A represents the protected attribute and Ŷ represents the predicted outcome.
+
+#### Equalized Odds
+Equalized odds requires that both the true positive rate and false positive rate are equal across groups:
+
+P(Ŷ = 1 | Y = 1, A = 0) = P(Ŷ = 1 | Y = 1, A = 1) (Equal TPR)
+P(Ŷ = 1 | Y = 0, A = 0) = P(Ŷ = 1 | Y = 0, A = 1) (Equal FPR)
+
+This ensures that the classifier performs equally well across different groups.
+
+#### Equal Opportunity
+Equal opportunity is a relaxation of equalized odds that only requires equal true positive rates across groups:
+
+P(Ŷ = 1 | Y = 1, A = 0) = P(Ŷ = 1 | Y = 1, A = 1)
+
+This allows for different false positive rates across groups while ensuring equal access to positive outcomes for qualified individuals.
+
+### Common Fairness Metrics
+
+#### Demographic Parity
+Ensures that the proportion of positive outcomes is the same across all groups:
+
+P(Ŷ = 1 | A = 0) = P(Ŷ = 1 | A = 1)
+
+#### Calibration
+Ensures that the prediction is calibrated across groups, meaning that for any predicted probability p, the actual probability of the positive outcome is p regardless of the group:
+
+P(Y = 1 | Ŷ = p, A = 0) = P(Y = 1 | Ŷ = p, A = 1)
+
+#### False Positive Rate Parity
+Ensures equal false positive rates across groups:
+
+P(Ŷ = 1 | Y = 0, A = 0) = P(Ŷ = 1 | Y = 0, A = 1)
+
+#### False Negative Rate Parity
+Ensures equal false negative rates across groups:
+
+P(Ŷ = 0 | Y = 1, A = 0) = P(Ŷ = 0 | Y = 1, A = 1)
+
+### Trade-offs Between Fairness Criteria
+
+Research has shown that many fairness criteria are mathematically incompatible. For example:
+
+- **Accuracy vs. Fairness**: Improving fairness often comes at the cost of predictive accuracy
+- **Individual vs. Group Fairness**: Achieving individual fairness may violate group fairness and vice versa
+- **Multiple Group Fairness**: It's often impossible to satisfy multiple group fairness criteria simultaneously
+- **Different Protected Attributes**: Fairness with respect to one protected attribute may create unfairness with respect to another
+
+### Fairness in Different Domains
+
+#### Healthcare Robotics
+Fairness in healthcare robotics involves ensuring equitable access to and quality of care:
+
+**Diagnostic Systems**: Ensuring equal accuracy across demographic groups
+**Treatment Recommendations**: Avoiding bias in medical advice and treatment suggestions
+**Resource Allocation**: Fair distribution of limited healthcare resources
+
+#### Criminal Justice
+Algorithmic fairness in criminal justice contexts is particularly critical:
+
+**Risk Assessment**: Ensuring equal error rates across demographic groups
+**Sentencing Recommendations**: Avoiding bias in automated sentencing tools
+**Parole Decisions**: Fair evaluation of parole eligibility
+
+#### Hiring and Employment
+Fairness in employment-related AI systems:
+
+**Resume Screening**: Equal consideration across demographic groups
+**Interview Analysis**: Unbiased evaluation of candidate qualifications
+**Promotion Recommendations**: Fair advancement opportunities
+
+#### Financial Services
+Ensuring fairness in financial decision-making:
+
+**Credit Scoring**: Equal access to credit across demographic groups
+**Insurance Pricing**: Fair pricing without discrimination
+**Fraud Detection**: Equal false positive rates across groups
+
+### Challenges in Measuring Fairness
+
+#### Defining Protected Attributes
+Determining which characteristics should be considered protected is complex:
+
+- **Legally Protected**: Race, gender, age, religion, etc.
+- **Socially Significant**: Socioeconomic status, geographic location
+- **Emerging Categories**: Genetic information, biometric data
+
+#### Choosing Appropriate Metrics
+Selecting the right fairness metric depends on context:
+
+- **Application Domain**: Healthcare, criminal justice, employment
+- **Stakeholder Values**: Different communities may prioritize different fairness notions
+- **Technical Feasibility**: Some metrics are easier to implement than others
+
+#### Measuring Intersectional Fairness
+Traditional fairness metrics often consider single protected attributes, but individuals belong to multiple groups simultaneously:
+
+- **Intersectionality**: The overlapping of multiple identities (e.g., Black women)
+- **Complex Interactions**: How multiple identities interact to create unique experiences
+- **Statistical Power**: Challenges in measuring fairness across multiple intersections
+
+### Implementing Fairness Measures
+
+#### Fairness-Aware Learning Algorithms
+Algorithms designed to optimize for both accuracy and fairness:
+
+**Pre-processing**: Adjusting training data to remove bias before learning
+**In-processing**: Incorporating fairness constraints during training
+**Post-processing**: Adjusting model outputs after training
+
+#### Auditing and Monitoring
+Regular assessment of algorithmic systems:
+
+**Pre-deployment Auditing**: Testing systems before deployment
+**Continuous Monitoring**: Tracking performance across groups over time
+**Impact Assessments**: Evaluating real-world effects on different communities
+
+#### Regulatory Compliance
+Meeting legal requirements for algorithmic fairness:
+
+**Anti-discrimination Laws**: Compliance with existing civil rights legislation
+**New Regulations**: Adapting to emerging algorithmic accountability laws
+**Industry Standards**: Following best practices and guidelines
+
+### Limitations of Current Approaches
+
+#### Oversimplification of Social Concepts
+Mathematical definitions of fairness may not capture the full complexity of social justice:
+
+- **Context Ignorance**: Mathematical definitions may not consider historical context
+- **Cultural Differences**: Fairness concepts vary across cultures and societies
+- **Dynamic Nature**: Social concepts of fairness evolve over time
+
+#### Technical Limitations
+Current technical approaches have inherent limitations:
+
+- **Measurement Error**: Inaccurate measurement of protected attributes
+- **Proxy Variables**: Unfairness through seemingly neutral variables
+- **Adversarial Behavior**: Gaming of fairness measures
+
+### Future Directions
+
+#### Contextual Fairness
+Developing fairness measures that account for context and purpose:
+
+- **Use-Case Specific**: Tailored fairness measures for specific applications
+- **Community Input**: Incorporating affected communities' perspectives
+- **Dynamic Adaptation**: Systems that adapt fairness measures over time
+
+#### Holistic Approaches
+Integrating fairness with other ethical considerations:
+
+- **Transparency**: Understanding how fairness measures affect model interpretability
+- **Accountability**: Ensuring human oversight of fair algorithms
+- **Justice**: Connecting algorithmic fairness to broader social justice goals
+
+Understanding these fairness measures is crucial for developing AI and robotic systems that promote equity and justice.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Algorithmic fairness involves equitable treatment and non-discrimination in automated systems.
+- Mathematical definitions include individual fairness, group fairness, equalized odds, and equal opportunity.
+- Common metrics include demographic parity, calibration, and error rate parity.
+- Trade-offs exist between different fairness criteria and between fairness and accuracy.
+- Applications span healthcare, criminal justice, employment, and financial services.
+- Challenges include defining protected attributes and measuring intersectional fairness.
+- Implementation involves fairness-aware algorithms, auditing, and regulatory compliance.
+- Future directions include contextual fairness and holistic approaches.
+
+</div>
+</TabItem>
+</Tabs>

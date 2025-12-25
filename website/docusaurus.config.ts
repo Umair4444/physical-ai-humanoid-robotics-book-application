@@ -53,17 +53,18 @@ const config: Config = {
       'classic',
       {
         docs: {
-          sidebarPath: './sidebars.ts', // Path to the sidebars file
-          // Use the textbook sidebar configuration
-          sidebarCollapsed: false,
-          showLastUpdateTime: true,
+          sidebarPath: './sidebars.ts',
+          // Please change this to your repo.
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          routeBasePath: '/', // Serve the docs at the site's root
-          // Table of contents settings
+          // Useful options to enforce docs best practices
+          sidebarCollapsed: false,
+          showLastUpdateTime: true,
+          // Options for the MDX structure
           admonitions: {
             keywords: ['caution', 'note', 'tip', 'danger', 'info'],
           },
+          routeBasePath: '/', // Serve docs at the site's root
         },
         blog: {
           showReadingTime: true,
@@ -87,6 +88,20 @@ const config: Config = {
     ],
   ],
 
+  plugins: [
+    './src/plugins/tailwind-config.js',
+    [
+      '@docusaurus/plugin-ideal-image',
+      {
+        quality: 70,
+        max: 1030, // max resized image's size.
+        min: 640, // min resized image's size. if original is lower, use that size.
+        steps: 2, // the max number of images generated between min and max (inclusive)
+        disableInDev: false,
+      },
+    ],
+  ],
+
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
@@ -100,7 +115,7 @@ const config: Config = {
     },
     footer: {
       // Disable the default Docusaurus footer since we're using a custom footer in MainLayout and theme Footer
-      style: 'none',
+      style: 'dark',
     },
   } satisfies Preset.ThemeConfig,
 };

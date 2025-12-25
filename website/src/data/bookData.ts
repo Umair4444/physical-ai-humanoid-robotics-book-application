@@ -29,7 +29,7 @@ export const allBooks: Book[] = [
     image: '/img/book2-cover.jpg',
     featured: true,
     tags: ['Humanoid Design', 'Engineering', 'Robotics'],
-    href: '/books/humanoid-design',
+    href: '/books/humanoid-design-principles/intro',
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ export const allBooks: Book[] = [
     image: '/img/book3-cover.jpg',
     featured: true,
     tags: ['Neural Networks', 'Movement Control', 'AI'],
-    href: '/books/neural-networks-motion',
+    href: '/books/neural-networks-in-motion/intro',
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ export const allBooks: Book[] = [
     image: '/img/book4-cover.jpg',
     featured: true,
     tags: ['Ethics', 'AI', 'Society'],
-    href: '/books/ethics-ai-robotics',
+    href: '/books/ethics-in-ai-robotics/intro',
   },
   {
     id: 5,
@@ -56,7 +56,7 @@ export const allBooks: Book[] = [
     image: '/img/book1-cover.jpg',
     featured: false,
     tags: ['Physical Computing', 'Sensors', 'Actuators'],
-    href: '/books/physical-computing',
+    href: '/books/physical-computing-for-robotics/intro',
   },
   {
     id: 6,
@@ -65,7 +65,7 @@ export const allBooks: Book[] = [
     image: '/img/book2-cover.jpg',
     featured: false,
     tags: ['Computer Vision', 'Perception', 'AI'],
-    href: '/books/computer-vision',
+    href: '/books/computer-vision-in-robotics/intro',
   },
   {
     id: 7,
@@ -74,7 +74,7 @@ export const allBooks: Book[] = [
     image: '/img/book3-cover.jpg',
     featured: false,
     tags: ['Simulation', 'Testing', 'Virtual Environments'],
-    href: '/books/simulation-environments',
+    href: '/books/robotics-simulation-environments/intro',
   },
   {
     id: 8,
@@ -83,7 +83,7 @@ export const allBooks: Book[] = [
     image: '/img/book4-cover.jpg',
     featured: false,
     tags: ['Manipulation', 'Grasping', 'Interaction'],
-    href: '/books/manipulation-grasping',
+    href: '/books/manipulation-and-grasping/intro',
   },
   {
     id: 9,
@@ -92,7 +92,7 @@ export const allBooks: Book[] = [
     image: '/img/book1-cover.jpg',
     featured: false,
     tags: ['Locomotion', 'Navigation', 'Mobility'],
-    href: '/books/locomotion-mobility',
+    href: '/books/locomotion-and-mobility/intro',
   },
   {
     id: 10,
@@ -101,7 +101,7 @@ export const allBooks: Book[] = [
     image: '/img/book2-cover.jpg',
     featured: false,
     tags: ['Human-Robot Interaction', 'UX', 'Collaboration'],
-    href: '/books/human-robot-interaction',
+    href: '/books/human-robot-interaction/intro',
   },
 ];
 

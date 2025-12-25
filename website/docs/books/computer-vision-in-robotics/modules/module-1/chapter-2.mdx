@@ -1,0 +1,189 @@
+---
+id: chapter-2
+title: "Image Formation and Camera Models"
+module: "Module 1: Foundations of Computer Vision in Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Image Formation and Camera Models
+
+### Introduction to Image Formation
+
+Image formation is the process by which a 3D scene is projected onto a 2D image plane. Understanding this process is crucial for robotics applications, as it determines how robots perceive the world and how to interpret that visual information for navigation, manipulation, and interaction.
+
+The image formation process involves several key concepts:
+- **Geometric projection**: How 3D points map to 2D image coordinates
+- **Optics**: How light travels through lenses to form images
+- **Sensor response**: How digital sensors capture light intensity
+- **Distortion**: How imperfections in the optical system affect images
+
+### Pinhole Camera Model
+
+The pinhole camera model is the simplest mathematical model for image formation. It describes how 3D points in the world are projected onto a 2D image plane through a single point (the center of projection).
+
+Key elements of the pinhole model:
+- **Center of projection**: The point through which all light rays pass
+- **Image plane**: The 2D surface where the image is formed
+- **Focal length**: The distance between the center of projection and the image plane
+- **Principal point**: The intersection of the optical axis with the image plane
+
+The mathematical relationship is given by the perspective projection equations:
+- x = f * (X / Z)
+- y = f * (Y / Z)
+
+Where (X, Y, Z) are the 3D world coordinates, (x, y) are the 2D image coordinates, and f is the focal length.
+
+### Real Camera Models
+
+Real cameras deviate from the ideal pinhole model due to lens construction and optical properties. These deviations are modeled as camera parameters that must be calibrated for accurate computer vision applications.
+
+**Intrinsic Parameters** (internal to the camera):
+- **Focal length** (fx, fy): The effective focal length in pixel units
+- **Principal point** (cx, cy): The image center in pixel coordinates
+- **Skew coefficient**: The angle between pixel axes (usually 0)
+
+**Extrinsic Parameters** (describing camera pose in the world):
+- **Rotation matrix** (R): 3x3 matrix describing camera orientation
+- **Translation vector** (t): 3x1 vector describing camera position
+
+### Types of Cameras in Robotics
+
+#### Monocular Cameras
+Single-lens cameras that capture 2D images. While they provide rich visual information, they lack depth information without additional processing techniques.
+
+Advantages:
+- Simple and lightweight
+- Low computational requirements
+- High resolution and frame rates
+
+Disadvantages:
+- No direct depth information
+- Scale ambiguity in reconstruction
+- Requires motion or prior knowledge for 3D understanding
+
+#### Stereo Cameras
+Systems with two or more cameras separated by a known baseline, allowing for direct depth estimation through triangulation.
+
+Advantages:
+- Direct depth information
+- Good accuracy for medium distances
+- Real-time depth estimation possible
+
+Disadvantages:
+- More complex calibration
+- Limited range (near and far objects)
+- Computational overhead for stereo matching
+
+#### RGB-D Cameras
+Cameras that provide both color (RGB) and depth (D) information, such as Microsoft Kinect or Intel RealSense.
+
+Advantages:
+- Direct depth information
+- Rich color and geometric data
+- Good for indoor applications
+
+Disadvantages:
+- Limited range and outdoor performance
+- Sensitivity to lighting conditions
+- Higher cost than standard cameras
+
+### Lens Distortions
+
+Real camera lenses introduce geometric distortions that deviate from the ideal pinhole model. These must be corrected for accurate computer vision applications.
+
+#### Radial Distortion
+Caused by the spherical shape of lens elements, causing straight lines to appear curved, especially near the image edges.
+
+Types:
+- **Barrel distortion**: Lines curve outward (common in wide-angle lenses)
+- **Pincushion distortion**: Lines curve inward (common in telephoto lenses)
+- **Mustache distortion**: Combination of barrel and pincushion effects
+
+#### Tangential Distortion
+Caused by lens elements not being perfectly aligned with the image plane, causing additional geometric distortion.
+
+### Camera Calibration
+
+Camera calibration is the process of determining the intrinsic and extrinsic parameters of a camera system. This is essential for robotics applications requiring accurate measurements or 3D reconstruction.
+
+#### Calibration Methods
+1. **Planar calibration**: Using a 2D calibration pattern (like a checkerboard) at various orientations
+2. **3D calibration objects**: Using objects with known 3D geometry
+3. **Self-calibration**: Estimating parameters from scene content and motion
+
+#### Calibration Process
+1. **Data collection**: Capture images of calibration objects from various poses
+2. **Feature detection**: Identify known points in the calibration pattern
+3. **Parameter estimation**: Solve for camera parameters using optimization
+4. **Validation**: Verify calibration accuracy with test images
+
+### Applications in Robotics
+
+#### Visual Odometry
+Using camera images to estimate robot motion by tracking features between frames. Accurate camera models are essential for reliable pose estimation.
+
+#### 3D Reconstruction
+Building 3D models of the environment from multiple camera views. Proper understanding of image formation is crucial for accurate reconstruction.
+
+#### Visual Servoing
+Controlling robot motion based on visual feedback. Camera models are needed to map image errors to robot actions.
+
+### Challenges in Robotic Vision
+
+#### Dynamic Environments
+Robots operate in changing environments where lighting, object positions, and scene content may vary significantly, requiring robust camera models and adaptive processing.
+
+#### Real-time Constraints
+Robots often require real-time visual processing, limiting the computational complexity of camera model corrections and image processing algorithms.
+
+#### Calibration Maintenance
+Camera parameters may change due to temperature, vibration, or mechanical stress during robot operation, requiring periodic recalibration or self-calibration methods.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Image Formation and Camera Models
+
+### Key Concepts
+- **Image Formation**: Process of projecting 3D scenes onto 2D image planes
+- **Pinhole Model**: Simple mathematical model of image formation
+- **Camera Parameters**: Intrinsic (internal) and extrinsic (pose) parameters
+
+### Camera Types
+- **Monocular**: Single lens, no direct depth information
+- **Stereo**: Two+ cameras, direct depth through triangulation
+- **RGB-D**: Color + depth information in single device
+
+### Distortions
+- **Radial**: Curved lines due to lens shape (barrel, pincushion, mustache)
+- **Tangential**: Due to misaligned lens elements
+
+### Calibration
+- **Process**: Determining intrinsic and extrinsic parameters
+- **Methods**: Planar patterns, 3D objects, or self-calibration
+- **Importance**: Essential for accurate robotic vision applications
+
+### Applications
+- Visual odometry for robot localization
+- 3D reconstruction of environments
+- Visual servoing for robot control
+
+### Challenges
+- Dynamic environments with changing conditions
+- Real-time processing constraints
+- Maintaining calibration under operational conditions
+
+</div>
+</TabItem>
+</Tabs>

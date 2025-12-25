@@ -1,0 +1,344 @@
+---
+id: chapter-8
+title: "Bipedal Walking Fundamentals and Gait Analysis"
+module: "Module 2: Legged Locomotion and Bipedal Walking"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Bipedal Walking Fundamentals and Gait Analysis
+
+### Introduction to Bipedal Walking
+
+Bipedal walking is one of the most challenging forms of locomotion to achieve in robotics, requiring sophisticated control systems to maintain balance while moving on just two legs. This form of locomotion is particularly important for humanoid robots that need to operate in human environments. Understanding the fundamentals of bipedal walking and being able to analyze gait patterns is crucial for developing effective walking robots.
+
+Bipedal walking fundamentals include:
+- **Gait cycle phases**: Understanding the different phases of walking
+- **Balance mechanisms**: How balance is maintained during walking
+- **Kinematic patterns**: Characteristic movement patterns during walking
+- **Dynamic principles**: Forces and motion during walking
+
+### The Human Gait Cycle
+
+#### Phases of Bipedal Walking
+The gait cycle is divided into distinct phases that repeat with each step:
+
+**Stance Phase (60% of gait cycle)**:
+- **Initial contact**: Heel of leading leg contacts the ground
+- **Loading response**: Weight is transferred to the leading leg
+- **Midstance**: Single limb support, body is directly over stance limb
+- **Terminal stance**: Heel of stance limb begins to rise
+- **Pre-swing**: Toe of stance limb is the last point of contact
+
+**Swing Phase (40% of gait cycle)**:
+- **Initial swing**: Acceleration of the swing leg
+- **Midswing**: Deceleration of the swing leg
+- **Terminal swing**: Deceleration and preparation for ground contact
+
+#### Double Support Phase
+Periods when both feet are in contact with the ground:
+- **Double limb support**: Occurs at beginning and end of stance phase
+- **Duration**: Typically 10-12% of gait cycle in normal walking
+- **Importance**: Critical for stability and smooth weight transfer
+
+### Kinematic Analysis of Bipedal Walking
+
+#### Lower Extremity Joint Patterns
+Characteristic patterns of joint motion during walking:
+
+**Hip joint kinematics**:
+- **Sagittal plane**: Flexion during swing phase, extension during stance
+- **Frontal plane**: Lateral tilt to maintain center of mass over stance limb
+- **Transverse plane**: Rotation to assist with step clearance and propulsion
+
+**Knee joint kinematics**:
+- **Sagittal plane**: Initial flexion at heel strike, extension in mid-stance, flexion in late stance/swing
+- **Importance**: Shock absorption and step clearance
+- **Power generation**: Flexion moments for shock absorption, extension moments for propulsion
+
+**Ankle joint kinematics**:
+- **Sagittal plane**: Dorsiflexion in loading response, plantarflexion in push-off
+- **Importance**: Shock absorption and propulsion
+- **Range**: Critical for normal walking patterns
+
+#### Center of Mass (CoM) Motion
+Movement of the body's center of mass during walking:
+
+**Vertical displacement**: 
+- **Pattern**: Upward in midstance, downward in double support
+- **Magnitude**: Typically 4-5 cm in normal human walking
+- **Importance**: Minimizing energy cost through inverted pendulum mechanics
+
+**Horizontal displacement**:
+- **Forward progression**: CoM moves forward with each step
+- **Lateral sway**: Side-to-side movement with each step
+- **Control**: Maintaining forward progression while controlling sway
+
+#### Foot Trajectory
+Path of the foot during the swing phase:
+
+**Step clearance**: Foot must clear the ground during swing
+- **Minimum clearance**: Typically 1-2 cm to prevent tripping
+- **Trajectory shape**: Smooth, parabolic arc
+- **Control**: Achieved through coordinated hip, knee, and ankle motion
+
+### Kinetic Analysis of Bipedal Walking
+
+#### Ground Reaction Forces
+Forces exerted by the ground on the feet during walking:
+
+**Vertical forces**:
+- **Pattern**: Two peaks per step cycle
+- **First peak**: Weight acceptance during loading response
+- **Second peak**: Propulsion during push-off
+- **Magnitude**: Up to 1.2-1.3 times body weight
+
+**Anterior-posterior forces**:
+- **Braking**: Forces that slow forward progression (early stance)
+- **Propulsive**: Forces that accelerate forward progression (late stance)
+- **Balance**: Net zero over a complete gait cycle
+
+**Medial-lateral forces**:
+- **Magnitude**: Generally smaller than other components
+- **Function**: Maintaining lateral balance
+- **Variation**: Changes with gait speed and terrain
+
+#### Joint Moments and Powers
+Torques and power generation at major joints:
+
+**Hip joint**:
+- **Stance phase**: Extension moment for forward progression
+- **Swing phase**: Flexion moment to advance the limb
+- **Power**: Both positive (generation) and negative (absorption) power
+
+**Knee joint**:
+- **Loading response**: Absorptive moment for shock absorption
+- **Terminal stance**: Extension moment for stability
+- **Swing phase**: Controlled flexion
+- **Power**: Primarily absorptive during loading response
+
+**Ankle joint**:
+- **Push-off**: Plantarflexion moment for propulsion
+- **Loading response**: Dorsiflexion moment for shock absorption
+- **Power**: Primarily generative during push-off
+
+### Balance Control in Bipedal Walking
+
+#### Zero Moment Point (ZMP)
+Critical concept for bipedal balance:
+
+**Definition**: The point on the ground where the moment of the ground reaction force is zero.
+
+**Balance condition**: For stable walking, the ZMP must remain within the support polygon (typically the area of the foot in contact with the ground).
+
+**ZMP trajectory**: During normal walking, ZMP moves from heel to toe on the stance foot.
+
+#### Capture Point and Balance Recovery
+Advanced concepts for understanding balance:
+
+**Capture point**: The point where the robot must step to come to a complete stop.
+
+**Balance control**: Using stepping and CoM control to maintain stability.
+
+**Recovery strategies**: How to recover from balance perturbations.
+
+#### Dynamic Balance Strategies
+Different approaches to maintaining balance:
+
+**Ankle strategy**: Using ankle torques to maintain balance for small perturbations.
+
+**Hip strategy**: Using hip torques for larger perturbations.
+
+**Stepping strategy**: Taking a step to recover balance when other strategies are insufficient.
+
+### Bipedal Walking Models
+
+#### Inverted Pendulum Model
+Simple model for understanding walking mechanics:
+
+**Single inverted pendulum**: Modeling the body as an inverted pendulum.
+
+**Double pendulum**: Including both stance and swing limbs.
+
+**Applications**: Understanding basic balance and walking principles.
+
+#### Linear Inverted Pendulum Model (LIPM)
+Simplified model for walking pattern generation:
+
+**Assumptions**: Constant height center of mass.
+
+**Dynamics**: Linear differential equations describing CoM motion.
+
+**Applications**: Trajectory planning and control design.
+
+#### Spring-Loaded Inverted Pendulum (SLIP)
+Model incorporating leg compliance:
+
+**Compliant leg**: Modeling the leg as a spring.
+
+**Energy storage**: Incorporating elastic energy storage and return.
+
+**Applications**: Understanding running and efficient walking.
+
+### Gait Analysis Techniques
+
+#### Temporal-Spatial Parameters
+Quantifying gait characteristics:
+
+**Temporal parameters**:
+- **Gait cycle duration**: Time for one complete gait cycle
+- **Stance time**: Time foot is in contact with ground
+- **Swing time**: Time foot is not in contact with ground
+- **Double support time**: Time both feet are on ground
+
+**Spatial parameters**:
+- **Step length**: Distance between ipsilateral foot contacts
+- **Step width**: Distance between feet in frontal plane
+- **Stride length**: Distance between consecutive heel contacts of same foot
+- **Cadence**: Steps per minute
+
+#### Symmetry and Variability
+Assessing gait quality:
+
+**Symmetry**: How similar the left and right sides are.
+- **Step length symmetry**: Difference between left and right step lengths
+- **Stance time symmetry**: Difference between left and right stance times
+- **Joint angle symmetry**: Differences in bilateral joint patterns
+
+**Variability**: Natural variation in gait patterns.
+- **Healthy variability**: Normal variation in healthy walking
+- **Pathological changes**: Changes in variability due to disease or injury
+- **Control implications**: How to handle natural variability in robotic systems
+
+### Challenges in Robotic Bipedal Walking
+
+#### Balance Control Challenges
+Maintaining stability during walking:
+
+**Underactuation**: Fewer actuators than degrees of freedom at contact points.
+
+**Dynamic stability**: Need for active control during dynamic walking.
+
+**Perturbation handling**: Managing unexpected disturbances.
+
+**Terrain adaptation**: Adjusting to different surfaces and obstacles.
+
+#### Control Complexity
+Managing the complexity of bipedal control:
+
+**High-dimensional state space**: Many variables to control simultaneously.
+
+**Real-time requirements**: Need for fast computation and response.
+
+**Multi-objective optimization**: Balancing multiple goals simultaneously.
+
+**Robustness**: Maintaining performance despite uncertainties.
+
+#### Mechanical Challenges
+Physical challenges in robot design:
+
+**Weight distribution**: Proper weight distribution for stability.
+
+**Actuator capabilities**: Sufficient power and precision for walking.
+
+**Joint limits**: Adequate range of motion for walking patterns.
+
+**Compliance**: Appropriate compliance for safe interaction and energy efficiency.
+
+### Gait Assessment and Optimization
+
+#### Performance Metrics
+Quantifying walking performance:
+
+**Stability metrics**:
+- **Margins of stability**: Distance to stability boundaries
+- **Variability**: Consistency of walking patterns
+- **Recovery capability**: Ability to recover from perturbations
+
+**Efficiency metrics**:
+- **Cost of transport**: Energy consumed per unit distance and mass
+- **Power consumption**: Rate of energy consumption
+- **Mechanical efficiency**: How efficiently energy is used for locomotion
+
+#### Optimization Techniques
+Improving walking performance:
+
+**Gait parameter optimization**: Adjusting step length, width, and timing.
+
+**Control parameter tuning**: Optimizing controller parameters.
+
+**Trajectory optimization**: Optimizing CoM and joint trajectories.
+
+**Machine learning approaches**: Learning optimal gait patterns.
+
+### Applications and Future Directions
+
+#### Current Applications
+Where bipedal walking robots are being used:
+
+**Research platforms**: Advancing understanding of bipedal locomotion.
+
+**Entertainment**: Humanoid robots for entertainment and interaction.
+
+**Assistive devices**: Prosthetics and exoskeletons.
+
+**Education**: Teaching robotics and biomechanics concepts.
+
+#### Future Developments
+Emerging trends in bipedal walking:
+
+**Bio-inspired approaches**: Learning from human and animal locomotion.
+
+**Adaptive control**: Automatically adapting to new conditions.
+
+**Learning-based control**: Using machine learning for gait optimization.
+
+**Human-like walking**: Achieving more natural, human-like gait patterns.
+
+Understanding bipedal walking fundamentals and gait analysis is crucial for developing effective walking robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Bipedal walking involves complex balance and coordination challenges.
+- The gait cycle has stance (60%) and swing (40%) phases with sub-phases.
+- Kinematic analysis includes joint patterns and center of mass motion.
+- Kinetic analysis covers ground reaction forces and joint moments.
+- Balance control uses concepts like ZMP and capture point.
+- Walking models include inverted pendulum and SLIP models.
+- Gait analysis quantifies temporal-spatial parameters and symmetry.
+- Challenges include balance control, complexity, and mechanical design.
+- Applications span research, entertainment, and assistive devices.
+
+</div>
+</TabItem>
+</Tabs>

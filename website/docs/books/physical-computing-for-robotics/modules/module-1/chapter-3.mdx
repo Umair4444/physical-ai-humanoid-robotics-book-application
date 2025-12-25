@@ -1,0 +1,684 @@
+---
+id: chapter-3
+title: "Actuators and Motion Control"
+module: "Module 1: Foundations of Physical Computing for Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Actuators and Motion Control
+
+### Introduction to Actuators and Motion Control
+
+Actuators are the muscles of robotic systems, converting electrical signals into physical motion. Motion control encompasses the techniques and algorithms used to command and regulate these actuators to achieve desired movements. In physical computing for robotics, the selection, control, and integration of actuators is fundamental to creating robots that can effectively interact with their environment and perform useful tasks.
+
+### Classification of Actuators
+
+#### By Energy Source
+
+**Electric Actuators**:
+Convert electrical energy to mechanical motion.
+
+**Types**:
+- **DC Motors**: Direct current motors
+- **AC Motors**: Alternating current motors
+- **Stepper Motors**: Precise incremental motion
+- **Servo Motors**: Closed-loop position control
+- **Linear Motors**: Direct linear motion
+
+**Advantages**:
+- **Clean Operation**: No emissions or fluids
+- **Precision**: Good control accuracy
+- **Efficiency**: High energy efficiency
+- **Integration**: Easy to integrate with digital systems
+
+**Disadvantages**:
+- **Power Supply**: Requires electrical power source
+- **Heat Generation**: Can generate significant heat
+- **Complexity**: May require complex control electronics
+- **Cost**: High-performance systems can be expensive
+
+**Hydraulic Actuators**:
+Use pressurized fluid to generate motion.
+
+**Types**:
+- **Hydraulic Cylinders**: Linear motion actuators
+- **Hydraulic Motors**: Rotational motion actuators
+- **Hydraulic Rotary Actuators**: Limited rotation actuators
+
+**Advantages**:
+- **High Power Density**: Very high force/torque per unit weight
+- **Precision**: Can achieve precise control
+- **Stiffness**: High stiffness for accurate positioning
+- **Self-Lubricating**: Fluid provides lubrication
+
+**Disadvantages**:
+- **Complexity**: Complex systems with pumps and valves
+- **Maintenance**: Regular maintenance of fluid systems
+- **Leakage**: Potential for fluid leakage
+- **Cost**: High initial and maintenance costs
+
+**Pneumatic Actuators**:
+Use compressed air to generate motion.
+
+**Types**:
+- **Pneumatic Cylinders**: Linear motion actuators
+- **Pneumatic Motors**: Rotational motion actuators
+- **Pneumatic Grippers**: Specialized gripping actuators
+
+**Advantages**:
+- **Clean Operation**: Compressed air is clean
+- **Safety**: Inherently safe in explosive environments
+- **Speed**: Fast response times
+- **Cost-Effective**: Lower cost for high-force applications
+
+**Disadvantages**:
+- **Compressibility**: Air compressibility affects precision
+- **Air Supply**: Requires compressed air infrastructure
+- **Noise**: Can be noisy during operation
+- **Efficiency**: Less efficient than electric systems
+
+#### By Motion Type
+
+**Rotary Actuators**:
+Produce rotational motion.
+
+**Examples**:
+- **Electric Motors**: DC, AC, stepper, servo
+- **Hydraulic Motors**: High-torque rotational motion
+- **Pneumatic Motors**: Fast, high-speed rotation
+- **Piezoelectric Motors**: Precise, slow motion
+
+**Linear Actuators**:
+Produce straight-line motion.
+
+**Examples**:
+- **Solenoids**: On/off linear motion
+- **Hydraulic Cylinders**: High-force linear motion
+- **Pneumatic Cylinders**: Fast linear motion
+- **Linear Motors**: Direct electrical-to-linear conversion
+
+**Oscillatory Actuators**:
+Produce back-and-forth motion.
+
+**Examples**:
+- **Voice Coils**: Used in speakers and positioning
+- **Piezoelectric Actuators**: High-frequency oscillation
+- **Ultrasonic Motors**: High-precision oscillatory motion
+
+### Electric Motors
+
+#### DC Motors
+
+**Principle of Operation**:
+DC motors operate based on the interaction between magnetic fields and current-carrying conductors.
+
+**Construction**:
+- **Stator**: Stationary magnetic field (permanent magnets or electromagnets)
+- **Rotor**: Rotating part with current-carrying conductors
+- **Commutator**: Mechanical switch that reverses current direction
+- **Brushes**: Electrical contacts between stationary and rotating parts
+
+**Torque-Speed Characteristics**:
+```
+Torque = K_t * I_a
+Speed = (V - I_a * R_a) / (K_e * Φ)
+```
+
+Where:
+- K_t is the torque constant
+- I_a is the armature current
+- V is the applied voltage
+- R_a is the armature resistance
+- K_e is the back EMF constant
+- Φ is the magnetic flux
+
+**Speed Control Methods**:
+- **Voltage Control**: Varying applied voltage
+- **Current Control**: Controlling armature current
+- **Field Control**: Controlling magnetic field strength
+- **PWM Control**: Pulse-width modulation for efficiency
+
+**Applications**:
+- **Simple Motion**: Basic rotational motion
+- **Speed Control**: Applications requiring speed regulation
+- **Position Control**: With encoder feedback
+- **Torque Control**: With current feedback
+
+#### Stepper Motors
+
+**Principle of Operation**:
+Stepper motors move in discrete steps by energizing different coils in sequence.
+
+**Types**:
+- **Permanent Magnet Steppers**: Use permanent magnets in rotor
+- **Variable Reluctance Steppers**: Use soft iron rotor
+- **Hybrid Steppers**: Combine features of both types
+
+**Step Resolution**:
+- **Full Step**: One step per electrical cycle
+- **Half Step**: Two steps per electrical cycle
+- **Microstepping**: Many steps per electrical cycle
+
+**Step Angle Calculation**:
+```
+Step Angle = 360° / (Number of Steps per Revolution)
+```
+
+**Advantages**:
+- **Precision**: Precise positioning without feedback
+- **Holding Torque**: Maintains position when powered
+- **Open-Loop Control**: No feedback required for positioning
+- **Repeatability**: Consistent positioning accuracy
+
+**Disadvantages**:
+- **Resonance**: Can resonate at certain speeds
+- **Heat Generation**: Can generate heat when holding position
+- **Speed Limitations**: Torque decreases at high speeds
+- **Complex Drive Electronics**: Requires specialized drivers
+
+**Control Methods**:
+- **Full-Step Drive**: Energize one or two phases
+- **Half-Step Drive**: Alternate between full and half steps
+- **Microstepping**: Fractional step control for smooth motion
+- **Current Control**: Control current for torque regulation
+
+#### Servo Motors
+
+**Principle of Operation**:
+Servo motors are closed-loop systems that maintain position using feedback.
+
+**Components**:
+- **Motor**: Usually a DC motor
+- **Gearbox**: Reduces speed, increases torque
+- **Position Sensor**: Potentiometer or encoder
+- **Control Electronics**: PID controller and driver
+
+**Control Signal**:
+- **PWM Signal**: Pulse-width modulated control signal
+- **Pulse Width**: Determines desired position
+- **Frequency**: Typically 50Hz (20ms period)
+
+**Typical Servo Specifications**:
+- **Voltage**: 4.8V to 6V
+- **Torque**: Varies by size and type
+- **Speed**: Varies by size and type
+- **Resolution**: 0.1° to 1°
+
+**Advantages**:
+- **Precision**: Accurate position control
+- **Integrated**: All components in one package
+- **Simple Control**: Single PWM signal for control
+- **Wide Availability**: Many sizes and types available
+
+**Disadvantages**:
+- **Limited Rotation**: Usually limited to 180° or less
+- **Speed**: Lower speed than continuous motors
+- **Torque**: Lower torque than continuous motors
+- **Cost**: More expensive than simple motors
+
+### Motor Drive Electronics
+
+#### H-Bridge Circuits
+
+**Principle**:
+H-bridge circuits control the direction and speed of DC motors.
+
+**Circuit Configuration**:
+```
+     Vcc
+      |
+    [Q1]---[Q2]---
+      |     |    |
+     M+    M-    |
+      |     |    |
+    [Q3]---[Q4]---
+      |     |
+     GND   GND
+```
+
+**Operating Modes**:
+- **Forward**: Q1 and Q4 ON, Q2 and Q3 OFF
+- **Reverse**: Q2 and Q3 ON, Q1 and Q4 OFF
+- **Brake**: Q1 and Q3 ON, Q2 and Q4 OFF
+- **Coast**: All switches OFF
+
+**Control Methods**:
+- **PWM Speed Control**: Vary duty cycle of applied voltage
+- **Direction Control**: Switch between forward/reverse
+- **Regenerative Braking**: Use motor as generator to brake
+- **Current Limiting**: Limit motor current for protection
+
+#### PWM Motor Control
+
+**Principle**:
+Pulse Width Modulation varies the average voltage applied to the motor.
+
+**Duty Cycle Calculation**:
+```
+Duty Cycle = (Pulse Width / Period) × 100%
+```
+
+**Speed Control**:
+```
+Motor Speed ∝ Average Voltage ∝ Duty Cycle
+```
+
+**Advantages**:
+- **Efficiency**: High efficiency compared to linear control
+- **Precision**: Fine control of motor speed
+- **Flexibility**: Easy to implement with microcontrollers
+- **Protection**: Can implement current limiting
+
+**Considerations**:
+- **Ripple Current**: PWM can cause current ripple
+- **Switching Frequency**: Higher frequency reduces ripple but increases losses
+- **Filtering**: May need filtering for sensitive applications
+- **EMI**: PWM can generate electromagnetic interference
+
+### Motion Control Techniques
+
+#### Open-Loop Control
+
+**Concept**:
+Control system that operates without feedback.
+
+**Characteristics**:
+- **Predictable Systems**: Works well with predictable systems
+- **No Feedback**: No measurement of actual output
+- **Simple Implementation**: Simple control algorithms
+- **Lower Cost**: No sensors required
+
+**Applications**:
+- **Stepper Motors**: Natural open-loop operation
+- **Predictable Loads**: Systems with known characteristics
+- **Speed Control**: When precision position not required
+- **Simple Systems**: Basic on/off control
+
+**Limitations**:
+- **No Error Correction**: Cannot correct for disturbances
+- **Accuracy**: Limited accuracy and repeatability
+- **Load Sensitivity**: Performance varies with load changes
+- **Stall Detection**: Cannot detect motor stalls
+
+#### Closed-Loop Control
+
+**Concept**:
+Control system that uses feedback to correct errors.
+
+**Components**:
+- **Sensor**: Measures actual output
+- **Controller**: Compares desired vs. actual output
+- **Actuator**: Implements control action
+- **Process**: The system being controlled
+
+**Feedback Loop**:
+```
+Desired → Controller → Actuator → Process → Sensor → Error
+Output     Output      Input      Output    Input    |
+  ↑_________________________________________________|
+```
+
+**Advantages**:
+- **Accuracy**: High accuracy and repeatability
+- **Stability**: Can maintain stability despite disturbances
+- **Adaptability**: Can adapt to changing conditions
+- **Error Correction**: Automatically corrects errors
+
+**Disadvantages**:
+- **Complexity**: More complex than open-loop
+- **Cost**: Requires sensors and more complex electronics
+- **Stability**: Can become unstable if not properly designed
+- **Response**: May have slower response than open-loop
+
+### PID Control for Motion
+
+#### PID Controller Fundamentals
+
+**Proportional Control**:
+Response proportional to current error.
+
+**Equation**:
+```
+u_P(t) = K_p * e(t)
+```
+
+Where:
+- u_P(t) is the proportional control output
+- K_p is the proportional gain
+- e(t) is the error at time t
+
+**Characteristics**:
+- **Response Speed**: Increases with K_p
+- **Steady-State Error**: Cannot eliminate steady-state error
+- **Stability**: Higher K_p can cause instability
+- **Oscillation**: Can cause oscillation if too high
+
+**Integral Control**:
+Response proportional to accumulated error.
+
+**Equation**:
+```
+u_I(t) = K_i * ∫e(τ)dτ from 0 to t
+```
+
+Where:
+- u_I(t) is the integral control output
+- K_i is the integral gain
+
+**Characteristics**:
+- **Steady-State Error**: Eliminates steady-state error
+- **Response Speed**: Slower response initially
+- **Windup**: Can cause integrator windup
+- **Stability**: Can reduce stability margin
+
+**Derivative Control**:
+Response proportional to rate of error change.
+
+**Equation**:
+```
+u_D(t) = K_d * de(t)/dt
+```
+
+Where:
+- u_D(t) is the derivative control output
+- K_d is the derivative gain
+
+**Characteristics**:
+- **Overshoot**: Reduces overshoot
+- **Stability**: Improves stability margin
+- **Noise**: Amplifies high-frequency noise
+- **Sensitivity**: Sensitive to measurement noise
+
+#### PID Controller Equation
+
+**Complete PID Equation**:
+```
+u(t) = K_p * e(t) + K_i * ∫e(τ)dτ + K_d * de(t)/dt
+```
+
+**Digital Implementation**:
+```
+u[k] = K_p * e[k] + K_i * Σe[i] + K_d * (e[k] - e[k-1])
+```
+
+#### PID Tuning Methods
+
+**Ziegler-Nichols Method**:
+Empirical method for tuning PID controllers.
+
+**Process**:
+1. **Set K_i = K_d = 0**
+2. **Increase K_p until sustained oscillations occur**
+3. **Record critical gain K_u and oscillation period P_u**
+4. **Set gains using table:**
+
+| Controller | K_p | K_i | K_d |
+|------------|-----|-----|-----|
+| P          | 0.5K_u | 0 | 0 |
+| PI         | 0.45K_u | 1.2K_p/P_u | 0 |
+| PID        | 0.6K_u | 2K_p/P_u | K_p*P_u/8 |
+
+**Cohen-Coon Method**:
+Another empirical tuning method.
+
+**Process**:
+1. **Obtain process reaction curve**
+2. **Determine process parameters (gain, time constant, delay)**
+3. **Calculate PID parameters using formulas**
+
+### Advanced Motion Control
+
+#### Trajectory Generation
+
+**Point-to-Point Motion**:
+Moving from one position to another with controlled velocity and acceleration.
+
+**Trapezoidal Profile**:
+```
+Velocity
+   ^
+   |    _______
+   |   /|     |\
+   |  / |     | \
+   | /  |     |  \
+   |/   |     |   \
+   +----+-----+----+--> Time
+  t1   t2    t3   t4
+```
+
+**Parameters**:
+- **Maximum Velocity**: V_max
+- **Acceleration**: a_acc
+- **Deceleration**: a_dec
+
+**Profile Equations**:
+```
+Acceleration Phase: v(t) = a_acc * t
+Constant Velocity: v(t) = V_max
+Deceleration Phase: v(t) = V_max - a_dec * (t - t_const)
+```
+
+**S-Curve Profile**:
+Smoothing acceleration and deceleration phases.
+
+**Advantages**:
+- **Smooth Motion**: Reduces vibration and wear
+- **Lower Jerk**: Bounded rate of acceleration change
+- **Better Following**: Improved tracking performance
+- **Reduced Resonance**: Less excitation of mechanical resonances
+
+#### Multi-Axis Coordination
+
+**Linear Interpolation**:
+Moving multiple axes simultaneously to follow a straight line.
+
+**2-Axis Example**:
+```
+x(t) = x_start + (x_end - x_start) * t / T
+y(t) = y_start + (y_end - y_start) * t / T
+```
+
+**Circular Interpolation**:
+Moving multiple axes to follow a circular path.
+
+**2-Axis Circular**:
+```
+x(t) = x_center + R * cos(θ_start + (θ_end - θ_start) * t / T)
+y(t) = y_center + R * sin(θ_start + (θ_end - θ_start) * t / T)
+```
+
+**Synchronization**:
+Coordinating multiple axes for complex motion patterns.
+
+**Techniques**:
+- **Master-Slave**: One axis follows another
+- **Electronic Gearing**: Ratio-based coordination
+- **Camming**: Complex profile-based coordination
+- **Synchronized Motion**: Coordinated multi-axis motion
+
+### Specialized Actuators
+
+#### Piezoelectric Actuators
+
+**Principle**:
+Use the piezoelectric effect to generate motion.
+
+**Direct Piezoelectric Effect**:
+```
+Strain ∝ Electric Field
+```
+
+**Characteristics**:
+- **Precision**: Nanometer-level positioning
+- **Speed**: Very fast response
+- **Force**: High force at low displacement
+- **Hysteresis**: Significant hysteresis effects
+
+**Applications**:
+- **Precision Positioning**: Microscopy, metrology
+- **Optics**: Mirror positioning, lens focusing
+- **Nanomanipulation**: Atomic force microscopy
+- **Valves**: High-speed valve control
+
+#### Shape Memory Alloy Actuators
+
+**Principle**:
+Use shape memory alloys that change shape when heated.
+
+**Characteristics**:
+- **High Force**: High force-to-weight ratio
+- **Low Voltage**: Operate on low voltage
+- **Slow Response**: Slow heating/cooling cycles
+- **Limited Stroke**: Limited displacement
+
+**Applications**:
+- **Micro Actuation**: Small-scale applications
+- **Biomimetic Systems**: Muscle-like actuation
+- **Aerospace**: Lightweight actuation systems
+- **Medical Devices**: Implantable devices
+
+### Control System Design Considerations
+
+#### System Modeling
+
+**Transfer Function**:
+Mathematical representation of system dynamics.
+
+**First-Order System**:
+```
+G(s) = K / (τs + 1)
+```
+
+**Second-Order System**:
+```
+G(s) = Kω_n² / (s² + 2ζω_n s + ω_n²)
+```
+
+Where:
+- K is the gain
+- τ is the time constant
+- ω_n is the natural frequency
+- ζ is the damping ratio
+
+**Model Identification**:
+- **Step Response**: Analyze step response to identify parameters
+- **Frequency Response**: Use frequency analysis
+- **System Identification**: Use input/output data
+- **Parameter Estimation**: Estimate model parameters
+
+#### Stability Analysis
+
+**Routh-Hurwitz Criterion**:
+Method for determining system stability.
+
+**Nyquist Criterion**:
+Stability analysis using frequency response.
+
+**Gain and Phase Margins**:
+Measures of relative stability.
+
+**Gain Margin**:
+```
+GM = 1/|G(jω_180)|
+```
+Where ω_180 is the frequency where phase = -180°.
+
+**Phase Margin**:
+```
+PM = 180° + ∠G(jω_gc)
+```
+Where ω_gc is the gain crossover frequency.
+
+### Real-World Implementation
+
+#### Practical Considerations
+
+**Nonlinearities**:
+- **Friction**: Static and dynamic friction effects
+- **Deadband**: Mechanical play and backlash
+- **Saturation**: Actuator and amplifier limits
+- **Hysteresis**: Different behavior on forward/reverse motion
+
+**Compensation Techniques**:
+- **Friction Compensation**: Pre-compensate for friction
+- **Feedforward Control**: Add feedforward terms
+- **Gain Scheduling**: Adjust gains based on operating point
+- **Adaptive Control**: Adjust parameters online
+
+#### Safety and Protection
+
+**Current Limiting**:
+Protect motors from excessive current.
+
+**Methods**:
+- **Hardware**: Current sensing and protection circuits
+- **Software**: Current monitoring and limiting
+- **PWM**: Current regulation through PWM control
+- **Thermal**: Temperature-based current limiting
+
+**Position Limits**:
+Prevent motion beyond safe limits.
+
+**Implementation**:
+- **Software Limits**: Limit commands in software
+- **Hardware Limits**: Limit switches or sensors
+- **Electronic Limits**: Soft limits in controller
+- **Emergency Stop**: Immediate motion stop
+
+Understanding actuators and motion control is essential for creating robotic systems that can accurately and reliably perform physical tasks.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Actuators and Motion Control
+
+### Actuator Types
+- **Electric**: DC, stepper, servo motors
+- **Hydraulic**: High power density, precise control
+- **Pneumatic**: Clean operation, fast response
+- **Specialized**: Piezoelectric, shape memory alloys
+
+### Electric Motors
+- **DC Motors**: Simple, controllable rotation
+- **Stepper Motors**: Precise open-loop positioning
+- **Servo Motors**: Closed-loop position control
+- **Drive Electronics**: H-bridges, PWM control
+
+### Motion Control
+- **Open-Loop**: No feedback, simple implementation
+- **Closed-Loop**: Feedback for error correction
+- **PID Control**: Proportional, integral, derivative
+- **Tuning Methods**: Ziegler-Nichols, Cohen-Coon
+
+### Advanced Techniques
+- **Trajectory Generation**: Trapezoidal, S-curve profiles
+- **Multi-Axis Coordination**: Linear, circular interpolation
+- **System Modeling**: Transfer functions, identification
+- **Stability Analysis**: Routh-Hurwitz, Nyquist criteria
+
+### Practical Considerations
+- **Nonlinearities**: Friction, deadband, saturation
+- **Safety**: Current limiting, position limits
+- **Protection**: Hardware and software safeguards
+- **Compensation**: Friction and feedforward control
+
+### Implementation
+- **System Design**: Modeling and analysis
+- **Controller Tuning**: Parameter optimization
+- **Real-time**: Timing and performance requirements
+- **Integration**: Hardware and software integration
+
+</div>
+</TabItem>
+</Tabs>

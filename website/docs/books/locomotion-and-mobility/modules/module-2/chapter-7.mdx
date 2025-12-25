@@ -1,0 +1,279 @@
+---
+id: chapter-7
+title: "Introduction to Legged Locomotion"
+module: "Module 2: Legged Locomotion and Bipedal Walking"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Introduction to Legged Locomotion
+
+### Understanding Legged Locomotion
+
+Legged locomotion is one of the most versatile forms of robotic mobility, allowing robots to navigate complex terrains that would be challenging for wheeled or tracked systems. Unlike wheeled robots that require continuous contact with the ground, legged robots can step over obstacles, navigate rough terrain, and adapt to changing environments. This form of locomotion is particularly valuable for applications in search and rescue, exploration, and human environments.
+
+Legged locomotion encompasses:
+- **Kinematic patterns**: How legs move in coordinated patterns
+- **Dynamic principles**: How forces and motion interact during locomotion
+- **Stability mechanisms**: How robots maintain balance during movement
+- **Terrain adaptation**: How robots adjust to different surfaces and obstacles
+
+### Types of Legged Locomotion
+
+#### Number of Legs
+The number of legs affects stability, complexity, and mobility:
+
+**Bipedal (2 legs)**:
+- **Human-like**: Most similar to human locomotion
+- **Narrow profile**: Smaller footprint, can navigate tight spaces
+- **Balance challenge**: Requires sophisticated balance control
+- **Applications**: Humanoid robots, prosthetics, human-like mobility
+
+**Tripedal (3 legs)**:
+- **Theoretical stability**: Always maintains a triangular support base
+- **Rare in nature**: Not commonly found in biological systems
+- **Complex coordination**: Requires sophisticated gait planning
+- **Potential applications**: Specialized robotic applications
+
+**Quadrupedal (4 legs)**:
+- **High stability**: Excellent static and dynamic stability
+- **Common in nature**: Found in many animals (dogs, cats, horses)
+- **Load capacity**: Can carry heavier payloads
+- **Applications**: Military, industrial, search and rescue
+
+**Hexapodal (6 legs)**:
+- **Static stability**: Can maintain stability with three legs down
+- **Fault tolerance**: Can continue moving with one leg failure
+- **Insect-like**: Mimics insect locomotion patterns
+- **Applications**: Planetary exploration, hazardous environments
+
+**Multi-legged (>6)**:
+- **Wave gaits**: Coordinated wave-like movement patterns
+- **High stability**: Excellent stability on rough terrain
+- **Biological inspiration**: Millipedes, centipedes
+- **Applications**: Specialized terrain navigation
+
+### Gait Classification
+
+#### Static vs. Dynamic Stability
+How stability is maintained during locomotion:
+
+**Static stability**:
+- **Support polygon**: Center of mass remains within support polygon
+- **Slow movement**: Typically associated with slower movement
+- **Safety**: More stable, less likely to fall
+- **Energy**: Often more energy efficient for slow movement
+
+**Dynamic stability**:
+- **Center of mass**: Center of mass may move outside support polygon
+- **Active control**: Requires active balance control
+- **Speed**: Enables faster movement
+- **Energy**: May be more efficient at higher speeds
+
+#### Common Gait Patterns
+
+**Walking gaits**:
+- **Ripple gait**: Sequential movement (1-2-3-4 for quadruped)
+- **Tripod gait**: Alternating tripods of legs (insects)
+- **Wave gait**: Wave-like progression of leg movements
+- **Pace**: Ipsilateral legs move together (left front and left back)
+
+**Running gaits**:
+- **Trot**: Diagonal pairs move together (left front and right back)
+- **Gallop**: Asynchronous leg movements with flight phases
+- **Bound**: Legs move in pairs with body flexion
+- **Canter**: Three-beat gait with complex coordination
+
+### Biomechanics of Legged Locomotion
+
+#### Force Analysis
+Understanding the forces involved in legged movement:
+
+**Ground reaction forces**:
+- **Vertical forces**: Supporting body weight
+- **Horizontal forces**: Propelling the body forward
+- **Medial-lateral forces**: Maintaining lateral stability
+- **Temporal patterns**: How forces vary throughout the gait cycle
+
+**Joint forces**:
+- **Axial loads**: Compressive forces on joints
+- **Shear forces**: Forces parallel to joint surfaces
+- **Moments**: Torques required at joints
+- **Power requirements**: Energy needed for movement
+
+#### Energy Considerations
+Energy management in legged systems:
+
+**Energy storage and return**:
+- **Tendon elasticity**: Biological systems store energy in tendons
+- **Spring-mass models**: Simplified models for understanding energy management
+- **Efficiency**: How efficiently energy is used for locomotion
+
+**Power requirements**:
+- **Active power**: Power from actuators/muscles
+- **Passive power**: Power from gravity and elastic elements
+- **Optimization**: Minimizing energy consumption
+
+### Control Challenges
+
+#### Balance and Stability
+Maintaining stability during legged locomotion:
+
+**Sensory feedback**:
+- **Inertial measurement**: Gyroscopes and accelerometers
+- **Force sensing**: Measuring ground contact forces
+- **Vision systems**: Environmental perception
+- **Proprioception**: Joint position and velocity sensing
+
+**Control strategies**:
+- **Feedback control**: Correcting based on measured errors
+- **Feedforward control**: Anticipating required movements
+- **Predictive control**: Planning movements based on models
+
+#### Coordination and Timing
+Synchronizing leg movements:
+
+**Central pattern generators**: Neural oscillators that coordinate movement
+**Phase relationships**: Maintaining proper timing between legs
+**Adaptive coordination**: Adjusting coordination based on terrain
+**Transition management**: Switching between different gaits
+
+### Advantages and Disadvantages
+
+#### Advantages of Legged Locomotion
+
+**Terrain adaptability**:
+- **Rough terrain**: Can step over obstacles
+- **Variable surfaces**: Can adapt to different ground conditions
+- **Narrow passages**: Can squeeze through tight spaces
+- **Vertical obstacles**: Can climb stairs and steps
+
+**Efficiency in specific conditions**:
+- **Natural environments**: Often more efficient in unstructured environments
+- **Energy storage**: Can utilize passive dynamics and energy storage
+- **Selective contact**: Can choose where to place feet
+
+#### Disadvantages of Legged Locomotion
+
+**Complexity**:
+- **Mechanical complexity**: More complex mechanical systems
+- **Control complexity**: Sophisticated control systems required
+- **Computational requirements**: High computational demands
+- **Maintenance**: More components to maintain
+
+**Energy consumption**:
+- **Active balance**: Requires continuous power for balance
+- **Lift costs**: Energy required to lift legs
+- **Control overhead**: Energy for control systems
+
+### Design Considerations
+
+#### Mechanical Design
+Key mechanical factors in legged robot design:
+
+**Leg architecture**:
+- **Degrees of freedom**: Number of joints and their ranges
+- **Link lengths**: Proportions affecting stride length and stability
+- **Actuator placement**: Where actuators are located
+- **Transmission systems**: How power is transferred to joints
+
+**Foot design**:
+- **Contact geometry**: Shape of foot for ground interaction
+- **Compliance**: How feet handle ground contact
+- **Sensing**: Force and tactile sensing capabilities
+- **Terrain adaptation**: Ability to adapt to different surfaces
+
+#### Control Architecture
+How control systems are organized:
+
+**Hierarchical control**: Different levels of control authority
+**Distributed vs. centralized**: Where control decisions are made
+**Real-time requirements**: Timing constraints for control
+**Fault tolerance**: Handling component failures
+
+### Applications of Legged Locomotion
+
+#### Military and Security
+- **Reconnaissance**: Gathering intelligence in difficult terrain
+- **Perimeter security**: Patrolling complex environments
+- **Logistics support**: Carrying supplies over rough terrain
+- **Explosive ordnance disposal**: Accessing dangerous areas
+
+#### Search and Rescue
+- **Disaster response**: Navigating through rubble and debris
+- **Wilderness rescue**: Accessing difficult terrain
+- **Urban search**: Navigating collapsed buildings
+- **Hazardous environments**: Operating in dangerous conditions
+
+#### Industrial and Commercial
+- **Inspection**: Inspecting infrastructure in difficult-to-reach areas
+- **Maintenance**: Performing maintenance in complex environments
+- **Delivery**: Delivering goods to locations inaccessible to wheeled vehicles
+- **Agriculture**: Working in fields with obstacles and uneven terrain
+
+### Future Directions
+
+#### Advanced Materials
+New materials for improved legged locomotion:
+- **Artificial muscles**: Materials that contract like biological muscles
+- **Smart materials**: Materials that respond to environmental conditions
+- **Compliant materials**: Materials that provide variable stiffness
+
+#### Control Innovations
+Advanced control approaches:
+- **Machine learning**: Learning optimal locomotion patterns
+- **Bio-inspired control**: Mimicking biological control strategies
+- **Adaptive control**: Automatically adjusting to new conditions
+
+#### Hybrid Approaches
+Combining legged with other forms of locomotion:
+- **Wheeled legs**: Wheels that can also function as legs
+- **Track-leg hybrids**: Combining tracks with legged capabilities
+- **Multi-modal systems**: Switching between different locomotion modes
+
+Understanding the fundamentals of legged locomotion is essential for designing robots that can navigate complex environments effectively.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Legged locomotion allows robots to navigate complex terrains effectively.
+- Types include bipedal, quadrupedal, hexapodal, and multi-legged systems.
+- Gaits are classified by static/dynamic stability and movement patterns.
+- Biomechanics involve force analysis and energy considerations.
+- Control challenges include balance, stability, and coordination.
+- Advantages include terrain adaptability; disadvantages include complexity.
+- Applications span military, search and rescue, and industrial uses.
+- Future directions include advanced materials and hybrid approaches.
+
+</div>
+</TabItem>
+</Tabs>

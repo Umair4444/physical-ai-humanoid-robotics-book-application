@@ -1,0 +1,542 @@
+---
+id: chapter-5
+title: "Balance and Stability Control in Humanoid Robots"
+module: "Module 1: Foundations of Humanoid Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Balance and Stability Control in Humanoid Robots
+
+### Introduction to Balance Control
+
+Balance and stability are fundamental challenges in humanoid robotics, as these robots must maintain stability while performing dynamic movements and interacting with the environment. Unlike wheeled or tracked robots, humanoid robots have small support areas and must actively control their balance through coordinated movements of their body segments. Understanding and implementing effective balance control is essential for creating humanoid robots that can walk, manipulate objects, and interact safely with humans.
+
+### Fundamentals of Balance and Stability
+
+#### Static vs. Dynamic Balance
+
+**Static Balance**:
+The robot maintains balance without motion, with its center of mass positioned within its support polygon.
+
+**Characteristics**:
+- **Support Polygon**: Area defined by ground contact points
+- **Center of Mass (CoM)**: Must remain within support polygon
+- **Zero Motion**: No movement of body segments
+- **Stability Margin**: Distance from CoM to support polygon boundary
+
+**Applications**:
+- Standing posture maintenance
+- Static manipulation tasks
+- Resting positions
+- Preparatory poses for movement
+
+**Dynamic Balance**:
+The robot maintains balance during motion, using momentum and controlled movement to stay stable.
+
+**Characteristics**:
+- **Momentum Utilization**: Using body momentum for balance
+- **Controlled Falling**: Temporarily moving CoM outside support
+- **Recovery Actions**: Actively correcting balance disturbances
+- **Energy Efficiency**: Using dynamics for efficient movement
+
+**Applications**:
+- Walking and running
+- Dynamic manipulation
+- Recovery from disturbances
+- High-speed movements
+
+#### Stability Criteria
+
+**Zero Moment Point (ZMP)**:
+A critical concept in humanoid balance control that represents the point where the net moment of the ground reaction forces is zero.
+
+**Mathematical Definition**:
+```
+ZMP_x = x - (g/ẍ) * (z - z_0)
+ZMP_y = y - (g/ÿ) * (z - z_0)
+```
+Where:
+- (x, y, z) is the center of mass position
+- (ẍ, ÿ) are center of mass accelerations
+- g is gravitational acceleration
+- z_0 is the height of the ZMP plane
+
+**Stability Condition**:
+For stable walking, the ZMP must remain within the convex hull of the support polygon (typically the foot area).
+
+**Importance in Humanoid Design**:
+- Foundation for most walking pattern generation algorithms
+- Critical for stable locomotion planning
+- Used for real-time balance feedback control
+- Essential for disturbance recovery
+
+**Capture Point**:
+An alternative stability criterion that indicates where a robot must step to come to a complete stop.
+
+**Mathematical Definition**:
+```
+Capture_Point = CoM_Position + sqrt(Height/Gravity) * CoM_Velocity
+```
+
+**Advantages**:
+- Simpler to compute than ZMP
+- Intuitive concept for step planning
+- Useful for push recovery
+- Applicable to various locomotion patterns
+
+### Balance Control Strategies
+
+#### Model-Based Balance Control
+
+**Linear Inverted Pendulum Model (LIPM)**:
+A simplified model that treats the robot as a point mass supported by a massless leg.
+
+**Assumptions**:
+- CoM height remains constant
+- Robot behaves as a single pendulum
+- ZMP control for stability
+- Simplified dynamics for computation
+
+**Applications**:
+- Walking pattern generation
+- Balance recovery planning
+- Real-time trajectory optimization
+- Disturbance response planning
+
+**Limitations**:
+- Constant CoM height assumption
+- Simplified robot dynamics
+- Limited for complex movements
+- May not represent actual robot behavior
+
+**Cart-Table Model**:
+An extension of LIPM that includes both CoM and angular momentum.
+
+**Advantages**:
+- Accounts for angular momentum
+- Better for upper body movements
+- More accurate than LIPM
+- Suitable for manipulation tasks
+
+#### Feedback Control Approaches
+
+**Proportional-Derivative (PD) Control**:
+Using feedback of CoM position and velocity to generate corrective torques.
+
+**Implementation**:
+```
+τ_balance = K_p * (CoM_desired - CoM_actual) + K_d * (CoM_vel_desired - CoM_vel_actual)
+```
+
+**Applications**:
+- Real-time balance feedback
+- Disturbance rejection
+- Standing balance maintenance
+- Simple implementation
+
+**Whole-Body Control**:
+Coordinated control of all robot joints to maintain balance.
+
+**Approach**:
+- **Task Hierarchy**: Prioritizing balance over other tasks
+- **Optimization**: Minimizing balance-related costs
+- **Constraint Handling**: Ensuring physical constraints
+- **Real-time**: Fast computation for real-time control
+
+**Mathematical Framework**:
+```
+min ||Ax - b||²
+s.t. Cx ≤ d (constraints)
+```
+
+**Advantages**:
+- Coordinated multi-joint control
+- Optimal resource utilization
+- Constraint handling
+- Task prioritization
+
+**Disadvantages**:
+- Computational complexity
+- Real-time implementation challenges
+- Model dependency
+- Tuning complexity
+
+### Walking Pattern Generation
+
+#### ZMP-Based Walking
+
+**Preview Control**:
+Using future ZMP references to generate stable walking patterns.
+
+**Concept**:
+- Compute CoM trajectory based on future ZMP plan
+- Ensure ZMP remains within support polygon
+- Use preview of future steps for smooth transitions
+- Minimize CoM acceleration changes
+
+**Mathematical Approach**:
+```
+ẍ_CoM(t) = ω² * (x_CoM(t) - x_ZMP(t))
+```
+where ω = √(g/h) for CoM height h
+
+**Implementation Steps**:
+1. Define ZMP trajectory for walking
+2. Compute CoM trajectory using preview control
+3. Generate joint trajectories to follow CoM path
+4. Ensure ZMP remains within support polygon
+
+#### Foot Placement Strategies
+
+**Capture Point-Based Placement**:
+Using capture point concepts for foot placement during walking.
+
+**Approach**:
+- Calculate current capture point
+- Place foot at or beyond capture point
+- Ensure future stability
+- Adjust for walking speed and step length
+
+**Advantages**:
+- Intuitive and biologically inspired
+- Good for disturbance recovery
+- Simple computation
+- Stable step planning
+
+**Model Predictive Control (MPC) Walking**:
+Using optimization over a prediction horizon for walking control.
+
+**Concept**:
+- Predict future states over a time horizon
+- Optimize control inputs for stability and objectives
+- Implement first control action
+- Repeat at each time step
+
+**Objectives**:
+- Minimize ZMP tracking error
+- Maintain CoM stability
+- Optimize energy consumption
+- Ensure smooth transitions
+
+**Constraints**:
+- Physical joint limits
+- ZMP stability constraints
+- Kinematic constraints
+- Dynamic feasibility
+
+### Disturbance Recovery
+
+#### Push Recovery Strategies
+
+**Ankle Strategy**:
+Using ankle joint adjustments to recover from small disturbances.
+
+**Characteristics**:
+- **Small Disturbances**: Effective for minor imbalances
+- **Ankle Torques**: Primarily ankle joint control
+- **Fast Response**: Quick corrective action
+- **Limited Range**: Only effective for small disturbances
+
+**Implementation**:
+- PD control of ankle joints
+- CoM position feedback
+- Rapid torque application
+- Minimal upper body movement
+
+**Hip Strategy**:
+Using hip joint movements to recover from medium disturbances.
+
+**Characteristics**:
+- **Medium Disturbances**: Effective for larger imbalances
+- **Hip Movement**: Coordinated hip and trunk motion
+- **Moderate Response**: Moderate speed of recovery
+- **Larger Range**: Effective for larger disturbances than ankle strategy
+
+**Implementation**:
+- Coordinated hip and trunk control
+- Balance control prioritization
+- Upper body stabilization
+- CoM repositioning
+
+**Stepping Strategy**:
+Taking a step to recover from large disturbances.
+
+**Characteristics**:
+- **Large Disturbances**: Effective for major imbalances
+- **Step Taking**: Moving support base
+- **Slowest Response**: Requires step planning and execution
+- **Largest Range**: Effective for the largest disturbances
+
+**Implementation**:
+- Capture point calculation
+- Step location planning
+- Step execution control
+- Post-step stabilization
+
+#### Balance Recovery Algorithms
+
+**Linear Quadratic Regulator (LQR)**:
+Optimal control approach for balance recovery.
+
+**Mathematical Framework**:
+```
+min ∫(x^T Q x + u^T R u) dt
+```
+where x is state vector, u is control input
+
+**Application**:
+- Optimal balance recovery control
+- Disturbance rejection
+- State feedback optimization
+- Robust control design
+
+**Advantages**:
+- Optimal performance
+- Systematic design approach
+- Robust to disturbances
+- Well-established theory
+
+**Disadvantages**:
+- Model dependency
+- Linear system assumption
+- Computational complexity
+- Tuning requirements
+
+### Multi-Contact Balance
+
+#### Whole-Body Balance Control
+
+**Contact Modeling**:
+Representing multiple contact points between robot and environment.
+
+**Approaches**:
+- **Rigid Contact**: Assumption of no penetration
+- **Soft Contact**: Compliance at contact points
+- **Friction Cones**: Limiting tangential forces
+- **Contact Stability**: Ensuring stable contact configurations
+
+**Optimization-Based Control**:
+Using optimization to coordinate balance and other tasks.
+
+**Task Prioritization**:
+1. **Balance Task**: Highest priority for stability
+2. **Posture Task**: Maintaining desired posture
+3. **Manipulation Task**: Performing desired manipulation
+4. **Other Tasks**: Lower priority objectives
+
+**Mathematical Formulation**:
+```
+min ||J_task * θ̇ - ẋ_task_desired||²
+s.t. Stability constraints
+     Joint limit constraints
+     Actuator limit constraints
+```
+
+#### Manipulation While Balancing
+
+**Dual-Task Coordination**:
+Performing manipulation tasks while maintaining balance.
+
+**Challenges**:
+- **Conflicting Objectives**: Balance vs. manipulation goals
+- **Resource Competition**: Limited actuator capacity
+- **Dynamic Coupling**: Manipulation affects balance
+- **Real-time Requirements**: Fast response to disturbances
+
+**Strategies**:
+- **Task Prioritization**: Balance as primary task
+- **Redundancy Utilization**: Using excess DOF effectively
+- **Predictive Control**: Anticipating manipulation effects
+- **Adaptive Control**: Adjusting for changing conditions
+
+### Sensing for Balance Control
+
+#### Inertial Measurement Units (IMUs)
+
+**Role in Balance**:
+IMUs provide critical information about robot orientation and acceleration for balance control.
+
+**Information Provided**:
+- **Attitude**: Robot orientation relative to gravity
+- **Angular Velocity**: Rate of orientation change
+- **Linear Acceleration**: Acceleration measurements
+- **Heading**: Direction relative to magnetic north
+
+**Placement Considerations**:
+- **Torso Mounting**: For overall body orientation
+- **Multiple IMUs**: For segment-specific information
+- **Calibration**: Ensuring accurate measurements
+- **Drift Compensation**: Managing sensor drift over time
+
+#### Force/Torque Sensing
+
+**Foot Force Sensors**:
+Measuring ground reaction forces for balance control.
+
+**Information**:
+- **Ground Contact**: Detection of contact points
+- **Force Magnitude**: Measuring vertical forces
+- **Force Location**: Determining ZMP location
+- **Impact Detection**: Identifying external disturbances
+
+**Implementation**:
+- **Six-Axis Sensors**: Measuring forces and moments
+- **Multiple Sensors**: For redundancy and accuracy
+- **Calibration**: Ensuring accurate force measurements
+- **Filtering**: Reducing sensor noise
+
+#### Vision-Based Balance
+
+**Visual Feedback**:
+Using cameras for balance-related information.
+
+**Applications**:
+- **Terrain Assessment**: Identifying safe footholds
+- **Obstacle Detection**: Avoiding balance-threatening obstacles
+- **Human Detection**: Maintaining safe distances
+- **Environmental Mapping**: Understanding surroundings
+
+**Integration Challenges**:
+- **Processing Delay**: Latency in visual processing
+- **Lighting Conditions**: Performance in various lighting
+- **Computational Load**: Processing requirements
+- **Robustness**: Handling vision failures
+
+### Advanced Balance Control Techniques
+
+#### Machine Learning Approaches
+
+**Reinforcement Learning for Balance**:
+Learning balance control policies through trial and error.
+
+**Approach**:
+- **State Representation**: Defining robot state for learning
+- **Action Space**: Defining possible control actions
+- **Reward Function**: Defining success criteria
+- **Policy Learning**: Learning optimal control policies
+
+**Advantages**:
+- **Adaptation**: Learning from experience
+- **Optimization**: Optimizing for specific objectives
+- **Robustness**: Learning to handle disturbances
+- **Generalization**: Potential for generalization
+
+**Challenges**:
+- **Safety**: Ensuring safe learning process
+- **Sample Efficiency**: Learning with limited data
+- **Real-time**: Meeting real-time requirements
+- **Transfer**: Transferring to real robots
+
+#### Bio-Inspired Approaches
+
+**Central Pattern Generators (CPGs)**:
+Neural networks that generate rhythmic patterns for locomotion.
+
+**Characteristics**:
+- **Rhythmic Patterns**: Generating rhythmic movements
+- **Adaptation**: Adapting to disturbances
+- **Simplicity**: Relatively simple control structure
+- **Biological Inspiration**: Mimicking biological systems
+
+**Implementation**:
+- **Neural Oscillators**: Generating rhythmic signals
+- **Coupling**: Coordinating different oscillators
+- **Modulation**: Adjusting patterns based on feedback
+- **Learning**: Adapting patterns over time
+
+### Implementation Considerations
+
+#### Real-time Requirements
+
+**Computation Time**:
+Balance control algorithms must operate in real-time to be effective.
+
+**Timing Constraints**:
+- **High Frequency**: 100-1000 Hz for balance feedback
+- **Predictive Control**: Planning at lower frequencies
+- **Optimization**: Balancing accuracy and speed
+- **Multi-rate**: Different rates for different tasks
+
+**Optimization Strategies**:
+- **Algorithm Simplification**: Reducing computational complexity
+- **Parallel Processing**: Distributing computation
+- **Approximation**: Using approximations for speed
+- **Code Optimization**: Efficient implementation
+
+#### Hardware Limitations
+
+**Actuator Constraints**:
+Physical limitations of actuators affect balance control capabilities.
+
+**Considerations**:
+- **Torque Limits**: Maximum available torque
+- **Speed Limits**: Maximum joint velocities
+- **Power Limits**: Available power for control
+- **Backdrivability**: Ability to be moved by external forces
+
+**Sensor Limitations**:
+Sensor characteristics affect balance control performance.
+
+**Factors**:
+- **Noise**: Sensor measurement noise
+- **Delay**: Time delay in sensor readings
+- **Range**: Measurement range limitations
+- **Accuracy**: Measurement precision
+
+Understanding balance and stability control is essential for creating humanoid robots that can operate safely and effectively in dynamic environments while performing complex tasks.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Balance and Stability Control in Humanoid Robots
+
+### Balance Fundamentals
+- **Static vs. Dynamic**: Different approaches for stationary and moving robots
+- **ZMP**: Zero Moment Point as stability criterion
+- **Capture Point**: Alternative stability measure for step planning
+- **Stability Criteria**: Mathematical conditions for stable balance
+
+### Control Strategies
+- **Model-Based**: LIPM and cart-table models
+- **Feedback Control**: PD and whole-body control
+- **Walking Patterns**: ZMP-based and MPC approaches
+- **Recovery**: Ankle, hip, and stepping strategies
+
+### Disturbance Handling
+- **Push Recovery**: Ankle, hip, and stepping strategies
+- **Algorithms**: LQR and predictive control
+- **Multi-Contact**: Whole-body balance with multiple contacts
+- **Dual Tasks**: Balancing during manipulation
+
+### Sensing Systems
+- **IMUs**: Orientation and acceleration measurements
+- **Force Sensors**: Ground reaction force measurements
+- **Vision**: Environmental and terrain assessment
+- **Integration**: Combining multiple sensor types
+
+### Advanced Techniques
+- **Learning**: Reinforcement learning for balance
+- **Bio-Inspired**: CPGs for rhythmic movements
+- **Optimization**: MPC and LQR approaches
+- **Real-time**: Implementation and computational requirements
+
+### Implementation
+- **Real-time**: Timing and computational constraints
+- **Hardware**: Actuator and sensor limitations
+- **Safety**: Ensuring stable operation
+- **Tuning**: Parameter optimization for performance
+
+</div>
+</TabItem>
+</Tabs>

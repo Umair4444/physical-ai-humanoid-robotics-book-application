@@ -1,0 +1,1587 @@
+---
+id: chapter-8
+title: "3D Vision and Depth Perception"
+module: "Module 2: Advanced Computer Vision Techniques"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: 3D Vision and Depth Perception
+
+### Introduction to 3D Vision
+
+3D vision is a critical component of robotics systems that enables robots to perceive and understand the three-dimensional structure of their environment. Unlike 2D vision systems that only provide planar information, 3D vision systems provide depth information that is essential for navigation, manipulation, object recognition, and spatial reasoning. This chapter explores the fundamental principles, techniques, and applications of 3D vision in robotics.
+
+### Stereo Vision Fundamentals
+
+#### Stereo Geometry and Triangulation
+
+**Pinhole Camera Model**:
+The mathematical foundation for stereo vision.
+
+**Mathematical Representation**:
+```
+x = f * (X/Z) + cx
+y = f * (Y/Z) + cy
+```
+
+Where (x,y) are image coordinates, (X,Y,Z) are world coordinates, f is focal length, and (cx,cy) are principal point coordinates.
+
+**Stereo Geometry**:
+Two cameras observing the same scene from slightly different positions.
+
+**Baseline**:
+The distance between the two camera centers.
+
+**Epipolar Geometry**:
+The geometric relationship between two views of the same scene.
+
+**Epipolar Constraint**:
+If a point p appears at location x in the first image, its corresponding point x' in the second image must lie on a specific line called the epipolar line.
+
+**Mathematical Expression**:
+```
+x'^T * F * x = 0
+```
+
+Where F is the fundamental matrix.
+
+**Essential Matrix**:
+For calibrated cameras:
+```
+x'^T * E * x = 0
+```
+
+Where E = K^T * F * K, and K is the camera intrinsic matrix.
+
+#### Stereo Matching Algorithms
+
+**Block Matching**:
+Simple but effective approach for finding correspondences.
+
+**Algorithm Steps**:
+1. **Define Window**: Select a window around each pixel in the left image
+2. **Search**: Search along the epipolar line in the right image
+3. **Compare**: Compare windows using similarity metric
+4. **Select**: Choose best match based on similarity
+
+**Similarity Metrics**:
+- **Sum of Absolute Differences (SAD)**:
+  ```
+  SAD = Σ |I_left(x+i, y+j) - I_right(x+d+i, y+j)|
+  ```
+- **Sum of Squared Differences (SSD)**:
+  ```
+  SSD = Σ [I_left(x+i, y+j) - I_right(x+d+i, y+j)]²
+  ```
+- **Normalized Cross Correlation (NCC)**:
+  ```
+  NCC = Σ [(I_left - μ_left)(I_right - μ_right)] / (σ_left * σ_right)
+  ```
+
+**Implementation Example**:
+```cpp
+class StereoMatcher {
+private:
+    int window_size;
+    int max_disparity;
+    cv::Mat left_img, right_img;
+    
+public:
+    StereoMatcher(int win_size = 15, int max_disp = 64) 
+        : window_size(win_size), max_disparity(max_disp) {}
+    
+    cv::Mat computeDisparity(const cv::Mat& left, const cv::Mat& right) {
+        cv::Mat disparity = cv::Mat::zeros(left.rows, left.cols, CV_32F);
+        
+        int half_window = window_size / 2;
+        
+        for (int y = half_window; y < left.rows - half_window; y++) {
+            for (int x = half_window + max_disparity; x < left.cols - half_window; x++) {
+                float best_cost = std::numeric_limits<float>::max();
+                int best_disparity = 0;
+                
+                for (int d = 0; d < max_disparity; d++) {
+                    if (x - d < half_window) continue;
+                    
+                    float cost = computeSAD(x, y, d, left, right);
+                    
+                    if (cost < best_cost) {
+                        best_cost = cost;
+                        best_disparity = d;
+                    }
+                }
+                
+                disparity.at<float>(y, x) = best_disparity;
+            }
+        }
+        
+        return disparity;
+    }
+
+private:
+    float computeSAD(int x, int y, int disparity, 
+                    const cv::Mat& left, const cv::Mat& right) {
+        float sad = 0.0f;
+        int half_window = window_size / 2;
+        
+        for (int dy = -half_window; dy <= half_window; dy++) {
+            for (int dx = -half_window; dx <= half_window; dx++) {
+                float left_val = left.at<uchar>(y + dy, x + dx);
+                float right_val = right.at<uchar>(y + dy, x - disparity + dx);
+                sad += abs(left_val - right_val);
+            }
+        }
+        
+        return sad;
+    }
+};
+```
+
+#### Semi-Global Block Matching (SGBM)
+
+**Concept**:
+Improves upon simple block matching by considering multiple scanlines.
+
+**Advantages**:
+- **Better Accuracy**: Considers multiple directions
+- **Reduced Noise**: Aggregates information from multiple paths
+- **Boundary Preservation**: Better handling of depth discontinuities
+
+**Algorithm**:
+1. **Cost Computation**: Compute matching costs for all disparities
+2. **Path Aggregation**: Aggregate costs along multiple paths
+3. **Disparity Selection**: Select disparities based on aggregated costs
+4. **Refinement**: Apply post-processing to improve results
+
+**Mathematical Foundation**:
+For each pixel (x,y) and disparity d:
+```
+L_r(x,y,d) = C(x,y,d) + min(L_r(x-r,y-r,d'),
+                           L_r(x-r,y-r,d) + P1,
+                           min_k(L_r(x-r,y-r,k)) + P2) - min_k(L_r(x-r,y-r,k))
+```
+
+Where L_r is the aggregated cost along path r, C is the matching cost, and P1, P2 are penalty parameters.
+
+**Implementation**:
+```cpp
+class SGBMMatcher {
+private:
+    int min_disparity;
+    int num_disparities;
+    int block_size;
+    float P1, P2;  // Penalty parameters
+    
+public:
+    cv::Mat computeSGBM(const cv::Mat& left, const cv::Mat& right) {
+        // Initialize cost volume
+        cv::Mat cost_vol = cv::Mat::zeros(
+            left.rows, left.cols * num_disparities, CV_16S);
+        
+        // Compute initial matching costs
+        computeMatchingCosts(left, right, cost_vol);
+        
+        // Aggregate costs along multiple directions
+        cv::Mat aggregated_costs = aggregateCosts(cost_vol);
+        
+        // Compute disparities
+        cv::Mat disparity = computeDisparity(aggregated_costs);
+        
+        // Apply subpixel refinement
+        refineDisparity(disparity);
+        
+        return disparity;
+    }
+
+private:
+    void computeMatchingCosts(const cv::Mat& left, const cv::Mat& right, 
+                             cv::Mat& cost_volume) {
+        // Compute CENSUS transform for robust matching
+        cv::Mat census_left = computeCensusTransform(left);
+        cv::Mat census_right = computeCensusTransform(right);
+        
+        for (int y = 0; y < left.rows; y++) {
+            for (int x = 0; x < left.cols; x++) {
+                for (int d = min_disparity; d < min_disparity + num_disparities; d++) {
+                    if (x - d >= 0 && x - d < right.cols) {
+                        // Compute Hamming distance between Census transforms
+                        int hamming_dist = computeHammingDistance(
+                            census_left.at<uint64_t>(y, x),
+                            census_right.at<uint64_t>(y, x - d));
+                        
+                        cost_volume.at<short>(y, x * num_disparities + (d - min_disparity)) = 
+                            static_cast<short>(hamming_dist);
+                    } else {
+                        cost_volume.at<short>(y, x * num_disparities + (d - min_disparity)) = 63;  // Max Census distance
+                    }
+                }
+            }
+        }
+    }
+    
+    uint64_t computeCensusTransform(const cv::Mat& img, int x, int y, int size = 7) {
+        uint64_t census = 0;
+        int half_size = size / 2;
+        int center_val = img.at<uchar>(y, x);
+        
+        int bit = 0;
+        for (int dy = -half_size; dy <= half_size; dy++) {
+            for (int dx = -half_size; dx <= half_size; dx++) {
+                if (dy == 0 && dx == 0) continue;  // Skip center
+                
+                int neighbor_x = x + dx;
+                int neighbor_y = y + dy;
+                
+                if (neighbor_x >= 0 && neighbor_x < img.cols && 
+                    neighbor_y >= 0 && neighbor_y < img.rows) {
+                    int neighbor_val = img.at<uchar>(neighbor_y, neighbor_x);
+                    if (neighbor_val >= center_val) {
+                        census |= (1ULL << bit);
+                    }
+                }
+                bit++;
+            }
+        }
+        
+        return census;
+    }
+    
+    int computeHammingDistance(uint64_t a, uint64_t b) {
+        return __builtin_popcountll(a ^ b);
+    }
+    
+    cv::Mat aggregateCosts(const cv::Mat& cost_volume) {
+        cv::Mat aggregated = cv::Mat::zeros(
+            cost_volume.rows, cost_volume.cols, CV_32S);
+        
+        // Aggregate costs along 8 directions
+        std::vector<std::pair<int, int>> directions = {
+            {-1, -1}, {-1, 0}, {-1, 1},
+            {0, -1},           {0, 1},
+            {1, -1},  {1, 0},  {1, 1}
+        };
+        
+        for (const auto& dir : directions) {
+            aggregatePath(cost_volume, aggregated, dir.first, dir.second);
+        }
+        
+        return aggregated;
+    }
+    
+    void aggregatePath(const cv::Mat& cost_vol, cv::Mat& aggregated, 
+                      int dx, int dy) {
+        // Implementation would aggregate costs along the specified direction
+        // This is a simplified representation
+    }
+    
+    cv::Mat computeDisparity(const cv::Mat& aggregated_costs) {
+        cv::Mat disparity = cv::Mat::zeros(aggregated_costs.rows, 
+                                          aggregated_costs.cols / num_disparities, 
+                                          CV_16S);
+        
+        for (int y = 0; y < disparity.rows; y++) {
+            for (int x = 0; x < disparity.cols; x++) {
+                int best_disparity = 0;
+                int min_cost = std::numeric_limits<int>::max();
+                
+                for (int d = 0; d < num_disparities; d++) {
+                    int cost = aggregated_costs.at<int>(y, x * num_disparities + d);
+                    if (cost < min_cost) {
+                        min_cost = cost;
+                        best_disparity = d;
+                    }
+                }
+                
+                disparity.at<short>(y, x) = best_disparity + min_disparity;
+            }
+        }
+        
+        return disparity;
+    }
+    
+    void refineDisparity(cv::Mat& disparity) {
+        // Apply subpixel refinement using quadratic interpolation
+        for (int y = 0; y < disparity.rows; y++) {
+            for (int x = 0; x < disparity.cols; x++) {
+                int d = disparity.at<short>(y, x);
+                
+                if (d > 0 && d < num_disparities - 1) {
+                    // Get costs for three disparities around the winner
+                    int c0 = aggregated_costs.at<int>(y, x * num_disparities + d - 1);
+                    int c1 = aggregated_costs.at<int>(y, x * num_disparities + d);
+                    int c2 = aggregated_costs.at<int>(y, x * num_disparities + d + 1);
+                    
+                    // Quadratic interpolation
+                    float delta = (c0 - c2) / (2.0f * (c0 - 2*c1 + c2));
+                    
+                    if (abs(delta) <= 1.0f) {
+                        disparity.at<float>(y, x) = d + delta;
+                    }
+                }
+            }
+        }
+    }
+};
+```
+
+### Depth from Single Images
+
+#### Monocular Depth Estimation
+
+**Traditional Approaches**:
+Using geometric and photometric cues to estimate depth from a single image.
+
+**Geometric Cues**:
+- **Perspective**: Objects farther away appear smaller
+- **Shading**: Surface orientation from shading patterns
+- **Texture**: Texture density changes with distance
+- **Motion**: Depth from motion parallax
+
+**Photometric Cues**:
+- **Defocus**: Depth from defocus blur
+- **Illumination**: Surface properties from lighting
+- **Color**: Atmospheric effects and color changes
+- **Shadows**: Depth from shadow analysis
+
+#### Deep Learning Approaches
+
+**Convolutional Neural Networks for Depth**:
+Using deep learning to learn depth estimation from large datasets.
+
+**Architecture Example**:
+```cpp
+class MonocularDepthEstimator {
+private:
+    // Based on architectures like DepthNet, DORN, or MiDaS
+    cv::dnn::Net network;
+    int input_width, input_height;
+    
+public:
+    MonocularDepthEstimator(const std::string& model_path) {
+        network = cv::dnn::readNetFromONNX(model_path);
+        input_width = 384;
+        input_height = 384;
+    }
+    
+    cv::Mat estimateDepth(const cv::Mat& input) {
+        // Preprocess input
+        cv::Mat blob;
+        cv::dnn::blobFromImage(input, blob, 1.0/255.0, 
+                              cv::Size(input_width, input_height), 
+                              cv::Scalar(0, 0, 0), true, false);
+        
+        // Set input
+        network.setInput(blob);
+        
+        // Forward pass
+        cv::Mat output = network.forward();
+        
+        // Post-process output
+        cv::Mat depth_map = postProcessOutput(output);
+        
+        return depth_map;
+    }
+
+private:
+    cv::Mat postProcessOutput(const cv::Mat& raw_output) {
+        // Reshape and resize to original dimensions
+        cv::Mat reshaped;
+        if (raw_output.dims == 4) {
+            // Output is [batch, channels, height, width]
+            reshaped = raw_output.reshape(1, {raw_output.size[2], raw_output.size[3]});
+        } else {
+            reshaped = raw_output;
+        }
+        
+        // Apply activation function (often ReLU or linear)
+        cv::Mat activated;
+        cv::exp(-reshaped, activated);  // Example: convert log depth to depth
+        
+        // Resize to original input size
+        cv::Mat resized;
+        cv::resize(activated, resized, 
+                  cv::Size(original_width, original_height),
+                  0, 0, cv::INTER_CUBIC);
+        
+        return resized;
+    }
+};
+```
+
+**Learning-based Depth Estimation**:
+Training networks on large datasets of images with ground truth depth.
+
+**Training Data Sources**:
+- **Synthetic Data**: Generated from 3D models
+- **Stereo Pairs**: Depth computed from stereo
+- **LIDAR Data**: Ground truth from LIDAR sensors
+- **Structure from Motion**: Reconstructed depth from multi-view
+
+**Loss Functions**:
+```cpp
+// Scale-invariant loss (common for monocular depth)
+float scaleInvariantLoss(const cv::Mat& pred, const cv::Mat& gt, float alpha = 0.5) {
+    cv::Mat log_diff = cv::log(pred) - cv::log(gt);
+    
+    float mean_log_diff = cv::mean(log_diff)[0];
+    
+    cv::Mat centered_log_diff = log_diff - mean_log_diff;
+    cv::Mat squared_diff = centered_log_diff.mul(centered_log_diff);
+    
+    float mse = cv::mean(squared_diff)[0];
+    float mean_squared = mean_log_diff * mean_log_diff;
+    
+    return mse - alpha * mean_squared;
+}
+
+// BerHu loss (combination of L1 and L2)
+float berHuLoss(const cv::Mat& pred, const cv::Mat& gt, float delta = 0.2) {
+    cv::Mat abs_diff = cv::abs(pred - gt);
+    
+    cv::Mat loss = abs_diff.clone();
+    
+    // For values greater than delta, use quadratic loss
+    cv::Mat mask = (abs_diff > delta);
+    cv::Mat quad_loss = (abs_diff.mul(abs_diff) + delta*delta) / (2.0f * delta);
+    loss.setTo(quad_loss, mask);
+    
+    return cv::mean(loss)[0];
+}
+```
+
+### Time-of-Flight (ToF) and Structured Light
+
+#### Time-of-Flight Sensors
+
+**Principle**:
+Measuring distance by timing the round-trip of light.
+
+**Mathematical Foundation**:
+```
+Distance = (Speed of Light × Time of Flight) / 2
+```
+
+**Modulated ToF**:
+Instead of measuring direct time, measuring phase shift of modulated light.
+
+**Phase Measurement**:
+```
+φ = 4πd / λ
+d = φλ / 4π
+```
+
+Where φ is phase shift, λ is wavelength of modulation, and d is distance.
+
+**Implementation Challenges**:
+- **Multi-path Interference**: Light bouncing off multiple surfaces
+- **Motion Artifacts**: Movement during measurement
+- **Temperature Effects**: Temperature affecting measurements
+- **Integration Time**: Trade-off between speed and accuracy
+
+**ToF Camera Processing**:
+```cpp
+class ToFCameraProcessor {
+private:
+    float modulation_frequency;  // in Hz
+    float speed_of_light;        // in m/s
+    
+public:
+    ToFCameraProcessor(float freq = 20e6)  // 20 MHz
+        : modulation_frequency(freq), speed_of_light(299792458.0f) {}
+    
+    cv::Mat processRawMeasurements(const std::vector<cv::Mat>& phase_images) {
+        // Phase images typically come in multiple phases (e.g., 4-phase quadrature)
+        if (phase_images.size() < 4) {
+            throw std::invalid_argument("Need at least 4 phase images");
+        }
+        
+        cv::Mat phase_map = cv::Mat::zeros(phase_images[0].size(), CV_32F);
+        
+        for (int y = 0; y < phase_map.rows; y++) {
+            for (int x = 0; x < phase_map.cols; x++) {
+                // Extract amplitudes and phases
+                float a1 = phase_images[0].at<float>(y, x);
+                float a2 = phase_images[1].at<float>(y, x);
+                float a3 = phase_images[2].at<float>(y, x);
+                float a4 = phase_images[3].at<float>(y, x);
+                
+                // Calculate phase using arctangent
+                float phase = atan2(a3 - a1, a4 - a2);
+                
+                // Ensure positive phase
+                if (phase < 0) phase += 2 * M_PI;
+                
+                // Calculate distance
+                float wavelength = speed_of_light / modulation_frequency;
+                float distance = phase * wavelength / (4 * M_PI);
+                
+                phase_map.at<float>(y, x) = distance;
+            }
+        }
+        
+        return phase_map;
+    }
+    
+    cv::Mat applyPhaseUnwrapping(const cv::Mat& wrapped_phase) {
+        cv::Mat unwrapped_phase = wrapped_phase.clone();
+        
+        // Simple phase unwrapping using path-following approach
+        cv::Mat mask = cv::Mat::zeros(wrapped_phase.size(), CV_8UC1);
+        
+        // Start from a reliable point and unwrap outward
+        unwrapPhaseRecursive(wrapped_phase, unwrapped_phase, mask, 
+                           wrapped_phase.rows/2, wrapped_phase.cols/2);
+        
+        return unwrapped_phase;
+    }
+
+private:
+    void unwrapPhaseRecursive(const cv::Mat& wrapped, cv::Mat& unwrapped, 
+                             cv::Mat& mask, int y, int x) {
+        if (y < 0 || y >= wrapped.rows || x < 0 || x >= wrapped.cols) return;
+        if (mask.at<uchar>(y, x) == 255) return;  // Already processed
+        
+        mask.at<uchar>(y, x) = 255;  // Mark as processed
+        
+        // Process neighbors
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                if (abs(dy) + abs(dx) != 1) continue;  // Only 4-connectivity
+                
+                int ny = y + dy;
+                int nx = x + dx;
+                
+                if (ny >= 0 && ny < wrapped.rows && nx >= 0 && nx < wrapped.cols) {
+                    float current_phase = unwrapped.at<float>(y, x);
+                    float neighbor_phase = wrapped.at<float>(ny, nx);
+                    
+                    // Calculate phase difference and adjust for 2π jumps
+                    float diff = neighbor_phase - current_phase;
+                    if (diff > M_PI) diff -= 2*M_PI;
+                    else if (diff < -M_PI) diff += 2*M_PI;
+                    
+                    unwrapped.at<float>(ny, nx) = current_phase + diff;
+                    
+                    // Continue unwrapping
+                    unwrapPhaseRecursive(wrapped, unwrapped, mask, ny, nx);
+                }
+            }
+        }
+    }
+};
+```
+
+#### Structured Light Systems
+
+**Principle**:
+Projecting known patterns onto a scene and analyzing the deformation to determine depth.
+
+**Pattern Types**:
+- **Stripe Patterns**: Alternating light/dark stripes
+- **Grid Patterns**: Checkerboard or grid patterns
+- **Coded Patterns**: Unique codes for each stripe
+- **Phase-Shifting**: Multiple phase-shifted patterns
+
+**Mathematical Model**:
+For a projector-camera system:
+```
+x_image = f * (X_world - T_x) / (Z_world - T_z) + c_x
+y_image = f * (Y_world - T_y) / (Z_world - T_z) + c_y
+```
+
+Where (T_x, T_y, T_z) is the translation between camera and projector.
+
+**Calibration Requirements**:
+Both camera and projector need to be calibrated.
+
+**Camera Calibration**:
+Same as stereo camera calibration.
+
+**Projector Calibration**:
+Treating projector as an inverse camera.
+
+**Implementation**:
+```cpp
+class StructuredLightSystem {
+private:
+    cv::Mat camera_matrix, dist_coeffs;
+    cv::Mat proj_camera_matrix, proj_dist_coeffs;
+    cv::Mat R, T;  // Rotation and translation between camera and projector
+    
+public:
+    struct CalibrationPattern {
+        std::vector<cv::Point2f> image_points;
+        std::vector<cv::Point3f> object_points;
+    };
+    
+    void calibrateSystem(const std::vector<CalibrationPattern>& patterns) {
+        // Calibrate camera using standard calibration
+        std::vector<std::vector<cv::Point2f>> img_points;
+        std::vector<std::vector<cv::Point3f>> obj_points;
+        
+        for (const auto& pattern : patterns) {
+            img_points.push_back(pattern.image_points);
+            obj_points.push_back(pattern.object_points);
+        }
+        
+        cv::calibrateCamera(obj_points, img_points, 
+                           cv::Size(640, 480), 
+                           camera_matrix, dist_coeffs,
+                           rvecs, tvecs);
+        
+        // Calibrate projector similarly
+        // ...
+        
+        // Calibrate relative pose between camera and projector
+        cv::Mat R_cam_proj, T_cam_proj;
+        cv::stereoCalibrate(obj_points, camera_points, projector_points,
+                           camera_matrix, dist_coeffs,
+                           proj_camera_matrix, proj_dist_coeffs,
+                           cv::Size(640, 480), R_cam_proj, T_cam_proj);
+        
+        // Store relative transformation
+        R = R_cam_proj;
+        T = T_cam_proj;
+    }
+    
+    cv::Mat reconstruct3D(const std::vector<cv::Mat>& projected_patterns,
+                         const cv::Mat& captured_image) {
+        // Decode the structured light pattern
+        cv::Mat decoded_pattern = decodePatterns(projected_patterns, captured_image);
+        
+        // Create correspondence map
+        cv::Mat correspondence_map = createCorrespondenceMap(decoded_pattern);
+        
+        // Triangulate 3D points
+        cv::Mat points_3d = triangulatePoints(correspondence_map);
+        
+        return points_3d;
+    }
+
+private:
+    cv::Mat decodePatterns(const std::vector<cv::Mat>& patterns,
+                          const cv::Mat& captured) {
+        // Implementation depends on pattern type
+        // For binary patterns, decode using gray code
+        // For phase-shifting, decode using phase calculation
+        
+        cv::Mat decoded = cv::Mat::zeros(captured.size(), CV_32F);
+        
+        // Example for binary pattern decoding
+        for (size_t i = 0; i < patterns.size(); i++) {
+            cv::Mat binary_pattern;
+            cv::threshold(patterns[i], binary_pattern, 128, 255, cv::THRESH_BINARY);
+            binary_pattern.convertTo(binary_pattern, CV_32F, 1.0/255.0);
+            
+            cv::Mat captured_binary;
+            cv::threshold(captured, captured_binary, 128, 255, cv::THRESH_BINARY);
+            captured_binary.convertTo(captured_binary, CV_32F, 1.0/255.0);
+            
+            // Decode this bit of the pattern
+            cv::Mat bit_mask = (binary_pattern == captured_binary);
+            decoded += bit_mask * (1 << i);
+        }
+        
+        return decoded;
+    }
+    
+    cv::Mat createCorrespondenceMap(const cv::Mat& decoded_pattern) {
+        // For each pixel in the camera image, find corresponding projector pixel
+        cv::Mat correspondence = cv::Mat::zeros(decoded_pattern.size(), CV_32FC2);
+        
+        for (int y = 0; y < decoded_pattern.rows; y++) {
+            for (int x = 0; x < decoded_pattern.cols; x++) {
+                float proj_coord = decoded_pattern.at<float>(y, x);
+                
+                // Convert pattern coordinate to projector pixel coordinate
+                // This depends on the specific pattern and projection geometry
+                float proj_x = proj_coord;  // Simplified
+                float proj_y = y;           // Simplified
+                
+                correspondence.at<cv::Vec2f>(y, x) = cv::Vec2f(proj_x, proj_y);
+            }
+        }
+        
+        return correspondence;
+    }
+    
+    cv::Mat triangulatePoints(const cv::Mat& correspondence_map) {
+        cv::Mat points_3d = cv::Mat::zeros(correspondence_map.size(), CV_32FC3);
+        
+        // For each pixel, triangulate the 3D point using camera and projector rays
+        for (int y = 0; y < correspondence_map.rows; y++) {
+            for (int x = 0; x < correspondence_map.cols; x++) {
+                cv::Vec2f proj_coords = correspondence_map.at<cv::Vec2f>(y, x);
+                int proj_x = static_cast<int>(proj_coords[0]);
+                int proj_y = static_cast<int>(proj_coords[1]);
+                
+                if (proj_x >= 0 && proj_x < projector_resolution.width &&
+                    proj_y >= 0 && proj_y < projector_resolution.height) {
+                    
+                    // Create rays from camera and projector
+                    cv::Vec3f camera_ray = pixelToRay(x, y, camera_matrix);
+                    cv::Vec3f projector_ray = pixelToRay(proj_x, proj_y, proj_camera_matrix);
+                    
+                    // Transform projector ray to camera coordinate system
+                    cv::Mat R_inv = R.t();
+                    cv::Mat t_neg = -R_inv * T;
+                    
+                    cv::Vec3f proj_ray_cam = R_inv * projector_ray + t_neg;
+                    
+                    // Find intersection of rays (least squares approach)
+                    cv::Vec3f point_3d = triangulatePoint(camera_ray, proj_ray_cam, 
+                                                        cv::Point2f(x, y), 
+                                                        cv::Point2f(proj_x, proj_y));
+                    
+                    points_3d.at<cv::Vec3f>(y, x) = point_3d;
+                }
+            }
+        }
+        
+        return points_3d;
+    }
+    
+    cv::Vec3f triangulatePoint(const cv::Vec3f& ray1, const cv::Vec3f& ray2,
+                              const cv::Point2f& img_pt1, const cv::Point2f& img_pt2) {
+        // Triangulate 3D point from two rays using least squares
+        // This is a simplified implementation
+        
+        cv::Vec3f p1 = cv::Vec3f(0, 0, 0);  // Camera origin
+        cv::Vec3f p2 = T;  // Projector origin in camera coordinates
+        
+        // Formulate as AX = b where X = [s, t] for ray parameters
+        cv::Mat A = (cv::Mat_<float>(3, 2) << 
+                    -ray1[0], ray2[0],
+                    -ray1[1], ray2[1], 
+                    -ray1[2], ray2[2]);
+        
+        cv::Mat b = (cv::Mat_<float>(3, 1) << 
+                    p2[0] - p1[0],
+                    p2[1] - p1[1],
+                    p2[2] - p1[2]);
+        
+        cv::Mat x;
+        cv::solve(A, b, x, cv::DECOMP_SVD);
+        
+        float s = x.at<float>(0);
+        float t = x.at<float>(1);
+        
+        // Average of the two points along the rays
+        cv::Vec3f point1 = p1 + s * ray1;
+        cv::Vec3f point2 = p2 + t * ray2;
+        
+        return (point1 + point2) * 0.5f;
+    }
+};
+```
+
+### Point Cloud Processing
+
+#### Point Cloud Data Structures
+
+**Basic Point Cloud Representation**:
+```cpp
+struct Point3D {
+    float x, y, z;
+    uint8_t r, g, b;    // Color information
+    float intensity;    // Intensity for LiDAR points
+    float normal_x, normal_y, normal_z;  // Surface normal
+};
+
+class PointCloud {
+public:
+    std::vector<Point3D> points;
+    std::vector<int> indices;  // Optional: subset indices
+    
+    PointCloud() = default;
+    
+    void addPoint(float x, float y, float z) {
+        Point3D pt;
+        pt.x = x; pt.y = y; pt.z = z;
+        points.push_back(pt);
+    }
+    
+    size_t size() const { return points.size(); }
+    
+    // Calculate bounding box
+    void getBoundingBox(float& min_x, float& min_y, float& min_z,
+                       float& max_x, float& max_y, float& max_z) const {
+        if (points.empty()) return;
+        
+        min_x = max_x = points[0].x;
+        min_y = max_y = points[0].y;
+        min_z = max_z = points[0].z;
+        
+        for (const auto& pt : points) {
+            min_x = std::min(min_x, pt.x);
+            max_x = std::max(max_x, pt.x);
+            min_y = std::min(min_y, pt.y);
+            max_y = std::max(max_y, pt.y);
+            min_z = std::min(min_z, pt.z);
+            max_z = std::max(max_z, pt.z);
+        }
+    }
+    
+    // Calculate centroid
+    cv::Vec3f getCentroid() const {
+        if (points.empty()) return cv::Vec3f(0, 0, 0);
+        
+        cv::Vec3f sum(0, 0, 0);
+        for (const auto& pt : points) {
+            sum[0] += pt.x;
+            sum[1] += pt.y;
+            sum[2] += pt.z;
+        }
+        
+        float inv_size = 1.0f / points.size();
+        return sum * inv_size;
+    }
+    
+    // Downsample using voxel grid
+    PointCloud downsample(float voxel_size) const {
+        PointCloud downsampled;
+        
+        // Create voxel grid
+        std::map<std::tuple<int, int, int>, std::vector<size_t>> voxel_map;
+        
+        for (size_t i = 0; i < points.size(); i++) {
+            const auto& pt = points[i];
+            
+            int vx = static_cast<int>(pt.x / voxel_size);
+            int vy = static_cast<int>(pt.y / voxel_size);
+            int vz = static_cast<int>(pt.z / voxel_size);
+            
+            voxel_map[{vx, vy, vz}].push_back(i);
+        }
+        
+        // Take centroid of each voxel
+        for (const auto& voxel_entry : voxel_map) {
+            const auto& indices = voxel_entry.second;
+            
+            cv::Vec3f sum(0, 0, 0);
+            for (size_t idx : indices) {
+                const auto& pt = points[idx];
+                sum[0] += pt.x;
+                sum[1] += pt.y;
+                sum[2] += pt.z;
+            }
+            
+            float inv_count = 1.0f / indices.size();
+            cv::Vec3f centroid = sum * inv_count;
+            
+            Point3D avg_pt;
+            avg_pt.x = centroid[0];
+            avg_pt.y = centroid[1];
+            avg_pt.z = centroid[2];
+            
+            downsampled.points.push_back(avg_pt);
+        }
+        
+        return downsampled;
+    }
+    
+    // Statistical outlier removal
+    PointCloud removeOutliers(int mean_k = 50, float std_dev_thresh = 1.0) const {
+        PointCloud filtered;
+        
+        // Calculate distance to k nearest neighbors for each point
+        std::vector<float> distances;
+        
+        for (size_t i = 0; i < points.size(); i++) {
+            std::vector<float> neighbor_distances;
+            
+            for (size_t j = 0; j < points.size(); j++) {
+                if (i == j) continue;
+                
+                float dx = points[i].x - points[j].x;
+                float dy = points[i].y - points[j].y;
+                float dz = points[i].z - points[j].z;
+                float dist = sqrt(dx*dx + dy*dy + dz*dz);
+                
+                neighbor_distances.push_back(dist);
+            }
+            
+            // Sort and take mean of k nearest
+            std::sort(neighbor_distances.begin(), neighbor_distances.end());
+            int actual_k = std::min(mean_k, static_cast<int>(neighbor_distances.size()));
+            
+            float mean_dist = 0.0f;
+            for (int k = 0; k < actual_k; k++) {
+                mean_dist += neighbor_distances[k];
+            }
+            mean_dist /= actual_k;
+            
+            distances.push_back(mean_dist);
+        }
+        
+        // Calculate mean and standard deviation
+        float mean = 0.0f;
+        for (float dist : distances) {
+            mean += dist;
+        }
+        mean /= distances.size();
+        
+        float variance = 0.0f;
+        for (float dist : distances) {
+            float diff = dist - mean;
+            variance += diff * diff;
+        }
+        variance /= distances.size();
+        float std_dev = sqrt(variance);
+        
+        // Filter points
+        for (size_t i = 0; i < points.size(); i++) {
+            if (abs(distances[i] - mean) <= std_dev_thresh * std_dev) {
+                filtered.points.push_back(points[i]);
+            }
+        }
+        
+        return filtered;
+    }
+};
+```
+
+#### Surface Reconstruction
+
+**Poisson Surface Reconstruction**:
+Reconstructing surfaces from oriented point clouds.
+
+**Mathematical Foundation**:
+Find an indicator function χ whose gradient best matches the input normals.
+
+**Algorithm Steps**:
+1. **Orient Normals**: Ensure consistent normal orientations
+2. **Implicit Function**: Compute implicit function using Poisson equation
+3. **Marching Cubes**: Extract iso-surface from implicit function
+
+**Implementation**:
+```cpp
+class SurfaceReconstructor {
+public:
+    // RANSAC plane fitting for ground plane removal
+    static PointCloud removeGroundPlane(const PointCloud& input,
+                                      float distance_threshold = 0.1,
+                                      int max_iterations = 1000) {
+        PointCloud result;
+        
+        // Use RANSAC to find dominant plane (ground plane)
+        std::vector<size_t> inliers;
+        cv::Vec4f best_plane;  // ax + by + cz + d = 0
+        int best_inlier_count = 0;
+        
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        
+        for (int iter = 0; iter < max_iterations; iter++) {
+            // Randomly select 3 points
+            std::uniform_int_distribution<> dis(0, input.points.size() - 1);
+            int idx1 = dis(gen);
+            int idx2 = dis(gen);
+            int idx3 = dis(gen);
+            
+            // Ensure they're different
+            while (idx2 == idx1) idx2 = dis(gen);
+            while (idx3 == idx1 || idx3 == idx2) idx3 = dis(gen);
+            
+            const auto& p1 = input.points[idx1];
+            const auto& p2 = input.points[idx2];
+            const auto& p3 = input.points[idx3];
+            
+            // Calculate plane from 3 points
+            cv::Vec3f v1(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+            cv::Vec3f v2(p3.x - p1.x, p3.y - p1.y, p3.z - p1.z);
+            
+            cv::Vec3f normal = v1.cross(v2);
+            normal = normal / cv::norm(normal);  // Normalize
+            
+            // Plane equation: ax + by + cz + d = 0
+            float d = -(normal[0] * p1.x + normal[1] * p1.y + normal[2] * p1.z);
+            
+            // Count inliers
+            std::vector<size_t> current_inliers;
+            for (size_t i = 0; i < input.points.size(); i++) {
+                const auto& pt = input.points[i];
+                float distance = abs(normal[0] * pt.x + normal[1] * pt.y + 
+                                   normal[2] * pt.z + d);
+                
+                if (distance < distance_threshold) {
+                    current_inliers.push_back(i);
+                }
+            }
+            
+            if (current_inliers.size() > best_inlier_count) {
+                best_inlier_count = current_inliers.size();
+                inliers = current_inliers;
+                best_plane = cv::Vec4f(normal[0], normal[1], normal[2], d);
+            }
+        }
+        
+        // Remove points that belong to the ground plane
+        std::unordered_set<size_t> ground_indices(inliers.begin(), inliers.end());
+        
+        for (size_t i = 0; i < input.points.size(); i++) {
+            if (ground_indices.find(i) == ground_indices.end()) {
+                result.points.push_back(input.points[i]);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Normal estimation using k-nearest neighbors
+    static std::vector<cv::Vec3f> estimateNormals(const PointCloud& cloud,
+                                                 int k_neighbors = 20) {
+        std::vector<cv::Vec3f> normals(cloud.points.size());
+        
+        for (size_t i = 0; i < cloud.points.size(); i++) {
+            // Find k nearest neighbors
+            std::vector<std::pair<float, size_t>> distances;
+            
+            for (size_t j = 0; j < cloud.points.size(); j++) {
+                if (i == j) continue;
+                
+                const auto& pi = cloud.points[i];
+                const auto& pj = cloud.points[j];
+                
+                float dx = pi.x - pj.x;
+                float dy = pi.y - pj.y;
+                float dz = pi.z - pj.z;
+                float dist = sqrt(dx*dx + dy*dy + dz*dz);
+                
+                distances.push_back({dist, j});
+            }
+            
+            // Sort by distance
+            std::sort(distances.begin(), distances.end());
+            
+            // Take k nearest
+            int actual_k = std::min(k_neighbors, static_cast<int>(distances.size()));
+            
+            // Build covariance matrix
+            cv::Mat covar = cv::Mat::zeros(3, 3, CV_32F);
+            cv::Vec3f centroid(0, 0, 0);
+            
+            for (int k = 0; k < actual_k; k++) {
+                size_t idx = distances[k].second;
+                const auto& pt = cloud.points[idx];
+                
+                centroid[0] += pt.x;
+                centroid[1] += pt.y;
+                centroid[2] += pt.z;
+            }
+            
+            centroid = centroid / actual_k;
+            
+            // Calculate covariance
+            for (int k = 0; k < actual_k; k++) {
+                size_t idx = distances[k].second;
+                const auto& pt = cloud.points[idx];
+                
+                cv::Vec3f diff(pt.x - centroid[0], 
+                              pt.y - centroid[1], 
+                              pt.z - centroid[2]);
+                
+                for (int r = 0; r < 3; r++) {
+                    for (int c = 0; c < 3; c++) {
+                        covar.at<float>(r, c) += diff[r] * diff[c];
+                    }
+                }
+            }
+            
+            covar = covar / actual_k;
+            
+            // Calculate eigenvectors
+            cv::Mat eigenvals, eigenvecs;
+            cv::eigen(covar, eigenvals, eigenvecs);
+            
+            // Normal is the eigenvector corresponding to smallest eigenvalue
+            cv::Vec3f normal(eigenvecs.at<float>(2, 0), 
+                            eigenvecs.at<float>(2, 1), 
+                            eigenvecs.at<float>(2, 2));
+            
+            // Orient consistently (toward viewpoint if known)
+            normals[i] = normal;
+        }
+        
+        return normals;
+    }
+};
+```
+
+### 3D Object Recognition and Pose Estimation
+
+#### Feature-Based 3D Recognition
+
+**Point Feature Histograms (PFH)**:
+Describing local geometric properties around each point.
+
+**Concept**:
+For each point, compute relationships with its neighbors.
+
+**Features**:
+- **Distance**: Distance to neighbor points
+- **Angles**: Angles between normals and connecting vectors
+- **Curvature**: Local surface curvature
+
+**Implementation**:
+```cpp
+class PFHExtractor {
+public:
+    struct PFHSignature {
+        std::vector<float> histogram;  // Binned feature values
+        int bins_per_feature;         // Number of bins for each feature
+    };
+    
+    static PFHSignature computePFH(const PointCloud& cloud,
+                                  const std::vector<cv::Vec3f>& normals,
+                                  float radius = 0.05) {
+        PFHSignature signature;
+        signature.bins_per_feature = 25;
+        signature.histogram.resize(25 * 25 * 25, 0);  // 3 features with 25 bins each
+        
+        // For each point, compute PFH
+        for (size_t i = 0; i < cloud.points.size(); i++) {
+            const auto& pt = cloud.points[i];
+            const auto& normal = normals[i];
+            
+            // Find neighbors within radius
+            std::vector<size_t> neighbors;
+            for (size_t j = 0; j < cloud.points.size(); j++) {
+                if (i == j) continue;
+                
+                const auto& neighbor = cloud.points[j];
+                float dx = pt.x - neighbor.x;
+                float dy = pt.y - neighbor.y;
+                float dz = pt.z - neighbor.z;
+                float dist = sqrt(dx*dx + dy*dy + dz*dz);
+                
+                if (dist < radius) {
+                    neighbors.push_back(j);
+                }
+            }
+            
+            // Compute PFH for all pairs of neighbors
+            for (size_t j = 0; j < neighbors.size(); j++) {
+                for (size_t k = j + 1; k < neighbors.size(); k++) {
+                    size_t nj = neighbors[j];
+                    size_t nk = neighbors[k];
+                    
+                    // Calculate geometric relationships
+                    float dist = calculateDistance(cloud.points[nj], cloud.points[nk]);
+                    float angle_normal = calculateAngle(normals[nj], normals[nk]);
+                    float angle_surface = calculateSurfaceAngle(cloud.points[nj], 
+                                                              cloud.points[nk], 
+                                                              normals[i]);
+                    
+                    // Quantize and bin
+                    int bin1 = quantizeFeature(angle_normal, -M_PI, M_PI, 25);
+                    int bin2 = quantizeFeature(angle_surface, -M_PI, M_PI, 25);
+                    int bin3 = quantizeFeature(dist, 0, radius, 25);
+                    
+                    int index = bin1 * 25 * 25 + bin2 * 25 + bin3;
+                    if (index < signature.histogram.size()) {
+                        signature.histogram[index]++;
+                    }
+                }
+            }
+        }
+        
+        // Normalize histogram
+        float sum = 0;
+        for (float val : signature.histogram) {
+            sum += val;
+        }
+        if (sum > 0) {
+            for (auto& val : signature.histogram) {
+                val /= sum;
+            }
+        }
+        
+        return signature;
+    }
+
+private:
+    static float calculateAngle(const cv::Vec3f& v1, const cv::Vec3f& v2) {
+        float dot = v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
+        float len1 = sqrt(v1[0]*v1[0] + v1[1]*v1[1] + v1[2]*v1[2]);
+        float len2 = sqrt(v2[0]*v2[0] + v2[1]*v2[1] + v2[2]*v2[2]);
+        
+        return acos(std::max(-1.0f, std::min(1.0f, dot / (len1 * len2))));
+    }
+    
+    static int quantizeFeature(float value, float min_val, float max_val, int bins) {
+        float range = max_val - min_val;
+        float normalized = (value - min_val) / range;
+        int bin = static_cast<int>(normalized * (bins - 1));
+        return std::max(0, std::min(bins - 1, bin));
+    }
+};
+```
+
+#### 3D Template Matching
+
+**Concept**:
+Matching 3D models to point cloud data to identify objects and estimate poses.
+
+**Implementation**:
+```cpp
+class TemplateMatcher3D {
+public:
+    struct MatchResult {
+        cv::Mat rotation;    // 3x3 rotation matrix
+        cv::Vec3f translation;  // Translation vector
+        float score;       // Matching score
+        std::vector<int> inlier_indices;  // Inlier point indices
+    };
+    
+    static std::vector<MatchResult> matchTemplates(
+        const PointCloud& scene_cloud,
+        const PointCloud& template_cloud,
+        float distance_threshold = 0.02,
+        float min_inlier_ratio = 0.5) {
+        
+        std::vector<MatchResult> matches;
+        
+        // Use Sample Consensus Initial Alignment (SAC-IA) approach
+        // This is a simplified version of the algorithm
+        
+        // Downsample both clouds for efficiency
+        PointCloud downsampled_scene = scene_cloud.downsample(0.02f);
+        PointCloud downsampled_template = template_cloud.downsample(0.02f);
+        
+        // Generate random transformations
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<float> angle_dist(-M_PI, M_PI);
+        std::uniform_real_distribution<float> trans_dist(-0.1, 0.1);
+        
+        for (int attempt = 0; attempt < 1000; attempt++) {
+            // Generate random transformation
+            float rx = angle_dist(gen);
+            float ry = angle_dist(gen);
+            float rz = angle_dist(gen);
+            
+            cv::Mat R = eulerToRotationMatrix(rx, ry, rz);
+            cv::Vec3f t(trans_dist(gen), trans_dist(gen), trans_dist(gen));
+            
+            // Transform template and find correspondences
+            int inlier_count = 0;
+            std::vector<int> inliers;
+            
+            for (size_t i = 0; i < downsampled_template.points.size(); i++) {
+                // Transform template point
+                cv::Vec3f temp_pt(downsampled_template.points[i].x,
+                                 downsampled_template.points[i].y,
+                                 downsampled_template.points[i].z);
+                cv::Vec3f transformed_pt = R * temp_pt + t;
+                
+                // Find nearest neighbor in scene
+                float min_dist = std::numeric_limits<float>::max();
+                size_t nearest_idx = 0;
+                
+                for (size_t j = 0; j < downsampled_scene.points.size(); j++) {
+                    cv::Vec3f scene_pt(downsampled_scene.points[j].x,
+                                      downsampled_scene.points[j].y,
+                                      downsampled_scene.points[j].z);
+                    float dist = cv::norm(transformed_pt - scene_pt);
+                    
+                    if (dist < min_dist) {
+                        min_dist = dist;
+                        nearest_idx = j;
+                    }
+                }
+                
+                if (min_dist < distance_threshold) {
+                    inlier_count++;
+                    inliers.push_back(nearest_idx);
+                }
+            }
+            
+            float inlier_ratio = static_cast<float>(inlier_count) / downsampled_template.points.size();
+            
+            if (inlier_ratio >= min_inlier_ratio) {
+                MatchResult result;
+                result.rotation = R;
+                result.translation = t;
+                result.score = inlier_ratio;
+                result.inlier_indices = inliers;
+                
+                matches.push_back(result);
+            }
+        }
+        
+        // Apply iterative closest point (ICP) refinement to best matches
+        for (auto& match : matches) {
+            refinePoseICP(scene_cloud, template_cloud, 
+                         match.rotation, match.translation, distance_threshold);
+        }
+        
+        return matches;
+    }
+
+private:
+    static cv::Mat eulerToRotationMatrix(float rx, float ry, float rz) {
+        // Create rotation matrix from Euler angles
+        cv::Mat Rx = (cv::Mat_<float>(3,3) << 
+                     1, 0, 0,
+                     0, cos(rx), -sin(rx),
+                     0, sin(rx), cos(rx));
+        
+        cv::Mat Ry = (cv::Mat_<float>(3,3) << 
+                     cos(ry), 0, sin(ry),
+                     0, 1, 0,
+                     -sin(ry), 0, cos(ry));
+        
+        cv::Mat Rz = (cv::Mat_<float>(3,3) << 
+                     cos(rz), -sin(rz), 0,
+                     sin(rz), cos(rz), 0,
+                     0, 0, 1);
+        
+        return Rz * Ry * Rx;
+    }
+    
+    static void refinePoseICP(const PointCloud& scene, 
+                             const PointCloud& template_cloud,
+                             cv::Mat& R, cv::Vec3f& t,
+                             float max_distance) {
+        const int max_iterations = 20;
+        
+        for (int iter = 0; iter < max_iterations; iter++) {
+            // Find correspondences
+            std::vector<std::pair<int, int>> correspondences;
+            
+            for (size_t i = 0; i < template_cloud.points.size(); i++) {
+                cv::Vec3f temp_pt(template_cloud.points[i].x,
+                                 template_cloud.points[i].y,
+                                 template_cloud.points[i].z);
+                cv::Vec3f transformed_pt = R * temp_pt + t;
+                
+                // Find nearest neighbor in scene
+                float min_dist = std::numeric_limits<float>::max();
+                int nearest_idx = -1;
+                
+                for (size_t j = 0; j < scene.points.size(); j++) {
+                    cv::Vec3f scene_pt(scene.points[j].x,
+                                      scene.points[j].y,
+                                      scene.points[j].z);
+                    float dist = cv::norm(transformed_pt - scene_pt);
+                    
+                    if (dist < min_dist && dist < max_distance) {
+                        min_dist = dist;
+                        nearest_idx = j;
+                    }
+                }
+                
+                if (nearest_idx >= 0) {
+                    correspondences.push_back({i, nearest_idx});
+                }
+            }
+            
+            if (correspondences.size() < 3) break;
+            
+            // Compute transformation using SVD
+            std::vector<cv::Vec3f> src_pts, dst_pts;
+            
+            for (const auto& corr : correspondences) {
+                int src_idx = corr.first;
+                int dst_idx = corr.second;
+                
+                src_pts.push_back(cv::Vec3f(
+                    template_cloud.points[src_idx].x,
+                    template_cloud.points[src_idx].y,
+                    template_cloud.points[src_idx].z));
+                
+                dst_pts.push_back(cv::Vec3f(
+                    scene.points[dst_idx].x,
+                    scene.points[dst_idx].y,
+                    scene.points[dst_idx].z));
+            }
+            
+            // Center the points
+            cv::Vec3f src_centroid = computeCentroid(src_pts);
+            cv::Vec3f dst_centroid = computeCentroid(dst_pts);
+            
+            for (auto& pt : src_pts) pt -= src_centroid;
+            for (auto& pt : dst_pts) pt -= dst_centroid;
+            
+            // Compute cross-covariance matrix
+            cv::Mat H = cv::Mat::zeros(3, 3, CV_32F);
+            for (size_t i = 0; i < src_pts.size(); i++) {
+                cv::Mat src_mat = (cv::Mat_<float>(3, 1) << 
+                                  src_pts[i][0], src_pts[i][1], src_pts[i][2]);
+                cv::Mat dst_mat = (cv::Mat_<float>(3, 1) << 
+                                  dst_pts[i][0], dst_pts[i][1], dst_pts[i][2]);
+                
+                H += src_mat * dst_mat.t();
+            }
+            
+            // SVD decomposition
+            cv::Mat U, S, Vt;
+            cv::SVD::compute(H, S, U, Vt);
+            
+            // Compute rotation
+            cv::Mat R_new = Vt.t() * U.t();
+            
+            // Ensure rotation matrix has positive determinant
+            if (cv::determinant(R_new) < 0) {
+                cv::Mat temp = Vt;
+                temp.row(2) = -temp.row(2);
+                R_new = temp.t() * U.t();
+            }
+            
+            // Compute translation
+            cv::Vec3f t_new = dst_centroid - R_new * src_centroid;
+            
+            R = R_new;
+            t = t_new;
+        }
+    }
+    
+    static cv::Vec3f computeCentroid(const std::vector<cv::Vec3f>& points) {
+        cv::Vec3f sum(0, 0, 0);
+        for (const auto& pt : points) {
+            sum += pt;
+        }
+        return sum / points.size();
+    }
+};
+```
+
+### Applications in Robotics
+
+#### Navigation and Mapping
+
+**3D SLAM**:
+Simultaneous Localization and Mapping using 3D information.
+
+**Components**:
+- **Front-end**: Feature extraction and matching
+- **Back-end**: Optimization of pose graph
+- **Loop Closure**: Detecting revisited locations
+- **Map Representation**: Efficient 3D map storage
+
+**Occupancy Grids in 3D**:
+Extending 2D occupancy grids to three dimensions.
+
+**Voxel Grids**:
+```
+3D_Grid[x, y, z] = P(occupancy)
+```
+
+Where P is the probability of occupancy for each voxel.
+
+#### Manipulation and Grasping
+
+**3D Object Recognition**:
+Identifying objects in 3D space for manipulation.
+
+**Approaches**:
+- **Template Matching**: Matching 3D models to observed data
+- **Feature-Based**: Using geometric features for recognition
+- **Learning-Based**: Deep learning approaches for recognition
+- **Multi-view**: Combining information from multiple views
+
+**Grasp Planning**:
+Using 3D information to plan stable grasps.
+
+**Considerations**:
+- **Object Shape**: Understanding object geometry
+- **Stability**: Planning stable grasp configurations
+- **Accessibility**: Ensuring gripper can reach grasp points
+- **Force Optimization**: Optimizing grasp forces
+
+#### Perception for Navigation
+
+**Obstacle Detection**:
+Identifying obstacles in 3D space.
+
+**Techniques**:
+- **Ground Plane Removal**: Removing ground to focus on obstacles
+- **Clustering**: Grouping points into objects
+- **Classification**: Identifying different obstacle types
+- **Tracking**: Following obstacles over time
+
+**Path Planning**:
+Using 3D information for navigation planning.
+
+**Approaches**:
+- **Voxel-Based**: Planning in 3D voxel space
+- **Visibility Graphs**: Creating graphs of navigable regions
+- **Sampling-Based**: RRT and similar algorithms in 3D
+- **Optimization-Based**: Trajectory optimization in 3D
+
+Understanding 3D vision and depth perception is essential for creating robots that can operate effectively in three-dimensional environments, enabling advanced capabilities like navigation, manipulation, and interaction with complex 3D structures.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: 3D Vision and Depth Perception
+
+### Stereo Vision
+- **Geometry**: Epipolar geometry and triangulation
+- **Matching**: Block matching and SGBM algorithms
+- **Calibration**: Camera and stereo system calibration
+- **Depth Maps**: Creating depth maps from stereo pairs
+
+### Single Image Depth
+- **Traditional**: Geometric and photometric cues
+- **Learning-Based**: Deep neural networks for depth estimation
+- **Monocular**: Depth from single image approaches
+- **Performance**: Accuracy and computational considerations
+
+### Depth Sensors
+- **ToF**: Time-of-flight distance measurement
+- **Structured Light**: Pattern projection and analysis
+- **Stereo**: Dual camera depth computation
+- **LiDAR**: Laser-based ranging systems
+
+### Point Cloud Processing
+- **Data Structures**: Efficient point cloud representations
+- **Filtering**: Noise removal and outlier detection
+- **Segmentation**: Object separation in 3D space
+- **Registration**: Aligning multiple point cloud views
+
+### Surface Reconstruction
+- **Triangulation**: Creating surfaces from points
+- **Poisson**: Mathematical surface reconstruction
+- **Delaunay**: Geometric triangulation methods
+- **Marching Cubes**: Iso-surface extraction
+
+### 3D Object Recognition
+- **Features**: PFH, FPFH, and geometric descriptors
+- **Matching**: Template matching in 3D space
+- **Pose Estimation**: 6D pose determination
+- **Classification**: Object identification in 3D
+
+### Applications
+- **Navigation**: 3D SLAM and path planning
+- **Manipulation**: Grasp planning and object interaction
+- **Mapping**: 3D environment modeling
+- **Perception**: Obstacle detection and avoidance
+
+### Challenges
+- **Accuracy**: Depth measurement precision
+- **Resolution**: Spatial resolution limitations
+- **Computational**: Processing power requirements
+- **Integration**: Combining multiple depth sources
+
+### Future Directions
+- **AI Integration**: Deep learning enhancement
+- **Real-time**: Efficient processing techniques
+- **Fusion**: Multi-sensor integration approaches
+- **Robustness**: Handling challenging conditions
+
+</div>
+</TabItem>
+</Tabs>
