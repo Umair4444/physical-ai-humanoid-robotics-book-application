@@ -11,12 +11,12 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // Custom sidebar for the Physical AI Humanoid Robotics Textbook
+  // Main sidebar for the entire textbook collection
   textbookSidebar: [
     {
       type: 'doc',
       id: 'books/physical-ai-humanoid-robotics-book/intro',
-      label: '📘 Introduction',
+      label: '📘 Physical AI & Humanoid Robotics Textbook',
       className: 'sidebar-title-intro',
     },
     {
@@ -159,24 +159,22 @@ const sidebars: SidebarsConfig = {
         { type: 'doc', id: 'books/physical-ai-humanoid-robotics-book/modules/module-10/chapter-60', label: 'Chapter 60: Conclusion' },
       ],
     },
-  ],
-
-  // Sidebar for Ethics in AI Robotics
-  ethicsSidebar: [
+    
+    // Ethics in AI Robotics Book
     {
       type: 'doc',
       id: 'books/ethics-in-ai-robotics/intro',
-      label: '📘 Introduction',
+      label: '📘 Ethics in AI & Robotics Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/ethics-in-ai-robotics/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Ethics in AI Robotics' },
-        { type: 'doc', id: 'books/ethics-in-ai-robotics/modules/module-1/chapter-2', label: 'Chapter 2: Ethical Frameworks and Moral Theories' },
+        { type: 'doc', id: 'books/ethics-in-ai-robotics/modules/module-1/chapter-2', label: 'Chapter 2: Historical Context of AI Ethics' },
         { type: 'doc', id: 'books/ethics-in-ai-robotics/modules/module-1/chapter-3', label: 'Chapter 3: Moral Philosophy Foundations' },
         { type: 'doc', id: 'books/ethics-in-ai-robotics/modules/module-1/chapter-4', label: 'Chapter 4: Legal Frameworks and Regulations' },
         { type: 'doc', id: 'books/ethics-in-ai-robotics/modules/module-1/chapter-5', label: 'Chapter 5: Cultural and Societal Considerations' },
@@ -197,21 +195,19 @@ const sidebars: SidebarsConfig = {
         { type: 'doc', id: 'books/ethics-in-ai-robotics/modules/module-2/chapter-12', label: 'Chapter 12: Future Challenges in Bias and Fairness' },
       ],
     },
-  ],
-
-  // Sidebar for Human-Robot Interaction
-  humanRobotInteractionSidebar: [
+    
+    // Human-Robot Interaction Book
     {
       type: 'doc',
       id: 'books/human-robot-interaction/intro',
-      label: '📘 Introduction',
+      label: '📘 Human-Robot Interaction Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/human-robot-interaction/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Human-Robot Interaction' },
         { type: 'doc', id: 'books/human-robot-interaction/modules/module-1/chapter-2', label: 'Chapter 2: Historical Development of HRI' },
@@ -227,7 +223,7 @@ const sidebars: SidebarsConfig = {
       collapsible: true,
       collapsed: true,
       items: [
-        { type: 'doc', id: 'books/human-robot-interaction/modules/module-2/chapter-7', label: 'Chapter 7: Introduction to Social Cues in HRI' },
+        { type: 'doc', id: 'books/human-robot-interaction/modules/module-2/chapter-7', label: 'Chapter 7: Understanding Social Cues in Human-Robot Interaction' },
         { type: 'doc', id: 'books/human-robot-interaction/modules/module-2/chapter-8', label: 'Chapter 8: Verbal and Non-Verbal Communication Modalities' },
         { type: 'doc', id: 'books/human-robot-interaction/modules/module-2/chapter-9', label: 'Chapter 9: Gestures and Body Language in Robot Communication' },
         { type: 'doc', id: 'books/human-robot-interaction/modules/module-2/chapter-10', label: 'Chapter 10: Speech and Prosody in Robot Communication' },
@@ -235,21 +231,19 @@ const sidebars: SidebarsConfig = {
         { type: 'doc', id: 'books/human-robot-interaction/modules/module-2/chapter-12', label: 'Chapter 12: Cultural and Contextual Considerations in Multimodal Communication' },
       ],
     },
-  ],
-
-  // Sidebar for Humanoid Design Principles
-  humanoidDesignPrinciplesSidebar: [
+    
+    // Humanoid Design Principles Book
     {
       type: 'doc',
       id: 'books/humanoid-design-principles/intro',
-      label: '📘 Introduction',
+      label: '📘 Humanoid Design Principles Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/humanoid-design-principles/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Humanoid Design Principles' },
         { type: 'doc', id: 'books/humanoid-design-principles/modules/module-1/chapter-2', label: 'Chapter 2: Historical Development of Humanoid Robots' },
@@ -273,21 +267,19 @@ const sidebars: SidebarsConfig = {
         { type: 'doc', id: 'books/humanoid-design-principles/modules/module-2/chapter-12', label: 'Chapter 12: Biomechanical Analysis of Human Movement for Robot Design' },
       ],
     },
-  ],
-
-  // Sidebar for Locomotion and Mobility
-  locomotionAndMobilitySidebar: [
+    
+    // Locomotion and Mobility Book
     {
       type: 'doc',
       id: 'books/locomotion-and-mobility/intro',
-      label: '📘 Introduction',
+      label: '📘 Locomotion and Mobility in Robotics Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/locomotion-and-mobility/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Locomotion and Mobility' },
         { type: 'doc', id: 'books/locomotion-and-mobility/modules/module-1/chapter-2', label: 'Chapter 2: Principles of Biological Locomotion' },
@@ -311,21 +303,19 @@ const sidebars: SidebarsConfig = {
         { type: 'doc', id: 'books/locomotion-and-mobility/modules/module-2/chapter-12', label: 'Chapter 12: Human-Inspired Locomotion and Biomimetic Approaches' },
       ],
     },
-  ],
-
-  // Sidebar for Manipulation and Grasping
-  manipulationGraspingSidebar: [
+    
+    // Manipulation and Grasping Book
     {
       type: 'doc',
       id: 'books/manipulation-and-grasping/intro',
-      label: '📘 Introduction',
+      label: '📘 Manipulation and Grasping in Robotics Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/manipulation-and-grasping/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Manipulation and Grasping' },
         { type: 'doc', id: 'books/manipulation-and-grasping/modules/module-1/chapter-2', label: 'Chapter 2: Historical Development of Robotic Manipulation' },
@@ -346,24 +336,22 @@ const sidebars: SidebarsConfig = {
         { type: 'doc', id: 'books/manipulation-and-grasping/modules/module-2/chapter-9', label: 'Chapter 9: Contact Mechanics and Friction Modeling' },
         { type: 'doc', id: 'books/manipulation-and-grasping/modules/module-2/chapter-10', label: 'Chapter 10: Grasp Stability and Robustness Analysis' },
         { type: 'doc', id: 'books/manipulation-and-grasping/modules/module-2/chapter-11', label: 'Chapter 11: Sensor-Based Grasp Planning and Feedback Control' },
-        { type: 'doc', id: 'books/manipulation-and-grasping/modules/module-2/chapter-12', label: 'Chapter 12: Multi-Fingered Hand Control and Coordination' },
+        { type: 'doc', id: 'books/manipulation-and-grasping/modules/module-2/chapter-12', label: 'Chapter 12: Advanced Grasp Planning Techniques' },
       ],
     },
-  ],
-
-  // Sidebar for Neural Networks in Motion
-  neuralNetworksInMotionSidebar: [
+    
+    // Neural Networks in Motion Book
     {
       type: 'doc',
       id: 'books/neural-networks-in-motion/intro',
-      label: '📘 Introduction',
+      label: '📘 Neural Networks in Motion Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/neural-networks-in-motion/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Neural Networks in Motion' },
         { type: 'doc', id: 'books/neural-networks-in-motion/modules/module-1/chapter-2', label: 'Chapter 2: Biological Neural Networks and Motion Control' },
@@ -387,27 +375,25 @@ const sidebars: SidebarsConfig = {
         { type: 'doc', id: 'books/neural-networks-in-motion/modules/module-2/chapter-12', label: 'Chapter 12: Real-Time Motion Prediction and Deployment Considerations' },
       ],
     },
-  ],
-
-  // Sidebar for Physical Computing for Robotics
-  physicalComputingForRoboticsSidebar: [
+    
+    // Physical Computing for Robotics Book
     {
       type: 'doc',
       id: 'books/physical-computing-for-robotics/intro',
-      label: '📘 Introduction',
+      label: '📘 Physical Computing for Robotics Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Physical Computing for Robotics' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-2', label: 'Chapter 2: Microcontrollers and Embedded Systems' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-3', label: 'Chapter 3: Digital and Analog I/O Systems' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-4', label: 'Chapter 4: Communication Protocols and Interfaces' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-5', label: 'Chapter 5: Power Systems and Management' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-2', label: 'Chapter 2: Electronics Fundamentals for Robotics' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-3', label: 'Chapter 3: Microcontrollers and Processing Units' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-4', label: 'Chapter 4: Digital and Analog I/O Systems' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-5', label: 'Chapter 5: Communication Protocols and Interfaces' },
         { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-1/chapter-6', label: 'Chapter 6: Real-Time Programming Concepts' },
       ],
     },
@@ -419,27 +405,25 @@ const sidebars: SidebarsConfig = {
       items: [
         { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-7', label: 'Chapter 7: Introduction to Sensors and Sensing Technologies' },
         { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-8', label: 'Chapter 8: Inertial Measurement Units and Motion Sensors' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-9', label: 'Chapter 9: Force, Torque, and Tactile Sensors' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-10', label: 'Chapter 10: Range and Distance Sensors' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-11', label: 'Chapter 11: Constraint Solving and Joint Simulation' },
-        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-12', label: 'Chapter 12: Real-time Physics Simulation and Performance Optimization' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-9', label: 'Chapter 9: Vision Sensors and Camera Systems' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-10', label: 'Chapter 10: Force, Torque, and Tactile Sensors' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-11', label: 'Chapter 11: Range and Distance Sensors' },
+        { type: 'doc', id: 'books/physical-computing-for-robotics/modules/module-2/chapter-12', label: 'Chapter 12: Sensor Fusion and Data Integration' },
       ],
     },
-  ],
-
-  // Sidebar for Robotics Simulation Environments
-  simulationEnvironmentsSidebar: [
+    
+    // Robotics Simulation Environments Book
     {
       type: 'doc',
       id: 'books/robotics-simulation-environments/intro',
-      label: '📘 Introduction',
+      label: '📘 Robotics Simulation Environments Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Robotics Simulation Environments' },
         { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-1/chapter-2', label: 'Chapter 2: Physics Simulation Fundamentals' },
@@ -457,27 +441,25 @@ const sidebars: SidebarsConfig = {
       items: [
         { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-7', label: 'Chapter 7: Introduction to Physics Simulation in Robotics' },
         { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-8', label: 'Chapter 8: Rigid Body Dynamics and Motion Simulation' },
-        { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-9', label: 'Chapter 9: Collision Detection and Contact Modeling' },
+        { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-9', label: 'Chapter 9: Soft Body and Deformable Object Simulation' },
         { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-10', label: 'Chapter 10: Constraint Solving and Joint Simulation' },
-        { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-11', label: 'Chapter 11: Soft Body and Deformable Object Simulation' },
+        { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-11', label: 'Chapter 11: Collision Detection and Contact Modeling' },
         { type: 'doc', id: 'books/robotics-simulation-environments/modules/module-2/chapter-12', label: 'Chapter 12: Real-time Physics Simulation and Performance Optimization' },
       ],
     },
-  ],
-
-  // Sidebar for Computer Vision in Robotics
-  computerVisionInRoboticsSidebar: [
+    
+    // Computer Vision in Robotics Book
     {
       type: 'doc',
       id: 'books/computer-vision-in-robotics/intro',
-      label: '📘 Introduction',
+      label: '📘 Computer Vision in Robotics Textbook',
       className: 'sidebar-title-intro',
     },
     {
       type: 'category',
       label: 'Module 1: Foundations',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         { type: 'doc', id: 'books/computer-vision-in-robotics/modules/module-1/chapter-1', label: 'Chapter 1: Introduction to Computer Vision in Robotics' },
         { type: 'doc', id: 'books/computer-vision-in-robotics/modules/module-1/chapter-2', label: 'Chapter 2: Image Formation and Camera Models' },

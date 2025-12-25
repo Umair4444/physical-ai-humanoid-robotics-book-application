@@ -222,7 +222,7 @@ Combined equations for interconnected bodies:
 Methods that compute future state directly from current state:
 
 **Euler method**: Simple first-order integration:
-- **Formula**: x_{n+1} = x_n + h * f(x_n, t_n)
+- **Formula**: `x_{n+1} = x_n + h * f(x_n, t_n)`
 - **Advantages**: Simple, computationally efficient
 - **Disadvantages**: Numerical instability, energy drift
 - **Application**: Simple systems with small time steps
@@ -237,7 +237,7 @@ Methods that compute future state directly from current state:
 Methods that solve for future state using future force information:
 
 **Implicit Euler**: Unconditionally stable method:
-- **Formula**: x_{n+1} = x_n + h * f(x_{n+1}, t_{n+1})
+- **Formula**: `x_{n+1} = x_n + h * f(x_{n+1}, t_{n+1})`
 - **Advantages**: Unconditionally stable for linear problems
 - **Disadvantages**: Requires solving nonlinear equations
 - **Application**: Stiff systems, contact problems
