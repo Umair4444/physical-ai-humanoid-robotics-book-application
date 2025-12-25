@@ -44,7 +44,7 @@ F = ma
 ```
 Or in vector form:
 ```
-F⃗ = m * a⃗
+F_vector = m * a_vector
 ```
 
 **Third Law (Action-Reaction)**:
@@ -52,14 +52,14 @@ For every action, there is an equal and opposite reaction.
 
 **Mathematical Formulation**:
 ```
-F⃗_AB = -F⃗_BA
+F_AB_vector = -F_BA_vector
 ```
 
 **Linear Motion Equations**:
 ```
-v = v₀ + at
-s = s₀ + v₀t + ½at²
-v² = v₀² + 2a(s - s₀)
+v = v0 + at
+s = s0 + v0t + ½at²
+v² = v0² + 2a(s - s0)
 ```
 
 #### Rigid Body Dynamics
@@ -86,14 +86,14 @@ Where:
 
 **Euler's Equations of Motion for Rigid Bodies**:
 ```
-τ = I * α + ω × (I * ω)
+tau = I * alpha + omega cross (I * omega)
 ```
 
 Where:
-- τ is the torque vector
+- tau is the torque vector
 - I is the inertia tensor
-- α is the angular acceleration vector
-- ω is the angular velocity vector
+- alpha is the angular acceleration vector
+- omega is the angular velocity vector
 
 #### Degrees of Freedom (DOF)
 
@@ -171,7 +171,7 @@ Two convex objects don't intersect if there exists a separating axis.
 Efficient collision detection for convex objects.
 
 **Concept**:
-- **Minkowski Difference**: A (+) B = {a - b | a in A, b in B}
+- **Minkowski Difference**: A (+) B = `{a - b | a in A, b in B}`
 - **Simplex**: Convex hull of a small set of points
 - **Origin Test**: Objects intersect if origin is inside Minkowski difference
 
@@ -216,7 +216,7 @@ J = Δp = m * Δv
 
 **Angular Impulse**:
 ```
-L = r × J
+L = r cross J
 ```
 
 Where r is the vector from center of mass to contact point.
@@ -231,14 +231,14 @@ Determines how "bouncy" the collision is.
 
 **Relative Velocity at Contact Point**:
 ```
-v_rel = (v₂ + ω₂ × r₂) - (v₁ + ω₁ × r₁)
+v_rel = (v2 + omega2 cross r2) - (v1 + omega1 cross r1)
 ```
 
 **Impulse Calculation**:
 ```
-J = -(1 + e) * v_rel · n
+J = -(1 + e) * v_rel dot n
     ------------------------
-    (1/m₁ + 1/m₂) + n · [(r₁ × n) × I₁⁻¹ × (r₁ × n) + (r₂ × n) × I₂⁻¹ × (r₂ × n)]
+    (1/m1 + 1/m2) + n dot [(r1 cross n) cross I1_inv cross (r1 cross n) + (r2 cross n) cross I2_inv cross (r2 cross n)]
 ```
 
 Where n is the contact normal.
@@ -357,29 +357,29 @@ Allows rotation around a single axis.
 
 **Constraint Equations**:
 ```
-C₁ = (p₂ - p₁) · a = 0  (axis alignment)
-C₂ = (p₂ - p₁) · b = 0  (position constraint)
+C1 = (p2 - p1) dot a_axis = 0  (axis alignment)
+C2 = (p2 - p1) dot b_axis = 0  (position constraint)
 ```
 
-Where p₁, p₂ are attachment points, a, b are constraint axes.
+Where p1, p2 are attachment points, a_axis, b_axis are constraint axes.
 
 **Prismatic Joint**:
 Allows linear motion along a single axis.
 
 **Constraint Equations**:
 ```
-C₁ = (v₂ - v₁) · a = 0  (velocity constraint)
-C₂ = (p₂ - p₁) · b = 0  (position constraint)
+C1 = (v2 - v1) dot a_axis = 0  (velocity constraint)
+C2 = (p2 - p1) dot b_axis = 0  (position constraint)
 ```
 
-Where v₁, v₂ are linear velocities.
+Where v1, v2 are linear velocities.
 
 **Ball Joint**:
 Allows free rotation (spherical joint).
 
 **Constraint Equations**:
 ```
-C₁ = ||p₂ - p₁|| - d = 0  (distance constraint)
+C1 = ||p2 - p1|| - d = 0  (distance constraint)
 ```
 
 Where d is the fixed distance between attachment points.
@@ -413,7 +413,7 @@ Direct solver for constraint problems.
 **Formulation**:
 ```
 w = a + Mb
-w ≥ 0, b ≥ 0, w^T * b = 0
+w >= 0, b >= 0, w^T * b = 0
 ```
 
 **Advantages**:
@@ -481,11 +481,11 @@ High-order accurate integration method.
 
 **Formula**:
 ```
-k₁ = h * f(t_n, y_n)
-k₂ = h * f(t_n + h/2, y_n + k₁/2)
-k₃ = h * f(t_n + h/2, y_n + k₂/2)
-k₄ = h * f(t_n + h, y_n + k₃)
-y_{n+1} = y_n + (k₁ + 2*k₂ + 2*k₃ + k₄) / 6
+k1 = h * f(t_n, y_n)
+k2 = h * f(t_n + h/2, y_n + k1/2)
+k3 = h * f(t_n + h/2, y_n + k2/2)
+k4 = h * f(t_n + h, y_n + k3)
+y_n_plus_1 = y_n + (k1 + 2*k2 + 2*k3 + k4) / 6
 ```
 
 **Characteristics**:
@@ -667,14 +667,14 @@ Lagrangian method for fluid simulation.
 
 **Density Calculation**:
 ```
-ρᵢ = Σⱼ mⱼ * W(|rᵢ - rⱼ|, h)
+rho_i = Sum_j m_j * W(|r_i - r_j|, h)
 ```
 
 Where W is the smoothing kernel and h is the smoothing length.
 
 **Pressure Force**:
 ```
-F_pressure = -mᵢ * Σⱼ (Pᵢ/ρᵢ² + Pⱼ/ρⱼ²) * ∇W(|rᵢ - rⱼ|, h)
+F_pressure = -m_i * Sum_j (P_i/rho_i² + P_j/rho_j²) * nabla_W(|r_i - r_j|, h)
 ```
 
 #### Contact Handling
