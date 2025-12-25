@@ -187,7 +187,7 @@ Fast methods for time integration:
 - **Trade-offs**: More computation per step
 
 **Explicit Euler**: Simple first-order method:
-- **Formula**: x_{n+1} = x_n + h * f(x_n)
+- **Formula**: `x_{n+1} = x_n + h * f(x_n)`
 - **Advantages**: Simple, fast computation per step
 - **Application**: Systems where speed is more important than accuracy
 - **Limitations**: Numerical instability, energy drift
@@ -196,7 +196,7 @@ Fast methods for time integration:
 Stable methods for stiff systems:
 
 **Implicit Euler**: Unconditionally stable method:
-- **Formula**: x_{n+1} = x_n + h * f(x_{n+1})
+- **Formula**: `x_{n+1} = x_n + h * f(x_{n+1})`
 - **Advantages**: Unconditionally stable for linear problems
 - **Application**: Stiff systems, contact problems
 - **Disadvantages**: Requires solving nonlinear equations
