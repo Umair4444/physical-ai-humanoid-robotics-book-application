@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MainLayout from '../components/MainLayout';
 import BookList from '../components/Book/BookList';
+import { allBooks } from '../data/bookData';
 
 // Define the Book type that matches the BookList component requirements
 type Book = {
@@ -14,99 +15,6 @@ type Book = {
 };
 
 const BooksPage: React.FC = () => {
-  // Static book data to match the homepage book structure
-  const allBooks: Book[] = [
-    {
-      id: 1,
-      title: 'Physical AI Humanoid Robotics',
-      description: 'Learn the fundamentals of humanoid robotics',
-      image: '/img/book1-cover.jpg',
-      featured: true,
-      tags: ['Physical AI', 'Robotics', 'Humanoid Robotics'],
-      href: '/books/physical-ai-humanoid-robotics-book/intro',
-    },
-    {
-      id: 2,
-      title: 'Humanoid Design Principles',
-      description:
-        'Deep dive into the design and engineering of humanoid robots',
-      image: '/img/book2-cover.jpg',
-      featured: true,
-      tags: ['Humanoid Design', 'Engineering', 'Robotics'],
-    },
-    {
-      id: 3,
-      title: 'Neural Networks in Motion',
-      description:
-        'Explore how neural networks enable complex robotic movements',
-      image: '/img/book3-cover.jpg',
-      featured: true,
-      tags: ['Neural Networks', 'Movement Control', 'AI'],
-    },
-    {
-      id: 4,
-      title: 'Ethics in AI Robotics',
-      description:
-        'Critical examination of ethical considerations in AI-powered robotics',
-      image: '/img/book4-cover.jpg',
-      featured: true,
-      tags: ['Ethics', 'AI', 'Society'],
-    },
-    {
-      id: 5,
-      title: 'Physical Computing for Robotics',
-      description:
-        'Understanding sensors, actuators, and control systems in robotic applications',
-      image: '/img/book-default.jpg',
-      featured: false,
-      tags: ['Physical Computing', 'Sensors', 'Actuators'],
-    },
-    {
-      id: 6,
-      title: 'Computer Vision in Robotics',
-      description:
-        'How robots perceive and interpret visual information from their environment',
-      image: '/img/book-default.jpg',
-      featured: false,
-      tags: ['Computer Vision', 'Perception', 'AI'],
-    },
-    {
-      id: 7,
-      title: 'Robotics Simulation Environments',
-      description:
-        'Building and testing robotic systems in virtual environments',
-      image: '/img/book-default.jpg',
-      featured: false,
-      tags: ['Simulation', 'Testing', 'Virtual Environments'],
-    },
-    {
-      id: 8,
-      title: 'Manipulation and Grasping',
-      description:
-        'Understanding how robots interact with and manipulate objects',
-      image: '/img/book-default.jpg',
-      featured: false,
-      tags: ['Manipulation', 'Grasping', 'Interaction'],
-    },
-    {
-      id: 9,
-      title: 'Locomotion and Mobility',
-      description:
-        'Principles of robot movement and navigation in various terrains',
-      image: '/img/book-default.jpg',
-      featured: false,
-      tags: ['Locomotion', 'Navigation', 'Mobility'],
-    },
-    {
-      id: 10,
-      title: 'Human-Robot Interaction',
-      description:
-        'Designing interfaces and behaviors for effective human-robot collaboration',
-      image: '/img/book-default.jpg',
-      featured: false,
-      tags: ['Human-Robot Interaction', 'UX', 'Collaboration'],
-    },
-  ];
 
   const [selectedCategory, setSelectedCategory] =
     useState<string>('All Categories');

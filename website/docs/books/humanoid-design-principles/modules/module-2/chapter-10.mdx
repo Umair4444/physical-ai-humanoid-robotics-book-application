@@ -1,0 +1,357 @@
+---
+id: chapter-10
+title: "Inverse Kinematics for Humanoid Motion Planning"
+module: "Module 2: Biomechanics and Kinematics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Inverse Kinematics for Humanoid Motion Planning
+
+### Introduction to Inverse Kinematics in Humanoid Robotics
+
+Inverse kinematics (IK) is a fundamental problem in robotics that involves determining the joint angles required to achieve a desired position and orientation of the end-effector. In humanoid robotics, inverse kinematics becomes particularly complex due to the redundant nature of the systems, multiple end-effectors, and the need to maintain balance while achieving task goals. Effective IK solutions are essential for natural and efficient humanoid robot motion.
+
+Key aspects of IK in humanoid robots include:
+- **Redundancy resolution**: Managing more degrees of freedom than required
+- **Multiple constraints**: Balancing task requirements with physical constraints
+- **Real-time computation**: Providing solutions quickly enough for control
+- **Smooth motion**: Generating continuous, natural-looking movements
+
+### Mathematical Foundations of Inverse Kinematics
+
+#### Forward and Inverse Kinematic Equations
+The mathematical relationship between joint space and Cartesian space:
+
+**Forward kinematics**: f(θ) = x, where θ is the vector of joint angles and x is the end-effector pose.
+
+**Inverse kinematics**: θ = f⁻¹(x), finding joint angles that achieve the desired end-effector pose.
+
+**Jacobian matrix**: J = ∂f/∂θ, relating joint velocities to end-effector velocities: ẋ = Jθ̇.
+
+#### Types of Solutions
+
+**Analytical solutions**: Closed-form mathematical solutions:
+- **Advantages**: Exact, fast computation
+- **Disadvantages**: Only possible for specific kinematic structures
+- **Applicability**: Limited to simple kinematic chains
+
+**Numerical solutions**: Iterative methods to approximate solutions:
+- **Advantages**: Applicable to complex kinematic structures
+- **Disadvantages**: Computationally expensive, may not converge
+- **Applicability**: General solution for complex robots
+
+### Inverse Kinematics for Redundant Systems
+
+#### Redundancy in Humanoid Robots
+Humanoid robots typically have more degrees of freedom than required for specific tasks:
+
+**Kinematic redundancy**: More joints than necessary to achieve a task:
+- **Human comparison**: Humans have 200+ DOF but often use fewer for specific tasks
+- **Humanoid design**: Typically 20-60 DOF depending on design
+- **Advantages**: Greater flexibility, obstacle avoidance, energy efficiency
+
+**Task redundancy**: Multiple ways to achieve the same task:
+- **Multiple solutions**: Infinite solutions for redundant systems
+- **Optimization criteria**: Need to select the best solution
+- **Secondary objectives**: Achieving multiple goals simultaneously
+
+#### Redundancy Resolution Techniques
+
+**Null-space projection**: Maintaining task performance while optimizing secondary objectives:
+- **Mathematical formulation**: θ̇ = J⁺ẋ + (I - J⁺J)θ̇₀
+- **J⁺**: Pseudoinverse of the Jacobian
+- **θ̇₀**: Motion in the null space for secondary objectives
+
+**Optimization-based methods**: Formulating IK as an optimization problem:
+- **Quadratic programming**: Minimizing quadratic cost functions
+- **Linear programming**: Minimizing linear cost functions
+- **Nonlinear programming**: Handling complex cost functions
+
+**Gradient projection**: Projecting gradient of objective function into null space:
+- **Joint limit avoidance**: Keeping joints away from limits
+- **Obstacle avoidance**: Avoiding collisions with obstacles
+- **Energy minimization**: Minimizing energy consumption
+
+### Multiple Task Inverse Kinematics
+
+#### Prioritized Task Execution
+Handling multiple simultaneous tasks with different priorities:
+
+**Task hierarchy**: Organizing tasks by priority:
+- **Primary tasks**: High-priority tasks that must be satisfied
+- **Secondary tasks**: Lower-priority tasks to be satisfied when possible
+- **Task blending**: Combining tasks with different weights
+
+**Operational space control**: Controlling multiple task spaces simultaneously:
+- **Task coordinates**: Different coordinate systems for different tasks
+- **Jacobian pseudoinverse**: Mapping between joint space and task space
+- **Task coordination**: Ensuring tasks work together
+
+#### Multi-End-Effector Control
+Managing multiple end-effectors simultaneously:
+
+**Hands and feet**: Controlling manipulative and locomotive end-effectors:
+- **Constraint satisfaction**: Ensuring all end-effectors meet their goals
+- **Balance maintenance**: Maintaining whole-body balance
+- **Collision avoidance**: Preventing self-collision
+
+**Whole-body control**: Coordinating all body parts:
+- **Centroidal dynamics**: Controlling the center of mass and angular momentum
+- **Postural control**: Maintaining stable postures
+- **Task coordination**: Ensuring tasks don't conflict
+
+### Numerical Inverse Kinematics Methods
+
+#### Jacobian-Based Methods
+
+**Pseudoinverse method**: Using the Moore-Penrose pseudoinverse:
+- **Mathematical formulation**: θ̇ = J⁺ẋ
+- **Advantages**: Stable, well-conditioned
+- **Disadvantages**: May not handle joint limits well
+
+**Damped Least Squares (DLS)**: Adding damping to handle singularities:
+- **Mathematical formulation**: θ̇ = Jᵀ(JJᵀ + λ²I)⁻¹ẋ
+- **Damping factor**: λ controls behavior near singularities
+- **Advantages**: Handles singularities well
+- **Disadvantages**: May be slower than pseudoinverse
+
+**Transpose method**: Using the transpose of the Jacobian:
+- **Mathematical formulation**: θ̇ = Jᵀẋ
+- **Advantages**: Simple to compute, always stable
+- **Disadvantages**: Slower convergence, less accurate
+
+#### Iterative Methods
+
+**Newton-Raphson method**: Using derivatives to find solutions:
+- **Mathematical formulation**: θₖ₊₁ = θₖ - J⁻¹(θₖ)(f(θₖ) - x)
+- **Advantages**: Fast convergence near solution
+- **Disadvantages**: May diverge if far from solution
+
+**Gauss-Newton method**: Linearizing the system:
+- **Mathematical formulation**: θₖ₊₁ = θₖ - (JᵀJ)⁻¹Jᵀ(f(θₖ) - x)
+- **Advantages**: More stable than Newton-Raphson
+- **Disadvantages**: Still may have convergence issues
+
+**Cyclic Coordinate Descent (CCD)**: Adjusting one joint at a time:
+- **Process**: Iteratively adjusting each joint toward goal
+- **Advantages**: Simple, always converges to local minimum
+- **Disadvantages**: May be slow, gets stuck in local minima
+
+### Constraints in Inverse Kinematics
+
+#### Joint Limit Constraints
+Preventing joints from exceeding physical limits:
+
+**Hard limits**: Absolute physical constraints:
+- **Prevention**: Preventing joints from reaching limits
+- **Mathematical formulation**: θmin ≤ θ ≤ θmax
+- **Implementation**: Optimization with inequality constraints
+
+**Soft limits**: Preferences to stay within preferred ranges:
+- **Penalty functions**: Adding penalties for approaching limits
+- **Gradient methods**: Using gradients to move away from limits
+- **Priority**: Lower priority than hard constraints
+
+#### Balance Constraints
+Maintaining robot stability:
+
+**Zero Moment Point (ZMP)**: Maintaining balance during locomotion:
+- **Definition**: Point where the moment of ground reaction force is zero
+- **Constraint**: Keeping ZMP within support polygon
+- **Implementation**: Optimization with ZMP constraints
+
+**Center of Mass (CoM)**: Managing whole-body balance:
+- **Stability**: Keeping CoM over support base
+- **Dynamic balance**: Managing CoM during movement
+- **Constraint formulation**: CoM position and velocity limits
+
+#### Collision Avoidance Constraints
+Preventing self-collision and environmental collision:
+
+**Self-collision**: Preventing robot links from colliding:
+- **Detection**: Identifying potential collisions
+- **Avoidance**: Adjusting joint angles to avoid collisions
+- **Priority**: High priority to prevent damage
+
+**Environmental collision**: Avoiding obstacles in the environment:
+- **Sensing**: Detecting environmental obstacles
+- **Avoidance**: Planning paths around obstacles
+- **Real-time**: Handling dynamic obstacles
+
+### Real-Time Inverse Kinematics
+
+#### Computational Efficiency
+Achieving solutions quickly enough for real-time control:
+
+**Pre-computation**: Computing solutions offline:
+- **Look-up tables**: Pre-computing common IK solutions
+- **Interpolation**: Interpolating between pre-computed solutions
+- **Limited applicability**: Only works for specific configurations
+
+**Approximation methods**: Trading accuracy for speed:
+- **Simplified models**: Using simplified kinematic models
+- **Reduced DOF**: Temporarily reducing DOF for computation
+- **Error bounds**: Understanding accuracy trade-offs
+
+**Parallel computation**: Using multiple processors:
+- **GPU acceleration**: Using graphics processors for matrix operations
+- **Distributed computing**: Distributing computation across multiple cores
+- **Specialized hardware**: Hardware designed for IK computation
+
+#### Sampling-Based Methods
+Using random sampling for complex problems:
+
+**Rapidly-exploring Random Trees (RRT)**: Exploring configuration space:
+- **Path planning**: Finding collision-free paths
+- **IK applications**: Solving IK with constraints
+- **Probabilistic completeness**: Guaranteed to find solution if one exists
+
+**Monte Carlo methods**: Using random sampling:
+- **Random walks**: Exploring configuration space randomly
+- **Importance sampling**: Focusing on promising regions
+- **Statistical guarantees**: Probabilistic solution quality
+
+### Applications in Humanoid Robotics
+
+#### Manipulation Tasks
+Using IK for object manipulation:
+
+**Grasping**: Positioning hands for object interaction:
+- **Pre-grasp positioning**: Positioning before contact
+- **Grasp synthesis**: Determining grasp configuration
+- **Object manipulation**: Controlling object motion
+
+**Tool use**: Using tools with appropriate orientations:
+- **Tool pose control**: Maintaining proper tool orientation
+- **Force control**: Applying appropriate forces
+- **Motion coordination**: Coordinating with other tasks
+
+#### Locomotion
+Using IK for walking and balance:
+
+**Walking pattern generation**: Planning foot placement:
+- **Foot trajectory planning**: Planning smooth foot movements
+- **Balance maintenance**: Maintaining stability during walking
+- **Terrain adaptation**: Adapting to different surfaces
+
+**Balance recovery**: Recovering from disturbances:
+- **Reactive control**: Adjusting posture in response to disturbances
+- **Predictive control**: Anticipating and preventing falls
+- **Recovery strategies**: Planning recovery motions
+
+#### Human-Robot Interaction
+Using IK for natural interaction:
+
+**Gestures**: Creating human-like gestures:
+- **Gesture libraries**: Predefined gesture patterns
+- **Adaptive gestures**: Adapting to interaction context
+- **Social signals**: Using gestures for social communication
+
+**Cooperative tasks**: Working together with humans:
+- **Shared workspace**: Coordinating motion with humans
+- **Safety considerations**: Ensuring safe interaction
+- **Collaborative control**: Sharing control with humans
+
+### Advanced Topics in Inverse Kinematics
+
+#### Learning-Based Approaches
+Using machine learning for IK:
+
+**Neural networks**: Learning IK mappings:
+- **Feedforward networks**: Direct mapping from task to joint space
+- **Recurrent networks**: Handling temporal sequences
+- **Deep learning**: Complex nonlinear mappings
+
+**Reinforcement learning**: Learning optimal IK solutions:
+- **Reward functions**: Defining optimal behavior
+- **Exploration**: Learning through interaction
+- **Policy learning**: Learning control policies
+
+#### Hybrid Methods
+Combining different approaches:
+
+**Analytical + numerical**: Using analytical solutions when possible:
+- **Sub-problem decomposition**: Breaking into analytically solvable parts
+- **Numerical refinement**: Using numerical methods for fine-tuning
+- **Efficiency**: Combining speed and accuracy
+
+**Model-based + learning**: Combining physics models with learned components:
+- **Physics priors**: Using physical models as priors
+- **Learned corrections**: Learning to correct model errors
+- **Robustness**: Maintaining physical consistency
+
+### Challenges and Future Directions
+
+#### Current Challenges
+Ongoing challenges in humanoid IK:
+
+**Computational complexity**: Solving complex IK problems in real-time:
+- **Algorithm efficiency**: Developing faster algorithms
+- **Hardware acceleration**: Using specialized hardware
+- **Problem simplification**: Finding appropriate simplifications
+
+**Robustness**: Handling real-world uncertainties:
+- **Sensor noise**: Managing noisy sensor inputs
+- **Model errors**: Handling discrepancies between models and reality
+- **Dynamic environments**: Adapting to changing conditions
+
+#### Future Directions
+Emerging trends in humanoid IK:
+
+**Bio-inspired approaches**: Learning from biological systems:
+- **Muscle synergies**: Using biological movement patterns
+- **Neuromechanical models**: Combining neural and mechanical models
+- **Adaptive control**: Learning from biological examples
+
+**Human-like motion**: Creating more natural robot motion:
+- **Motion capture**: Learning from human motion data
+- **Biomechanical optimization**: Optimizing for human-like characteristics
+- **Social acceptability**: Optimizing for human acceptance
+
+Understanding and implementing effective inverse kinematics is crucial for creating humanoid robots that can move naturally and perform complex tasks.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Inverse kinematics determines joint angles for desired end-effector positions.
+- Mathematical foundations include forward/inverse equations and Jacobian matrices.
+- Redundant systems require resolution techniques like null-space projection.
+- Multiple task IK handles prioritized tasks and multi-end-effector control.
+- Numerical methods include Jacobian-based and iterative approaches.
+- Constraints include joint limits, balance, and collision avoidance.
+- Real-time IK requires computational efficiency and sampling-based methods.
+- Applications span manipulation, locomotion, and human-robot interaction.
+
+</div>
+</TabItem>
+</Tabs>

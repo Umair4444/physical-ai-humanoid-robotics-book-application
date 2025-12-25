@@ -1,0 +1,744 @@
+---
+id: chapter-4
+title: "Microcontrollers and Embedded Systems"
+module: "Module 1: Foundations of Physical Computing for Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Microcontrollers and Embedded Systems
+
+### Introduction to Microcontrollers and Embedded Systems
+
+Microcontrollers are the brains of physical computing systems, providing the computational power to process sensor data, execute control algorithms, and drive actuators. In robotics, microcontrollers serve as the interface between high-level planning systems and the physical hardware components. Understanding microcontroller architectures, programming, and integration is fundamental to creating effective robotic systems.
+
+### Microcontroller Architecture
+
+#### Basic Components
+
+**Central Processing Unit (CPU)**:
+The core computational unit that executes instructions.
+
+**Components**:
+- **Arithmetic Logic Unit (ALU)**: Performs arithmetic and logical operations
+- **Control Unit**: Manages instruction execution
+- **Registers**: High-speed storage for temporary data
+- **Instruction Decoder**: Decodes and executes instructions
+
+**Architecture Types**:
+- **von Neumann**: Shared memory for instructions and data
+- **Harvard**: Separate memory for instructions and data
+- **Modified Harvard**: Separate caches but shared memory
+
+**Clock System**:
+The timing system that synchronizes operations.
+
+**Components**:
+- **Crystal Oscillator**: Provides precise timing reference
+- **Phase-Locked Loop (PLL)**: Multiplies clock frequency
+- **Clock Dividers**: Generate different clock speeds for peripherals
+- **Real-Time Clock (RTC)**: Maintains time/date
+
+**Memory Systems**:
+Storage for program code and data.
+
+**Types**:
+- **Flash Memory**: Non-volatile program storage
+- **RAM**: Volatile data storage
+- **EEPROM**: Non-volatile data storage
+- **Cache Memory**: High-speed temporary storage
+
+**Memory Organization**:
+```
+Address Space:
+0x00000000 - 0x000FFFFF: Flash (Program Memory)
+0x20000000 - 0x2000FFFF: RAM (Data Memory)
+0x40000000 - 0x400FFFFF: Peripherals
+```
+
+#### Peripheral Systems
+
+**Input/Output Ports**:
+Digital interfaces for connecting external components.
+
+**Characteristics**:
+- **GPIO**: General-purpose input/output pins
+- **Configurable**: Can be configured as input or output
+- **Voltage Levels**: Typically 3.3V or 5V logic levels
+- **Current**: Limited current sourcing/sinking capability
+
+**Port Configuration**:
+```
+Pin Configuration Register:
+- Pin Mode: Input/Output/Alternate Function
+- Pull-up/Pull-down: Internal resistor selection
+- Output Type: Push-pull/Open-drain
+- Speed: Output drive strength
+```
+
+**Analog-to-Digital Converter (ADC)**:
+Converts analog signals to digital values.
+
+**Specifications**:
+- **Resolution**: Number of bits (8, 10, 12, 16-bit)
+- **Sample Rate**: Samples per second
+- **Input Channels**: Number of input channels
+- **Reference Voltage**: Reference for conversion
+
+**ADC Operation**:
+```
+Conversion Process:
+1. Sample: Hold input voltage on capacitor
+2. Quantize: Compare to reference voltages
+3. Encode: Convert to digital value
+```
+
+**Digital-to-Analog Converter (DAC)**:
+Converts digital values to analog signals.
+
+**Applications**:
+- **Motor Control**: Analog voltage for motor drivers
+- **Audio**: Audio signal generation
+- **Calibration**: Analog reference generation
+- **Testing**: Analog signal simulation
+
+### Popular Microcontroller Platforms
+
+#### Arduino Family
+
+**Architecture**:
+Based on Atmel AVR microcontrollers.
+
+**Models**:
+- **Uno**: ATmega328P, 32KB flash, 2KB RAM
+- **Mega**: ATmega2560, 256KB flash, 8KB RAM
+- **Nano**: ATmega328P in small form factor
+- **Due**: ARM Cortex-M3, 512KB flash, 96KB RAM
+
+**Programming Environment**:
+- **Arduino IDE**: Integrated development environment
+- **Wiring Language**: C/C++ based programming
+- **Libraries**: Extensive library ecosystem
+- **Bootloader**: Simplified programming process
+
+**Advantages**:
+- **User-Friendly**: Simple programming and setup
+- **Community**: Large community and resources
+- **Compatibility**: Extensive shield ecosystem
+- **Documentation**: Good documentation and examples
+
+**Disadvantages**:
+- **Performance**: Limited processing power
+- **Memory**: Limited memory for complex applications
+- **Real-time**: Not suitable for hard real-time applications
+- **Power**: Higher power consumption than some alternatives
+
+#### ARM Cortex-M Microcontrollers
+
+**Architecture**:
+ARM-based 32-bit microcontrollers.
+
+**Series**:
+- **Cortex-M0**: Basic, low-power applications
+- **Cortex-M3**: General-purpose applications
+- **Cortex-M4**: DSP and floating-point capabilities
+- **Cortex-M7**: High-performance applications
+
+**Popular Manufacturers**:
+- **STMicroelectronics**: STM32 series
+- **Texas Instruments**: Tiva C series
+- **NXP**: Kinetis series
+- **Microchip**: SAM series
+
+**Advantages**:
+- **Performance**: High processing power
+- **Memory**: Large memory options
+- **Peripherals**: Rich peripheral set
+- **Power**: Good power efficiency
+
+**Disadvantages**:
+- **Complexity**: More complex to program
+- **Cost**: Higher cost for basic applications
+- **Learning Curve**: Steeper learning curve
+- **Development Tools**: More complex toolchain
+
+#### Raspberry Pi
+
+**Architecture**:
+Single-board computer with ARM processor.
+
+**Specifications**:
+- **Processor**: ARM Cortex-A series
+- **RAM**: 512MB to 8GB
+- **OS**: Linux-based operating systems
+- **Connectivity**: Ethernet, WiFi, Bluetooth
+
+**Advantages**:
+- **Processing Power**: High computational capability
+- **OS Support**: Full operating system
+- **Connectivity**: Rich connectivity options
+- **Multimedia**: Video and audio processing
+
+**Disadvantages**:
+- **Real-time**: Not suitable for hard real-time applications
+- **Power**: Higher power consumption
+- **Determinism**: Less deterministic timing
+- **Cost**: Higher cost than microcontrollers
+
+### Programming Microcontrollers
+
+#### Development Environments
+
+**Integrated Development Environments (IDEs)**:
+Complete programming environments.
+
+**Features**:
+- **Editor**: Code editing with syntax highlighting
+- **Compiler**: Compile code to machine code
+- **Debugger**: Debug and test code
+- **Uploader**: Transfer code to microcontroller
+
+**Popular IDEs**:
+- **Arduino IDE**: Simple, beginner-friendly
+- **PlatformIO**: Cross-platform, extensible
+- **Keil MDK**: Professional ARM development
+- **IAR Embedded Workbench**: Professional development tools
+
+#### Programming Languages
+
+**C Programming**:
+Primary language for microcontroller programming.
+
+**Advantages**:
+- **Efficiency**: Efficient code generation
+- **Control**: Direct hardware control
+- **Portability**: Portable across platforms
+- **Resources**: Extensive libraries and resources
+
+**Basic Structure**:
+```c
+#include <avr/io.h>  // Hardware definitions
+
+int main(void) {
+    // Initialization code
+    DDRB = 0xFF;     // Set PORTB as output
+    PORTB = 0x00;    // Initialize PORTB to 0
+    
+    while(1) {       // Main loop
+        PORTB = 0xFF;  // Turn on all LEDs
+        _delay_ms(1000);  // Delay 1 second
+        PORTB = 0x00;  // Turn off all LEDs
+        _delay_ms(1000);  // Delay 1 second
+    }
+}
+```
+
+**C++ Programming**:
+Object-oriented approach for microcontroller programming.
+
+**Advantages**:
+- **Abstraction**: Better code organization
+- **Reusability**: Code reusability through classes
+- **Encapsulation**: Data and function encapsulation
+- **Polymorphism**: Flexible code design
+
+**Arduino Programming**:
+Simplified programming for Arduino platforms.
+
+**Structure**:
+```cpp
+void setup() {
+    // Initialization code (runs once)
+    pinMode(13, OUTPUT);
+}
+
+void loop() {
+    // Main code (runs continuously)
+    digitalWrite(13, HIGH);
+    delay(1000);
+    digitalWrite(13, LOW);
+    delay(1000);
+}
+```
+
+#### Real-Time Programming Concepts
+
+**Interrupts**:
+Asynchronous event handling.
+
+**Types**:
+- **External Interrupts**: Triggered by external signals
+- **Timer Interrupts**: Triggered by timer events
+- **ADC Interrupts**: Triggered by ADC conversions
+- **Communication Interrupts**: Triggered by serial communication
+
+**Interrupt Service Routine (ISR)**:
+```c
+ISR(INT0_vect) {  // External interrupt 0
+    // Handle interrupt
+    interrupt_flag = 1;
+    // Clear interrupt flag if needed
+}
+```
+
+**Timer Programming**:
+Generating precise timing events.
+
+**Timer Modes**:
+- **Normal Mode**: Count up to maximum value
+- **CTC Mode**: Compare and clear timer
+- **PWM Mode**: Generate pulse-width modulated signals
+- **Input Capture**: Capture input signal timing
+
+**Timer Example**:
+```c
+// Configure timer for 1ms interrupts
+TCCR1A = 0;  // Normal mode
+TCCR1B = (1 << WGM12) | (1 << CS12);  // CTC mode, prescaler 256
+OCR1A = 15624;  // 16MHz/256/60Hz = 1ms (16MHz/256/1000Hz)
+TIMSK1 = (1 << OCIE1A);  // Enable compare match interrupt
+```
+
+### Hardware Interfaces
+
+#### Serial Communication
+
+**UART (Universal Asynchronous Receiver/Transmitter)**:
+Asynchronous serial communication.
+
+**Configuration**:
+- **Baud Rate**: Data transmission speed (e.g., 9600, 115200)
+- **Data Bits**: Number of data bits (typically 8)
+- **Stop Bits**: Number of stop bits (1 or 2)
+- **Parity**: Error detection (none, even, odd)
+
+**UART Example**:
+```c
+// Initialize UART at 9600 baud
+UBRR0H = (uint8_t)(MYUBRR >> 8);
+UBRR0L = (uint8_t)(MYUBRR);
+UCSR0B = (1 << RXEN0) | (1 << TXEN0);  // Enable RX and TX
+UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);  // 8-bit data
+
+// Send character
+void uart_send_char(char c) {
+    while (!(UCSR0A & (1 << UDRE0)));  // Wait for empty buffer
+    UDR0 = c;
+}
+```
+
+**SPI (Serial Peripheral Interface)**:
+Synchronous serial communication.
+
+**Lines**:
+- **MOSI**: Master Out Slave In
+- **MISO**: Master In Slave Out
+- **SCK**: Serial Clock
+- **SS**: Slave Select
+
+**SPI Configuration**:
+```c
+// Initialize SPI as master
+SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);  // Enable SPI, master, f_osc/16
+```
+
+**I2C (Inter-Integrated Circuit)**:
+Two-wire serial communication.
+
+**Lines**:
+- **SDA**: Serial Data
+- **SCL**: Serial Clock
+- **Pull-ups**: Required pull-up resistors
+- **Addresses**: 7-bit or 10-bit addressing
+
+**I2C Example**:
+```c
+// I2C initialization
+TWSR = 0;  // Prescaler
+TWBR = ((F_CPU / F_SCL) - 16) / 2;  // Bit rate
+```
+
+#### Analog Interfaces
+
+**ADC Programming**:
+Configuring and using analog-to-digital conversion.
+
+**Configuration Steps**:
+1. **Reference Selection**: Choose voltage reference
+2. **Prescaler Selection**: Set conversion clock
+3. **Channel Selection**: Choose input channel
+4. **Enable ADC**: Enable the ADC module
+
+**ADC Example**:
+```c
+// Initialize ADC
+ADMUX = (1 << REFS0);  // AVcc reference
+ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);  // Enable, prescaler 128
+
+// Read ADC value
+uint16_t read_adc(uint8_t channel) {
+    ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);  // Select channel
+    ADCSRA |= (1 << ADSC);  // Start conversion
+    while (ADCSRA & (1 << ADSC));  // Wait for conversion
+    return ADC;
+}
+```
+
+### Real-Time Considerations
+
+#### Timing and Synchronization
+
+**Real-Time Constraints**:
+Meeting timing requirements in robotic systems.
+
+**Types**:
+- **Hard Real-Time**: Missing deadline is failure
+- **Soft Real-Time**: Missing deadline is degradation
+- **Firm Real-Time**: Missing deadline makes result useless
+
+**Timing Analysis**:
+- **Worst-Case Execution Time (WCET)**: Maximum execution time
+- **Interrupt Latency**: Time to respond to interrupts
+- **Jitter**: Variation in timing
+- **Deadline**: Time by which task must complete
+
+#### Interrupt Handling
+
+**Critical Sections**:
+Protecting shared resources from interrupt interference.
+
+**Implementation**:
+```c
+// Disable interrupts
+uint8_t sreg = SREG;
+cli();  // Clear global interrupt flag
+
+// Critical section code
+shared_variable = new_value;
+
+// Restore interrupts
+SREG = sreg;
+```
+
+**Interrupt Priorities**:
+Managing multiple interrupt sources.
+
+**Approaches**:
+- **Priority Levels**: Hardware-assigned priorities
+- **Nested Interrupts**: Higher priority interrupts during lower priority
+- **Polling**: Software-based interrupt handling
+- **Round-robin**: Fair scheduling of interrupts
+
+### Power Management
+
+#### Power Consumption Considerations
+
+**Power Calculation**:
+```
+Power = Voltage × Current
+P = V × I
+```
+
+**Power-Saving Techniques**:
+- **Clock Gating**: Disable clocks to unused peripherals
+- **Voltage Scaling**: Reduce voltage for lower performance
+- **Sleep Modes**: Use low-power sleep modes
+- **Dynamic Power Management**: Adjust power based on load
+
+#### Low-Power Modes
+
+**Sleep Modes**:
+Different levels of power saving.
+
+**Types**:
+- **Idle**: CPU stopped, peripherals active
+- **Power-down**: CPU and most peripherals stopped
+- **Power-save**: CPU and timers stopped, RTC active
+- **Standby**: Minimal power consumption
+
+**Sleep Example**:
+```c
+#include <avr/sleep.h>
+
+// Configure sleep mode
+set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+
+// Enable sleep
+sleep_enable();
+
+// Enter sleep
+sleep_cpu();
+
+// Wake up and continue execution
+```
+
+### Memory Management
+
+#### Memory Types and Usage
+
+**Program Memory**:
+Non-volatile storage for code.
+
+**Characteristics**:
+- **Flash Memory**: Re-writable program storage
+- **Read-Only**: During normal operation
+- **Programming**: Requires special programming cycles
+- **Size**: Limited by microcontroller model
+
+**Data Memory**:
+Volatile storage for variables.
+
+**Types**:
+- **SRAM**: Static RAM for variables
+- **Stack**: Function call management
+- **Heap**: Dynamic memory allocation
+- **Registers**: High-speed CPU storage
+
+**Memory Optimization**:
+- **Const Variables**: Store in program memory
+- **Struct Packing**: Reduce memory usage
+- **Dynamic Allocation**: Use sparingly in embedded systems
+- **Memory Profiling**: Monitor memory usage
+
+### Hardware Abstraction
+
+#### Peripheral Libraries
+
+**Hardware Abstraction Layer (HAL)**:
+Abstract hardware-specific details.
+
+**Benefits**:
+- **Portability**: Code can run on different microcontrollers
+- **Simplicity**: Simplified programming interface
+- **Reliability**: Tested and verified code
+- **Maintenance**: Easier to maintain and update
+
+**Example HAL Function**:
+```c
+// Abstract GPIO function
+void gpio_set_pin(uint8_t port, uint8_t pin, uint8_t value) {
+    if (value) {
+        // Set pin high
+        switch(port) {
+            case PORT_A: PORTA |= (1 << pin); break;
+            case PORT_B: PORTB |= (1 << pin); break;
+            // ... other ports
+        }
+    } else {
+        // Set pin low
+        switch(port) {
+            case PORT_A: PORTA &= ~(1 << pin); break;
+            case PORT_B: PORTB &= ~(1 << pin); break;
+            // ... other ports
+        }
+    }
+}
+```
+
+#### Device Drivers
+
+**Driver Architecture**:
+Software interface to hardware devices.
+
+**Components**:
+- **Initialization**: Configure hardware
+- **Control**: Send commands to device
+- **Data Transfer**: Read/write data
+- **Status**: Check device status
+
+**Driver Example**:
+```c
+typedef struct {
+    uint8_t (*init)(void);
+    uint8_t (*read)(uint8_t *data, uint16_t length);
+    uint8_t (*write)(uint8_t *data, uint16_t length);
+    uint8_t (*control)(uint8_t cmd, void *param);
+} sensor_driver_t;
+
+// Example driver implementation
+uint8_t temp_sensor_init(void) {
+    // Initialize temperature sensor
+    return 0;  // Success
+}
+
+uint8_t temp_sensor_read(uint8_t *data, uint16_t length) {
+    // Read temperature data
+    return 0;  // Success
+}
+```
+
+### Debugging and Development Tools
+
+#### Hardware Debugging
+
+**In-Circuit Debuggers**:
+Hardware tools for debugging microcontrollers.
+
+**Types**:
+- **JTAG**: Joint Test Action Group interface
+- **SWD**: Serial Wire Debug for ARM
+- **ICSP**: In-Circuit Serial Programming
+- **SWO**: Serial Wire Output for ARM
+
+**Debugging Features**:
+- **Breakpoints**: Pause execution at specific points
+- **Watchpoints**: Monitor variable changes
+- **Single Stepping**: Execute one instruction at a time
+- **Memory Inspection**: View memory contents
+
+#### Software Tools
+
+**Logic Analyzers**:
+Capture and analyze digital signals.
+
+**Applications**:
+- **Protocol Analysis**: Analyze communication protocols
+- **Timing Analysis**: Measure signal timing
+- **Debugging**: Debug hardware interfaces
+- **Verification**: Verify signal integrity
+
+**Oscilloscopes**:
+Analyze analog signals.
+
+**Applications**:
+- **Signal Quality**: Check signal integrity
+- **Timing**: Measure analog signal timing
+- **Power**: Measure power consumption
+- **Noise**: Identify noise sources
+
+### Robotic Applications
+
+#### Sensor Integration
+
+**Multi-Sensor Systems**:
+Integrating multiple sensors with microcontrollers.
+
+**Challenges**:
+- **Timing**: Synchronizing sensor readings
+- **Data Rate**: Managing different data rates
+- **Calibration**: Calibrating multiple sensors
+- **Fusion**: Combining sensor data
+
+**Example Implementation**:
+```c
+// Sensor reading task
+void read_sensors(void) {
+    // Read IMU
+    read_imu(&imu_data);
+    
+    // Read encoders
+    read_encoders(&encoder_data);
+    
+    // Read distance sensors
+    read_distance_sensors(&distance_data);
+    
+    // Process sensor fusion
+    sensor_fusion(&imu_data, &encoder_data, &distance_data);
+}
+```
+
+#### Motor Control Applications
+
+**PWM Motor Control**:
+Using microcontrollers for motor control.
+
+**Implementation**:
+- **Timer Configuration**: Set up PWM timers
+- **Direction Control**: Control motor direction
+- **Speed Control**: Control motor speed
+- **Current Monitoring**: Monitor motor current
+
+**PID Control Implementation**:
+```c
+// PID controller for motor position
+typedef struct {
+    float kp, ki, kd;     // PID gains
+    float error;          // Current error
+    float integral;       // Integral of error
+    float derivative;     // Derivative of error
+    float last_error;     // Previous error
+    float output;         // Controller output
+} pid_controller_t;
+
+float pid_compute(pid_controller_t *pid, float setpoint, float process_variable) {
+    pid->error = setpoint - process_variable;
+    pid->integral += pid->error;
+    pid->derivative = pid->error - pid->last_error;
+    
+    pid->output = pid->kp * pid->error + 
+                  pid->ki * pid->integral + 
+                  pid->kd * pid->derivative;
+    
+    pid->last_error = pid->error;
+    return pid->output;
+}
+```
+
+Understanding microcontrollers and embedded systems is essential for creating the computational foundation of robotic systems that can process sensor data and control actuators effectively.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Microcontrollers and Embedded Systems
+
+### Architecture
+- **CPU**: Central processing unit and ALU
+- **Memory**: Flash, RAM, EEPROM organization
+- **Peripherals**: I/O ports, ADC, DAC
+- **Clock**: Timing and synchronization systems
+
+### Platforms
+- **Arduino**: Beginner-friendly, extensive libraries
+- **ARM Cortex-M**: High-performance, 32-bit
+- **Raspberry Pi**: Single-board computer, Linux
+- **Selection**: Performance, power, cost trade-offs
+
+### Programming
+- **C/C++**: Efficient, direct hardware control
+- **Arduino**: Simplified programming environment
+- **Interrupts**: Asynchronous event handling
+- **Timers**: Precise timing and PWM generation
+
+### Interfaces
+- **Serial**: UART, SPI, I2C communication
+- **Analog**: ADC and DAC for analog signals
+- **Digital**: GPIO and digital interfaces
+- **Protocols**: Standard communication protocols
+
+### Real-Time
+- **Timing**: Hard/soft real-time constraints
+- **Synchronization**: Critical sections and mutexes
+- **Interrupts**: Priorities and latency
+- **Analysis**: WCET and deadline management
+
+### Power Management
+- **Consumption**: Voltage, current, power calculation
+- **Saving**: Clock gating, sleep modes
+- **Modes**: Idle, power-down, standby
+- **Optimization**: Dynamic power management
+
+### Development
+- **IDEs**: Arduino IDE, PlatformIO, Keil
+- **Debugging**: JTAG, SWD, logic analyzers
+- **HAL**: Hardware abstraction layers
+- **Drivers**: Device driver architecture
+
+### Applications
+- **Sensors**: Multi-sensor integration
+- **Motors**: PWM control, PID implementation
+- **Real-time**: Timing-critical robotic tasks
+- **Integration**: Hardware-software coordination
+
+</div>
+</TabItem>
+</Tabs>

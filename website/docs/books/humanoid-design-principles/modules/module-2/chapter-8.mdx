@@ -1,0 +1,277 @@
+---
+id: chapter-8
+title: "Kinematic Analysis of Humanoid Robots"
+module: "Module 2: Biomechanics and Kinematics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Kinematic Analysis of Humanoid Robots
+
+### Introduction to Kinematics
+
+Kinematics is the branch of mechanics that deals with the motion of objects without considering the forces that cause the motion. In humanoid robotics, kinematic analysis is essential for understanding how the robot's joints and links move to achieve desired positions and orientations. This analysis forms the foundation for motion planning, control, and design of humanoid robots.
+
+Kinematic concepts in humanoid robotics include:
+- **Forward kinematics**: Determining end-effector position from joint angles
+- **Inverse kinematics**: Determining joint angles from desired end-effector position
+- **Degrees of freedom**: The number of independent movements possible
+- **Workspace analysis**: The range of positions and orientations achievable
+
+### Forward Kinematics
+
+#### Definition and Purpose
+Forward kinematics calculates the position and orientation of the end-effector (typically the hand or foot) based on known joint angles. This is essential for predicting where the robot will place its limbs given specific joint configurations.
+
+**Mathematical representation**: Forward kinematics uses transformation matrices to describe the relationship between different coordinate frames attached to robot links.
+
+**Coordinate systems**: Each link in the robot has an associated coordinate frame:
+- **Base frame**: Fixed to the robot's base or torso
+- **Joint frames**: Aligned with joint axes
+- **End-effector frame**: Attached to the tool or interaction point
+
+#### Denavit-Hartenberg (DH) Convention
+The DH convention provides a systematic method for defining coordinate frames on robot links:
+
+**DH parameters**:
+- **Link length (a)**: Distance along the common normal between joint axes
+- **Link twist (α)**: Angle between joint axes about the common normal
+- **Link offset (d)**: Distance along the previous joint axis to the common normal
+- **Joint angle (θ)**: Angle about the current joint axis from the previous x-axis
+
+**Transformation matrices**: Each joint-link pair is represented by a 4x4 transformation matrix that combines rotation and translation.
+
+**Application to humanoid robots**: The DH convention must be adapted for the complex kinematic chains in humanoid robots, including the closed-loop chains formed by the torso and limbs.
+
+#### Kinematic Chains in Humanoid Robots
+
+**Serial chains**: Most humanoid limbs follow serial kinematic chains:
+- **Human arm equivalent**: Shoulder (3 DOF) → Elbow (1 DOF) → Wrist (2 DOF)
+- **Human leg equivalent**: Hip (3 DOF) → Knee (1 DOF) → Ankle (2 DOF)
+- **Head/neck**: Multiple DOF for looking and nodding
+
+**Tree structures**: Humanoid robots have branched kinematic structures:
+- **Torso as central trunk**: All limbs branch from the torso
+- **Multiple end-effectors**: Hands and feet as interaction points
+- **Redundant paths**: Multiple ways to achieve the same configuration
+
+### Inverse Kinematics
+
+#### Definition and Purpose
+Inverse kinematics solves for the joint angles required to achieve a desired end-effector position and orientation. This is crucial for task execution, where the robot must reach specific targets.
+
+**Mathematical complexity**: Inverse kinematics often involves solving systems of nonlinear equations, which can have multiple solutions or no solutions.
+
+**Multiple solutions**: Redundant robots (with more DOF than required) have infinite solutions for reaching a given pose.
+
+#### Analytical Solutions
+For simple kinematic chains, closed-form solutions exist:
+
+**Geometric approach**: Using geometric relationships to solve for joint angles.
+**Algebraic approach**: Converting kinematic equations to polynomial form.
+**Pieper's solution**: For 6 DOF chains with intersecting axes.
+
+**Limitations**: Analytical solutions are only possible for specific kinematic structures.
+
+#### Numerical Solutions
+For complex humanoid robots, numerical methods are typically used:
+
+**Jacobian-based methods**: Using the Jacobian matrix to relate joint velocities to end-effector velocities:
+- **Pseudoinverse**: Computing joint velocities to achieve desired end-effector motion
+- **Damped least squares**: Adding damping to handle singularities
+- **Weighted pseudoinverse**: Prioritizing certain DOF over others
+
+**Iterative methods**: Refining joint angles through repeated calculations:
+- **Newton-Raphson**: Using derivatives to find solutions
+- **Gradient descent**: Minimizing error between current and desired poses
+- **Cyclic coordinate descent**: Adjusting one joint at a time
+
+#### Challenges in Humanoid Inverse Kinematics
+
+**Redundancy**: Humanoid robots typically have more DOF than needed for most tasks:
+- **Optimization criteria**: Need to select the best solution from many possibilities
+- **Joint limit avoidance**: Staying within physical joint limits
+- **Obstacle avoidance**: Finding paths that avoid self-collision and environmental obstacles
+
+**Singularities**: Configurations where the robot loses degrees of freedom:
+- **Kinematic singularities**: Mathematical singularities in the Jacobian
+- **Physical singularities**: Configurations where joints align
+- **Avoidance strategies**: Planning paths around singular configurations
+
+### Degrees of Freedom (DOF) Analysis
+
+#### Counting DOF
+The number of independent parameters needed to specify the configuration of a mechanical system:
+
+**Grübler's formula**: For planar mechanisms: DOF = 3(n-1) - 2j - h, where n is number of links, j is number of joints, and h is higher pairs.
+
+**Screw theory**: For spatial mechanisms, using six-dimensional screws to represent motion.
+
+#### DOF in Humanoid Robots
+Humanoid robots have multiple DOF distributed across the body:
+
+**Human comparison**: Humans have approximately 230+ DOF in their skeletal system, though not all are independently controllable.
+
+**Robot implementations**: Current humanoid robots typically have 20-60 DOF:
+- **Honda ASIMO**: ~57 DOF
+- **Boston Dynamics Atlas**: ~28 DOF
+- **SoftBank NAO**: ~25 DOF
+
+**Functional DOF**: The DOF that contribute to task performance:
+- **Locomotion DOF**: DOF needed for walking and balance
+- **Manipulation DOF**: DOF needed for object manipulation
+- **Interaction DOF**: DOF needed for human-robot interaction
+
+### Workspace Analysis
+
+#### Definition
+The workspace is the set of all possible positions and orientations that the end-effector can reach.
+
+**Reachable workspace**: All positions the end-effector can reach regardless of orientation.
+**Dexterous workspace**: All positions and orientations the end-effector can achieve.
+**Orientation workspace**: All orientations achievable at a given position.
+
+#### Workspace Visualization
+Methods for representing and analyzing workspace:
+
+**Discrete sampling**: Calculating reachable points through random sampling of joint angles.
+**Analytical methods**: Mathematical description of workspace boundaries.
+**Graphical representation**: 3D visualization of workspace volume.
+
+#### Workspace Optimization
+Design considerations for maximizing useful workspace:
+
+**Joint limit optimization**: Setting joint limits to maximize useful workspace.
+**Link length optimization**: Choosing link lengths to achieve desired workspace.
+**Configuration optimization**: Positioning the robot to maximize workspace for tasks.
+
+### Kinematic Constraints
+
+#### Physical Constraints
+Real-world limitations on robot motion:
+
+**Joint limits**: Mechanical stops that limit joint angle ranges:
+- **Safety**: Preventing damage to the robot
+- **Biological accuracy**: Matching human joint ranges for humanoid appearance
+- **Task requirements**: Optimizing for specific tasks
+
+**Actuator limits**: Constraints on joint velocities and accelerations:
+- **Speed limits**: Maximum angular velocities
+- **Torque limits**: Maximum forces that can be applied
+- **Power limits**: Maximum power consumption
+
+#### Environmental Constraints
+Constraints imposed by the environment:
+
+**Obstacle avoidance**: Avoiding collisions with environmental objects:
+- **Collision detection**: Identifying potential collisions
+- **Path planning**: Finding collision-free paths
+- **Dynamic obstacles**: Avoiding moving objects
+
+**Self-collision avoidance**: Preventing robot links from colliding with each other:
+- **Link-link collisions**: Preventing different robot parts from colliding
+- **Complexity**: Increased complexity due to many DOF
+- **Real-time requirements**: Fast collision detection for control
+
+### Applications in Humanoid Robotics
+
+#### Motion Planning
+Kinematic analysis enables sophisticated motion planning:
+
+**Trajectory generation**: Creating smooth paths between configurations:
+- **Joint space planning**: Planning in joint angle space
+- **Cartesian space planning**: Planning in task space
+- **Hybrid planning**: Combining both approaches
+
+**Walking pattern generation**: Planning stable walking gaits:
+- **Zero Moment Point (ZMP)**: Maintaining balance during walking
+- **Foot placement**: Determining where to place feet for stability
+- **Center of mass control**: Managing whole-body balance
+
+#### Task Execution
+Kinematic analysis enables precise task execution:
+
+**Manipulation tasks**: Precise control of end-effector position:
+- **Grasping**: Positioning hands for object manipulation
+- **Tool use**: Controlling tools with appropriate orientations
+- **Assembly**: Precise positioning for assembly tasks
+
+**Human interaction**: Appropriate positioning for human interaction:
+- **Gestures**: Creating human-like gestures through kinematic control
+- **Eye contact**: Positioning head for appropriate gaze direction
+- **Personal space**: Respecting human personal space through positioning
+
+### Future Directions
+
+#### Advanced Kinematic Modeling
+Future developments in kinematic analysis:
+
+**Soft robotics**: Kinematic models for robots with flexible, deformable structures:
+- **Continuum robots**: Robots with continuous deformation
+- **Variable stiffness**: Robots with controllable stiffness properties
+- **Non-rigid motion**: Modeling non-rigid body motion
+
+**Bio-inspired kinematics**: Learning from biological systems:
+- **Muscle-tendon systems**: Modeling the effects of muscle-tendon compliance
+- **Non-linear joints**: Modeling joints with non-linear characteristics
+- **Adaptive structures**: Structures that change their kinematic properties
+
+#### Real-time Computation
+Improving computational efficiency:
+
+**Parallel computing**: Using parallel processing for kinematic calculations:
+- **GPU acceleration**: Using graphics processors for matrix calculations
+- **Distributed computing**: Distributing calculations across multiple processors
+- **Specialized hardware**: Hardware designed specifically for kinematic calculations
+
+**Approximation methods**: Trading accuracy for speed:
+- **Look-up tables**: Pre-computing common kinematic solutions
+- **Simplified models**: Using simplified models when accuracy is less critical
+- **Adaptive resolution**: Adjusting computation based on task requirements
+
+Understanding kinematic analysis is essential for designing and controlling effective humanoid robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Kinematics studies motion without considering forces.
+- Forward kinematics determines end-effector position from joint angles.
+- Inverse kinematics determines joint angles from desired end-effector position.
+- DOF analysis counts independent movements in robot systems.
+- Workspace analysis defines reachable positions and orientations.
+- Kinematic constraints include physical and environmental limitations.
+- Applications include motion planning and task execution.
+- Future directions involve soft robotics and real-time computation.
+
+</div>
+</TabItem>
+</Tabs>

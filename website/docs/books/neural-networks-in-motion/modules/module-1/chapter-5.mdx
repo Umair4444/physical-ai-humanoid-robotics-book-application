@@ -1,0 +1,683 @@
+---
+id: chapter-5
+title: "Deep Learning for Trajectory Planning"
+module: "Module 1: Foundations of Neural Networks in Motion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Deep Learning for Trajectory Planning
+
+### Introduction to Neural Network Trajectory Planning
+
+Trajectory planning is a critical component in robotics that involves computing paths and motion profiles for robots to follow while avoiding obstacles and satisfying various constraints. Traditional trajectory planning methods often rely on optimization techniques and geometric algorithms. However, deep learning approaches have emerged as powerful alternatives that can learn complex patterns from data and generate sophisticated trajectories that adapt to various environmental conditions and task requirements.
+
+### Classical vs. Learning-Based Trajectory Planning
+
+#### Traditional Approaches
+
+**Sampling-Based Methods**:
+- **RRT (Rapidly-exploring Random Tree)**: Probabilistically complete
+- **PRM (Probabilistic Roadmap)**: Pre-computed roadmap
+- **RRT***: Optimal variant of RRT
+- **PRM***: Optimal variant of PRM
+
+**Advantages**:
+- **Provable Completeness**: Guaranteed to find solution if one exists
+- **Optimality**: Some variants converge to optimal solutions
+- **Anytime Property**: Can be stopped early with valid solutions
+- **Theoretical Foundation**: Well-understood mathematical properties
+
+**Limitations**:
+- **Computational Complexity**: High computational cost in high-dimensional spaces
+- **Dynamic Environments**: Poor performance in changing environments
+- **Smoothness**: May produce jerky or non-smooth trajectories
+- **Learning**: Cannot adapt to repeated scenarios or learn from experience
+
+#### Learning-Based Approaches
+
+**Neural Network Advantages**:
+- **Learning from Data**: Can learn from demonstrations and experiences
+- **Generalization**: Can generalize to new but similar scenarios
+- **Speed**: Fast inference after training
+- **Smoothness**: Can learn smooth, human-like trajectories
+- **Adaptation**: Can adapt to different environmental conditions
+
+**Neural Network Limitations**:
+- **Training Data**: Require large amounts of training data
+- **Generalization Bounds**: May not generalize to very different scenarios
+- **Safety Guarantees**: Difficult to provide formal safety guarantees
+- **Interpretability**: Less interpretable than classical methods
+
+### Supervised Learning for Trajectory Planning
+
+#### Imitation Learning
+
+**Behavioral Cloning**:
+Learning to imitate expert demonstrations.
+
+**Mathematical Framework**:
+```
+π_θ(a|s) = argmin_θ E[(a_expert - π_θ(s))²]
+```
+
+Where:
+- π_θ is the policy parameterized by neural network with parameters θ
+- a_expert is the expert action
+- s is the state
+
+**Network Architecture**:
+```
+Input: [State Information, Environment Map, Goal Position]
+→ CNN Layers: Process visual/sensor data
+→ Dense Layers: Extract high-level features
+→ Output: [Velocity, Angular Velocity] or [Waypoints]
+```
+
+**Training Process**:
+1. **Data Collection**: Collect expert demonstrations
+2. **Preprocessing**: Normalize and augment training data
+3. **Network Training**: Train neural network to mimic expert
+4. **Validation**: Validate on held-out test scenarios
+5. **Deployment**: Deploy trained network for planning
+
+**Challenges**:
+- **Covariate Shift**: Distribution mismatch between training and deployment
+- **Error Accumulation**: Errors compound over time
+- **Coverage**: Expert demonstrations may not cover all scenarios
+- **Imitation Gap**: Performance degradation compared to expert
+
+#### Dataset Aggregation (DAgger)
+
+**Iterative Improvement**:
+Addressing the covariate shift problem in behavioral cloning.
+
+**Algorithm**:
+1. **Initialize**: Train policy π₀ with expert demonstrations
+2. **Collect Data**: Execute π₀, collect states, query expert
+3. **Aggregate**: Add new (state, expert_action) pairs to dataset
+4. **Retrain**: Train new policy π₁ on aggregated dataset
+5. **Repeat**: Continue until convergence
+
+**Mathematical Formulation**:
+```
+π_{t+1} = argmin_π E[Σ ||π(s_i) - π_expert(s_i)||²]
+```
+Where the expectation is over states visited by policy π_t.
+
+**Advantages**:
+- **Covariate Shift**: Addresses distribution mismatch
+- **Convergence**: Theoretically guarantees improvement
+- **Robustness**: More robust to policy errors
+- **Generalization**: Better generalization to deployment conditions
+
+#### Neural Network Architectures for Imitation
+
+**Convolutional Networks**:
+Processing visual and spatial information for trajectory planning.
+
+**Architecture**:
+```
+Input: Environment map (2D or 3D)
+→ Conv1: Extract local features [H×W×C] → [H/2×W/2×64]
+→ Conv2: Extract higher-level features [H/2×W/2×64] → [H/4×W/4×128]
+→ Conv3: Extract semantic features [H/4×W/4×128] → [H/8×W/8×256]
+→ Global Pooling: [H/8×W/8×256] → [256]
+→ Dense1: [256] → [128]
+→ Dense2: [128] → [64]
+→ Output: [6] (velocity commands)
+```
+
+**Recurrent Networks**:
+Handling sequential and temporal aspects of trajectory planning.
+
+**Architecture**:
+```
+Input: Sequence of states [s_1, s_2, ..., s_t]
+→ LSTM/GRU: Process temporal sequence
+→ Hidden State: Maintain temporal context
+→ Output: Next action or trajectory segment
+```
+
+**Attention Mechanisms**:
+Focusing on relevant environmental features for trajectory planning.
+
+**Implementation**:
+```
+Attention Weights = softmax(W_a * tanh(W_s * states + W_g * goal))
+Attended Features = Σ Attention_Weights * Features
+```
+
+### Reinforcement Learning for Trajectory Planning
+
+#### Value-Based Approaches
+
+**Q-Learning for Trajectory Planning**:
+Learning state-action values for trajectory decisions.
+
+**State Representation**:
+- **Robot Pose**: Position and orientation
+- **Goal Information**: Goal position and direction
+- **Environment**: Obstacle positions and types
+- **Sensor Data**: LIDAR, camera, or other sensor inputs
+
+**Action Space**:
+- **Discrete Velocities**: Predefined velocity commands
+- **Waypoint Selection**: Selecting next waypoints
+- **Direction Choices**: Discrete direction selections
+- **Trajectory Primitives**: Predefined trajectory segments
+
+**Reward Design**:
+- **Goal Proximity**: Reward for moving toward goal
+- **Collision Penalty**: Penalty for collisions
+- **Smoothness**: Reward for smooth trajectories
+- **Efficiency**: Reward for efficient paths
+
+#### Policy Gradient Approaches
+
+**Trajectory Optimization with Policy Gradients**:
+Directly optimizing trajectory generation policies.
+
+**Policy Network Architecture**:
+```
+Input: [Current State, Goal State, Environment Map]
+→ Encoder: Extract relevant features
+→ LSTM: Process temporal dependencies
+→ Decoder: Generate trajectory points
+→ Output: Sequence of waypoints [x_1, y_1, x_2, y_2, ..., x_n, y_n]
+```
+
+**Loss Function**:
+```
+L(θ) = -E[R(τ) * log π_θ(τ|s)]
+```
+Where R(τ) is the reward of trajectory τ and π_θ is the policy.
+
+#### Actor-Critic for Trajectory Planning
+
+**Architecture**:
+- **Actor**: Generates trajectories (policy network)
+- **Critic**: Evaluates trajectory quality (value network)
+- **Shared Features**: Common feature extraction layers
+- **Temporal Processing**: Handle sequential nature of trajectories
+
+**Training Process**:
+1. **Trajectory Generation**: Actor generates trajectory
+2. **Trajectory Evaluation**: Critic evaluates trajectory quality
+3. **Policy Update**: Update actor based on trajectory quality
+4. **Value Update**: Update critic based on actual rewards
+5. **Iteration**: Repeat for multiple episodes
+
+### Generative Models for Trajectory Planning
+
+#### Variational Autoencoders (VAEs)
+
+**Trajectory Generation**:
+Learning a latent space of valid trajectories.
+
+**Architecture**:
+```
+Encoder: [Trajectory] → [Latent Vector μ, σ]
+Decoder: [Latent Vector z] → [Reconstructed Trajectory]
+```
+
+**Mathematical Framework**:
+```
+L = E[log p(x|z)] - KL(q(z|x)||p(z))
+```
+
+Where:
+- E[log p(x|z)] is the reconstruction loss
+- KL(q(z|x)||p(z)) is the regularization loss
+
+**Applications**:
+- **Trajectory Interpolation**: Interpolating between similar trajectories
+- **Trajectory Completion**: Completing partial trajectories
+- **Diversity Generation**: Generating diverse but valid trajectories
+- **Anomaly Detection**: Detecting invalid trajectories
+
+#### Generative Adversarial Networks (GANs)
+
+**Trajectory Generation**:
+Learning to generate realistic trajectories through adversarial training.
+
+**Architecture**:
+- **Generator**: Neural network that generates trajectories
+- **Discriminator**: Neural network that distinguishes real from generated trajectories
+- **Noise Input**: Random noise to generate diverse trajectories
+
+**Training Process**:
+1. **Generator Update**: Train generator to fool discriminator
+2. **Discriminator Update**: Train discriminator to distinguish real from fake
+3. **Iteration**: Alternate between generator and discriminator updates
+4. **Convergence**: Continue until equilibrium is reached
+
+**Loss Functions**:
+```
+L_D = -E[log D(τ_real)] - E[log(1 - D(G(z)))]
+L_G = -E[log D(G(z))]
+```
+
+Where D is discriminator, G is generator, τ_real is real trajectory, and z is noise.
+
+**Conditional GANs**:
+Generating trajectories conditioned on environment and goal.
+
+```
+L_D = -E[log D(τ_real, c)] - E[log(1 - D(G(z, c), c))]
+L_G = -E[log D(G(z, c), c)]
+```
+
+Where c is the condition (environment/goal).
+
+### Graph Neural Networks for Trajectory Planning
+
+#### Graph-Based Representations
+
+**Environment as Graph**:
+Representing the environment as a graph where nodes are locations and edges represent connectivity.
+
+**Graph Construction**:
+- **Nodes**: Waypoints, road intersections, or grid points
+- **Edges**: Connectivity between locations
+- **Node Features**: Local environment information
+- **Edge Features**: Connection costs or constraints
+
+**Mathematical Representation**:
+```
+G = (V, E, X, A)
+```
+Where:
+- V: Set of nodes (locations)
+- E: Set of edges (connections)
+- X: Node feature matrix
+- A: Adjacency matrix
+
+#### Graph Convolutional Networks (GCNs)
+
+**Trajectory Planning on Graphs**:
+Using graph convolutions to propagate information and plan trajectories.
+
+**Message Passing**:
+```
+m_{ij}^{(l)} = φ^{(l)}(h_i^{(l-1)}, h_j^{(l-1)}, e_{ij})
+h_i^{(l)} = γ^{(l)}(h_i^{(l-1)}, agg({m_{ij}^{(l)} | j ∈ N(i)}))
+```
+
+Where:
+- h_i is the hidden state of node i
+- e_ij is the edge feature between nodes i and j
+- N(i) is the set of neighbors of node i
+- φ and γ are neural networks
+
+**Applications**:
+- **Road Network Planning**: Planning on road networks
+- **Multi-Robot Coordination**: Coordinating multiple robot trajectories
+- **Dynamic Environments**: Handling changing environmental conditions
+- **Multi-Modal Planning**: Planning with multiple transportation modes
+
+### End-to-End Trajectory Planning Networks
+
+#### Fully Convolutional Trajectory Planning
+
+**Direct Mapping**:
+Learning direct mapping from environment maps to trajectories.
+
+**Architecture**:
+```
+Input: Environment map + Goal position
+→ Encoder: Extract environmental features
+→ Bottleneck: Compress spatial information
+→ Decoder: Generate trajectory heatmap
+→ Post-processing: Extract trajectory from heatmap
+```
+
+**Advantages**:
+- **Speed**: Very fast inference
+- **End-to-End**: No intermediate representations
+- **Integration**: Easy integration with perception
+- **Scalability**: Scales to different map sizes
+
+**Challenges**:
+- **Complexity**: Difficult to handle complex environments
+- **Optimality**: May not find optimal trajectories
+- **Safety**: Difficult to guarantee safety constraints
+- **Generalization**: May not generalize to unseen environments
+
+#### Transformer-Based Trajectory Planning
+
+**Sequence-to-Sequence**:
+Treating trajectory planning as a sequence-to-sequence problem.
+
+**Architecture**:
+```
+Input: Environment sequence → Encoder → Context → Decoder → Trajectory
+```
+
+**Attention Mechanism**:
+```
+Attention(Q, K, V) = softmax(QK^T / √d_k)V
+```
+
+**Applications**:
+- **Multi-Step Planning**: Planning long-horizon trajectories
+- **Context Integration**: Incorporating multiple context sources
+- **Temporal Reasoning**: Reasoning about future states
+- **Multi-Agent**: Coordinating multiple agent trajectories
+
+### Multi-Modal Trajectory Planning
+
+#### Uncertainty Quantification
+
+**Bayesian Neural Networks**:
+Quantifying uncertainty in trajectory predictions.
+
+**Approach**:
+```
+p(θ|D) ∝ p(D|θ)p(θ)
+```
+
+Where θ are network parameters and D is training data.
+
+**Monte Carlo Dropout**:
+Using dropout at test time to estimate uncertainty.
+
+**Implementation**:
+```
+μ_pred = (1/T) Σ f(x; θ_t)
+σ_pred = (1/T) Σ (f(x; θ_t) - μ_pred)²
+```
+
+Where f(x; θ_t) is the network prediction with dropout mask θ_t.
+
+#### Mixture Density Networks
+
+**Multi-Modal Predictions**:
+Modeling multiple possible trajectories for the same input.
+
+**Architecture**:
+```
+Output: [π₁, π₂, ..., π_K, μ₁, μ₂, ..., μ_K, σ₁, σ₂, ..., σ_K]
+```
+
+Where π_k are mixture weights, μ_k are means, and σ_k are variances.
+
+**Probability Distribution**:
+```
+p(y|x) = Σ π_k(x) * N(y|μ_k(x), σ_k²(x))
+k
+```
+
+**Applications**:
+- **Multiple Solutions**: When multiple valid trajectories exist
+- **Uncertainty**: Modeling prediction uncertainty
+- **Diversity**: Generating diverse trajectory options
+- **Risk Assessment**: Evaluating trajectory risks
+
+### Real-time Trajectory Planning
+
+#### Efficient Network Architectures
+
+**Mobile Architectures**:
+Adapting networks for real-time deployment.
+
+**Techniques**:
+- **Depthwise Separable Convolutions**: Reducing computational complexity
+- **Channel Pruning**: Removing unnecessary channels
+- **Quantization**: Reducing precision for speed
+- **Knowledge Distillation**: Training smaller student networks
+
+#### Model Compression
+
+**Pruning**:
+Removing unnecessary connections in trajectory planning networks.
+
+**Approaches**:
+- **Magnitude-based**: Removing low-magnitude weights
+- **Gradient-based**: Removing weights with low gradients
+- **Structured**: Removing entire channels or layers
+- **Iterative**: Gradually pruning during training
+
+**Quantization**:
+Reducing precision of network weights and activations.
+
+**Techniques**:
+- **Post-training**: Quantizing after training
+- **Quantization-aware**: Training with quantization in mind
+- **Mixed Precision**: Different precisions for different layers
+- **Dynamic Quantization**: Quantizing during inference
+
+### Safety and Verification
+
+#### Safety Guarantees
+
+**Constraint Incorporation**:
+Incorporating safety constraints into neural network planning.
+
+**Approaches**:
+- **Constrained Optimization**: Adding safety constraints to loss
+- **Barrier Functions**: Using barrier functions to enforce constraints
+- **Control Barrier Functions**: Ensuring safety during control
+- **Formal Verification**: Verifying safety properties
+
+#### Adversarial Robustness
+
+**Robust Planning**:
+Making trajectory planning robust to adversarial inputs.
+
+**Techniques**:
+- **Adversarial Training**: Training with adversarial examples
+- **Robust Optimization**: Optimizing for worst-case scenarios
+- **Defensive Distillation**: Using softened targets
+- **Gradient Masking**: Hiding gradient information
+
+### Applications and Case Studies
+
+#### Autonomous Vehicle Trajectory Planning
+
+**Problem Setup**:
+Planning trajectories for autonomous vehicles in complex traffic scenarios.
+
+**Input Data**:
+- **Sensor Fusion**: LIDAR, radar, camera inputs
+- **HD Maps**: High-definition map information
+- **Traffic Information**: Traffic signals, road markings
+- **Predicted Behaviors**: Other agents' predicted motions
+
+**Network Architecture**:
+```
+Input: [Sensor Data, Map, Traffic State, Goal]
+→ Perception: Object detection and tracking
+→ Prediction: Other agents' future motions
+→ Planning: Trajectory generation network
+→ Output: [x(t), y(t), θ(t), v(t)] for t = 0 to T
+```
+
+**Challenges**:
+- **Real-time**: Planning within strict timing constraints
+- **Safety**: Ensuring collision-free trajectories
+- **Comfort**: Smooth and comfortable motion
+- **Legal**: Following traffic rules and regulations
+
+#### Robot Manipulation Trajectory Planning
+
+**Problem Setup**:
+Planning manipulation trajectories for robotic arms.
+
+**Input Data**:
+- **Visual Input**: Camera images of scene
+- **Object Information**: Object poses and properties
+- **Goal Specification**: Target poses or manipulation goals
+- **Robot State**: Current joint positions and velocities
+
+**Network Architecture**:
+```
+Input: [RGB-D Image, Object Poses, Goal, Robot State]
+→ Visual Processing: CNN for scene understanding
+→ Attention: Focus on relevant objects
+→ Planning: Trajectory generation network
+→ Output: Joint angles over time or Cartesian trajectory
+```
+
+**Challenges**:
+- **Collision Avoidance**: Avoiding collisions with objects/environment
+- **Grasp Planning**: Planning grasps and manipulation trajectories
+- **Dexterity**: Handling complex manipulation tasks
+- **Uncertainty**: Dealing with perception and modeling uncertainty
+
+#### Multi-Robot Trajectory Planning
+
+**Problem Setup**:
+Coordinating trajectories for multiple robots.
+
+**Input Data**:
+- **Multi-Agent States**: States of all robots
+- **Environment**: Shared environment representation
+- **Goals**: Goals for each robot
+- **Communication**: Communication constraints
+
+**Network Architecture**:
+```
+Input: [States of all robots, Environment, Goals, Communication Graph]
+→ Graph Processing: Process multi-agent relationships
+→ Coordination: Plan coordinated trajectories
+→ Output: Trajectory for each robot
+```
+
+**Challenges**:
+- **Coordination**: Ensuring robots don't interfere with each other
+- **Communication**: Handling limited communication
+- **Scalability**: Scaling to many robots
+- **Dynamic Replanning**: Handling changing goals and obstacles
+
+### Evaluation Metrics
+
+#### Planning Quality Metrics
+
+**Trajectory Optimality**:
+Measuring how close the generated trajectory is to optimal.
+
+**Metrics**:
+- **Path Length**: Total length of the trajectory
+- **Execution Time**: Time to reach goal
+- **Energy**: Energy consumption along trajectory
+- **Smoothness**: Continuity of position, velocity, acceleration
+
+**Safety Metrics**:
+Measuring the safety of the planned trajectory.
+
+**Metrics**:
+- **Collision Rate**: Percentage of trajectories with collisions
+- **Clearance**: Distance to obstacles along trajectory
+- **Violation Rate**: Percentage of constraint violations
+- **Risk Assessment**: Estimated risk along trajectory
+
+#### Learning Performance Metrics
+
+**Generalization**:
+Measuring how well the network generalizes to new scenarios.
+
+**Metrics**:
+- **Success Rate**: Percentage of successful trajectory plans
+- **Transfer Performance**: Performance on unseen environments
+- **Robustness**: Performance under varying conditions
+- **Adaptability**: Ability to adapt to new situations
+
+### Future Directions
+
+#### Neuro-Symbolic Approaches
+
+**Combining Learning and Reasoning**:
+Integrating neural networks with symbolic reasoning for trajectory planning.
+
+**Benefits**:
+- **Interpretability**: More interpretable planning decisions
+- **Guarantees**: Formal safety and optimality guarantees
+- **Generalization**: Better generalization to new scenarios
+- **Debugging**: Easier debugging and analysis
+
+#### Causal Reasoning
+
+**Understanding Cause-Effect**:
+Incorporating causal reasoning into trajectory planning.
+
+**Applications**:
+- **Intervention**: Understanding effects of interventions
+- **Counterfactuals**: Planning considering alternative scenarios
+- **Robustness**: Planning that's robust to model errors
+- **Explainability**: Explaining planning decisions
+
+Understanding deep learning for trajectory planning is essential for creating autonomous systems that can efficiently navigate complex environments while adapting to various conditions and requirements.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Deep Learning for Trajectory Planning
+
+### Approach Comparison
+- **Classical**: Provable completeness, high computational cost
+- **Learning-Based**: Generalization, speed, adaptability
+- **Trade-offs**: Safety guarantees vs. learning capability
+- **Applications**: Different methods for different scenarios
+
+### Supervised Learning
+- **Imitation Learning**: Learning from expert demonstrations
+- **DAgger**: Addressing covariate shift iteratively
+- **CNN Architectures**: Processing visual/spatial information
+- **RNN Architectures**: Handling temporal sequences
+
+### Reinforcement Learning
+- **Value-Based**: Q-learning for trajectory decisions
+- **Policy Gradient**: Direct trajectory optimization
+- **Actor-Critic**: Combined policy and value learning
+- **Reward Design**: Critical for learning success
+
+### Generative Models
+- **VAEs**: Latent space representation of trajectories
+- **GANs**: Adversarial generation of realistic trajectories
+- **Conditional Generation**: Environment-conditioned planning
+- **Diversity**: Generating multiple valid trajectories
+
+### Graph Networks
+- **Graph Representation**: Environment as nodes and edges
+- **Message Passing**: Propagating information through graphs
+- **Multi-Agent**: Coordinating multiple agent trajectories
+- **Dynamic Environments**: Handling changing conditions
+
+### Network Architectures
+- **End-to-End**: Direct mapping from input to trajectory
+- **Transformer**: Sequence-to-sequence planning
+- **Attention**: Focusing on relevant information
+- **Efficiency**: Real-time deployment considerations
+
+### Uncertainty & Safety
+- **Bayesian Networks**: Quantifying prediction uncertainty
+- **Mixture Models**: Multi-modal trajectory prediction
+- **Safety Guarantees**: Incorporating safety constraints
+- **Robustness**: Adversarial and robust planning
+
+### Applications
+- **Autonomous Vehicles**: Traffic-aware trajectory planning
+- **Robot Manipulation**: Dextrous manipulation planning
+- **Multi-Robot**: Coordinated multi-agent planning
+- **Real-time**: Deployment and efficiency requirements
+
+### Future Directions
+- **Neuro-Symbolic**: Combining learning and reasoning
+- **Causal Reasoning**: Understanding cause-effect relationships
+- **Safety Integration**: Formal guarantees for neural planners
+- **Generalization**: Cross-domain trajectory transfer
+
+</div>
+</TabItem>
+</Tabs>

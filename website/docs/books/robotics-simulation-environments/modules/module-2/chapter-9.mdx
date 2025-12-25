@@ -1,0 +1,402 @@
+---
+id: chapter-9
+title: "Collision Detection and Contact Modeling"
+module: "Module 2: Physics Simulation and Dynamics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Collision Detection and Contact Modeling
+
+### Introduction to Collision Detection and Contact Modeling
+
+Collision detection and contact modeling are fundamental components of physics simulation in robotics, enabling the realistic simulation of interactions between rigid bodies. Collision detection algorithms identify when objects intersect or come into contact, while contact modeling determines the forces and responses that result from these interactions. These components are essential for simulating realistic robot behavior when interacting with environments, objects, and other robots.
+
+Collision detection and contact modeling encompass:
+- **Broad phase collision detection**: Efficiently identifying potential collisions
+- **Narrow phase collision detection**: Precise determination of collisions
+- **Contact response**: Computing forces and reactions at contact points
+- **Friction modeling**: Simulating frictional forces at contact surfaces
+
+### Collision Detection Fundamentals
+
+#### Collision Detection Pipeline
+The multi-stage process for detecting collisions:
+
+**Broad phase**: Fast, approximate collision detection:
+- **Purpose**: Quickly eliminate pairs of objects that cannot collide
+- **Approach**: Use simple bounding volumes to approximate complex shapes
+- **Efficiency**: Reduces computational complexity from O(n²) to O(n log n)
+- **Output**: List of potentially colliding object pairs
+
+**Narrow phase**: Precise collision detection:
+- **Purpose**: Accurately determine if and where objects collide
+- **Approach**: Detailed geometric analysis of potential collision pairs
+- **Output**: Contact points, penetration depth, collision normals
+- **Precision**: Provides exact collision information for physics response
+
+**Continuous collision detection**: Detecting collisions between time steps:
+- **Problem**: Fast-moving objects may pass through each other (tunneling)
+- **Solution**: Interpolate motion between time steps
+- **Approach**: Sweep tests, conservative advancement
+- **Application**: High-speed objects, thin obstacles
+
+#### Collision Detection Approaches
+Different methods for detecting collisions:
+
+**Discrete collision detection**: Check collisions at specific time steps:
+- **Approach**: Test for collisions at each simulation time step
+- **Advantages**: Simple to implement, computationally efficient
+- **Disadvantages**: May miss collisions between steps (tunneling)
+- **Application**: Slow-moving objects, thick obstacles
+
+**Continuous collision detection**: Detect collisions during motion:
+- **Approach**: Test for collisions during time intervals
+- **Advantages**: No tunneling, accurate for high-speed objects
+- **Disadvantages**: More computationally expensive
+- **Application**: Fast-moving objects, thin obstacles
+
+### Broad Phase Collision Detection
+
+#### Spatial Partitioning
+Organizing space to efficiently eliminate non-colliding pairs:
+
+**Uniform grids**: Divide space into regular grid cells:
+- **Approach**: Each object assigned to relevant grid cells
+- **Advantages**: Simple implementation, efficient for uniform distributions
+- **Disadvantages**: Inefficient for varying object sizes
+- **Application**: Particle systems, uniform object distributions
+
+**Octrees (3D) / Quadtrees (2D)**: Hierarchical spatial partitioning:
+- **Approach**: Recursive subdivision of space based on object distribution
+- **Advantages**: Efficient for non-uniform distributions
+- **Disadvantages**: Complex implementation, overhead for updates
+- **Application**: Complex environments with varying density
+
+**Bounding Volume Hierarchies (BVH)**: Tree of bounding volumes:
+- **Approach**: Hierarchical structure of bounding volumes
+- **Advantages**: Good performance for complex objects
+- **Disadvantages**: Complex construction and maintenance
+- **Application**: Complex polyhedral objects
+
+#### Sweep and Prune
+Temporal coherence-based collision detection:
+
+**Concept**: Sort objects along axes to identify potential collisions:
+- **Approach**: Maintain sorted lists of object bounds
+- **Advantages**: Exploits temporal coherence, O(n) complexity for stable configurations
+- **Disadvantages**: O(n²) complexity for worst-case scenarios
+- **Application**: Systems with stable configurations
+
+**Implementation**: Maintaining sorted lists efficiently:
+- **Endpoints**: Track start/end points of objects along each axis
+- **Event processing**: Process insertions/deletions efficiently
+- **Coherence**: Leverage temporal coherence for efficiency
+- **Optimization**: Minimize updates for stable systems
+
+### Narrow Phase Collision Detection
+
+#### Primitive Collision Tests
+Basic geometric tests for simple shapes:
+
+**Sphere-sphere collision**: Simplest collision test:
+- **Test**: Distance between centers < sum of radii
+- **Formula**: ||c₁ - c₂||² < (r₁ + r₂)²
+- **Advantages**: Very fast, numerically stable
+- **Application**: Particle systems, approximate collisions
+
+**Sphere-plane collision**: Common for ground contact:
+- **Test**: Signed distance from sphere center to plane
+- **Formula**: (c - p) · n < r (where c=center, p=point on plane, n=normal, r=radius)
+- **Advantages**: Fast, provides contact point and normal
+- **Application**: Ground contact, walls
+
+**Box-box collision**: Using Separating Axis Theorem (SAT):
+- **Principle**: Two convex objects are separated if a separating axis exists
+- **Axes**: Face normals of both boxes and edge cross products
+- **Test**: Project both boxes onto each axis, check overlap
+- **Application**: Cuboidal objects, approximate complex shapes
+
+#### Advanced Collision Detection
+Handling complex geometries:
+
+**GJK Algorithm**: Minkowski difference-based collision detection:
+- **Principle**: Determine if origin is inside Minkowski difference
+- **Advantages**: Works with any convex shapes, efficient
+- **Disadvantages**: Complex implementation, requires support functions
+- **Application**: Complex convex objects, accurate collision detection
+
+**EPA (Expanding Polytope Algorithm)**: Extension of GJK for contact information:
+- **Purpose**: Find penetration depth and contact normal after GJK
+- **Approach**: Expand polytope toward origin
+- **Output**: Penetration depth and normal direction
+- **Application**: Continuous collision response
+
+**V-Clip (Voronoi Clip)**: Feature-based collision detection:
+- **Approach**: Track closest features between objects
+- **Advantages**: Provides detailed contact information
+- **Disadvantages**: Complex implementation
+- **Application**: High-quality contact information
+
+### Contact Modeling
+
+#### Contact Point Generation
+Determining where objects make contact:
+
+**Single contact point**: Approximating contact with one point:
+- **Approach**: Find deepest penetration point
+- **Advantages**: Simple, computationally efficient
+- **Disadvantages**: Less realistic, may cause instability
+- **Application**: Simple systems, real-time applications
+
+**Multiple contact points**: Using multiple points for stability:
+- **Approach**: Find several contact points between objects
+- **Advantages**: More stable, realistic contact behavior
+- **Disadvantages**: More computationally expensive
+- **Application**: Stable contact simulation
+
+**Contact manifold**: Set of contact points and normals:
+- **Representation**: Multiple contact points for complex contacts
+- **Advantages**: Better distribution of contact forces
+- **Disadvantages**: More complex constraint solving
+- **Application**: Stable multi-point contacts
+
+#### Normal Contact Forces
+Modeling forces perpendicular to contact surfaces:
+
+**Penetration depth**: Measuring how much objects overlap:
+- **Measurement**: Minimum distance needed to separate objects
+- **Application**: Computing contact forces based on penetration
+- **Limitation**: Should be minimized in stable simulation
+- **Stabilization**: Adding corrective terms to reduce drift
+
+**Spring-damper model**: Simple contact force model:
+- **Formula**: F_normal = k * penetration + c * relative_velocity_normal
+- **Parameters**: Stiffness (k) and damping (c) coefficients
+- **Advantages**: Simple to implement and understand
+- **Disadvantages**: May cause numerical issues with high stiffness
+
+**Impulse-based model**: Instantaneous force model:
+- **Approach**: Apply instantaneous impulses to resolve contacts
+- **Advantages**: Energy-conserving, stable for collisions
+- **Disadvantages**: Less suitable for resting contacts
+- **Application**: Collision response, impact simulation
+
+#### Friction Modeling
+Simulating tangential forces at contact surfaces:
+
+**Coulomb friction**: Classical friction model:
+- **Static friction**: Force required to initiate sliding
+- **Kinetic friction**: Force during sliding motion
+- **Formula**: f ≤ μ * N (where f=tangential force, μ=friction coefficient, N=normal force)
+- **Application**: Realistic sliding behavior
+
+**Anisotropic friction**: Direction-dependent friction:
+- **Concept**: Friction varies with sliding direction
+- **Application**: Textured surfaces, special materials
+- **Modeling**: Friction coefficient becomes tensor
+- **Complexity**: More complex but more accurate
+
+**Microscopic friction models**: Detailed friction mechanisms:
+- **Approach**: Modeling asperity interactions at microscopic level
+- **Application**: High-fidelity friction simulation
+- **Complexity**: Very complex but highly accurate
+- **Use case**: Precision applications
+
+### Contact Resolution Methods
+
+#### Sequential Impulse Method
+Iterative approach to resolve contact constraints:
+
+**Concept**: Apply impulses sequentially to satisfy constraints:
+- **Approach**: Process contacts one at a time, iteratively
+- **Advantages**: Simple implementation, good convergence
+- **Disadvantages**: May require many iterations
+- **Application**: Real-time physics engines
+
+**Implementation**: Algorithm for sequential impulse resolution:
+- **Initialization**: Compute initial contact velocities
+- **Iteration**: Apply impulses to satisfy constraints
+- **Convergence**: Repeat until constraints satisfied
+- **Efficiency**: Cache values to avoid recomputation
+
+#### Linear Complementarity Problem (LCP)
+Mathematical approach to contact resolution:
+
+**Formulation**: Mathematical formulation of contact constraints:
+- **Variables**: Contact forces and relative velocities
+- **Constraints**: Non-penetration and friction constraints
+- **Complementarity**: Either contact force or velocity is zero
+- **Solution**: Mathematical optimization approach
+
+**Advantages**: Globally optimal solution:
+- **Optimality**: Finds globally optimal contact forces
+- **Stability**: Numerically stable solution
+- **Accuracy**: High accuracy for contact problems
+- **Application**: High-fidelity simulation
+
+**Disadvantages**: Computational complexity:
+- **Complexity**: Computationally expensive
+- **Implementation**: Complex to implement correctly
+- **Scalability**: May not scale well with contact count
+- **Application**: Offline simulation, high-accuracy requirements
+
+#### Projected Gauss-Seidel
+Iterative method for solving contact constraints:
+
+**Approach**: Iterative solution of linearized contact constraints:
+- **Method**: Gauss-Seidel with projection for inequality constraints
+- **Advantages**: Good convergence properties, moderate complexity
+- **Disadvantages**: May require many iterations
+- **Application**: Real-time physics simulation
+
+**Implementation**: Algorithm for projected Gauss-Seidel:
+- **Initialization**: Set up constraint matrix and vectors
+- **Iteration**: Solve each constraint equation sequentially
+- **Projection**: Project solutions to constraint bounds
+- **Convergence**: Repeat until convergence
+
+### Implementation Challenges
+
+#### Numerical Stability
+Maintaining stable simulation behavior:
+
+**Penetration resolution**: Handling object penetration:
+- **Problem**: Objects may penetrate due to numerical errors
+- **Solutions**: Baumgarte stabilization, position correction
+- **Trade-offs**: Stability vs. accuracy
+- **Implementation**: Careful parameter tuning
+
+**Contact stiffness**: Balancing stability and realism:
+- **Problem**: High stiffness causes numerical instability
+- **Solutions**: Soft contact models, implicit integration
+- **Trade-offs**: Realism vs. stability
+- **Application**: Tuning for specific scenarios
+
+#### Performance Optimization
+Managing computational requirements:
+
+**Early termination**: Stopping algorithms early when appropriate:
+- **Approach**: Terminate when sufficient accuracy achieved
+- **Benefits**: Significant performance improvement
+- **Considerations**: Balancing accuracy and speed
+- **Implementation**: Convergence criteria and error bounds
+
+**Spatial coherence**: Exploiting spatial relationships:
+- **Concept**: Nearby objects likely to collide in future
+- **Implementation**: Cache collision results, predict future collisions
+- **Benefits**: Reduced computation for coherent systems
+- **Application**: Real-time systems
+
+### Applications in Robotics Simulation
+
+#### Robot-Environment Interaction
+Simulating robots interacting with environments:
+
+**Ground contact**: Modeling robot-ground interaction:
+- **Approach**: Multiple contact points between robot feet and ground
+- **Friction**: Modeling traction and slip conditions
+- **Stability**: Ensuring stable ground contact
+- **Application**: Walking, crawling, wheeled robots
+
+**Object manipulation**: Modeling robot-object interaction:
+- **Approach**: Contact between robot grippers and objects
+- **Friction**: Modeling grasp stability and slip
+- **Forces**: Computing manipulation forces
+- **Application**: Grasping, assembly, manipulation
+
+#### Multi-Robot Systems
+Simulating interactions between multiple robots:
+
+**Robot-robot contact**: Modeling collisions between robots:
+- **Detection**: Identifying robot-robot contacts
+- **Resolution**: Computing appropriate contact forces
+- **Stability**: Ensuring stable multi-robot simulation
+- **Application**: Robot swarms, collaborative robots
+
+**Formation maintenance**: Using contact forces for formation:
+- **Approach**: Virtual springs between robots in formation
+- **Modeling**: Spring-damper models for formation forces
+- **Stability**: Ensuring formation stability
+- **Application**: Multi-robot coordination
+
+### Advanced Contact Modeling
+
+#### Soft Body Contact
+Modeling contact with deformable objects:
+
+**Penalty methods**: Soft contact with spring forces:
+- **Approach**: Apply forces proportional to penetration
+- **Advantages**: Simple implementation
+- **Disadvantages**: May cause energy drift
+- **Application**: Soft object simulation
+
+**Finite element methods**: Detailed deformation modeling:
+- **Approach**: Discretize objects into finite elements
+- **Advantages**: Accurate deformation modeling
+- **Disadvantages**: Computationally expensive
+- **Application**: High-fidelity soft body simulation
+
+#### Fluid-Structure Interaction
+Modeling contact with fluids:
+
+**Buoyancy forces**: Modeling fluid displacement effects:
+- **Principle**: Archimedes' principle for floating objects
+- **Implementation**: Computing displaced fluid volume
+- **Application**: Underwater and aerial robotics
+- **Modeling**: Simplified or detailed approaches
+
+**Drag forces**: Modeling fluid resistance:
+- **Principle**: Resistance proportional to velocity squared
+- **Implementation**: Force computation based on relative velocity
+- **Application**: Underwater and aerial robotics
+- **Modeling**: Simplified or detailed approaches
+
+Collision detection and contact modeling are essential for creating realistic physics simulations that accurately represent the interaction between robots and their environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Collision detection identifies when objects intersect or contact.
+- Contact modeling determines forces and responses at contact points.
+- Pipeline includes broad phase, narrow phase, and continuous detection.
+- Approaches include spatial partitioning and sweep-and-prune methods.
+- Narrow phase uses primitive tests and advanced algorithms like GJK.
+- Contact modeling includes normal forces and friction.
+- Resolution methods include sequential impulses and LCP.
+- Challenges include numerical stability and performance optimization.
+- Applications span robot-environment and multi-robot interactions.
+- Advanced modeling includes soft bodies and fluid interactions.
+
+</div>
+</TabItem>
+</Tabs>

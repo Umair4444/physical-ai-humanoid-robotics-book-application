@@ -1,0 +1,440 @@
+---
+id: chapter-3
+title: "Humanoid Kinematics and Motion Planning"
+module: "Module 1: Foundations of Humanoid Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Kinematics and Motion Planning
+
+### Introduction to Humanoid Kinematics
+
+Kinematics is the study of motion without considering the forces that cause it. In humanoid robotics, kinematics is fundamental to understanding how robots can move their limbs and body to achieve desired positions and trajectories. Humanoid kinematics involves complex multi-body systems with many degrees of freedom, requiring sophisticated mathematical and computational approaches to solve forward and inverse kinematics problems.
+
+### Forward Kinematics
+
+#### Mathematical Foundation
+
+Forward kinematics calculates the position and orientation of the end-effector (typically the hand or foot) given the joint angles of the robot. This is a deterministic problem with a unique solution.
+
+**Denavit-Hartenberg (D-H) Convention**:
+A standardized method for defining coordinate frames on robotic linkages.
+
+**D-H Parameters**:
+- **a_i**: Link length (distance along x_i from z_(i-1) to z_i)
+- **α_i**: Link twist (angle from z_(i-1) to z_i about x_i)
+- **d_i**: Link offset (distance along z_(i-1) from x_(i-1) to x_i)
+- **θ_i**: Joint angle (angle from x_(i-1) to x_i about z_(i-1))
+
+**Transformation Matrices**:
+Each joint contributes a 4x4 transformation matrix that relates the coordinate frame of one link to the next:
+
+```
+T_i^(i-1) = [cos(θ_i)   -sin(θ_i)cos(α_i)   sin(θ_i)sin(α_i)   a_i*cos(θ_i)]
+            [sin(θ_i)    cos(θ_i)cos(α_i)  -cos(θ_i)sin(α_i)   a_i*sin(θ_i)]
+            [0           sin(α_i)           cos(α_i)           d_i        ]
+            [0           0                  0                  1          ]
+```
+
+**Overall Transformation**:
+The complete transformation from base to end-effector is the product of all individual transformations:
+```
+T_0^n = T_0^1 * T_1^2 * ... * T_(n-1)^n
+```
+
+#### Implementation in Humanoid Robots
+
+**Multi-Limb Systems**:
+Humanoid robots typically have multiple kinematic chains (arms, legs) that must be considered simultaneously.
+
+**Challenges**:
+- **Coordination**: Ensuring limbs don't collide with each other
+- **Balance**: Maintaining center of mass within support polygon
+- **Workspace**: Understanding reachable areas for each limb
+- **Redundancy**: Managing multiple limbs with overlapping workspaces
+
+**Computational Considerations**:
+- **Real-time Requirements**: Forward kinematics often computed at high frequency
+- **Efficiency**: Optimizing calculations for speed
+- **Accuracy**: Maintaining precision in position calculations
+- **Numerical Stability**: Avoiding computational errors in chain calculations
+
+### Inverse Kinematics
+
+#### Problem Definition
+
+Inverse kinematics (IK) is the process of determining the joint angles required to achieve a desired end-effector position and orientation. This is often a complex problem with multiple or no solutions.
+
+**Mathematical Formulation**:
+Given desired end-effector pose (x_d, y_d, z_d, φ_d, θ_d, ψ_d), find joint angles (θ_1, θ_2, ..., θ_n) such that:
+```
+f(θ_1, θ_2, ..., θ_n) = (x_d, y_d, z_d, φ_d, θ_d, ψ_d)
+```
+
+#### Analytical Solutions
+
+**Geometric Approach**:
+Using geometric relationships to solve for joint angles directly.
+
+**Applicability**:
+- Robots with simple kinematic structures
+- Specific configurations with known solutions
+- Planar manipulators
+- Some serial chains with special geometries
+
+**Advantages**:
+- Exact solutions
+- Fast computation
+- Complete solution sets
+- Insight into solution properties
+
+**Limitations**:
+- Only works for specific robot geometries
+- Complex for high-DOF systems
+- Difficult to handle redundant systems
+- May not account for constraints
+
+#### Numerical Solutions
+
+**Iterative Methods**:
+Using numerical techniques to find approximate solutions.
+
+**Jacobian-Based Methods**:
+The Jacobian matrix relates joint velocities to end-effector velocities:
+```
+ẋ = J(q) * θ̇
+```
+
+**Pseudoinverse Method**:
+```
+θ̇ = J^+ * ẋ
+```
+where J^+ is the pseudoinverse of the Jacobian.
+
+**Damped Least Squares**:
+```
+θ̇ = (J^T * J + λ^2 * I)^(-1) * J^T * ẋ
+```
+where λ is the damping factor, preventing singularity issues.
+
+**Cyclic Coordinate Descent (CCD)**:
+Iteratively adjusting one joint at a time to minimize error between current and desired end-effector positions.
+
+**Advantages of Numerical Methods**:
+- Applicable to any robot geometry
+- Can handle multiple end-effectors
+- Can incorporate constraints
+- Can handle redundant systems
+
+**Disadvantages of Numerical Methods**:
+- Approximate solutions
+- Computational complexity
+- Convergence issues
+- Local minima problems
+
+#### Handling Redundancy
+
+**Redundant Systems**:
+When a robot has more degrees of freedom than required for a task, there are infinite solutions to the IK problem.
+
+**Redundancy Resolution**:
+Techniques to select the "best" solution from infinite possibilities.
+
+**Optimization Criteria**:
+- **Minimum Joint Displacement**: Minimizing change from current configuration
+- **Minimum Energy**: Minimizing actuator effort
+- **Obstacle Avoidance**: Avoiding collisions with obstacles
+- **Joint Limit Avoidance**: Keeping joints away from limits
+- **Manipulability**: Maximizing dexterity measure
+
+**Null Space Projection**:
+Using the null space of the Jacobian to optimize secondary objectives while maintaining primary task performance:
+```
+θ̇ = J^+ * ẋ + (I - J^+ * J) * θ̇_0
+```
+where θ̇_0 is the desired motion in the null space.
+
+### Humanoid-Specific Kinematic Considerations
+
+#### Bipedal Locomotion Kinematics
+
+**Stance Leg Requirements**:
+- Fixed position during single support phase
+- Accurate positioning for balance
+- Force transmission capabilities
+- Ground contact maintenance
+
+**Swing Leg Requirements**:
+- Trajectory generation for foot placement
+- Obstacle avoidance during swing
+- Smooth transitions between phases
+- Energy-efficient movement patterns
+
+**Center of Mass (CoM) Control**:
+- CoM trajectory planning for stable walking
+- Relationship between CoM and Zero Moment Point (ZMP)
+- Balance maintenance during dynamic movement
+
+#### Multi-Limb Coordination
+
+**Simultaneous Task Execution**:
+Humanoid robots often need to perform multiple tasks simultaneously.
+
+**Examples**:
+- Walking while maintaining arm posture
+- Manipulation while maintaining balance
+- Looking at target while performing manipulation
+- Stepping over obstacle while reaching for object
+
+**Coordination Strategies**:
+- **Hierarchical Control**: Prioritizing tasks based on importance
+- **Task Space Decomposition**: Separating task and null spaces
+- **Optimization-Based**: Formulating coordination as optimization problem
+- **Learning-Based**: Learning coordination patterns from demonstration
+
+### Motion Planning Fundamentals
+
+#### Configuration Space (C-space)
+
+**Definition**:
+The space of all possible robot configurations, where each point represents a valid joint configuration.
+
+**Properties**:
+- **Dimensionality**: Equal to the number of joints in the system
+- **Constraints**: Joint limits, collision constraints, etc.
+- **Connectivity**: Path-connected regions allowing valid motion
+- **Complexity**: Highly complex for high-DOF humanoid systems
+
+**Obstacles in C-space**:
+- **Self-Collision**: Configurations where robot collides with itself
+- **Environmental Collision**: Configurations where robot collides with environment
+- **Kinematic Constraints**: Configurations that violate kinematic constraints
+
+#### Path Planning Algorithms
+
+**Sampling-Based Methods**:
+Algorithms that sample the configuration space to find collision-free paths.
+
+**Rapidly-exploring Random Trees (RRT)**:
+- Grow trees of configurations from start and goal
+- Random sampling to explore space
+- Probabilistically complete for path existence
+- Effective for high-dimensional spaces
+
+**Probabilistic Roadmaps (PRM)**:
+- Pre-compute roadmap of configuration space
+- Query roadmap for specific start-goal pairs
+- Effective for multiple queries in same environment
+- Computationally expensive pre-processing
+
+**RRT*** (Optimal RRT):
+- Extension of RRT that converges to optimal solution
+- Balances exploration and optimization
+- Asymptotically optimal
+- More computationally expensive than basic RRT
+
+**Grid-Based Methods**:
+Discretize the configuration space into a grid and search for paths.
+
+**A* Algorithm**:
+- Heuristic search algorithm
+- Optimal path finding
+- Complete and optimal
+- Memory intensive for high-dimensional spaces
+
+**D* Algorithm**:
+- Dynamic path planning
+- Replans efficiently when environment changes
+- Good for unknown or changing environments
+- More complex implementation
+
+#### Trajectory Planning
+
+**From Path to Trajectory**:
+Converting geometric paths into time-parameterized trajectories.
+
+**Time Parameterization**:
+- **Velocity Profiles**: How fast to move along path
+- **Acceleration Limits**: Respecting dynamic constraints
+- **Smoothness**: Ensuring continuous derivatives
+- **Timing**: Meeting temporal requirements
+
+**Optimization Approaches**:
+- **Minimum Time**: Fastest possible trajectory
+- **Minimum Energy**: Most energy-efficient trajectory
+- **Smoothness**: Minimizing jerk and higher derivatives
+- **Comfort**: Minimizing acceleration and jerk for human comfort
+
+### Humanoid Motion Planning Challenges
+
+#### Real-time Constraints
+
+**Computational Requirements**:
+Humanoid robots often need to plan motions in real-time, creating significant computational challenges.
+
+**Strategies**:
+- **Pre-computation**: Planning common motions offline
+- **Hierarchical Planning**: Coarse-to-fine planning approaches
+- **Reactive Planning**: Adjusting pre-planned motions based on feedback
+- **Parallel Processing**: Distributing computation across multiple processors
+
+#### Dynamic Environments
+
+**Moving Obstacles**:
+Planning for environments where obstacles move during execution.
+
+**Approaches**:
+- **Predictive Planning**: Predicting obstacle motion
+- **Reactive Avoidance**: Adjusting path based on sensor feedback
+- **Probabilistic Planning**: Planning with uncertainty about obstacles
+- **Multi-hypothesis Planning**: Planning for multiple possible obstacle behaviors
+
+#### Balance and Stability Constraints
+
+**Dynamic Balance**:
+Humanoid robots must maintain balance while moving, adding constraints to motion planning.
+
+**ZMP (Zero Moment Point) Stability**:
+- ZMP must remain within support polygon
+- Trajectory planning must ensure ZMP stability
+- Complex relationship between joint trajectories and ZMP
+- Real-time ZMP computation requirements
+
+**Capture Point**:
+Alternative stability criterion for dynamic walking.
+- Determines where robot must step to stop safely
+- Used for planning foot placement during walking
+- Computationally simpler than ZMP for some applications
+
+### Advanced Motion Planning Techniques
+
+#### Optimization-Based Planning
+
+**Trajectory Optimization**:
+Formulating motion planning as an optimization problem with multiple objectives and constraints.
+
+**Mathematical Formulation**:
+```
+min ∫[L(x(t), u(t), t) dt]
+s.t. ẋ(t) = f(x(t), u(t), t)
+      g(x(t), u(t)) ≤ 0
+      x(0) = x_start
+      x(T) = x_goal
+```
+
+**Applications**:
+- Energy-optimal walking patterns
+- Balance-constrained manipulation
+- Obstacle avoidance with multiple constraints
+- Multi-objective optimization (speed, energy, comfort)
+
+#### Learning-Based Motion Planning
+
+**Imitation Learning**:
+Learning motion patterns from human demonstrations.
+
+**Techniques**:
+- **Dynamic Movement Primitives (DMP)**: Learning movement patterns
+- **Gaussian Mixture Models**: Modeling demonstrated motions
+- **Neural Networks**: Learning complex motion relationships
+- **Reinforcement Learning**: Learning through trial and error
+
+**Advantages**:
+- Natural, human-like motion patterns
+- Learning from expert demonstrations
+- Adaptation to new situations
+- Continuous improvement through experience
+
+**Challenges**:
+- Generalization to new situations
+- Safety during learning phase
+- Integration with traditional planning
+- Computational requirements
+
+### Implementation Considerations
+
+#### Software Frameworks
+
+**Robot Operating System (ROS)**:
+- Extensive motion planning libraries
+- Integration with control systems
+- Visualization and debugging tools
+- Large community and resources
+
+**OpenRAVE**:
+- Specialized for kinematic and dynamic simulation
+- Extensive inverse kinematics solvers
+- Planning algorithm implementations
+- Good for research and development
+
+**MoveIt!**:
+- Comprehensive motion planning framework
+- Integration with various planners
+- Collision checking and visualization
+- Real-robot integration capabilities
+
+#### Hardware Considerations
+
+**Computational Requirements**:
+- Real-time processing capabilities
+- Memory for storing maps and models
+- Communication bandwidth for sensor integration
+- Power consumption for mobile systems
+
+**Sensor Integration**:
+- Real-time sensor data processing
+- Sensor fusion for accurate state estimation
+- Feedback for motion correction
+- Environment perception for planning
+
+Understanding kinematics and motion planning is essential for creating humanoid robots that can move effectively and safely in complex environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Humanoid Kinematics and Motion Planning
+
+### Kinematics Fundamentals
+- **Forward Kinematics**: Calculating end-effector position from joint angles
+- **Inverse Kinematics**: Finding joint angles for desired end-effector position
+- **D-H Convention**: Standardized method for kinematic modeling
+- **Redundancy**: Managing systems with excess DOF
+
+### Solution Approaches
+- **Analytical**: Exact solutions for simple geometries
+- **Numerical**: Iterative methods for complex systems
+- **Jacobian-Based**: Using velocity relationships
+- **Optimization**: Resolving redundancy with criteria
+
+### Motion Planning
+- **Configuration Space**: All possible robot configurations
+- **Path Planning**: Finding collision-free paths
+- **Sampling Methods**: RRT, PRM for high-dimensional spaces
+- **Trajectory Planning**: Time-parameterized motion
+
+### Humanoid Challenges
+- **Real-time Requirements**: Computational constraints
+- **Balance Constraints**: ZMP and stability maintenance
+- **Multi-limb Coordination**: Simultaneous task execution
+- **Dynamic Environments**: Moving obstacles and uncertainty
+
+### Advanced Techniques
+- **Optimization-Based**: Mathematical optimization approaches
+- **Learning-Based**: Imitation and reinforcement learning
+- **Software Frameworks**: ROS, OpenRAVE, MoveIt!
+- **Hardware Considerations**: Computational and sensor needs
+
+</div>
+</TabItem>
+</Tabs>

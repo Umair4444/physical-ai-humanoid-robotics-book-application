@@ -34,37 +34,12 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en', 'ur', 'zh'],
   },
-  plugins: [
-    './src/plugins/tailwind-config.js',
-    [
-      '@docusaurus/plugin-ideal-image',
-      {
-        quality: 70,
-        max: 1030, // max resized image's size.
-        min: 640, // min resized image's size. if original is lower, use that size.
-        steps: 2, // the max number of images generated between min and max (inclusive)
-        disableInDev: false,
-      },
-    ],
-  ],
 
   presets: [
     [
       'classic',
       {
-        docs: {
-          sidebarPath: './sidebars.ts', // Path to the sidebars file
-          // Use the textbook sidebar configuration
-          sidebarCollapsed: false,
-          showLastUpdateTime: true,
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          routeBasePath: '/', // Serve the docs at the site's root
-          // Table of contents settings
-          admonitions: {
-            keywords: ['caution', 'note', 'tip', 'danger', 'info'],
-          },
-        },
+        docs: false, // Disable the main docs plugin to avoid conflicts
         blog: {
           showReadingTime: true,
           feedOptions: {
@@ -87,6 +62,151 @@ const config: Config = {
     ],
   ],
 
+  plugins: [
+    // Add multiple instances of the docs plugin for each book with its own sidebar
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'physical-ai-humanoid-robotics',
+        path: 'docs/books/physical-ai-humanoid-robotics-book',
+        routeBasePath: 'books/physical-ai-humanoid-robotics-book',
+        sidebarPath: './src/sidebars/physical-ai-humanoid-robotics-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'ethics-in-ai-robotics',
+        path: 'docs/books/ethics-in-ai-robotics',
+        routeBasePath: 'books/ethics-in-ai-robotics',
+        sidebarPath: './src/sidebars/ethics-in-ai-robotics-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'human-robot-interaction',
+        path: 'docs/books/human-robot-interaction',
+        routeBasePath: 'books/human-robot-interaction',
+        sidebarPath: './src/sidebars/human-robot-interaction-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'humanoid-design-principles',
+        path: 'docs/books/humanoid-design-principles',
+        routeBasePath: 'books/humanoid-design-principles',
+        sidebarPath: './src/sidebars/humanoid-design-principles-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'locomotion-and-mobility',
+        path: 'docs/books/locomotion-and-mobility',
+        routeBasePath: 'books/locomotion-and-mobility',
+        sidebarPath: './src/sidebars/locomotion-and-mobility-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'manipulation-and-grasping',
+        path: 'docs/books/manipulation-and-grasping',
+        routeBasePath: 'books/manipulation-and-grasping',
+        sidebarPath: './src/sidebars/manipulation-and-grasping-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'neural-networks-in-motion',
+        path: 'docs/books/neural-networks-in-motion',
+        routeBasePath: 'books/neural-networks-in-motion',
+        sidebarPath: './src/sidebars/neural-networks-in-motion-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'physical-computing-for-robotics',
+        path: 'docs/books/physical-computing-for-robotics',
+        routeBasePath: 'books/physical-computing-for-robotics',
+        sidebarPath: './src/sidebars/physical-computing-for-robotics-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'robotics-simulation-environments',
+        path: 'docs/books/robotics-simulation-environments',
+        routeBasePath: 'books/robotics-simulation-environments',
+        sidebarPath: './src/sidebars/robotics-simulation-environments-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'computer-vision-in-robotics',
+        path: 'docs/books/computer-vision-in-robotics',
+        routeBasePath: 'books/computer-vision-in-robotics',
+        sidebarPath: './src/sidebars/computer-vision-in-robotics-sidebar.ts',
+        editUrl:
+          'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        sidebarCollapsed: false,
+        showLastUpdateTime: true,
+      },
+    ],
+    './src/plugins/tailwind-config.js',
+    [
+      '@docusaurus/plugin-ideal-image',
+      {
+        quality: 70,
+        max: 1030, // max resized image's size.
+        min: 640, // min resized image's size. if original is lower, use that size.
+        steps: 2, // the max number of images generated between min and max (inclusive)
+        disableInDev: false,
+      },
+    ],
+  ],
+
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
@@ -99,10 +219,8 @@ const config: Config = {
       hideOnScroll: true,
     },
     footer: {
-      // Disable the default Docusaurus footer since we're using a custom footer
+      // Disable the default Docusaurus footer since we're using a custom footer in MainLayout and theme Footer
       style: 'dark',
-      links: [],
-      copyright: `Copyright © ${new Date().getFullYear()} Physical AI Humanoid Robotics Textbook. All rights reserved.`,
     },
   } satisfies Preset.ThemeConfig,
 };

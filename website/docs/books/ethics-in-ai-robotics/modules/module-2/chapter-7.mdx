@@ -1,0 +1,200 @@
+---
+id: chapter-7
+title: "Understanding Bias in AI and Robotic Systems"
+module: "Module 2: Bias, Fairness, and Algorithmic Justice"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Understanding Bias in AI and Robotic Systems
+
+### Defining Bias in AI and Robotics
+
+Bias in AI and robotic systems refers to systematic and unfair discrimination against certain individuals or groups of people in favor of others. Unlike random errors, bias represents consistent and repeatable deviations from fairness that can have profound impacts on affected individuals and society at large.
+
+Types of bias in AI and robotics include:
+- **Historical bias**: Pre-existing societal inequalities reflected in data
+- **Representation bias**: Underrepresentation of certain groups in training data
+- **Measurement bias**: Systematic errors in data collection methods
+- **Evaluation bias**: Testing systems on non-representative populations
+- **Deployment bias**: Systems performing differently across various contexts
+
+### Sources of Bias
+
+#### Data-Related Sources
+The most common source of bias stems from the data used to train AI systems:
+
+**Historical Data**: AI systems often learn from historical data that reflects past discrimination and societal inequalities. For example, hiring algorithms trained on historical hiring data may perpetuate gender or racial biases that existed in past hiring decisions.
+
+**Sampling Bias**: When training data doesn't adequately represent the population the system will serve, resulting in poor performance for underrepresented groups.
+
+**Labeling Bias**: Human annotators may introduce their own biases when labeling training data, which then becomes embedded in the AI system.
+
+#### Algorithmic Sources
+Bias can also emerge from the algorithms themselves:
+
+**Feature Selection**: Choosing features that correlate with protected characteristics (race, gender, etc.)
+**Model Architecture**: Some models may be more susceptible to learning spurious correlations
+**Optimization Objectives**: Metrics that don't account for fairness across groups
+
+#### Human and Social Sources
+Bias often reflects human prejudices and social structures:
+
+**Designer Bias**: The perspectives and assumptions of system designers
+**Stakeholder Bias**: Biases of those funding, deploying, or using the systems
+**Cultural Bias**: Embedding of cultural values and norms that may not be universal
+
+### Manifestations of Bias in Robotics
+
+#### Physical Interaction Bias
+Robotic systems may exhibit bias in how they interact with different individuals:
+
+**Recognition Systems**: Facial recognition systems showing higher error rates for certain demographic groups, particularly women and people with darker skin tones.
+
+**Gesture Interpretation**: Robots misinterpreting gestures based on cultural differences or physical characteristics.
+
+**Assistance Prioritization**: Service robots potentially prioritizing certain users over others based on learned biases.
+
+#### Decision-Making Bias
+Autonomous systems making biased decisions in various contexts:
+
+**Healthcare Robotics**: Medical robots providing different recommendations based on patient demographics
+**Security Systems**: Surveillance robots flagging certain individuals as suspicious based on appearance
+**Educational Robots**: Tutoring systems providing different levels of support based on student characteristics
+
+### Real-World Examples of Bias
+
+#### Facial Recognition Systems
+Studies have shown significant disparities in facial recognition accuracy across demographic groups. For example, systems have shown higher false positive rates for African American and Asian faces compared to Caucasian faces, and higher false negative rates for women compared to men.
+
+#### Hiring Algorithms
+Amazon's AI recruiting tool was found to systematically downgrade resumes that contained words like "women's" (as in "women's chess club captain"), reflecting historical gender bias in technical roles.
+
+#### Risk Assessment Tools
+Algorithmic tools used in criminal justice systems have been shown to incorrectly flag Black defendants as future criminals at nearly twice the rate of white defendants.
+
+### Impacts of Bias
+
+#### Individual Impacts
+Bias in AI and robotic systems can have profound effects on individuals:
+
+- **Opportunity denial**: Reduced access to employment, education, or services
+- **Reinforcement of stereotypes**: Perpetuation of harmful social biases
+- **Psychological harm**: Feeling excluded or unfairly treated by automated systems
+- **Economic consequences**: Financial losses due to biased decision-making
+
+#### Societal Impacts
+The cumulative effect of biased systems can perpetuate and amplify societal inequalities:
+
+- **Systemic discrimination**: Automation of existing discriminatory practices
+- **Erosion of trust**: Reduced confidence in technological systems
+- **Social fragmentation**: Widening of existing social divides
+- **Democratic concerns**: Threats to equal treatment under law and policy
+
+### Technical Approaches to Bias Detection
+
+#### Pre-processing Methods
+Addressing bias before training models:
+
+- **Data re-sampling**: Adjusting the distribution of training data
+- **Reweighting**: Assigning different weights to different groups
+- **Data augmentation**: Adding synthetic data to underrepresented groups
+
+#### In-processing Methods
+Addressing bias during model training:
+
+- **Fairness constraints**: Adding constraints to optimization problems
+- **Adversarial training**: Training models to be invariant to sensitive attributes
+- **Multi-objective optimization**: Balancing accuracy with fairness metrics
+
+#### Post-processing Methods
+Adjusting model outputs after training:
+
+- **Threshold adjustment**: Different decision thresholds for different groups
+- **Calibration**: Adjusting output probabilities to ensure fairness
+
+### Challenges in Addressing Bias
+
+#### Defining Fairness
+There are multiple, sometimes incompatible, definitions of fairness:
+
+- **Individual fairness**: Similar individuals should receive similar treatment
+- **Group fairness**: Groups should have equal outcomes on certain metrics
+- **Procedural fairness**: The process should be fair regardless of outcomes
+
+#### Trade-offs
+Addressing bias often involves trade-offs between different objectives:
+
+- **Accuracy vs. fairness**: Improving fairness may reduce overall accuracy
+- **Different fairness criteria**: Improving one fairness metric may harm another
+- **Efficiency vs. equity**: More equitable systems may require additional resources
+
+#### Dynamic Environments
+Robotic systems operating in changing environments face ongoing challenges:
+
+- **Concept drift**: Fairness requirements may change over time
+- **Context sensitivity**: What's fair in one context may not be fair in another
+- **Emergent behaviors**: Unintended consequences of complex interactions
+
+### Future Directions
+
+#### Technical Innovations
+Ongoing research is exploring new approaches to bias mitigation:
+
+- **Causal inference**: Understanding the causal relationships that lead to bias
+- **Interpretable AI**: Making bias more visible and understandable
+- **Robust learning**: Developing systems that are less sensitive to biased data
+
+#### Regulatory Frameworks
+Policy approaches to addressing bias:
+
+- **Algorithmic auditing**: Requirements for bias testing and reporting
+- **Right to explanation**: Legal requirements for transparency in automated decisions
+- **Impact assessments**: Requirements to evaluate potential discriminatory effects
+
+Understanding the nature and sources of bias in AI and robotic systems is the first step toward developing more equitable technologies.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Bias in AI/robotics refers to systematic discrimination against certain individuals or groups.
+- Sources include historical data, algorithmic design, and human/social factors.
+- Bias manifests in recognition, decision-making, and interaction systems.
+- Real-world examples include facial recognition disparities and hiring algorithm bias.
+- Impacts range from individual opportunity denial to societal discrimination.
+- Technical approaches include pre-processing, in-processing, and post-processing methods.
+- Challenges include defining fairness and managing trade-offs between objectives.
+- Future directions involve technical innovations and regulatory frameworks.
+
+</div>
+</TabItem>
+</Tabs>

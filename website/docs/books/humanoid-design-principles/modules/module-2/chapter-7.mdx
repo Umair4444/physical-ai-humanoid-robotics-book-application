@@ -1,0 +1,264 @@
+---
+id: chapter-7
+title: "Introduction to Human Biomechanics for Robot Design"
+module: "Module 2: Biomechanics and Kinematics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Introduction to Human Biomechanics for Robot Design
+
+### Understanding Biomechanics in Humanoid Design
+
+Biomechanics is the study of the structure, function, and motion of the mechanical aspects of biological systems, particularly the human body. In humanoid robot design, biomechanics provides the fundamental principles for creating robots that can move and function like humans. Understanding human biomechanics is essential for designing robots that can operate effectively in human environments, interact naturally with humans, and perform tasks that require human-like capabilities.
+
+Biomechanics encompasses:
+- **Kinematics**: The study of motion without considering forces
+- **Kinetics**: The study of forces that cause motion
+- **Statics**: The study of forces in equilibrium
+- **Material properties**: How biological materials respond to forces
+
+### The Human Skeletal System
+
+#### Bone Structure and Function
+The human skeleton provides the structural framework for the body and enables movement:
+
+**Bone Composition**: Human bones are living tissues composed of:
+- **Collagen**: A protein that provides flexibility and tensile strength
+- **Calcium phosphate**: A mineral that provides compressive strength
+- **Bone cells**: Osteoblasts, osteocytes, and osteoclasts that maintain bone health
+
+**Types of Bones**: Different bone types serve different functions:
+- **Long bones**: Femur, tibia, humerus - for support and movement
+- **Short bones**: Carpals, tarsals - for stability and limited motion
+- **Flat bones**: Skull, ribs - for protection and muscle attachment
+- **Irregular bones**: Vertebrae, pelvis - for complex functions
+
+**Joint Types**: The connections between bones enable different types of movement:
+- **Fibrous joints**: Fixed joints like skull sutures
+- **Cartilaginous joints**: Slightly moveable joints like intervertebral discs
+- **Synovial joints**: Freely moveable joints like knees and elbows
+
+#### Skeletal Architecture
+The human skeleton is optimized for specific functions:
+
+**Axial skeleton**: The central support structure including skull, spine, and ribcage:
+- **Spine**: Composed of 24 vertebrae with intervertebral discs for flexibility
+- **Ribcage**: Protects vital organs while allowing respiratory movement
+- **Skull**: Protects the brain with specialized features for sensory organs
+
+**Appendicular skeleton**: The limbs and their connections to the axial skeleton:
+- **Upper limbs**: Shoulders, arms, forearms, and hands for manipulation
+- **Lower limbs**: Hips, thighs, legs, and feet for locomotion
+- **Girdles**: Shoulder and pelvic girdles connecting limbs to trunk
+
+### The Human Muscular System
+
+#### Muscle Structure and Function
+Muscles are responsible for generating force and movement:
+
+**Muscle Fiber Types**: Different fibers have different properties:
+- **Type I (Slow-twitch)**: Endurance fibers for sustained activity
+- **Type IIa (Fast-twitch)**: Power fibers for moderate force and speed
+- **Type IIx (Fast-twitch)**: Speed fibers for maximum force and speed
+
+**Muscle Architecture**: How muscles are organized affects their function:
+- **Fiber orientation**: Parallel, pennate, or convergent arrangements
+- **Fiber length**: Affects range of motion and force generation
+- **Pennation angle**: Affects force transmission efficiency
+
+#### Muscle Groups and Functions
+Muscles work in coordinated groups:
+
+**Antagonistic pairs**: Muscles that work in opposition:
+- **Flexors and extensors**: For joint movement in opposite directions
+- **Protractors and retractors**: For movement toward and away from midline
+- **Rotators**: For rotational movement around joint axes
+
+**Synergistic groups**: Muscles that work together:
+- **Prime movers**: Primary muscles responsible for movement
+- **Fixators**: Muscles that stabilize parts of the body
+- **Neutralizers**: Muscles that prevent unwanted movements
+
+### Joint Mechanics
+
+#### Degrees of Freedom
+Joints allow movement along specific axes:
+
+**Uniaxial joints**: Movement along one axis:
+- **Hinge joints**: Elbow and knee - flexion and extension
+- **Pivot joints**: Neck and forearms - rotation
+
+**Biaxial joints**: Movement along two axes:
+- **Condyloid joints**: Wrist - flexion/extension and abduction/adduction
+- **Saddle joints**: Thumb - similar to condyloid with more range
+
+**Multiaxial joints**: Movement along multiple axes:
+- **Ball and socket joints**: Shoulder and hip - all directions of movement
+
+#### Joint Range of Motion
+Different joints have different ranges of motion:
+
+**Anatomical position**: The standard reference position (standing, facing forward, arms at sides):
+- **Flexion/Extension**: Movement in the sagittal plane
+- **Abduction/Adduction**: Movement in the frontal plane
+- **Rotation**: Movement in the transverse plane
+
+### Biomechanical Principles in Human Movement
+
+#### Leverage and Mechanical Advantage
+The human body uses levers to amplify force or movement:
+
+**Lever classes**: Three types of levers in the human body:
+- **First class**: Fulcrum between effort and load (head nodding)
+- **Second class**: Load between fulcrum and effort (calf raises)
+- **Third class**: Effort between fulcrum and load (elbow flexion)
+
+**Trade-offs**: The human body typically favors range of motion over force:
+- **Speed advantage**: Muscles can produce rapid movements
+- **Force disadvantage**: Muscles must generate significant force
+- **Efficiency considerations**: Energy cost of movement patterns
+
+#### Force Transmission
+How forces are transmitted through the body:
+
+**Tension and compression**: Different forces on different structures:
+- **Tensile forces**: Muscles and ligaments resist pulling forces
+- **Compressive forces**: Bones resist pushing forces
+- **Shear forces**: Forces that cause sliding between structures
+
+**Force distribution**: How loads are distributed:
+- **Joint reaction forces**: Forces transmitted through joints
+- **Muscle forces**: Forces generated by muscle contraction
+- **External forces**: Gravity, contact forces, and applied loads
+
+### Biomechanical Considerations for Robot Design
+
+#### Anthropomorphic Design
+Mimicking human biomechanical principles:
+
+**Joint configurations**: Designing robot joints to match human movement patterns:
+- **Six degrees of freedom**: Matching human shoulder and hip capabilities
+- **Range of motion**: Ensuring robot joints can achieve human-like ranges
+- **Load capacity**: Designing joints to handle similar forces as human joints
+
+**Limb proportions**: Matching human proportions for environmental compatibility:
+- **Segment ratios**: Maintaining similar ratios between body segments
+- **Center of mass**: Positioning for human-like stability and movement
+- **Reach envelopes**: Ensuring robots can access the same spaces as humans
+
+#### Biomimetic Approaches
+Learning from biological solutions:
+
+**Compliant mechanisms**: Mimicking the compliance of biological systems:
+- **Series elastic actuators**: Mimicking muscle-tendon compliance
+- **Variable stiffness**: Mimicking the ability to change joint stiffness
+- **Energy storage**: Mimicking the energy storage in tendons
+
+**Distributed actuation**: Learning from muscle distribution:
+- **Redundant actuators**: Multiple actuators for each degree of freedom
+- **Parallel mechanisms**: Multiple pathways for force transmission
+- **Coordinated control**: Centralized and distributed control systems
+
+### Challenges in Biomechanical Design
+
+#### Force and Power Requirements
+Matching human capabilities presents challenges:
+
+**Power density**: Human muscles have high power-to-weight ratios:
+- **Actuator selection**: Choosing actuators that match muscle capabilities
+- **Heat dissipation**: Managing heat from high-power actuators
+- **Energy efficiency**: Minimizing energy consumption
+
+**Force transmission**: Efficiently transmitting forces through robot structures:
+- **Structural design**: Designing lightweight yet strong structures
+- **Joint design**: Ensuring joints can handle required forces
+- **Transmission systems**: Efficiently transferring power to joints
+
+#### Material Properties
+Matching biological material properties:
+
+**Compliance**: Biological materials have specific compliance characteristics:
+- **Elastic properties**: Mimicking the elastic behavior of biological materials
+- **Damping properties**: Matching energy dissipation characteristics
+- **Nonlinear properties**: Replicating the nonlinear behavior of biological materials
+
+**Self-healing**: Biological materials can self-repair:
+- **Adaptive materials**: Materials that can adapt to damage
+- **Maintenance systems**: Systems for detecting and addressing damage
+- **Redundancy**: Building in redundancy to handle component failure
+
+### Future Directions in Biomechanical Design
+
+#### Advanced Materials
+New materials that better mimic biological properties:
+
+**Smart materials**: Materials that respond to environmental stimuli:
+- **Shape memory alloys**: Materials that return to original shape when heated
+- **Electroactive polymers**: Materials that change shape when electrically stimulated
+- **Magnetorheological fluids**: Materials whose properties change with magnetic fields
+
+**Bio-inspired materials**: Materials that mimic biological properties:
+- **Artificial muscles**: Materials that contract like biological muscles
+- **Synthetic tendons**: Materials with tendon-like properties
+- **Artificial cartilage**: Materials for joint surfaces
+
+#### Computational Modeling
+Advanced modeling techniques:
+
+**Musculoskeletal models**: Detailed models of human movement:
+- **Multi-body dynamics**: Modeling the human body as interconnected rigid bodies
+- **Muscle models**: Detailed models of muscle contraction and force generation
+- **Optimization**: Finding optimal movement patterns and muscle activations
+
+**Simulation environments**: Testing designs before physical implementation:
+- **Virtual prototyping**: Testing designs in simulated environments
+- **Human-in-the-loop**: Including human operators in simulations
+- **Safety validation**: Ensuring safe interaction through simulation
+
+Understanding human biomechanics is fundamental to creating humanoid robots that can move and function effectively like humans.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Biomechanics studies the mechanical aspects of biological systems, especially the human body.
+- The human skeleton provides structure and enables movement through various bone types and joints.
+- Muscles generate force and movement through different fiber types and coordinated groups.
+- Joints have different degrees of freedom and ranges of motion.
+- Biomechanical principles include leverage, force transmission, and mechanical advantage.
+- Robot design can use anthropomorphic and biomimetic approaches.
+- Challenges include force/power requirements and material properties.
+- Future directions involve advanced materials and computational modeling.
+
+</div>
+</TabItem>
+</Tabs>

@@ -1,0 +1,700 @@
+---
+id: chapter-6
+title: "Adaptive Control with Neural Networks"
+module: "Module 1: Foundations of Neural Networks in Motion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Adaptive Control with Neural Networks
+
+### Introduction to Adaptive Control with Neural Networks
+
+Adaptive control is a control methodology that adjusts its parameters or structure in response to changes in the system or environment. When combined with neural networks, adaptive control systems can learn and adapt to complex, non-linear, and time-varying dynamics. This chapter explores how neural networks enable adaptive control in dynamic systems, particularly in robotics and motion control applications where system parameters may change over time or across different operating conditions.
+
+### Fundamentals of Adaptive Control
+
+#### Classical Adaptive Control
+
+**Model Reference Adaptive Control (MRAC)**:
+Controlling a system to follow a reference model.
+
+**Architecture**:
+```
+Reference Model: ẋ_m = A_m * x_m + B_m * r
+Plant:          ẋ = A * x + B * u
+Controller:     u = θ₁^T * x + θ₂^T * r
+```
+
+**Adaptation Law**:
+```
+θ̇₁ = -Γ₁ * x * e^T * P * B
+θ̇₂ = -Γ₂ * r * e^T * P * B
+```
+
+Where:
+- x_m is the reference model state
+- x is the plant state
+- r is the reference input
+- u is the control input
+- e = x_m - x is the tracking error
+- θ₁, θ₂ are controller parameters
+- Γ₁, Γ₂ are adaptation gains
+- P is the solution to the Lyapunov equation
+
+**Advantages**:
+- **Tracking**: Ensures system follows reference model
+- **Stability**: Guaranteed stability under certain conditions
+- **Design Flexibility**: Reference model can be designed for desired performance
+- **Parameter Estimation**: Estimates unknown parameters
+
+**Limitations**:
+- **Linearity**: Assumes linear parameterization
+- **Excitation**: Requires persistent excitation for parameter convergence
+- **Complexity**: Complex for highly non-linear systems
+- **Design**: Difficult to design for complex systems
+
+#### Self-Tuning Regulators (STR)
+
+**Concept**:
+Online parameter estimation combined with optimal control design.
+
+**Components**:
+- **Parameter Estimation**: Estimate system parameters online
+- **Controller Design**: Design controller based on estimates
+- **Certainty Equivalence**: Apply control as if estimates were true parameters
+- **Recursive Estimation**: Update parameters recursively
+
+**Mathematical Framework**:
+```
+Plant: y(k) = B(q⁻¹)/A(q⁻¹) * u(k) + C(q⁻¹)/A(q⁻¹) * e(k)
+Estimator: θ̂(k) = f(θ̂(k-1), u(k-1), y(k-1))
+Controller: u(k) = g(θ̂(k), r(k), y(k))
+```
+
+Where θ̂ represents estimated parameters.
+
+### Neural Network Adaptive Control
+
+#### Direct Neural Adaptive Control
+
+**Concept**:
+Using neural networks directly as the controller with adaptive weights.
+
+**Architecture**:
+```
+Controller: u = N(x, θ)
+```
+
+Where:
+- N is the neural network
+- x is the system state
+- θ are the neural network weights
+- u is the control input
+
+**Adaptation Law**:
+```
+θ̇ = -Γ * ∂N/∂θ * e
+```
+
+Where:
+- e is the tracking error
+- Γ is the adaptation gain
+- ∂N/∂θ is the gradient of network output with respect to weights
+
+**Advantages**:
+- **Non-linearity**: Can handle highly non-linear systems
+- **Universal Approximation**: Can approximate any continuous function
+- **Flexibility**: No need for system model
+- **Learning**: Can learn complex control strategies
+
+**Challenges**:
+- **Stability**: Ensuring closed-loop stability
+- **Convergence**: Ensuring parameter convergence
+- **Complexity**: High-dimensional weight space
+- **Initialization**: Need for good initial weights
+
+#### Indirect Neural Adaptive Control
+
+**Concept**:
+Using neural networks to identify the system model, then designing controller based on the identified model.
+
+**Architecture**:
+```
+Plant: ẋ = f(x, u, θ*)
+Identifier: ẋ̂ = f̂(x, u, θ̂)
+Controller: u = g(x, θ̂)
+```
+
+Where:
+- f is the true system dynamics
+- f̂ is the neural network model
+- θ* are true parameters
+- θ̂ are estimated parameters
+
+**Advantages**:
+- **Interpretability**: System model is explicit
+- **Design**: Can use traditional control design methods
+- **Prediction**: Can predict system behavior
+- **Robustness**: Can handle modeling errors
+
+**Disadvantages**:
+- **Two Stages**: Separate identification and control design
+- **Model Error**: Control performance depends on model accuracy
+- **Complexity**: More complex architecture
+- **Delay**: Control based on estimated model
+
+### Neural Network Architectures for Adaptive Control
+
+#### Feedforward Networks
+
+**Structure**:
+Simple feedforward networks for control function approximation.
+
+**Architecture**:
+```
+Input: [x₁, x₂, ..., x_n] (system states)
+→ Hidden Layer 1: [σ(W₁ * x + b₁)]
+→ Hidden Layer 2: [σ(W₂ * h₁ + b₂)]
+→ Output: [u₁, u₂, ..., u_m] (control inputs)
+```
+
+**Activation Functions**:
+- **ReLU**: max(0, x) - good for general approximation
+- **Tanh**: tanh(x) - bounded output, smooth
+- **Sigmoid**: 1/(1+exp(-x)) - bounded, smooth
+- **Linear**: x - for output layers when needed
+
+#### Recurrent Neural Networks
+
+**Dynamic Modeling**:
+Using RNNs to capture temporal dependencies in control.
+
+**Architecture**:
+```
+h_t = tanh(W_hh * h_{t-1} + W_xh * x_t + b_h)
+y_t = W_hy * h_t + b_y
+u_t = controller(y_t, reference_t)
+```
+
+**Advantages**:
+- **Memory**: Can remember past states
+- **Temporal Patterns**: Captures temporal dependencies
+- **Adaptation**: Can adapt to changing dynamics over time
+- **Prediction**: Can predict future states
+
+**Challenges**:
+- **Stability**: Ensuring stable recurrent dynamics
+- **Training**: Difficult to train for long sequences
+- **Complexity**: More complex than feedforward networks
+- **Computation**: Higher computational requirements
+
+#### LSTM/GRU Networks
+
+**Long-term Dependencies**:
+Using LSTM or GRU networks for systems with long-term memory.
+
+**LSTM for Control**:
+```
+f_t = σ(W_f * [h_{t-1}, x_t] + b_f)      # Forget gate
+i_t = σ(W_i * [h_{t-1}, x_t] + b_i)      # Input gate
+o_t = σ(W_o * [h_{t-1}, x_t] + b_o)      # Output gate
+C̃_t = tanh(W_C * [h_{t-1}, x_t] + b_C)   # Candidate cell state
+C_t = f_t * C_{t-1} + i_t * C̃_t         # Cell state update
+h_t = o_t * tanh(C_t)                     # Hidden state output
+u_t = W_out * h_t + b_out                # Control output
+```
+
+**Applications**:
+- **Systems with Memory**: Systems with hysteresis or delay
+- **Adaptive Control**: Adapting to slowly changing dynamics
+- **Prediction**: Predicting system behavior
+- **Fault Detection**: Detecting system changes
+
+### Stability Analysis
+
+#### Lyapunov Stability
+
+**Lyapunov Function**:
+Using Lyapunov functions to prove stability of neural adaptive systems.
+
+**General Form**:
+```
+V(x, θ̃) = V_tracking(x) + V_adaptation(θ̃)
+```
+
+Where:
+- V_tracking is the tracking error component
+- V_adaptation is the parameter error component
+- θ̃ = θ - θ* is the parameter estimation error
+
+**Stability Conditions**:
+- **Positive Definiteness**: V > 0 for all (x, θ̃) ≠ (0, 0)
+- **Decrescent**: V → 0 as (x, θ̃) → (0, 0)
+- **Negative Semi-definiteness**: V̇ ≤ 0 along system trajectories
+
+**Adaptive Law Design**:
+```
+θ̇ = -Γ * ∂V/∂θ̃
+```
+
+#### Robust Adaptive Control
+
+**Uncertainty Handling**:
+Incorporating robustness to unmodeled dynamics and disturbances.
+
+**Robust Control Term**:
+```
+u = u_neural + u_robust
+```
+
+Where:
+- u_neural is the neural network control
+- u_robust is the robustifying term
+
+**Robustifying Term**:
+```
+u_robust = -k * sign(s)
+```
+
+Where s is a sliding surface and k is a robustness gain.
+
+**Advantages**:
+- **Disturbance Rejection**: Handles unmodeled disturbances
+- **Parameter Robustness**: Robust to parameter estimation errors
+- **Stability**: Maintains stability under uncertainties
+- **Performance**: Maintains performance despite uncertainties
+
+### Practical Implementation Considerations
+
+#### Network Training
+
+**Online Learning**:
+Training neural networks during system operation.
+
+**Algorithms**:
+- **Real-time Recurrent Learning (RTRL)**: For RNNs
+- **Backpropagation Through Time (BPTT)**: For sequence learning
+- **Gradient Descent**: Standard optimization
+- **Kalman Filtering**: For parameter estimation
+
+**Challenges**:
+- **Real-time Constraints**: Meeting computational requirements
+- **Stability**: Maintaining stability during learning
+- **Excitation**: Ensuring sufficient excitation for learning
+- **Forgetting**: Preventing catastrophic forgetting
+
+**Offline Pre-training**:
+Training networks before deployment.
+
+**Approaches**:
+- **Simulation Training**: Training in simulated environments
+- **Data Augmentation**: Increasing training data diversity
+- **Transfer Learning**: Adapting pre-trained networks
+- **Meta-learning**: Learning to adapt quickly
+
+#### Parameter Initialization
+
+**Importance**:
+Proper initialization affects learning speed and stability.
+
+**Methods**:
+- **Random Initialization**: Small random weights
+- **Pre-trained Initialization**: From similar tasks
+- **Systematic Methods**: Xavier, He initialization
+- **Domain Knowledge**: Incorporating known system properties
+
+**Considerations**:
+- **Stability**: Initial controller should not destabilize system
+- **Learning Speed**: Good starting point for learning
+- **Exploration**: Encouraging exploration of control space
+- **Robustness**: Initial controller should be robust
+
+### Adaptive Control Applications
+
+#### Robotic Manipulator Control
+
+**Problem Setup**:
+Controlling robot manipulators with uncertain or changing dynamics.
+
+**System Dynamics**:
+```
+M(q)q̈ + C(q, q̇)q̇ + G(q) = τ
+```
+
+Where:
+- M(q) is the inertia matrix
+- C(q, q̇) is the Coriolis matrix
+- G(q) is the gravity vector
+- q, q̇, q̈ are joint positions, velocities, accelerations
+- τ is the joint torque vector
+
+**Neural Network Approximation**:
+```
+τ = τ_neural(q, q̇, q̈_d, q̇_d) + τ_classical
+```
+
+Where τ_neural approximates the uncertain dynamics.
+
+**Control Architecture**:
+```
+Desired Trajectory: q_d(t), q̇_d(t), q̈_d(t)
+→ Tracking Error: e = q_d - q
+→ Neural Controller: τ = N(e, ė, θ)
+→ Adaptive Law: θ̇ = -Γ * ∂N/∂θ * e
+→ Robot: M(q)q̈ + C(q, q̇)q̇ + G(q) = τ
+```
+
+**Advantages**:
+- **Uncertainty Handling**: Handles uncertain dynamics
+- **Adaptation**: Adapts to changing loads
+- **Performance**: Better tracking performance
+- **Robustness**: Robust to modeling errors
+
+#### Quadrotor Control
+
+**Problem Setup**:
+Controlling quadrotor aircraft with changing mass or aerodynamic properties.
+
+**System Model**:
+```
+Translation: m*ẍ = F * R * e₃ - m*g*e₃
+Rotation: J*ω̇ = τ - ω × (J*ω)
+```
+
+Where:
+- m is the mass
+- x is the position
+- F is the total thrust
+- R is the rotation matrix
+- e₃ = [0, 0, 1]ᵀ
+- J is the inertia matrix
+- ω is the angular velocity
+- τ is the control torque
+
+**Neural Network Control**:
+```
+F = F_neural(position_error, velocity_error)
+τ = τ_neural(orientation_error, angular_velocity_error)
+```
+
+**Adaptive Elements**:
+- **Mass Estimation**: Adapting to changing mass (payload)
+- **Aerodynamic Coefficients**: Adapting to changing aerodynamics
+- **Actuator Dynamics**: Adapting to changing motor/propeller characteristics
+- **Disturbance Rejection**: Adapting to wind disturbances
+
+#### Autonomous Vehicle Control
+
+**Problem Setup**:
+Controlling autonomous vehicles with changing road conditions and vehicle properties.
+
+**System Model**:
+```
+Longitudinal: m*vẋ = F_traction - F_drag - F_roll - F_slope
+Lateral: m*(vẏ + v_x*ψ̇) = F_y_f + F_y_r
+Yaw: I_z*ψ̈ = l_f*F_y_f - l_r*F_y_r
+```
+
+**Neural Network Elements**:
+- **Tire Model Adaptation**: Adapting to changing road conditions
+- **Aerodynamic Model**: Adapting to changing vehicle configuration
+- **Mass Properties**: Adapting to changing load
+- **Actuator Dynamics**: Adapting to changing vehicle characteristics
+
+**Control Structure**:
+```
+Reference: Desired speed, path
+→ Error Calculation: Position, speed, heading errors
+→ Neural Controller: Compute control actions
+→ Adaptation: Update neural weights based on performance
+→ Vehicle: Apply control inputs
+```
+
+### Advanced Adaptive Control Techniques
+
+#### Multi-Model Adaptive Control
+
+**Concept**:
+Using multiple models and controllers, switching between them based on system behavior.
+
+**Architecture**:
+```
+Model 1: ẋ = f₁(x, u, θ₁)
+Model 2: ẋ = f₂(x, u, θ₂)
+...
+Model N: ẋ = fₙ(x, u, θₙ)
+
+Controller 1: u = g₁(x, θ₁)
+Controller 2: u = g₂(x, θ₂)
+...
+Controller N: u = gₙ(x, θₙ)
+
+Switching Logic: Select model/controller based on performance
+```
+
+**Advantages**:
+- **Flexibility**: Can handle multiple operating modes
+- **Performance**: Optimal controller for each mode
+- **Stability**: Guaranteed stability for each mode
+- **Robustness**: Robust to large changes in system behavior
+
+**Neural Network Implementation**:
+```
+Input: System state x
+→ Multiple Neural Networks: N₁(x), N₂(x), ..., Nₙ(x)
+→ Performance Evaluation: Evaluate each network
+→ Selection: Choose best performing network
+→ Output: Control input from selected network
+```
+
+#### Switching Adaptive Control
+
+**Concept**:
+Switching between different adaptive controllers based on system conditions.
+
+**Switching Criteria**:
+- **Performance**: Based on tracking error
+- **Parameter Convergence**: Based on parameter estimation
+- **Stability**: Based on stability measures
+- **Operating Conditions**: Based on system state
+
+**Stability Considerations**:
+- **Switching Logic**: Ensure switching doesn't destabilize system
+- **Hysteresis**: Prevent chattering between controllers
+- **Transient Performance**: Minimize switching transients
+- **Stability Guarantees**: Maintain stability during switching
+
+#### Gain Scheduling with Neural Networks
+
+**Concept**:
+Using neural networks to implement non-linear gain scheduling.
+
+**Traditional Gain Scheduling**:
+```
+K(scheduling_variables) = Σ α_i(s) * K_i
+```
+
+**Neural Network Gain Scheduling**:
+```
+K = N(scheduling_variables, θ)
+```
+
+**Applications**:
+- **Flight Control**: Scheduling gains with flight conditions
+- **Process Control**: Scheduling with operating point
+- **Robotics**: Scheduling with configuration
+- **Automotive**: Scheduling with vehicle state
+
+### Learning Algorithms for Adaptive Control
+
+#### Online Learning Algorithms
+
+**Stochastic Gradient Descent (SGD)**:
+Standard online learning for neural network adaptation.
+
+**Update Rule**:
+```
+θ_{t+1} = θ_t - α * ∇_θ L(y_t, ŷ_t)
+```
+
+Where:
+- α is the learning rate
+- L is the loss function
+- y_t is the target
+- ŷ_t is the network output
+
+**Variants**:
+- **Momentum**: Add momentum term for faster convergence
+- **Adam**: Adaptive learning rates for each parameter
+- **RMSprop**: Root mean square propagation
+- **Adagrad**: Adaptive learning rates based on parameter history
+
+#### Reinforcement Learning Integration
+
+**Actor-Critic Architecture**:
+Using RL for adaptive control.
+
+**Actor Network**:
+```
+π_θ(a|s) = Control policy
+```
+
+**Critic Network**:
+```
+V_φ(s) = Value function
+```
+
+**Adaptation**:
+- **Policy Improvement**: Improve control policy
+- **Value Learning**: Learn system value function
+- **Exploration**: Balance exploration and exploitation
+- **Stability**: Ensure stable learning process
+
+#### Meta-Learning for Adaptive Control
+
+**Learning to Adapt**:
+Training networks that can quickly adapt to new conditions.
+
+**MAML (Model-Agnostic Meta-Learning)**:
+```
+θ* = argmin_θ Σ L_test(π_{θ'}(task_i))
+where θ' = θ - α∇_θ L_train(π_θ(task_i))
+```
+
+**Applications**:
+- **Rapid Adaptation**: Quick adaptation to new conditions
+- **Few-shot Learning**: Adaptation with minimal data
+- **Multi-task Learning**: Learning multiple related tasks
+- **Continual Learning**: Learning without forgetting
+
+### Challenges and Limitations
+
+#### Stability Challenges
+
+**Ensuring Stability**:
+Maintaining system stability during adaptation.
+
+**Approaches**:
+- **Lyapunov Design**: Design adaptation laws using Lyapunov theory
+- **Robust Control**: Add robustifying terms
+- **Projection Methods**: Project parameters to stable regions
+- **Switching Logic**: Switch to stable controllers when needed
+
+#### Computational Complexity
+
+**Real-time Requirements**:
+Meeting computational constraints for real-time control.
+
+**Solutions**:
+- **Network Compression**: Reduce network size
+- **Hardware Acceleration**: Use GPUs or specialized hardware
+- **Approximation Methods**: Use approximations for speed
+- **Hierarchical Control**: Separate fast and slow adaptation
+
+#### Safety Considerations
+
+**Safe Adaptation**:
+Ensuring safe operation during learning and adaptation.
+
+**Approaches**:
+- **Safe Learning**: Constrain learning to safe regions
+- **Backup Controllers**: Fallback controllers for safety
+- **Monitoring**: Monitor system during adaptation
+- **Verification**: Verify safety properties
+
+### Future Directions
+
+#### Neuromorphic Adaptive Control
+
+**Brain-inspired Computing**:
+Using neuromorphic hardware for adaptive control.
+
+**Advantages**:
+- **Energy Efficiency**: Dramatically reduced power consumption
+- **Real-time**: Ultra-fast processing
+- **Learning**: Built-in learning capabilities
+- **Robustness**: Robust to component failures
+
+**Challenges**:
+- **Programming**: Difficult to program neuromorphic systems
+- **Precision**: Limited precision compared to digital systems
+- **Development**: Immature development tools
+- **Integration**: Difficult to integrate with existing systems
+
+#### Causal Learning for Adaptive Control
+
+**Understanding Cause-Effect**:
+Incorporating causal reasoning into adaptation.
+
+**Applications**:
+- **Intervention**: Understanding effects of control actions
+- **Counterfactuals**: Learning from hypothetical scenarios
+- **Robustness**: Robustness to distribution shifts
+- **Explainability**: Explaining adaptation decisions
+
+#### Federated Adaptive Control
+
+**Distributed Learning**:
+Multiple systems learning together while maintaining privacy.
+
+**Architecture**:
+- **Local Learning**: Each system learns locally
+- **Global Model**: Aggregated global model
+- **Privacy Preservation**: Maintain data privacy
+- **Communication Efficiency**: Minimize communication
+
+**Applications**:
+- **Fleet Learning**: Multiple robots learning together
+- **Infrastructure**: Distributed control systems
+- **Privacy**: Learning without sharing sensitive data
+- **Scalability**: Scaling to many systems
+
+Understanding adaptive control with neural networks is crucial for creating control systems that can maintain performance despite changing conditions, uncertainties, and system variations.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Adaptive Control with Neural Networks
+
+### Adaptive Control Fundamentals
+- **MRAC**: Model Reference Adaptive Control for tracking
+- **STR**: Self-Tuning Regulators for parameter estimation
+- **Direct**: Neural networks as controllers
+- **Indirect**: Neural networks for system identification
+
+### Neural Network Approaches
+- **Feedforward**: Simple approximation of control functions
+- **Recurrent**: Capturing temporal dependencies
+- **LSTM/GRU**: Handling long-term memory requirements
+- **Architecture**: Design for specific control tasks
+
+### Stability & Analysis
+- **Lyapunov**: Proving stability of adaptive systems
+- **Robust Control**: Handling uncertainties and disturbances
+- **Adaptive Laws**: Designing parameter update rules
+- **Convergence**: Ensuring parameter convergence
+
+### Implementation Considerations
+- **Online Learning**: Training during system operation
+- **Parameter Initialization**: Proper starting conditions
+- **Real-time**: Meeting computational constraints
+- **Safety**: Ensuring safe operation during adaptation
+
+### Applications
+- **Robotic Manipulators**: Adapting to changing dynamics
+- **Quadrotors**: Adapting to changing mass/aerodynamics
+- **Autonomous Vehicles**: Adapting to road conditions
+- **Process Control**: Adapting to operating conditions
+
+### Advanced Techniques
+- **Multi-Model**: Multiple models for different modes
+- **Switching**: Switching between controllers
+- **Gain Scheduling**: Non-linear gain scheduling
+- **Meta-Learning**: Learning to adapt quickly
+
+### Learning Algorithms
+- **SGD Variants**: Momentum, Adam, RMSprop
+- **Reinforcement Learning**: Actor-critic architectures
+- **Online Learning**: Real-time parameter updates
+- **Federated Learning**: Distributed adaptation
+
+### Challenges & Future
+- **Stability**: Maintaining system stability
+- **Computational**: Meeting real-time requirements
+- **Safety**: Ensuring safe adaptation
+- **Neuromorphic**: Brain-inspired computing approaches
+
+</div>
+</TabItem>
+</Tabs>

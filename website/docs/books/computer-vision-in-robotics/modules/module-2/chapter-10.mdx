@@ -1,0 +1,394 @@
+---
+id: chapter-10
+title: "Edge Detection and Corner Extraction"
+module: "Module 2: Image Processing and Feature Extraction"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Edge Detection and Corner Extraction
+
+### Introduction to Edge Detection
+
+Edge detection is a fundamental technique in computer vision that identifies points in an image where the brightness changes sharply, indicating the boundaries of objects. In robotics applications, edge detection is crucial for object recognition, scene segmentation, navigation, and manipulation tasks. Edges provide important structural information about the environment that robots can use to understand and interact with their surroundings.
+
+Edge detection encompasses:
+- **Gradient computation**: Calculating intensity changes in images
+- **Edge linking**: Connecting edge points into meaningful structures
+- **Noise reduction**: Managing sensor noise and artifacts
+- **Thresholding**: Determining significant edge responses
+
+### Mathematical Foundations of Edge Detection
+
+#### Gradient Operators
+Mathematical tools for computing image gradients:
+
+**First-order derivatives**: Detecting intensity changes:
+- **Concept**: Points where first derivative is maximum
+- **Mathematical representation**: ∂f/∂x and ∂f/∂y
+- **Magnitude calculation**: √((∂f/∂x)² + (∂f/∂y)²)
+- **Direction calculation**: atan(∂f/∂y / ∂f/∂x)
+
+**Second-order derivatives**: Detecting intensity changes in gradients:
+- **Concept**: Points where second derivative crosses zero
+- **Mathematical representation**: ∂²f/∂x² and ∂²f/∂y²
+- **Laplacian operator**: ∇²f = ∂²f/∂x² + ∂²f/∂y²
+- **Application**: Fine edge localization, blob detection
+
+#### Convolution Operations
+Using filters to detect edges:
+
+**Convolution process**: Mathematical operation for edge detection:
+- **Template matching**: Sliding filter across image
+- **Dot product**: Element-wise multiplication and summation
+- **Output calculation**: Weighted sum of neighborhood pixels
+- **Implementation**: Efficient computation using separable filters
+
+**Separable filters**: Optimizing convolution operations:
+- **Concept**: Decomposing 2D filters into 1D operations
+- **Mathematical property**: Filter can be expressed as outer product
+- **Computational savings**: Reducing operations from O(n⁴) to O(n³)
+- **Application**: Large kernel optimization
+
+### Classical Edge Detectors
+
+#### Roberts Cross-Gradient Operator
+Simple edge detector using diagonal gradients:
+
+**Operator design**: 2×2 gradient masks:
+- **Gx operator**: [[1, 0], [0, -1]]
+- **Gy operator**: [[0, 1], [-1, 0]]
+- **Magnitude**: |Gx| + |Gy| or √(Gx² + Gy²)
+- **Advantages**: Fast computation, minimal memory
+
+**Characteristics of Roberts operator**:
+- **Sensitivity**: High sensitivity to noise
+- **Edge thickness**: Produces thick edges
+- **Directionality**: Good for diagonal edges
+- **Application**: Simple, fast edge detection
+
+#### Prewitt Operator
+3×3 edge detection kernels:
+
+**Horizontal edge detection**: 
+- **Gx kernel**: [[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]]
+- **Gy kernel**: [[-1, -1, -1], [0, 0, 0], [1, 1, 1]]
+- **Magnitude**: √(Gx² + Gy²)
+- **Direction**: atan(Gy/Gx)
+
+**Prewitt operator properties**:
+- **Noise reduction**: Better than Roberts due to larger mask
+- **Edge localization**: Good balance between sensitivity and accuracy
+- **Computational cost**: Moderate computational requirements
+- **Application**: General-purpose edge detection
+
+#### Sobel Operator
+Enhanced 3×3 gradient operator:
+
+**Sobel kernels**: Emphasizing center pixels:
+- **Gx kernel**: [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]
+- **Gy kernel**: [[-1, -2, -1], [0, 0, 0], [1, 2, 1]]
+- **Weighting**: Center pixels have higher weight
+- **Noise suppression**: Better noise handling than Prewitt
+
+**Sobel operator advantages**:
+- **Noise handling**: Better noise suppression
+- **Edge strength**: Strong response to edges
+- **Implementation**: Simple and efficient
+- **Application**: Most popular gradient-based edge detector
+
+#### Canny Edge Detector
+Multi-stage optimal edge detection algorithm:
+
+**Stage 1: Noise reduction**:
+- **Gaussian filter**: Smooth image to reduce noise
+- **Parameter**: σ controls smoothing level
+- **Kernel size**: Typically 5×5 or 7×7
+- **Effect**: Reduces spurious edges
+
+**Stage 2: Gradient calculation**:
+- **Sobel operators**: Compute gradient magnitude and direction
+- **Magnitude**: √(Gx² + Gy²)
+- **Direction**: atan(Gy/Gx) quantized to 4 directions
+- **Storage**: Both magnitude and direction
+
+**Stage 3: Non-maximum suppression**:
+- **Concept**: Thin edges to single-pixel width
+- **Process**: Compare each pixel with neighbors in gradient direction
+- **Preservation**: Keep only local maxima
+- **Result**: Thinner, more precise edges
+
+**Stage 4: Hysteresis thresholding**:
+- **Two thresholds**: High (T_high) and low (T_low)
+- **Strong edges**: Above T_high - definitely edges
+- **Weak edges**: Between T_low and T_high - edges if connected to strong
+- **Non-edges**: Below T_low - not edges
+
+**Canny algorithm advantages**:
+- **Optimality**: Minimizes error rate, false positives, and false negatives
+- **Single response**: Each edge point marked only once
+- **Localization**: Edge points close to true edge center
+- **Application**: Gold standard for edge detection
+
+### Corner Detection Techniques
+
+#### Intensity Change Analysis
+Detecting corners based on local intensity variations:
+
+**Corner characteristics**: Regions with significant intensity change in multiple directions:
+- **Mathematical model**: Window shifted in all directions causing large intensity change
+- **Edge characteristic**: Intensity change in one direction only
+- **Flat region**: No significant intensity change in any direction
+- **Mathematical formulation**: Sum of squared differences (SSD)
+
+**SSD matrix**: Quantifying intensity changes:
+- **Definition**: M = Σ[w(x,y)] * [[Ix², IxIy], [IxIy, Iy²]]
+- **Ix, Iy**: Image gradients in x and y directions
+- **w(x,y)**: Window function (e.g., Gaussian)
+- **Eigenvalues**: λ₁, λ₂ of SSD matrix
+
+**Corner response function**:
+- **Harris response**: R = det(M) - k(trace(M))²
+- **Shi-Tomasi**: R = min(λ₁, λ₂)
+- **Thresholding**: R > threshold for corner detection
+- **Localization**: Subpixel accuracy using interpolation
+
+#### Harris Corner Detector
+Classical corner detection algorithm:
+
+**Mathematical foundation**:
+- **Autocorrelation function**: E(u,v) = Σw(x,y)[I(x+u,y+v) - I(x,y)]²
+- **Taylor expansion**: E(u,v) ≈ [u,v]M[u,v]^T
+- **SSD matrix**: M = Σw(x,y)[[Ix², IxIy], [IxIy, Iy²]]
+- **Corner measure**: R = det(M) - k(trace(M))²
+
+**Harris detector algorithm**:
+- **Gradient computation**: Calculate Ix and Iy using Sobel operators
+- **SSD matrix**: Compute M at each pixel
+- **Response calculation**: Compute R for each pixel
+- **Non-maximum suppression**: Thin to local maxima
+- **Thresholding**: Keep points above threshold
+
+**Harris detector properties**:
+- **Rotation invariance**: Response invariant to rotation
+- **Affine transformation**: Not fully invariant to perspective
+- **Parameter sensitivity**: k value affects corner selection
+- **Application**: Robust corner detection for tracking
+
+#### Shi-Tomasi Corner Detector
+Enhanced corner detection algorithm:
+
+**Mathematical approach**:
+- **Eigenvalue analysis**: R = min(λ₁, λ₂) where λ₁, λ₂ are eigenvalues of M
+- **Interpretation**: Minimum eigenvalue measures corner strength
+- **Advantages**: More intuitive corner strength measure
+- **Performance**: Better than Harris for some applications
+
+**Shi-Tomasi algorithm**:
+- **Same preprocessing**: Gradient computation as Harris
+- **Different measure**: Use minimum eigenvalue
+- **Non-maximum suppression**: Same as Harris
+- **Thresholding**: Same approach
+
+**Shi-Tomasi advantages**:
+- **Intuitive measure**: Direct measure of corner strength
+- **Better localization**: Superior corner localization
+- **Robustness**: More robust to parameter variations
+- **Application**: Feature tracking and matching
+
+### Advanced Edge and Corner Techniques
+
+#### Laplacian of Gaussian (LoG)
+Edge detection using second-order derivatives:
+
+**Gaussian smoothing**: Preprocessing with Gaussian kernel:
+- **Purpose**: Reduce noise before edge detection
+- **Parameter**: σ controls scale of analysis
+- **Scale space**: Different σ values for different scales
+- **Application**: Multi-scale edge detection
+
+**Laplacian operator**: Detecting zero-crossings:
+- **Definition**: ∇²f = ∂²f/∂x² + ∂²f/∂y²
+- **Implementation**: Discrete approximation
+- **Zero-crossings**: Points where Laplacian changes sign
+- **Edge localization**: Precise edge location
+
+**LoG properties**:
+- **Blob detection**: Detects circular regions
+- **Scale invariance**: Multi-scale analysis capability
+- **Noise sensitivity**: Less sensitive to noise than first-order
+- **Computation**: More computationally expensive
+
+#### Difference of Gaussians (DoG)
+Approximation of LoG for efficiency:
+
+**Mathematical approximation**:
+- **Concept**: Difference of two Gaussian-blurred images
+- **Formula**: DoG(x,y,σ) = G(x,y,kσ) - G(x,y,σ)
+- **Efficiency**: Faster than LoG computation
+- **Scale space**: Efficient multi-scale representation
+
+**DoG applications**:
+- **Blob detection**: Approximation of Laplacian
+- **Feature extraction**: Part of SIFT algorithm
+- **Real-time**: More efficient than LoG
+- **Multi-scale**: Efficient scale-space analysis
+
+### Applications in Robotics
+
+#### Navigation and Mapping
+Using edges and corners for robot navigation:
+
+**Visual odometry**: Tracking robot motion using visual features:
+- **Feature tracking**: Tracking corners between frames
+- **Motion estimation**: Computing camera/robot motion
+- **Robustness**: Using multiple features for reliability
+- **Application**: Autonomous navigation systems
+
+**SLAM initialization**: Using corners for map building:
+- **Landmark detection**: Identifying corners as landmarks
+- **Data association**: Matching features across views
+- **Pose estimation**: Computing camera poses
+- **Mapping**: Building environment maps
+
+#### Object Recognition and Manipulation
+Using edges and corners for object understanding:
+
+**Feature-based recognition**: Using corners for object identification:
+- **Feature extraction**: Extracting corners from objects
+- **Descriptor computation**: Computing feature descriptors
+- **Matching**: Comparing features to known objects
+- **Recognition**: Identifying objects in environment
+
+**Grasp planning**: Using edges for grasp point selection:
+- **Edge analysis**: Identifying object boundaries
+- **Grasp points**: Selecting stable grasp locations
+- **Orientation**: Determining object orientation
+- **Application**: Robotic manipulation systems
+
+#### Human-Robot Interaction
+Using visual features for interaction:
+
+**Gesture recognition**: Detecting hand edges and corners:
+- **Hand detection**: Identifying hand regions using edges
+- **Gesture analysis**: Recognizing gestures from hand features
+- **Interaction**: Enabling gesture-based interaction
+- **Application**: Natural human-robot interfaces
+
+**Face detection**: Using facial features for recognition:
+- **Facial landmarks**: Detecting corners of facial features
+- **Face localization**: Identifying face regions
+- **Expression analysis**: Recognizing expressions from features
+- **Application**: Social robotics applications
+
+### Implementation Considerations
+
+#### Computational Optimization
+Making edge and corner detection efficient:
+
+**Separable filters**: Optimizing convolution operations:
+- **Gaussian kernel**: Separable into 1D operations
+- **Sobel operators**: Can be made separable
+- **Performance**: Significant computational savings
+- **Implementation**: Row-column decomposition
+
+**Integral images**: Fast computation of sums over rectangular regions:
+- **Concept**: Precompute cumulative sums
+- **Application**: Fast computation of box filters
+- **Performance**: O(1) computation regardless of region size
+- **Use case**: Fast feature computation
+
+#### Parameter Selection
+Choosing appropriate parameters for different applications:
+
+**Threshold selection**: Balancing detection and false alarms:
+- **Hysteresis thresholds**: High and low threshold selection
+- **Adaptive thresholds**: Adjusting to image statistics
+- **Application-specific**: Different requirements for different tasks
+- **Evaluation**: Using ground truth for optimization
+
+**Scale selection**: Choosing appropriate analysis scale:
+- **Feature size**: Match scale to expected feature size
+- **Multi-scale**: Using multiple scales for robust detection
+- **Computational cost**: Balance accuracy and efficiency
+- **Application**: Different scales for different tasks
+
+### Challenges and Limitations
+
+#### Noise and Image Quality
+Managing imperfections in input images:
+
+**Sensor noise**: Various types of image noise:
+- **Gaussian noise**: Random intensity variations
+- **Salt and pepper**: Impulse noise
+- **Quantization**: Digital noise from limited bit depth
+- **Mitigation**: Preprocessing and robust algorithms
+
+**Illumination variations**: Handling lighting changes:
+- **Shadows**: Affecting intensity and edge detection
+- **Highlights**: Causing saturation and false edges
+- **Color balance**: Affecting edge responses
+- **Normalization**: Preprocessing for consistent results
+
+#### Real-time Constraints
+Meeting timing requirements for robotic applications:
+
+**Processing speed**: Achieving required frame rates:
+- **Algorithm selection**: Choosing efficient algorithms
+- **Hardware acceleration**: Using GPUs or specialized processors
+- **Approximation**: Trading accuracy for speed
+- **Optimization**: Efficient implementation techniques
+
+**Memory management**: Managing computational resources:
+- **Buffer management**: Efficient image buffer usage
+- **Pipeline processing**: Processing multiple frames efficiently
+- **Memory bandwidth**: Optimizing memory access patterns
+- **Embedded systems**: Managing limited memory resources
+
+Edge detection and corner extraction are fundamental techniques in computer vision that provide crucial information for robotic perception and interaction with the environment.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Edge detection identifies intensity changes indicating object boundaries.
+- Mathematical foundations include gradient operators and convolution.
+- Classical detectors include Roberts, Prewitt, Sobel, and Canny operators.
+- Corner detection identifies points with intensity changes in multiple directions.
+- Harris and Shi-Tomasi are popular corner detection algorithms.
+- Advanced techniques include LoG and DoG for multi-scale analysis.
+- Applications span navigation, object recognition, and human-robot interaction.
+- Implementation requires optimization for computational efficiency.
+- Challenges include noise handling and real-time constraints.
+
+</div>
+</TabItem>
+</Tabs>

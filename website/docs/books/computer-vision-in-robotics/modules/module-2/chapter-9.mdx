@@ -1,0 +1,2100 @@
+---
+id: chapter-9
+title: "Visual SLAM and Mapping"
+module: "Module 2: Advanced Computer Vision Techniques"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Visual SLAM and Mapping
+
+### Introduction to Visual SLAM
+
+Visual Simultaneous Localization and Mapping (Visual SLAM) is a fundamental technology in robotics that enables robots to simultaneously determine their position in an unknown environment while building a map of that environment using visual sensors. This technology is crucial for autonomous navigation, as it allows robots to operate in environments without relying on external positioning systems like GPS.
+
+### SLAM Fundamentals
+
+#### The SLAM Problem
+
+**Mathematical Formulation**:
+The SLAM problem can be expressed as estimating the robot's trajectory and the map of landmarks simultaneously.
+
+**State Vector**:
+```
+X = [x_robot, y_robot, θ_robot, x_landmark1, y_landmark1, ..., x_landmarkn, y_landmarkn]
+```
+
+**Bayesian Formulation**:
+```
+P(X_t, M | Z_1:t, U_1:t) ∝ P(Z_t | X_t, M) * P(X_t | X_t-1, U_t) * P(X_t-1, M | Z_1:t-1, U_1:t-1)
+```
+
+Where:
+- X_t: Robot state at time t
+- M: Map of landmarks
+- Z_t: Observations at time t
+- U_t: Control inputs at time t
+
+#### Visual SLAM vs. Other SLAM Approaches
+
+**Visual SLAM**:
+- **Sensors**: Cameras (monocular, stereo, RGB-D)
+- **Features**: Natural landmarks from visual data
+- **Advantages**: Rich information, no additional sensors needed
+- **Challenges**: Scale ambiguity, lighting conditions
+
+**LIDAR SLAM**:
+- **Sensors**: LIDAR systems
+- **Features**: Geometric features from range data
+- **Advantages**: Metric accuracy, consistent features
+- **Challenges**: Expensive sensors, limited information
+
+**IMU Integration**:
+- **Sensors**: Inertial Measurement Units
+- **Features**: Motion and orientation data
+- **Advantages**: High-frequency data, motion prediction
+- **Challenges**: Drift over time, calibration requirements
+
+### Feature-Based Visual SLAM
+
+#### Feature Detection and Matching
+
+**Key Components**:
+Visual SLAM systems typically consist of several key components working together.
+
+**Feature Detection**:
+Identifying distinctive points in images that can be tracked over time.
+
+**Popular Feature Detectors**:
+- **Harris Corner Detector**: Detects corner-like features
+- **FAST**: Fast corner detection
+- **SIFT**: Scale-invariant feature transform
+- **SURF**: Speeded-up robust features
+- **ORB**: Oriented FAST and rotated BRIEF
+- **AKAZE**: Accelerated-KAZE features
+
+**Implementation Example - ORB Feature Detection**:
+```cpp
+class ORBFeatureDetector {
+private:
+    cv::Ptr<cv::ORB> orb_detector;
+    int max_features;
+    float scale_factor;
+    int levels;
+
+public:
+    ORBFeatureDetector(int max_feat = 1000, 
+                      float scale_fact = 1.2f, 
+                      int num_levels = 8) 
+        : max_features(max_feat), scale_factor(scale_fact), levels(num_levels) {
+        orb_detector = cv::ORB::create(
+            max_features,      // Number of features to retain
+            scale_factor,      // Pyramid decimation ratio
+            levels,            // Number of pyramid levels
+            31,               // Fast threshold
+            0,                // First level
+            2,                // WTA_K
+            cv::ORB::HARRIS_SCORE,  // Score type
+            31,               // Patch size
+            20                // Fast threshold
+        );
+    }
+
+    void detectAndCompute(const cv::Mat& image, 
+                         std::vector<cv::KeyPoint>& keypoints, 
+                         cv::Mat& descriptors) {
+        orb_detector->detectAndCompute(image, cv::noArray(), keypoints, descriptors);
+    }
+    
+    // Feature matching using brute force matcher
+    std::vector<cv::DMatch> matchFeatures(const cv::Mat& desc1, 
+                                         const cv::Mat& desc2) {
+        cv::BFMatcher matcher(cv::NORM_HAMMING, true);  // Cross-check enabled
+        std::vector<cv::DMatch> matches;
+        matcher.match(desc1, desc2, matches);
+        
+        // Filter matches based on distance
+        std::vector<cv::DMatch> good_matches;
+        double max_dist = 0, min_dist = 100;
+        
+        for (int i = 0; i < matches.size(); i++) {
+            double dist = matches[i].distance;
+            if (dist < min_dist) min_dist = dist;
+            if (dist > max_dist) max_dist = dist;
+        }
+        
+        for (int i = 0; i < matches.size(); i++) {
+            if (matches[i].distance < std::max(2*min_dist, 30.0)) {
+                good_matches.push_back(matches[i]);
+            }
+        }
+        
+        return good_matches;
+    }
+};
+```
+
+#### Tracking and Mapping Pipeline
+
+**Front-End Processing**:
+Real-time tracking of features between consecutive frames.
+
+**Key Steps**:
+1. **Feature Extraction**: Detect features in current frame
+2. **Feature Matching**: Match features with previous frame
+3. **Motion Estimation**: Estimate camera motion
+4. **Outlier Rejection**: Remove incorrect matches
+5. **Tracking Quality Assessment**: Evaluate tracking performance
+
+**Implementation**:
+```cpp
+class VisualTracker {
+private:
+    ORBFeatureDetector feature_detector;
+    std::vector<cv::Point2f> prev_keypoints;
+    std::vector<cv::Point2f> curr_keypoints;
+    cv::Mat prev_frame;
+    cv::Mat curr_frame;
+    cv::Mat camera_matrix;
+    cv::Mat dist_coeffs;
+    
+public:
+    struct TrackingResult {
+        cv::Mat rotation;
+        cv::Mat translation;
+        std::vector<cv::Point2f> matched_points;
+        int inlier_count;
+        bool success;
+    };
+    
+    TrackingResult trackFrame(const cv::Mat& current_frame) {
+        TrackingResult result;
+        
+        if (prev_frame.empty()) {
+            // Initialize with first frame
+            initializeFrame(current_frame);
+            result.success = true;
+            return result;
+        }
+        
+        // Lucas-Kanade optical flow tracking
+        std::vector<uchar> status;
+        std::vector<float> error;
+        
+        cv::calcOpticalFlowPyrLK(prev_frame, current_frame,
+                                prev_keypoints, curr_keypoints,
+                                status, error,
+                                cv::Size(21, 21), 3,
+                                cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, 0.01),
+                                cv::OPTFLOW_USE_INITIAL_FLOW);
+        
+        // Filter out bad matches
+        std::vector<cv::Point2f> good_prev, good_curr;
+        for (size_t i = 0; i < status.size(); i++) {
+            if (status[i] && error[i] < 50) {  // Filter by error
+                good_prev.push_back(prev_keypoints[i]);
+                good_curr.push_back(curr_keypoints[i]);
+            }
+        }
+        
+        if (good_prev.size() < 10) {  // Need minimum number of points
+            result.success = false;
+            return result;
+        }
+        
+        // Estimate motion using essential matrix
+        cv::Mat mask;
+        cv::Mat essential = cv::findEssentialMat(
+            good_curr, good_prev, camera_matrix, 
+            cv::RANSAC, 0.999, 1.0, mask);
+        
+        if (essential.empty() || cv::countNonZero(mask) < 10) {
+            result.success = false;
+            return result;
+        }
+        
+        // Recover pose
+        cv::Mat R, t;
+        int inliers = cv::recoverPose(essential, good_curr, good_prev, 
+                                     R, t, camera_matrix, mask);
+        
+        result.rotation = R;
+        result.translation = t;
+        result.inlier_count = inliers;
+        result.success = (inliers >= 10);
+        
+        // Update for next iteration
+        prev_frame = current_frame.clone();
+        prev_keypoints = good_curr;
+        
+        return result;
+    }
+
+private:
+    void initializeFrame(const cv::Mat& frame) {
+        std::vector<cv::KeyPoint> keypoints;
+        cv::Mat descriptors;
+        
+        feature_detector.detectAndCompute(frame, keypoints, descriptors);
+        
+        // Convert keypoints to points
+        prev_keypoints.clear();
+        for (const auto& kp : keypoints) {
+            prev_keypoints.push_back(kp.pt);
+        }
+        
+        prev_frame = frame.clone();
+    }
+};
+```
+
+#### Bundle Adjustment
+
+**Concept**:
+Optimizing both camera poses and 3D landmark positions simultaneously to minimize reprojection errors.
+
+**Mathematical Formulation**:
+```
+min Σ ||x_ij - π(R_i * X_j + t_i)||²
+```
+
+Where:
+- x_ij: Observed position of landmark j in image i
+- π: Projection function
+- R_i, t_i: Camera pose at time i
+- X_j: 3D position of landmark j
+
+**Implementation**:
+```cpp
+class BundleAdjuster {
+public:
+    struct CameraPose {
+        cv::Mat R;  // Rotation matrix
+        cv::Mat t;  // Translation vector
+        cv::Mat K;  // Camera matrix
+    };
+    
+    struct Landmark {
+        cv::Point3f position;
+        std::vector<std::pair<int, cv::Point2f>> observations;  // (camera_id, pixel_location)
+    };
+    
+    static void optimize(std::vector<CameraPose>& cameras,
+                        std::vector<Landmark>& landmarks,
+                        int max_iterations = 10) {
+        
+        for (int iter = 0; iter < max_iterations; iter++) {
+            // Build Jacobian matrices
+            Eigen::SparseMatrix<double> J;
+            Eigen::VectorXd errors;
+            
+            // Calculate residuals and Jacobians
+            std::vector<Eigen::Triplet<double>> triplets;
+            int residual_idx = 0;
+            
+            for (size_t cam_idx = 0; cam_idx < cameras.size(); cam_idx++) {
+                for (size_t lm_idx = 0; lm_idx < landmarks.size(); lm_idx++) {
+                    const auto& obs = findObservation(cameras[cam_idx], landmarks[lm_idx]);
+                    if (obs.valid) {
+                        cv::Point2f predicted = project(cameras[cam_idx], landmarks[lm_idx].position);
+                        cv::Point2f error = obs.location - predicted;
+                        
+                        // Calculate Jacobian
+                        Eigen::Matrix<double, 2, 6> J_pose = calculatePoseJacobian(
+                            cameras[cam_idx], landmarks[lm_idx].position);
+                        Eigen::Matrix<double, 2, 3> J_point = calculatePointJacobian(
+                            cameras[cam_idx], landmarks[lm_idx].position);
+                        
+                        // Add to Jacobian matrix
+                        for (int i = 0; i < 2; i++) {
+                            for (int j = 0; j < 6; j++) {
+                                triplets.push_back(Eigen::Triplet<double>(
+                                    residual_idx + i, 
+                                    cam_idx * 6 + j, 
+                                    J_pose(i, j)));
+                            }
+                            for (int j = 0; j < 3; j++) {
+                                triplets.push_back(Eigen::Triplet<double>(
+                                    residual_idx + i, 
+                                    cameras.size() * 6 + lm_idx * 3 + j, 
+                                    J_point(i, j)));
+                            }
+                        }
+                        
+                        residual_idx += 2;
+                    }
+                }
+            }
+            
+            J.setFromTriplets(triplets.begin(), triplets.end());
+            
+            // Solve normal equations: (J^T * J) * dx = -J^T * errors
+            Eigen::SparseMatrix<double> JTJ = J.transpose() * J;
+            Eigen::VectorXd rhs = -J.transpose() * errors;
+            
+            Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
+            solver.compute(JTJ);
+            
+            if (solver.info() != Eigen::Success) {
+                break;  // Matrix not positive definite
+            }
+            
+            Eigen::VectorXd dx = solver.solve(rhs);
+            
+            if (solver.info() != Eigen::Success) {
+                break;  // Solve failed
+            }
+            
+            // Update poses and landmarks
+            updateParameters(cameras, landmarks, dx);
+        }
+    }
+
+private:
+    static Eigen::Matrix<double, 2, 6> calculatePoseJacobian(
+        const CameraPose& cam, const cv::Point3f& point_3d) {
+        
+        // Convert to homogeneous coordinates
+        Eigen::Vector3d p(point_3d.x, point_3d.y, point_3d.z);
+        
+        // Transform to camera coordinates
+        Eigen::Matrix3d R;
+        R << cam.R.at<double>(0,0), cam.R.at<double>(0,1), cam.R.at<double>(0,2),
+             cam.R.at<double>(1,0), cam.R.at<double>(1,1), cam.R.at<double>(1,2),
+             cam.R.at<double>(2,0), cam.R.at<double>(2,1), cam.R.at<double>(2,2);
+        
+        Eigen::Vector3d t(cam.t.at<double>(0), cam.t.at<double>(1), cam.t.at<double>(2));
+        Eigen::Vector3d p_cam = R * p + t;
+        
+        // Projection
+        double x = p_cam[0], y = p_cam[1], z = p_cam[2];
+        double z_inv = 1.0 / z;
+        double z_inv2 = z_inv * z_inv;
+        
+        // Camera intrinsics
+        double fx = cam.K.at<double>(0,0);
+        double fy = cam.K.at<double>(1,1);
+        double cx = cam.K.at<double>(0,2);
+        double cy = cam.K.at<double>(1,2);
+        
+        // Jacobian of projection w.r.t. camera coordinates
+        Eigen::Matrix<double, 2, 3> J_projection;
+        J_projection << fx/z, 0, -fx*x*z_inv2,
+                        0, fy/z, -fy*y*z_inv2;
+        
+        // Jacobian of rotation and translation
+        Eigen::Matrix<double, 3, 6> J_transform;
+        J_transform.block<3,3>(0,0) = -R * skew(p);  // Rotation part
+        J_transform.block<3,3>(0,3) = Eigen::Matrix3d::Identity();  // Translation part
+        
+        return J_projection * J_transform;
+    }
+    
+    static Eigen::Matrix<double, 2, 3> calculatePointJacobian(
+        const CameraPose& cam, const cv::Point3f& point_3d) {
+        
+        Eigen::Vector3d p(point_3d.x, point_3d.y, point_3d.z);
+        
+        // Transform to camera coordinates
+        Eigen::Matrix3d R;
+        R << cam.R.at<double>(0,0), cam.R.at<double>(0,1), cam.R.at<double>(0,2),
+             cam.R.at<double>(1,0), cam.R.at<double>(1,1), cam.R.at<double>(1,2),
+             cam.R.at<double>(2,0), cam.R.at<double>(2,1), cam.R.at<double>(2,2);
+        
+        Eigen::Vector3d t(cam.t.at<double>(0), cam.t.at<double>(1), cam.t.at<double>(2));
+        Eigen::Vector3d p_cam = R * p + t;
+        
+        // Projection
+        double x = p_cam[0], y = p_cam[1], z = p_cam[2];
+        double z_inv = 1.0 / z;
+        double z_inv2 = z_inv * z_inv;
+        
+        // Camera intrinsics
+        double fx = cam.K.at<double>(0,0);
+        double fy = cam.K.at<double>(1,1);
+        
+        // Jacobian
+        Eigen::Matrix<double, 2, 3> J;
+        J << fx*z_inv, 0, -fx*x*z_inv2,
+             0, fy*z_inv, -fy*y*z_inv2;
+        
+        return J * R;  // Chain rule: multiply by rotation
+    }
+    
+    static Eigen::Matrix3d skew(const Eigen::Vector3d& v) {
+        Eigen::Matrix3d S;
+        S << 0, -v[2], v[1],
+             v[2], 0, -v[0],
+             -v[1], v[0], 0;
+        return S;
+    }
+    
+    struct Observation {
+        cv::Point2f location;
+        bool valid;
+    };
+    
+    static Observation findObservation(const CameraPose& cam, const Landmark& landmark) {
+        // Find observation for this camera and landmark
+        for (const auto& obs : landmark.observations) {
+            if (obs.first == /* camera ID */) {
+                return {obs.second, true};
+            }
+        }
+        return {{0, 0}, false};
+    }
+    
+    static cv::Point2f project(const CameraPose& cam, const cv::Point3f& point_3d) {
+        // Transform point to camera coordinates
+        cv::Mat R = cam.R;
+        cv::Mat t = cam.t;
+        cv::Mat K = cam.K;
+        
+        cv::Mat point_3d_homogeneous = (cv::Mat_<double>(4,1) << 
+                                       point_3d.x, point_3d.y, point_3d.z, 1.0);
+        
+        cv::Mat Rt = cv::Mat::eye(4, 4, CV_64F);
+        R.copyTo(Rt(cv::Rect(0, 0, 3, 3)));
+        t.copyTo(Rt(cv::Rect(3, 0, 1, 3)));
+        
+        cv::Mat point_cam_homogeneous = Rt * point_3d_homogeneous;
+        
+        cv::Point3d point_cam(point_cam_homogeneous.at<double>(0),
+                             point_cam_homogeneous.at<double>(1),
+                             point_cam_homogeneous.at<double>(2));
+        
+        // Project to image
+        double x_norm = point_cam.x / point_cam.z;
+        double y_norm = point_cam.y / point_cam.z;
+        
+        double x_img = K.at<double>(0,0) * x_norm + K.at<double>(0,2);
+        double y_img = K.at<double>(1,1) * y_norm + K.at<double>(1,2);
+        
+        return cv::Point2f(x_img, y_img);
+    }
+    
+    static void updateParameters(std::vector<CameraPose>& cameras,
+                                std::vector<Landmark>& landmarks,
+                                const Eigen::VectorXd& dx) {
+        // Update camera poses
+        for (size_t i = 0; i < cameras.size(); i++) {
+            // Extract pose update (6 DOF: 3 for rotation, 3 for translation)
+            Eigen::VectorXd pose_update = dx.segment<6>(i * 6);
+            
+            // Update rotation using Rodrigues formula
+            Eigen::Vector3d rotation_update = pose_update.segment<3>(0);
+            double angle = rotation_update.norm();
+            
+            if (angle > 1e-8) {
+                Eigen::Vector3d axis = rotation_update.normalized();
+                
+                // Convert to rotation matrix
+                Eigen::Matrix3d R_update;
+                R_update = Eigen::AngleAxisd(angle, axis);
+                
+                // Apply update
+                Eigen::Matrix3d R_current;
+                R_current << cameras[i].R.at<double>(0,0), cameras[i].R.at<double>(0,1), cameras[i].R.at<double>(0,2),
+                           cameras[i].R.at<double>(1,0), cameras[i].R.at<double>(1,1), cameras[i].R.at<double>(1,2),
+                           cameras[i].R.at<double>(2,0), cameras[i].R.at<double>(2,1), cameras[i].R.at<double>(2,2);
+                
+                Eigen::Matrix3d R_new = R_update * R_current;
+                
+                // Convert back to cv::Mat
+                cameras[i].R.at<double>(0,0) = R_new(0,0); cameras[i].R.at<double>(0,1) = R_new(0,1); cameras[i].R.at<double>(0,2) = R_new(0,2);
+                cameras[i].R.at<double>(1,0) = R_new(1,0); cameras[i].R.at<double>(1,1) = R_new(1,1); cameras[i].R.at<double>(1,2) = R_new(1,2);
+                cameras[i].R.at<double>(2,0) = R_new(2,0); cameras[i].R.at<double>(2,1) = R_new(2,1); cameras[i].R.at<double>(2,2) = R_new(2,2);
+            }
+            
+            // Update translation
+            Eigen::Vector3d translation_update = pose_update.segment<3>(3);
+            cameras[i].t.at<double>(0) += translation_update[0];
+            cameras[i].t.at<double>(1) += translation_update[1];
+            cameras[i].t.at<double>(2) += translation_update[2];
+        }
+        
+        // Update landmarks
+        size_t landmark_start_idx = cameras.size() * 6;
+        for (size_t j = 0; j < landmarks.size(); j++) {
+            Eigen::Vector3d point_update = dx.segment<3>(landmark_start_idx + j * 3);
+            
+            landmarks[j].position.x += point_update[0];
+            landmarks[j].position.y += point_update[1];
+            landmarks[j].position.z += point_update[2];
+        }
+    }
+};
+```
+
+### Direct Visual SLAM
+
+#### Direct Methods Overview
+
+**Concept**:
+Unlike feature-based methods that track discrete features, direct methods use pixel intensities directly to estimate motion.
+
+**Advantages**:
+- **Dense Information**: Uses all pixels, not just features
+- **No Feature Extraction**: Avoids feature detection/tracking failures
+- **Robust to Low-Texture**: Works in low-texture environments
+- **Accurate Motion**: Potentially more accurate motion estimates
+
+**Disadvantages**:
+- **Photometric Assumptions**: Assumes constant brightness
+- **Illumination Sensitivity**: Sensitive to lighting changes
+- **Computational Cost**: More computationally expensive
+- **Drift**: Prone to drift without loop closure
+
+#### Semi-Direct Methods (SVO, SPTAM)
+
+**Semi-Direct Approach**:
+Combines feature-based and direct methods.
+
+**Key Concepts**:
+- **Sparse Direct Tracking**: Track sparse set of pixels directly
+- **Feature-Based Mapping**: Use features for map maintenance
+- **Efficiency**: Balance accuracy with computational efficiency
+- **Robustness**: Combine strengths of both approaches
+
+**Implementation Example**:
+```cpp
+class SemiDirectTracker {
+private:
+    cv::Mat prev_frame;
+    cv::Mat curr_frame;
+    cv::Mat camera_matrix;
+    std::vector<cv::Point2f> tracked_pixels;
+    std::vector<cv::Point3f> tracked_3d_points;
+    cv::Mat current_rotation;
+    cv::Mat current_translation;
+    
+public:
+    struct SemiDirectResult {
+        cv::Mat rotation;
+        cv::Mat translation;
+        std::vector<cv::Point2f> tracked_pixels;
+        std::vector<cv::Point3f> estimated_3d_points;
+        float tracking_quality;  // 0.0 to 1.0
+        bool success;
+    };
+    
+    SemiDirectResult trackFrame(const cv::Mat& current_frame) {
+        SemiDirectResult result;
+        
+        if (prev_frame.empty()) {
+            // Initialize with first frame
+            initializeFrame(current_frame);
+            result.success = true;
+            result.tracking_quality = 1.0f;
+            return result;
+        }
+        
+        curr_frame = current_frame.clone();
+        
+        // Prepare for semi-direct tracking
+        std::vector<cv::Point2f> new_tracked_pixels;
+        std::vector<cv::Point3f> new_tracked_3d_points;
+        
+        // Direct tracking for each pixel
+        for (size_t i = 0; i < tracked_pixels.size(); i++) {
+            cv::Point2f prev_pixel = tracked_pixels[i];
+            cv::Point3f world_point = tracked_3d_points[i];
+            
+            // Project 3D point to current frame
+            cv::Point2f predicted_pixel = projectPoint(world_point, current_rotation, current_translation);
+            
+            // Use direct alignment to refine pixel location
+            cv::Point2f refined_pixel = directAlignment(
+                prev_frame, curr_frame, prev_pixel, predicted_pixel);
+            
+            if (refined_pixel.x >= 0 && refined_pixel.y >= 0) {  // Valid tracking
+                new_tracked_pixels.push_back(refined_pixel);
+                new_tracked_3d_points.push_back(world_point);
+            }
+        }
+        
+        // Estimate motion from tracked correspondences
+        if (new_tracked_pixels.size() >= 10) {
+            cv::Mat motion_R, motion_t;
+            bool motion_success = estimateMotion(
+                new_tracked_3d_points, new_tracked_pixels, motion_R, motion_t);
+            
+            if (motion_success) {
+                // Update current pose
+                current_rotation = motion_R;
+                current_translation = motion_t;
+                
+                result.rotation = motion_R;
+                result.translation = motion_t;
+                result.tracked_pixels = new_tracked_pixels;
+                result.estimated_3d_points = new_tracked_3d_points;
+                result.tracking_quality = static_cast<float>(new_tracked_pixels.size()) / tracked_pixels.size();
+                result.success = true;
+                
+                // Update for next iteration
+                tracked_pixels = new_tracked_pixels;
+                tracked_3d_points = new_tracked_3d_points;
+                prev_frame = curr_frame.clone();
+            } else {
+                result.success = false;
+                result.tracking_quality = 0.0f;
+            }
+        } else {
+            result.success = false;
+            result.tracking_quality = 0.0f;
+        }
+        
+        return result;
+    }
+
+private:
+    void initializeFrame(const cv::Mat& frame) {
+        // Initialize with key points from ORB or other detector
+        std::vector<cv::KeyPoint> keypoints;
+        cv::Mat descriptors;
+        
+        cv::Ptr<cv::ORB> orb = cv::ORB::create(2000);
+        orb->detectAndCompute(frame, cv::noArray(), keypoints, descriptors);
+        
+        // Convert to points and initialize with some depth estimate
+        for (const auto& kp : keypoints) {
+            tracked_pixels.push_back(kp.pt);
+            // Initialize with some depth (will be refined later)
+            tracked_3d_points.push_back(cv::Point3f(kp.pt.x, kp.pt.y, 1.0f));
+        }
+        
+        prev_frame = frame.clone();
+        current_rotation = cv::Mat::eye(3, 3, CV_64F);
+        current_translation = cv::Mat::zeros(3, 1, CV_64F);
+    }
+    
+    cv::Point2f directAlignment(const cv::Mat& prev_img, const cv::Mat& curr_img,
+                               const cv::Point2f& prev_pt, const cv::Point2f& predicted_curr_pt) {
+        // Lucas-Kanade optical flow approach for direct alignment
+        cv::Size window_size(10, 10);
+        
+        // Ensure points are within image bounds
+        cv::Point2f clamped_prev = clampPoint(prev_pt, prev_img.size());
+        cv::Point2f clamped_pred = clampPoint(predicted_curr_pt, curr_img.size());
+        
+        // Extract patches around points
+        cv::Rect prev_rect(clamped_prev.x - window_size.width/2,
+                          clamped_prev.y - window_size.height/2,
+                          window_size.width, window_size.height);
+        cv::Rect curr_rect(clamped_pred.x - window_size.width/2,
+                          clamped_pred.y - window_size.height/2,
+                          window_size.width, window_size.height);
+        
+        // Check if rectangles are within image bounds
+        if (!isRectWithinImage(prev_rect, prev_img.size()) ||
+            !isRectWithinImage(curr_rect, curr_img.size())) {
+            return cv::Point2f(-1, -1);  // Invalid
+        }
+        
+        cv::Mat prev_patch = prev_img(prev_rect);
+        cv::Mat curr_patch = curr_img(curr_rect);
+        
+        // Use iterative Lucas-Kanade to find optimal offset
+        cv::Point2f offset(0, 0);
+        const int max_iterations = 10;
+        const float threshold = 0.1f;
+        
+        for (int iter = 0; iter < max_iterations; iter++) {
+            // Compute image gradients
+            cv::Mat grad_x, grad_y;
+            cv::Scharr(prev_patch, grad_x, CV_32F, 1, 0);
+            cv::Scharr(prev_patch, grad_y, CV_32F, 0, 1);
+            
+            // Compute Jacobian (gradient of image w.r.t. pixel location)
+            cv::Mat A = cv::Mat::zeros(2, 2, CV_32F);
+            cv::Mat b = cv::Mat::zeros(2, 1, CV_32F);
+            
+            for (int y = 0; y < prev_patch.rows; y++) {
+                for (int x = 0; x < prev_patch.cols; x++) {
+                    float Ix = grad_x.at<float>(y, x);
+                    float Iy = grad_y.at<float>(y, x);
+                    
+                    // Compute difference between images
+                    float diff = static_cast<float>(curr_patch.at<uchar>(y, x)) - 
+                                static_cast<float>(prev_patch.at<uchar>(y, x));
+                    
+                    // Accumulate for normal equations
+                    A.at<float>(0, 0) += Ix * Ix;
+                    A.at<float>(0, 1) += Ix * Iy;
+                    A.at<float>(1, 0) += Ix * Iy;
+                    A.at<float>(1, 1) += Iy * Iy;
+                    
+                    b.at<float>(0) += Ix * diff;
+                    b.at<float>(1) += Iy * diff;
+                }
+            }
+            
+            // Solve for pixel offset
+            cv::Mat delta_p;
+            cv::solve(A, -b, delta_p, cv::DECOMP_SVD);
+            
+            offset.x += delta_p.at<float>(0);
+            offset.y += delta_p.at<float>(1);
+            
+            // Check for convergence
+            if (abs(delta_p.at<float>(0)) < threshold && 
+                abs(delta_p.at<float>(1)) < threshold) {
+                break;
+            }
+            
+            // Update current patch location
+            cv::Point2f new_center = clamped_pred + offset;
+            curr_rect.x = static_cast<int>(new_center.x - window_size.width/2);
+            curr_rect.y = static_cast<int>(new_center.y - window_size.height/2);
+            
+            // Check bounds again
+            if (!isRectWithinImage(curr_rect, curr_img.size())) {
+                return cv::Point2f(-1, -1);  // Invalid
+            }
+            
+            curr_patch = curr_img(curr_rect);
+        }
+        
+        return clamped_pred + offset;
+    }
+    
+    cv::Point2f projectPoint(const cv::Point3f& world_point,
+                            const cv::Mat& R, const cv::Mat& t) {
+        // Transform point to camera coordinates
+        cv::Mat world_pt_homo = (cv::Mat_<double>(4,1) << 
+                                world_point.x, world_point.y, world_point.z, 1.0);
+        
+        cv::Mat Rt = cv::Mat::eye(4, 4, CV_64F);
+        R.copyTo(Rt(cv::Rect(0, 0, 3, 3)));
+        t.copyTo(Rt(cv::Rect(3, 0, 1, 3)));
+        
+        cv::Mat cam_pt_homo = Rt * world_pt_homo;
+        cv::Point3d cam_pt(cam_pt_homo.at<double>(0),
+                          cam_pt_homo.at<double>(1),
+                          cam_pt_homo.at<double>(2));
+        
+        // Project to image
+        double x_norm = cam_pt.x / cam_pt.z;
+        double y_norm = cam_pt.y / cam_pt.z;
+        
+        double x_img = camera_matrix.at<double>(0,0) * x_norm + camera_matrix.at<double>(0,2);
+        double y_img = camera_matrix.at<double>(1,1) * y_norm + camera_matrix.at<double>(1,2);
+        
+        return cv::Point2f(x_img, y_img);
+    }
+    
+    bool estimateMotion(const std::vector<cv::Point3f>& points_3d,
+                      const std::vector<cv::Point2f>& points_2d,
+                      cv::Mat& R, cv::Mat& t) {
+        if (points_3d.size() < 6) return false;
+        
+        // Use PnP (Perspective-n-Point) to estimate pose
+        std::vector<cv::Point3f> object_points;
+        std::vector<cv::Point2f> image_points;
+        
+        for (size_t i = 0; i < points_3d.size(); i++) {
+            object_points.push_back(points_3d[i]);
+            image_points.push_back(points_2d[i]);
+        }
+        
+        cv::Mat rvec, tvec;
+        cv::Mat dist_coeffs = cv::Mat::zeros(4, 1, CV_64F);  // Assume no distortion
+        
+        bool success = cv::solvePnP(object_points, image_points, 
+                                   camera_matrix, dist_coeffs, rvec, tvec);
+        
+        if (success) {
+            // Convert rotation vector to rotation matrix
+            cv::Rodrigues(rvec, R);
+            t = tvec;
+        }
+        
+        return success;
+    }
+    
+    cv::Point2f clampPoint(const cv::Point2f& pt, const cv::Size& img_size) {
+        cv::Point2f clamped = pt;
+        clamped.x = std::max(0.0f, std::min(static_cast<float>(img_size.width - 1), pt.x));
+        clamped.y = std::max(0.0f, std::min(static_cast<float>(img_size.height - 1), pt.y));
+        return clamped;
+    }
+    
+    bool isRectWithinImage(const cv::Rect& rect, const cv::Size& img_size) {
+        return (rect.x >= 0 && rect.y >= 0 && 
+                rect.x + rect.width <= img_size.width && 
+                rect.y + rect.height <= img_size.height);
+    }
+};
+```
+
+### Loop Closure and Global Optimization
+
+#### Loop Closure Detection
+
+**Purpose**:
+Identifying when the robot revisits a previously mapped location to correct drift.
+
+**Techniques**:
+- **Bag of Words**: Representing images as visual words
+- **Direct Comparison**: Comparing images directly
+- **Deep Learning**: Using learned image representations
+- **Geometric Verification**: Confirming matches geometrically
+
+**Bag of Words Implementation**:
+```cpp
+class LoopClosureDetector {
+private:
+    struct VisualWord {
+        int id;
+        std::vector<int> image_ids;  // Images containing this word
+        double weight;  // IDF weight
+    };
+    
+    struct ImageDescriptor {
+        int image_id;
+        std::vector<int> visual_words;  // Word IDs in this image
+        std::vector<double> tf_scores;  // TF scores for each word
+    };
+    
+    std::vector<VisualWord> vocabulary;
+    std::vector<ImageDescriptor> database;
+    cv::Ptr<cv::ORB> feature_detector;
+    cv::Ptr<cv::DescriptorMatcher> matcher;
+    
+public:
+    LoopClosureDetector() {
+        feature_detector = cv::ORB::create(2000);
+        matcher = cv::BFMatcher::create();
+    }
+    
+    void addToDatabase(const cv::Mat& image, int image_id) {
+        // Extract features from image
+        std::vector<cv::KeyPoint> keypoints;
+        cv::Mat descriptors;
+        feature_detector->detectAndCompute(image, cv::noArray(), keypoints, descriptors);
+        
+        if (descriptors.empty()) return;
+        
+        // Quantize descriptors to visual words
+        std::vector<int> visual_words;
+        std::vector<double> tf_scores;
+        
+        // For each descriptor, find nearest visual word
+        for (int i = 0; i < descriptors.rows; i++) {
+            cv::Mat query_desc = descriptors.row(i);
+            
+            // Find best matching visual word (simplified - in practice, use FLANN)
+            int best_match_word = findBestVisualWord(query_desc);
+            visual_words.push_back(best_match_word);
+            
+            // Calculate TF (term frequency)
+            int count = std::count(visual_words.begin(), visual_words.end(), best_match_word);
+            tf_scores.push_back(1.0 / count);  // Simple TF calculation
+        }
+        
+        // Store in database
+        ImageDescriptor desc;
+        desc.image_id = image_id;
+        desc.visual_words = visual_words;
+        desc.tf_scores = tf_scores;
+        database.push_back(desc);
+        
+        // Update vocabulary (simplified - in practice, use clustering to build vocabulary)
+        updateVocabulary(descriptors);
+    }
+    
+    std::vector<int> detectLoopCandidates(const cv::Mat& query_image, 
+                                         double score_threshold = 0.3) {
+        // Extract features from query image
+        std::vector<cv::KeyPoint> keypoints;
+        cv::Mat descriptors;
+        feature_detector->detectAndCompute(query_image, cv::noArray(), keypoints, descriptors);
+        
+        if (descriptors.empty()) return {};
+        
+        // Quantize to visual words
+        std::vector<int> query_visual_words;
+        for (int i = 0; i < descriptors.rows; i++) {
+            cv::Mat query_desc = descriptors.row(i);
+            int best_match_word = findBestVisualWord(query_desc);
+            query_visual_words.push_back(best_match_word);
+        }
+        
+        // Calculate similarity scores with database images
+        std::vector<std::pair<int, double>> scores;  // (image_id, score)
+        
+        for (const auto& db_image : database) {
+            double score = calculateSimilarity(query_visual_words, db_image);
+            if (score > score_threshold) {
+                scores.push_back({db_image.image_id, score});
+            }
+        }
+        
+        // Sort by score (highest first)
+        std::sort(scores.begin(), scores.end(), 
+                 [](const auto& a, const auto& b) { return a.second > b.second; });
+        
+        // Extract image IDs
+        std::vector<int> candidates;
+        for (const auto& score_pair : scores) {
+            candidates.push_back(score_pair.first);
+        }
+        
+        return candidates;
+    }
+
+private:
+    void updateVocabulary(const cv::Mat& descriptors) {
+        // Simplified vocabulary update
+        // In practice, this would involve clustering descriptors to create visual words
+        if (vocabulary.empty() && !descriptors.empty()) {
+            // Initialize with first few descriptors (simplified approach)
+            for (int i = 0; i < std::min(1000, descriptors.rows); i++) {
+                VisualWord word;
+                word.id = i;
+                word.weight = 1.0;  // Simplified IDF calculation
+                vocabulary.push_back(word);
+            }
+        }
+    }
+    
+    int findBestVisualWord(const cv::Mat& descriptor) {
+        // Find best matching visual word using brute force (simplified)
+        // In practice, use FLANN or other efficient nearest neighbor search
+        int best_match = 0;
+        double best_distance = std::numeric_limits<double>::max();
+        
+        for (size_t i = 0; i < vocabulary.size(); i++) {
+            // Calculate distance to vocabulary word (simplified - assume word is represented by a descriptor)
+            // This is a placeholder - in reality, vocabulary words are cluster centers
+            double dist = calculateDescriptorDistance(descriptor, getVocabularyDescriptor(i));
+            if (dist < best_distance) {
+                best_distance = dist;
+                best_match = i;
+            }
+        }
+        
+        return best_match;
+    }
+    
+    double calculateSimilarity(const std::vector<int>& query_words,
+                             const ImageDescriptor& db_image) {
+        // Calculate TF-IDF similarity score
+        std::set<int> query_set(query_words.begin(), query_words.end());
+        std::set<int> db_set(db_image.visual_words.begin(), db_image.visual_words.end());
+        
+        // Calculate intersection
+        std::vector<int> intersection;
+        std::set_intersection(query_set.begin(), query_set.end(),
+                             db_set.begin(), db_set.end(),
+                             std::back_inserter(intersection));
+        
+        // Calculate similarity (simplified TF-IDF)
+        double similarity = 0.0;
+        
+        for (int word_id : intersection) {
+            // Find TF-IDF for this word in both query and database image
+            double query_tf_idf = calculateTfIdf(query_words, word_id);
+            double db_tf_idf = calculateTfIdf(db_image.visual_words, word_id);
+            
+            similarity += query_tf_idf * db_tf_idf;  // Dot product of TF-IDF vectors
+        }
+        
+        return similarity;
+    }
+    
+    double calculateTfIdf(const std::vector<int>& words, int word_id) {
+        // Calculate TF-IDF for a specific word in the given word list
+        int count = std::count(words.begin(), words.end(), word_id);
+        double tf = static_cast<double>(count) / words.size();
+        
+        // Get IDF (inverted document frequency) - simplified
+        int docs_with_word = 0;
+        for (const auto& img_desc : database) {
+            if (std::find(img_desc.visual_words.begin(), img_desc.visual_words.end(), 
+                         word_id) != img_desc.visual_words.end()) {
+                docs_with_word++;
+            }
+        }
+        
+        double idf = log(static_cast<double>(database.size()) / (docs_with_word + 1));
+        
+        return tf * idf;
+    }
+    
+    cv::Mat getVocabularyDescriptor(int word_id) {
+        // Placeholder - return a dummy descriptor
+        // In practice, this would return the cluster center for the visual word
+        return cv::Mat::zeros(1, 32, CV_8U);
+    }
+};
+```
+
+#### Pose Graph Optimization
+
+**Concept**:
+Representing the SLAM problem as a graph optimization problem where nodes are robot poses and edges represent constraints.
+
+**Mathematical Formulation**:
+```
+min Σ ρ(||h_ij(x_i, x_j) - z_ij||_Ω)
+```
+
+Where:
+- x_i: Robot pose at time i
+- z_ij: Measurement between poses i and j
+- h_ij: Measurement function
+- Ω: Information matrix (inverse covariance)
+- ρ: Robust cost function (Huber, etc.)
+
+**Implementation**:
+```cpp
+class PoseGraphOptimizer {
+public:
+    struct Node {
+        int id;
+        cv::Mat pose;  // 6DOF pose (rotation + translation)
+        cv::Mat covariance;
+        bool fixed;    // Whether this pose is fixed (e.g., first pose)
+    };
+    
+    struct Edge {
+        int from_node;
+        int to_node;
+        cv::Mat relative_pose;  // Relative transformation
+        cv::Mat information_matrix;  // Information matrix (inverse covariance)
+    };
+    
+    static void optimize(std::vector<Node>& nodes,
+                        const std::vector<Edge>& edges,
+                        int max_iterations = 10) {
+        
+        for (int iter = 0; iter < max_iterations; iter++) {
+            // Build linear system: A * dx = b
+            SparseMatrix<double> A;
+            VectorXd b;
+            
+            // For each edge, calculate Jacobian and residual
+            std::vector<Triplet<double>> triplets;
+            b.resize(nodes.size() * 6);  // 6 DOF per node
+            b.setZero();
+            
+            for (const auto& edge : edges) {
+                int i = edge.from_node;
+                int j = edge.to_node;
+                
+                // Calculate error between predicted and measured relative pose
+                cv::Mat predicted_relative = computeRelativePose(nodes[i].pose, nodes[j].pose);
+                cv::Mat error = computePoseError(predicted_relative, edge.relative_pose);
+                
+                // Calculate Jacobians
+                Matrix<double, 6, 6> Ji, Jj;
+                computeJacobian(nodes[i].pose, nodes[j].pose, Ji, Jj);
+                
+                // Apply information matrix
+                Matrix6d info_sqrt = edge.information_matrix.llt().matrixL();
+                
+                Matrix<double, 6, 12> J_combined;
+                J_combined.block<6,6>(0,0) = -info_sqrt * Ji;
+                J_combined.block<6,6>(0,6) = info_sqrt * Jj;
+                
+                Vector<double, 6> error_vec;
+                for (int k = 0; k < 6; k++) {
+                    error_vec[k] = error.at<double>(k, 0);
+                }
+                
+                Vector<double, 12> b_combined;
+                b_combined.segment<6>(0) = -info_sqrt * error_vec;
+                b_combined.segment<6>(6) = info_sqrt * error_vec;
+                
+                // Add to linear system
+                for (int r = 0; r < 6; r++) {
+                    for (int c = 0; c < 6; c++) {
+                        if (abs(J_combined(r, c)) > 1e-10) {
+                            triplets.push_back(Triplet<double>(
+                                i*6 + r, i*6 + c, J_combined(r, c+c)));
+                        }
+                    }
+                }
+                
+                for (int r = 0; r < 6; r++) {
+                    for (int c = 0; c < 6; c++) {
+                        if (abs(J_combined(r, 6+c)) > 1e-10) {
+                            triplets.push_back(Triplet<double>(
+                                i*6 + r, j*6 + c, J_combined(r, 6+c)));
+                        }
+                    }
+                }
+                
+                b.segment<6>(i*6) += b_combined.segment<6>(0);
+                b.segment<6>(j*6) += b_combined.segment<6>(6);
+            }
+            
+            A.setFromTriplets(triplets.begin(), triplets.end());
+            
+            // Solve: A^T * A * dx = A^T * b
+            SparseMatrix<double> AtA = A.transpose() * A;
+            VectorXd Atb = A.transpose() * b;
+            
+            // Apply fixed node constraints (fix first node)
+            for (int i = 0; i < nodes.size(); i++) {
+                if (nodes[i].fixed) {
+                    for (int dof = 0; dof < 6; dof++) {
+                        // Set diagonal element to 1, others to 0
+                        for (int j = 0; j < AtA.outerSize(); j++) {
+                            for (SparseMatrix<double>::InnerIterator it(AtA, j); it; ++it) {
+                                if (it.row() == i*6 + dof || it.col() == i*6 + dof) {
+                                    if (it.row() == i*6 + dof && it.col() == i*6 + dof) {
+                                        it.valueRef() = 1.0;
+                                    } else {
+                                        it.valueRef() = 0.0;
+                                    }
+                                }
+                            }
+                        }
+                        Atb[i*6 + dof] = 0.0;  // No change for fixed nodes
+                    }
+                }
+            }
+            
+            // Solve linear system
+            SimplicialLDLT<SparseMatrix<double>> solver;
+            solver.compute(AtA);
+            VectorXd dx = solver.solve(Atb);
+            
+            // Update poses
+            for (size_t i = 0; i < nodes.size(); i++) {
+                if (!nodes[i].fixed) {
+                    Vector6d delta_pose = dx.segment<6>(i*6);
+                    nodes[i].pose = updatePose(nodes[i].pose, delta_pose);
+                }
+            }
+        }
+    }
+
+private:
+    static cv::Mat computeRelativePose(const cv::Mat& pose1, const cv::Mat& pose2) {
+        // Compute relative transformation from pose1 to pose2
+        cv::Mat R1 = pose1(cv::Rect(0, 0, 3, 3));
+        cv::Mat t1 = pose1(cv::Rect(3, 0, 1, 3));
+        
+        cv::Mat R2 = pose2(cv::Rect(0, 0, 3, 3));
+        cv::Mat t2 = pose2(cv::Rect(3, 0, 1, 3));
+        
+        // Relative rotation: R_rel = R1^T * R2
+        cv::Mat R_rel = R1.t() * R2;
+        
+        // Relative translation: t_rel = R1^T * (t2 - t1)
+        cv::Mat t_rel = R1.t() * (t2 - t1);
+        
+        cv::Mat relative_pose = cv::Mat::eye(4, 4, CV_64F);
+        R_rel.copyTo(relative_pose(cv::Rect(0, 0, 3, 3)));
+        t_rel.copyTo(relative_pose(cv::Rect(3, 0, 1, 3)));
+        
+        return relative_pose;
+    }
+    
+    static cv::Mat computePoseError(const cv::Mat& predicted, const cv::Mat& measured) {
+        // Compute error in SE(3): log(R_pred^T * R_meas) and t_pred - t_meas
+        cv::Mat R_pred = predicted(cv::Rect(0, 0, 3, 3));
+        cv::Mat t_pred = predicted(cv::Rect(3, 0, 1, 3));
+        
+        cv::Mat R_meas = measured(cv::Rect(0, 0, 3, 3));
+        cv::Mat t_meas = measured(cv::Rect(3, 0, 1, 3));
+        
+        cv::Mat R_err = R_pred.t() * R_meas;
+        cv::Mat t_err = R_pred.t() * (t_meas - t_pred);
+        
+        // Convert rotation error to axis-angle representation
+        cv::Mat rvec;
+        cv::Rodrigues(R_err, rvec);
+        
+        cv::Mat error = cv::Mat::zeros(6, 1, CV_64F);
+        rvec.copyTo(error(cv::Rect(0, 0, 1, 3)));  // Rotation error (3 DOF)
+        t_err.copyTo(error(cv::Rect(0, 3, 1, 3))); // Translation error (3 DOF)
+        
+        return error;
+    }
+    
+    static void computeJacobian(const cv::Mat& pose_i, const cv::Mat& pose_j,
+                               Eigen::Matrix<double, 6, 6>& Ji,
+                               Eigen::Matrix<double, 6, 6>& Jj) {
+        // Simplified Jacobian computation
+        // In practice, this would be computed analytically
+        Ji.setIdentity();
+        Jj.setIdentity();
+        
+        // Negate Ji for the error function
+        Ji = -Ji;
+    }
+    
+    static cv::Mat updatePose(const cv::Mat& pose, const Eigen::Vector<double, 6>& delta) {
+        // Update pose using exponential map
+        cv::Mat rvec = (cv::Mat_<double>(3,1) << delta[0], delta[1], delta[2]);
+        cv::Mat tvec = (cv::Mat_<double>(3,1) << delta[3], delta[4], delta[5]);
+        
+        cv::Mat R_delta;
+        cv::Rodrigues(rvec, R_delta);
+        
+        cv::Mat pose_update = cv::Mat::eye(4, 4, CV_64F);
+        R_delta.copyTo(pose_update(cv::Rect(0, 0, 3, 3)));
+        tvec.copyTo(pose_update(cv::Rect(3, 0, 1, 3)));
+        
+        cv::Mat new_pose = pose * pose_update;
+        return new_pose;
+    }
+};
+```
+
+### Mapping Strategies
+
+#### Dense Mapping
+
+**Concept**:
+Creating detailed 3D maps using all available visual information.
+
+**Approaches**:
+- **Direct Dense Mapping**: Using pixel intensities directly
+- **Semi-Dense Mapping**: Using pixels with sufficient gradient
+- **Feature-Based Dense**: Combining features with dense information
+
+**Implementation**:
+```cpp
+class DenseMapper {
+private:
+    cv::Mat depth_map;
+    cv::Mat color_map;
+    cv::Mat normal_map;
+    std::vector<cv::Point3f> point_cloud;
+    
+public:
+    struct DenseMap {
+        cv::Mat depth;
+        cv::Mat color;
+        cv::Mat normals;
+        std::vector<cv::Point3f> points;
+        std::vector<cv::Vec3b> colors;
+    };
+    
+    DenseMap createDenseMap(const std::vector<cv::Mat>& keyframes,
+                           const std::vector<cv::Mat>& poses) {
+        DenseMap map;
+        
+        for (size_t i = 0; i < keyframes.size(); i++) {
+            cv::Mat current_depth = estimateDepth(keyframes[i], 
+                                               keyframes[std::max(0, (int)i-1)], 
+                                               poses[i], poses[std::max(0, (int)i-1)]);
+            
+            // Fuse depth map with existing map
+            fuseDepthMap(map.depth, current_depth, poses[i]);
+            
+            // Extract point cloud from depth map
+            extractPointCloud(map.points, map.colors, 
+                            keyframes[i], current_depth, poses[i]);
+        }
+        
+        return map;
+    }
+
+private:
+    cv::Mat estimateDepth(const cv::Mat& curr_frame, const cv::Mat& prev_frame,
+                         const cv::Mat& curr_pose, const cv::Mat& prev_pose) {
+        // Simplified depth estimation using optical flow
+        cv::Mat flow;
+        cv::calcOpticalFlowFarneback(prev_frame, curr_frame, flow, 0.5, 3, 15, 3, 5, 1.2, 0);
+        
+        // Calculate depth from motion parallax
+        cv::Mat depth = cv::Mat::zeros(curr_frame.size(), CV_32F);
+        
+        // Get relative motion
+        cv::Mat rel_motion = computeRelativeMotion(prev_pose, curr_pose);
+        
+        for (int y = 0; y < flow.rows; y++) {
+            for (int x = 0; x < flow.cols; x++) {
+                cv::Point2f flow_vec = flow.at<cv::Point2f>(y, x);
+                
+                // Calculate depth from optical flow and camera motion
+                // This is a simplified approach - real implementation would be more complex
+                float flow_magnitude = sqrt(flow_vec.x * flow_vec.x + flow_vec.y * flow_vec.y);
+                
+                if (flow_magnitude > 0.1) {  // Significant motion
+                    // Depth is inversely proportional to parallax
+                    float depth_est = estimateDepthFromParallax(flow_vec, rel_motion, x, y);
+                    depth.at<float>(y, x) = depth_est;
+                }
+            }
+        }
+        
+        return depth;
+    }
+    
+    float estimateDepthFromParallax(const cv::Point2f& flow, 
+                                   const cv::Mat& rel_motion,
+                                   int x, int y) {
+        // Simplified depth from parallax calculation
+        // In practice, this would use more sophisticated geometric relationships
+        
+        // Get camera parameters
+        float fx = camera_matrix.at<double>(0, 0);
+        float fy = camera_matrix.at<double>(1, 1);
+        
+        // Calculate 3D point from image coordinates
+        float x_norm = (x - camera_matrix.at<double>(0, 2)) / fx;
+        float y_norm = (y - camera_matrix.at<double>(1, 2)) / fy;
+        
+        // Simplified depth calculation (would need full geometric solution)
+        float baseline = getTranslationMagnitude(rel_motion);
+        float disparity = sqrt(flow.x * flow.x + flow.y * flow.y);
+        
+        // Depth from disparity (simplified - assumes stereo geometry)
+        if (disparity > 0.001) {
+            return (baseline * fx) / disparity;  // Depth in camera units
+        } else {
+            return 1000.0f;  // Far distance if no motion
+        }
+    }
+    
+    void fuseDepthMap(cv::Mat& global_map, const cv::Mat& new_depth, 
+                     const cv::Mat& camera_pose) {
+        // Implement depth map fusion using TSDF (Truncated Signed Distance Function)
+        if (global_map.empty()) {
+            global_map = new_depth.clone();
+            return;
+        }
+        
+        // Transform new depth map to global coordinate system
+        cv::Mat transformed_depth = transformDepthToGlobal(new_depth, camera_pose);
+        
+        // Fuse using weighted average
+        float alpha = 0.1f;  // New information weight
+        
+        for (int y = 0; y < global_map.rows; y++) {
+            for (int x = 0; x < global_map.cols; x++) {
+                float old_depth = global_map.at<float>(y, x);
+                float new_depth_val = transformed_depth.at<float>(y, x);
+                
+                if (new_depth_val > 0 && old_depth > 0) {
+                    // Weighted fusion
+                    global_map.at<float>(y, x) = 
+                        (1 - alpha) * old_depth + alpha * new_depth_val;
+                } else if (new_depth_val > 0) {
+                    // New information is better than no information
+                    global_map.at<float>(y, x) = new_depth_val;
+                }
+                // If new is invalid but old is valid, keep old
+            }
+        }
+    }
+    
+    void extractPointCloud(std::vector<cv::Point3f>& points,
+                          std::vector<cv::Vec3b>& colors,
+                          const cv::Mat& image,
+                          const cv::Mat& depth,
+                          const cv::Mat& camera_pose) {
+        cv::Mat R = camera_pose(cv::Rect(0, 0, 3, 3));
+        cv::Mat t = camera_pose(cv::Rect(3, 0, 1, 3));
+        
+        float fx = camera_matrix.at<double>(0, 0);
+        float fy = camera_matrix.at<double>(1, 1);
+        float cx = camera_matrix.at<double>(0, 2);
+        float cy = camera_matrix.at<double>(1, 2);
+        
+        for (int y = 0; y < depth.rows; y++) {
+            for (int x = 0; x < depth.cols; x++) {
+                float z = depth.at<float>(y, x);
+                
+                if (z > 0 && z < 100) {  // Valid depth range
+                    // Convert to camera coordinates
+                    float x_cam = (x - cx) * z / fx;
+                    float y_cam = (y - cy) * z / fy;
+                    
+                    // Transform to world coordinates
+                    cv::Mat point_cam = (cv::Mat_<double>(3, 1) << x_cam, y_cam, z);
+                    cv::Mat point_world = R * point_cam + t;
+                    
+                    points.emplace_back(point_world.at<double>(0),
+                                      point_world.at<double>(1),
+                                      point_world.at<double>(2));
+                    
+                    // Get color
+                    if (image.channels() == 3) {
+                        cv::Vec3b color = image.at<cv::Vec3b>(y, x);
+                        colors.push_back(color);
+                    } else {
+                        // Convert grayscale to color
+                        unsigned char gray = image.at<unsigned char>(y, x);
+                        colors.push_back(cv::Vec3b(gray, gray, gray));
+                    }
+                }
+            }
+        }
+    }
+};
+```
+
+#### Semantic Mapping
+
+**Concept**:
+Incorporating semantic information (object labels, categories) into maps.
+
+**Approaches**:
+- **Deep Learning Integration**: Using CNNs for semantic segmentation
+- **Object Recognition**: Identifying and labeling objects
+- **Scene Understanding**: Understanding spatial relationships
+- **Knowledge Integration**: Combining semantic with geometric information
+
+**Implementation**:
+```cpp
+class SemanticMapper {
+public:
+    struct SemanticObject {
+        std::string class_label;
+        int instance_id;
+        cv::Rect bounding_box;
+        cv::Point3f center;
+        cv::Vec3f dimensions;
+        std::vector<cv::Point3f> points;
+    };
+    
+    struct SemanticMap {
+        std::vector<SemanticObject> objects;
+        cv::Mat semantic_labels;  // Label for each pixel
+        cv::Mat instance_masks;   // Instance ID for each pixel
+        std::vector<cv::Point3f> points;
+        std::vector<int> semantic_labels;  // Semantic label for each 3D point
+    };
+    
+    SemanticMap createSemanticMap(const std::vector<cv::Mat>& images,
+                                const std::vector<cv::Mat>& depth_maps,
+                                const std::vector<cv::Mat>& poses) {
+        SemanticMap map;
+        
+        for (size_t i = 0; i < images.size(); i++) {
+            // Perform semantic segmentation
+            cv::Mat semantic_labels = performSemanticSegmentation(images[i]);
+            
+            // Perform instance segmentation
+            cv::Mat instance_masks = performInstanceSegmentation(images[i]);
+            
+            // Create 3D semantic objects
+            std::vector<SemanticObject> objects = create3DObjects(
+                semantic_labels, instance_masks, depth_maps[i], poses[i]);
+            
+            // Add to global map
+            for (auto& obj : objects) {
+                // Transform to global coordinates
+                transformObjectToGlobal(obj, poses[i]);
+                map.objects.push_back(obj);
+            }
+        }
+        
+        return map;
+    }
+
+private:
+    cv::Mat performSemanticSegmentation(const cv::Mat& image) {
+        // Placeholder for semantic segmentation
+        // In practice, this would use a deep learning model like:
+        // - DeepLab
+        // - PSPNet
+        // - U-Net
+        // - Mask R-CNN
+        
+        // For demonstration, return a simple mock result
+        cv::Mat semantic_labels = cv::Mat::zeros(image.size(), CV_32S);
+        
+        // This would be replaced with actual deep learning inference
+        // semantic_labels = semantic_segmentation_model.inference(image);
+        
+        return semantic_labels;
+    }
+    
+    cv::Mat performInstanceSegmentation(const cv::Mat& image) {
+        // Placeholder for instance segmentation
+        // In practice, this would use models like:
+        // - Mask R-CNN
+        // - YOLACT
+        // - SOLO
+        
+        cv::Mat instance_masks = cv::Mat::zeros(image.size(), CV_32S);
+        
+        // This would be replaced with actual instance segmentation
+        // instance_masks = instance_segmentation_model.inference(image);
+        
+        return instance_masks;
+    }
+    
+    std::vector<SemanticObject> create3DObjects(const cv::Mat& semantic_labels,
+                                              const cv::Mat& instance_masks,
+                                              const cv::Mat& depth_map,
+                                              const cv::Mat& camera_pose) {
+        std::vector<SemanticObject> objects;
+        
+        // Get unique instance IDs
+        std::set<int> instance_ids;
+        for (int y = 0; y < instance_masks.rows; y++) {
+            for (int x = 0; x < instance_masks.cols; x++) {
+                int id = instance_masks.at<int>(y, x);
+                if (id > 0) {  // Valid instance
+                    instance_ids.insert(id);
+                }
+            }
+        }
+        
+        // Process each instance
+        for (int instance_id : instance_ids) {
+            // Create mask for this instance
+            cv::Mat instance_mask = (instance_masks == instance_id);
+            
+            // Get bounding box
+            cv::Rect bbox = cv::boundingRect(instance_mask);
+            
+            // Extract 3D points for this instance
+            std::vector<cv::Point3f> instance_points;
+            for (int y = bbox.y; y < bbox.y + bbox.height; y++) {
+                for (int x = bbox.x; x < bbox.x + bbox.width; x++) {
+                    if (instance_mask.at<uchar>(y, x) > 0) {  // Part of instance
+                        float depth = depth_map.at<float>(y, x);
+                        if (depth > 0) {
+                            // Convert to 3D point
+                            float x_3d = (x - camera_matrix.at<double>(0, 2)) * depth / camera_matrix.at<double>(0, 0);
+                            float y_3d = (y - camera_matrix.at<double>(1, 2)) * depth / camera_matrix.at<double>(1, 1);
+                            
+                            instance_points.emplace_back(x_3d, y_3d, depth);
+                        }
+                    }
+                }
+            }
+            
+            if (instance_points.size() > 10) {  // Minimum points for valid object
+                SemanticObject obj;
+                obj.instance_id = instance_id;
+                
+                // Determine class label based on semantic segmentation
+                obj.class_label = determineClassLabel(semantic_labels, instance_mask);
+                
+                obj.bounding_box = bbox;
+                obj.points = instance_points;
+                
+                // Calculate center and dimensions
+                calculateObjectProperties(obj);
+                
+                objects.push_back(obj);
+            }
+        }
+        
+        return objects;
+    }
+    
+    std::string determineClassLabel(const cv::Mat& semantic_labels,
+                                  const cv::Mat& instance_mask) {
+        // Count semantic labels within instance mask
+        std::map<int, int> label_counts;
+        
+        for (int y = 0; y < semantic_labels.rows; y++) {
+            for (int x = 0; x < semantic_labels.cols; x++) {
+                if (instance_mask.at<uchar>(y, x) > 0) {  // Within instance
+                    int label = semantic_labels.at<int>(y, x);
+                    label_counts[label]++;
+                }
+            }
+        }
+        
+        // Find most common label
+        int dominant_label = 0;
+        int max_count = 0;
+        for (const auto& pair : label_counts) {
+            if (pair.second > max_count) {
+                max_count = pair.second;
+                dominant_label = pair.first;
+            }
+        }
+        
+        // Convert numeric label to string (would use class mapping in practice)
+        return "class_" + std::to_string(dominant_label);
+    }
+    
+    void calculateObjectProperties(SemanticObject& obj) {
+        if (obj.points.empty()) return;
+        
+        // Calculate center
+        cv::Point3f sum(0, 0, 0);
+        for (const auto& pt : obj.points) {
+            sum.x += pt.x;
+            sum.y += pt.y;
+            sum.z += pt.z;
+        }
+        
+        float inv_count = 1.0f / obj.points.size();
+        obj.center = sum * inv_count;
+        
+        // Calculate bounding box dimensions
+        cv::Point3f min_pt(obj.points[0]), max_pt(obj.points[0]);
+        for (const auto& pt : obj.points) {
+            min_pt.x = std::min(min_pt.x, pt.x);
+            min_pt.y = std::min(min_pt.y, pt.y);
+            min_pt.z = std::min(min_pt.z, pt.z);
+            
+            max_pt.x = std::max(max_pt.x, pt.x);
+            max_pt.y = std::max(max_pt.y, pt.y);
+            max_pt.z = std::max(max_pt.z, pt.z);
+        }
+        
+        obj.dimensions = cv::Vec3f(max_pt.x - min_pt.x,
+                                 max_pt.y - min_pt.y,
+                                 max_pt.z - min_pt.z);
+    }
+    
+    void transformObjectToGlobal(SemanticObject& obj, const cv::Mat& pose) {
+        cv::Mat R = pose(cv::Rect(0, 0, 3, 3));
+        cv::Mat t = pose(cv::Rect(3, 0, 1, 3));
+        
+        // Transform center
+        cv::Mat center_homo = (cv::Mat_<double>(4, 1) << 
+                              obj.center.x, obj.center.y, obj.center.z, 1.0);
+        cv::Mat global_center_homo = pose * center_homo;
+        obj.center = cv::Point3f(global_center_homo.at<double>(0),
+                                global_center_homo.at<double>(1),
+                                global_center_homo.at<double>(2));
+        
+        // Transform all points
+        for (auto& pt : obj.points) {
+            cv::Mat pt_homo = (cv::Mat_<double>(4, 1) << 
+                              pt.x, pt.y, pt.z, 1.0);
+            cv::Mat global_pt_homo = pose * pt_homo;
+            
+            pt = cv::Point3f(global_pt_homo.at<double>(0),
+                            global_pt_homo.at<double>(1),
+                            global_pt_homo.at<double>(2));
+        }
+    }
+};
+```
+
+### Real-time Considerations
+
+#### Computational Efficiency
+
+**Multi-threading**:
+Implementing SLAM algorithms with multiple threads for efficiency.
+
+**Implementation**:
+```cpp
+class RealTimeSLAM {
+private:
+    std::thread tracking_thread;
+    std::thread mapping_thread;
+    std::thread optimization_thread;
+    
+    std::mutex data_mutex;
+    std::condition_variable data_cv;
+    
+    // Queues for inter-thread communication
+    std::queue<cv::Mat> image_queue;
+    std::queue<std::pair<cv::Mat, cv::Mat>> pose_queue;  // (image, pose)
+    
+    // Shared data structures
+    std::vector<cv::Point3f> map_points;
+    std::vector<cv::Mat> keyframe_poses;
+    
+    std::atomic<bool> running;
+    
+public:
+    RealTimeSLAM() : running(true) {}
+    
+    void start() {
+        tracking_thread = std::thread(&RealTimeSLAM::trackingLoop, this);
+        mapping_thread = std::thread(&RealTimeSLAM::mappingLoop, this);
+        optimization_thread = std::thread(&RealTimeSLAM::optimizationLoop, this);
+    }
+    
+    void stop() {
+        running = false;
+        
+        tracking_thread.join();
+        mapping_thread.join();
+        optimization_thread.join();
+    }
+    
+    void processImage(const cv::Mat& image) {
+        std::lock_guard<std::mutex> lock(data_mutex);
+        
+        if (image_queue.size() < 10) {  // Prevent queue overflow
+            image_queue.push(image);
+        }
+        
+        data_cv.notify_one();
+    }
+
+private:
+    void trackingLoop() {
+        VisualTracker tracker;
+        
+        while (running) {
+            cv::Mat image;
+            
+            {
+                std::unique_lock<std::mutex> lock(data_mutex);
+                data_cv.wait(lock, [this] { return !image_queue.empty() || !running; });
+                
+                if (!running && image_queue.empty()) break;
+                
+                if (!image_queue.empty()) {
+                    image = image_queue.front();
+                    image_queue.pop();
+                }
+            }
+            
+            if (!image.empty()) {
+                auto result = tracker.trackFrame(image);
+                
+                if (result.success) {
+                    // Add to pose queue for mapping
+                    std::lock_guard<std::mutex> lock(data_mutex);
+                    pose_queue.push({image.clone(), composePoseMatrix(result.rotation, result.translation)});
+                }
+            }
+        }
+    }
+    
+    void mappingLoop() {
+        DenseMapper mapper;
+        int keyframe_counter = 0;
+        const int keyframe_interval = 10;  // Every 10th frame
+        
+        while (running) {
+            std::pair<cv::Mat, cv::Mat> pose_data;
+            
+            {
+                std::unique_lock<std::mutex> lock(data_mutex);
+                
+                if (pose_queue.empty()) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                    continue;
+                }
+                
+                pose_data = pose_queue.front();
+                pose_queue.pop();
+            }
+            
+            if (keyframe_counter % keyframe_interval == 0) {
+                // Add keyframe to map
+                addKeyframeToMap(pose_data.first, pose_data.second);
+            }
+            
+            keyframe_counter++;
+        }
+    }
+    
+    void optimizationLoop() {
+        while (running) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Optimize every 100ms
+            
+            // Check for loop closures
+            if (needOptimization()) {
+                optimizeMap();
+            }
+        }
+    }
+    
+    void addKeyframeToMap(const cv::Mat& image, const cv::Mat& pose) {
+        // Add keyframe to global map
+        std::lock_guard<std::mutex> lock(data_mutex);
+        
+        keyframe_poses.push_back(pose);
+        
+        // Extract features and add to map
+        std::vector<cv::KeyPoint> keypoints;
+        cv::Mat descriptors;
+        
+        cv::Ptr<cv::ORB> orb = cv::ORB::create(1000);
+        orb->detectAndCompute(image, cv::noArray(), keypoints, descriptors);
+        
+        // Add features to map points
+        for (const auto& kp : keypoints) {
+            // Convert to 3D point (simplified - would use triangulation)
+            cv::Point3f pt_3d(kp.pt.x, kp.pt.y, 1.0f);  // Placeholder depth
+            map_points.push_back(pt_3d);
+        }
+    }
+    
+    bool needOptimization() {
+        std::lock_guard<std::mutex> lock(data_mutex);
+        return keyframe_poses.size() > 10;  // Optimize when enough keyframes
+    }
+    
+    void optimizeMap() {
+        // Perform global optimization
+        std::vector<PoseGraphOptimizer::Node> nodes;
+        std::vector<PoseGraphOptimizer::Edge> edges;
+        
+        // Create nodes for keyframe poses
+        for (size_t i = 0; i < keyframe_poses.size(); i++) {
+            PoseGraphOptimizer::Node node;
+            node.id = i;
+            node.pose = keyframe_poses[i];
+            node.fixed = (i == 0);  // Fix first pose
+            nodes.push_back(node);
+        }
+        
+        // Create edges for consecutive keyframes
+        for (size_t i = 0; i < keyframe_poses.size() - 1; i++) {
+            // Calculate relative pose between consecutive keyframes
+            cv::Mat rel_pose = computeRelativePose(keyframe_poses[i], keyframe_poses[i+1]);
+            
+            PoseGraphOptimizer::Edge edge;
+            edge.from_node = i;
+            edge.to_node = i + 1;
+            edge.relative_pose = rel_pose;
+            edge.information_matrix = cv::Mat::eye(6, 6, CV_64F);  // Simplified
+            edges.push_back(edge);
+        }
+        
+        // Perform optimization
+        PoseGraphOptimizer::optimize(nodes, edges);
+        
+        // Update keyframe poses
+        std::lock_guard<std::mutex> lock(data_mutex);
+        for (size_t i = 0; i < nodes.size(); i++) {
+            keyframe_poses[i] = nodes[i].pose;
+        }
+    }
+    
+    cv::Mat computeRelativePose(const cv::Mat& pose1, const cv::Mat& pose2) {
+        return pose1.inv() * pose2;  // Relative transformation
+    }
+    
+    cv::Mat composePoseMatrix(const cv::Mat& rotation, const cv::Mat& translation) {
+        cv::Mat pose = cv::Mat::eye(4, 4, CV_64F);
+        rotation.copyTo(pose(cv::Rect(0, 0, 3, 3)));
+        translation.copyTo(pose(cv::Rect(3, 0, 1, 3)));
+        return pose;
+    }
+};
+```
+
+### Performance Evaluation and Benchmarking
+
+#### Standard Datasets and Metrics
+
+**KITTI Dataset**:
+Standard dataset for evaluating visual odometry and SLAM.
+
+**Evaluation Metrics**:
+- **Absolute Trajectory Error (ATE)**: Difference between estimated and ground truth trajectory
+- **Relative Pose Error (RPE)**: Error in relative motion between poses
+- **Drift**: Accumulation of error over distance/time
+
+**Implementation**:
+```cpp
+class SLAMEvaluator {
+public:
+    struct EvaluationResults {
+        double ate_rmse;      // Absolute trajectory error RMSE
+        double ate_mean;      // Absolute trajectory error mean
+        double ate_median;    // Absolute trajectory error median
+        double rpe_translation;  // Relative pose error (translation)
+        double rpe_rotation;     // Relative pose error (rotation)
+        double processing_time;  // Average processing time per frame
+        double success_rate;     // Percentage of successfully processed frames
+    };
+    
+    static EvaluationResults evaluateSLAM(
+        const std::vector<cv::Mat>& estimated_poses,
+        const std::vector<cv::Mat>& ground_truth_poses) {
+        
+        EvaluationResults results;
+        
+        // Calculate Absolute Trajectory Error
+        std::vector<double> ate_errors;
+        for (size_t i = 0; i < estimated_poses.size() && i < ground_truth_poses.size(); i++) {
+            cv::Mat est_pos = estimated_poses[i];
+            cv::Mat gt_pos = ground_truth_poses[i];
+            
+            // Calculate position error
+            double dx = est_pos.at<double>(0, 3) - gt_pos.at<double>(0, 3);
+            double dy = est_pos.at<double>(1, 3) - gt_pos.at<double>(1, 3);
+            double dz = est_pos.at<double>(2, 3) - gt_pos.at<double>(2, 3);
+            
+            double error = sqrt(dx*dx + dy*dy + dz*dz);
+            ate_errors.push_back(error);
+        }
+        
+        // Calculate ATE statistics
+        results.ate_rmse = calculateRMSE(ate_errors);
+        results.ate_mean = calculateMean(ate_errors);
+        results.ate_median = calculateMedian(ate_errors);
+        
+        // Calculate Relative Pose Error
+        std::vector<double> rpe_trans_errors;
+        std::vector<double> rpe_rot_errors;
+        
+        for (size_t i = 0; i < estimated_poses.size() - 1; i++) {
+            // Calculate relative pose error
+            cv::Mat est_rel = estimated_poses[i].inv() * estimated_poses[i+1];
+            cv::Mat gt_rel = ground_truth_poses[i].inv() * ground_truth_poses[i+1];
+            
+            // Translation error
+            double trans_error = calculateTranslationError(est_rel, gt_rel);
+            rpe_trans_errors.push_back(trans_error);
+            
+            // Rotation error
+            double rot_error = calculateRotationError(est_rel, gt_rel);
+            rpe_rot_errors.push_back(rot_error);
+        }
+        
+        results.rpe_translation = calculateMean(rpe_trans_errors);
+        results.rpe_rotation = calculateMean(rpe_rot_errors);
+        
+        return results;
+    }
+
+private:
+    static double calculateRMSE(const std::vector<double>& errors) {
+        double sum = 0.0;
+        for (double err : errors) {
+            sum += err * err;
+        }
+        return sqrt(sum / errors.size());
+    }
+    
+    static double calculateMean(const std::vector<double>& values) {
+        if (values.empty()) return 0.0;
+        
+        double sum = 0.0;
+        for (double val : values) {
+            sum += val;
+        }
+        return sum / values.size();
+    }
+    
+    static double calculateMedian(std::vector<double> values) {
+        if (values.empty()) return 0.0;
+        
+        std::sort(values.begin(), values.end());
+        
+        size_t n = values.size();
+        if (n % 2 == 0) {
+            return (values[n/2 - 1] + values[n/2]) / 2.0;
+        } else {
+            return values[n/2];
+        }
+    }
+    
+    static double calculateTranslationError(const cv::Mat& est_rel, const cv::Mat& gt_rel) {
+        double dx = est_rel.at<double>(0, 3) - gt_rel.at<double>(0, 3);
+        double dy = est_rel.at<double>(1, 3) - gt_rel.at<double>(1, 3);
+        double dz = est_rel.at<double>(2, 3) - gt_rel.at<double>(2, 3);
+        
+        return sqrt(dx*dx + dy*dy + dz*dz);
+    }
+    
+    static double calculateRotationError(const cv::Mat& est_rel, const cv::Mat& gt_rel) {
+        // Calculate rotation matrix difference
+        cv::Mat R_est = est_rel(cv::Rect(0, 0, 3, 3));
+        cv::Mat R_gt = gt_rel(cv::Rect(0, 0, 3, 3));
+        
+        cv::Mat R_diff = R_est * R_gt.t();
+        
+        // Convert to axis-angle to get rotation error
+        cv::Mat rvec;
+        cv::Rodrigues(R_diff, rvec);
+        
+        double angle = norm(rvec);  // Angle in radians
+        return angle;
+    }
+};
+```
+
+Understanding visual SLAM and mapping is essential for creating autonomous robotic systems that can navigate and operate in unknown environments while building accurate representations of their surroundings.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Visual SLAM and Mapping
+
+### SLAM Fundamentals
+- **Problem**: Simultaneous localization and mapping
+- **Approach**: Estimating robot trajectory and environment map
+- **Challenge**: Managing uncertainty in both pose and map
+- **Solution**: Recursive Bayesian estimation techniques
+
+### Feature-Based SLAM
+- **Detection**: SIFT, SURF, ORB feature detection
+- **Matching**: Descriptor matching and geometric verification
+- **Tracking**: Feature correspondence across frames
+- **Bundle Adjustment**: Joint optimization of poses and landmarks
+
+### Direct SLAM Methods
+- **Approach**: Using pixel intensities directly
+- **Semi-Direct**: Combining feature and direct methods
+- **Dense Mapping**: Creating detailed 3D reconstructions
+- **Advantages**: Works in low-texture environments
+
+### Multi-View Geometry
+- **Epipolar Geometry**: Relationship between camera views
+- **Essential Matrix**: Motion between calibrated cameras
+- **Fundamental Matrix**: Motion between uncalibrated cameras
+- **Triangulation**: 3D point reconstruction from multiple views
+
+### Loop Closure
+- **Detection**: Identifying revisited locations
+- **Bag of Words**: Visual vocabulary approach
+- **Geometric Verification**: Confirming matches geometrically
+- **Optimization**: Global map consistency improvement
+
+### Pose Graph Optimization
+- **Representation**: Graph of poses and constraints
+- **Optimization**: Minimizing constraint violations
+- **Sparsity**: Efficient sparse matrix techniques
+- **Robustness**: Handling outliers and incorrect matches
+
+### Mapping Strategies
+- **Sparse**: Landmark-based mapping
+- **Dense**: Voxel grid and TSDF mapping
+- **Semantic**: Incorporating object labels and categories
+- **Multi-resolution**: Hierarchical map representations
+
+### Real-time Implementation
+- **Threading**: Multi-threaded processing pipelines
+- **Keyframing**: Selective frame processing
+- **Optimization**: Efficient computational techniques
+- **Memory Management**: Efficient data structures
+
+### Evaluation Metrics
+- **ATE**: Absolute trajectory error
+- **RPE**: Relative pose error
+- **Drift**: Error accumulation over distance
+- **Success Rate**: Percentage of successful operations
+
+### Applications
+- **Navigation**: Autonomous navigation and path planning
+- **Inspection**: Infrastructure and environment inspection
+- **Mapping**: Creating 3D environment models
+- **Augmented Reality**: Virtual content overlay
+
+### Challenges
+- **Scale**: Managing large-scale environments
+- **Dynamic Objects**: Handling moving objects in scene
+- **Illumination**: Dealing with lighting changes
+- **Real-time**: Meeting computational requirements
+
+### Future Directions
+- **Learning-Based**: Deep learning integration
+- **Multi-modal**: Combining different sensor types
+- **Collaborative**: Multi-robot SLAM systems
+- **Robustness**: Handling challenging conditions
+
+</div>
+</TabItem>
+</Tabs>

@@ -1,0 +1,1218 @@
+---
+id: chapter-4
+title: "Sensor Simulation and Perception"
+module: "Module 1: Foundations of Robotics Simulation"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Sensor Simulation and Perception
+
+### Introduction to Sensor Simulation
+
+Sensor simulation is a critical component of robotics simulation environments, enabling the creation of realistic sensor data that closely matches real-world sensor outputs. Accurate sensor simulation is essential for developing and testing perception algorithms, navigation systems, and control strategies in virtual environments before deployment on real robots. This chapter explores the principles, techniques, and implementation of various sensor simulation methods used in robotics simulation.
+
+### Sensor Modeling Fundamentals
+
+#### Sensor Characteristics and Properties
+
+**Sensor Accuracy and Precision**:
+Understanding the fundamental properties of sensors.
+
+**Accuracy**:
+How close the sensor reading is to the true value.
+
+**Types of Accuracy**:
+- **Systematic Accuracy**: Consistent deviation from true value
+- **Random Accuracy**: Variability in measurements
+- **Absolute Accuracy**: Accuracy relative to a reference standard
+- **Relative Accuracy**: Accuracy relative to other measurements
+
+**Precision**:
+How consistent the sensor readings are when measuring the same thing.
+
+**Resolution**:
+The smallest change in input that can be detected by the sensor.
+
+**Range**:
+The minimum and maximum values the sensor can measure.
+
+**Field of View (FOV)**:
+The extent of the observable environment that can be seen by the sensor.
+
+**Update Rate**:
+How frequently the sensor provides new measurements.
+
+**Linearity**:
+How well the sensor output is proportional to the input.
+
+#### Noise Modeling
+
+**Types of Noise**:
+
+**White Noise**:
+Random noise with constant power spectral density across all frequencies.
+
+**Mathematical Model**:
+```
+n(t) ~ N(0, σ²)
+```
+
+**Characteristics**:
+- **Constant PSD**: Equal power at all frequencies
+- **Uncorrelated**: Samples are independent
+- **Gaussian**: Often assumed to be Gaussian
+- **Additive**: Added to true signal
+
+**Implementation**:
+```cpp
+#include <random>
+
+class WhiteNoiseGenerator {
+private:
+    std::normal_distribution<double> distribution;
+    std::mt19937 generator;
+
+public:
+    WhiteNoiseGenerator(double mean, double stddev) 
+        : distribution(mean, stddev) {
+        std::random_device rd;
+        generator.seed(rd());
+    }
+
+    double generate() {
+        return distribution(generator);
+    }
+};
+```
+
+**Pink Noise (1/f Noise)**:
+Noise with power spectral density inversely proportional to frequency.
+
+**Characteristics**:
+- **Power Spectral Density**: S(f) ∝ 1/f
+- **Correlated**: Samples are correlated
+- **Realistic**: More realistic than white noise
+- **Implementation**: More complex than white noise
+
+**Implementation**:
+```cpp
+class PinkNoiseGenerator {
+private:
+    double pink_noise[10];  // Array for filtering
+    int index;
+    double b[10];  // Filter coefficients
+
+public:
+    PinkNoiseGenerator() {
+        // Initialize filter coefficients
+        for(int i = 0; i < 10; i++) {
+            b[i] = 0.0;
+        }
+        index = 0;
+    }
+
+    double generate() {
+        double white = /* generate white noise */;
+        // Apply pink noise filter
+        // Implementation would involve filtering white noise
+        // through a 1/f filter
+        
+        return /* filtered value */;
+    }
+};
+```
+
+**Brownian Noise (Random Walk)**:
+Cumulative integration of white noise.
+
+**Characteristics**:
+- **Cumulative**: Values depend on previous values
+- **Drift**: Long-term drift in measurements
+- **Non-stationary**: Statistics change over time
+- **Memory**: Has "memory" of past values
+
+**Implementation**:
+```cpp
+class BrownianNoiseGenerator {
+private:
+    double current_value;
+    WhiteNoiseGenerator white_noise_gen;
+
+public:
+    BrownianNoiseGenerator(double initial_value) 
+        : current_value(initial_value), 
+          white_noise_gen(0.0, 1.0) {}
+
+    double generate() {
+        current_value += white_noise_gen.generate();
+        return current_value;
+    }
+    
+    void reset(double initial_value) {
+        current_value = initial_value;
+    }
+};
+```
+
+#### Sensor Error Models
+
+**Bias**:
+Systematic offset in sensor measurements.
+
+**Types of Bias**:
+- **Constant Bias**: Fixed offset from true value
+- **Temperature Bias**: Bias that varies with temperature
+- **Time-dependent Bias**: Bias that changes over time
+- **Position-dependent Bias**: Bias that varies with position
+
+**Modeling Bias**:
+```
+measured_value = true_value + bias + noise
+```
+
+**Drift**:
+Slow change in sensor characteristics over time.
+
+**Causes**:
+- **Aging**: Physical deterioration of components
+- **Temperature**: Thermal effects on electronics
+- **Usage**: Wear and tear from operation
+- **Environmental**: Exposure to environmental factors
+
+**Calibration**:
+Adjusting sensor readings to compensate for errors.
+
+**Types of Calibration**:
+- **Zero-point Calibration**: Adjusting for zero bias
+- **Span Calibration**: Adjusting for gain errors
+- **Multi-point Calibration**: Adjusting across measurement range
+- **Dynamic Calibration**: Adjusting during operation
+
+### Camera and Vision Sensor Simulation
+
+#### Pinhole Camera Model
+
+**Geometric Model**:
+The mathematical basis for camera projection.
+
+**Projection Equations**:
+```
+x = (f * X) / Z
+y = (f * Y) / Z
+```
+
+Where (X,Y,Z) is the 3D point in camera frame, (x,y) is the image point, and f is the focal length.
+
+**Intrinsic Parameters**:
+Parameters that describe the camera's internal characteristics.
+
+**Matrix Form**:
+```
+K = [fx  0  cx]
+    [0  fy  cy]
+    [0   0   1]
+```
+
+Where:
+- fx, fy: Focal lengths in pixels
+- cx, cy: Principal point (image center)
+
+**Extrinsic Parameters**:
+Parameters that describe the camera's position and orientation.
+
+**Transformation Matrix**:
+```
+T = [R t]
+    [0 1]
+```
+
+Where R is the rotation matrix and t is the translation vector.
+
+#### Camera Distortion
+
+**Radial Distortion**:
+Distortion caused by the spherical nature of camera lenses.
+
+**Mathematical Model**:
+```
+x_distorted = x * (1 + k₁*r² + k₂*r⁴ + k₃*r⁶)
+y_distorted = y * (1 + k₁*r² + k₂*r⁴ + k₃*r⁶)
+```
+
+Where r² = x² + y² and k₁, k₂, k₃ are radial distortion coefficients.
+
+**Tangential Distortion**:
+Distortion caused by lens elements not being perfectly aligned.
+
+**Mathematical Model**:
+```
+x_distorted = x + [2*p₁*x*y + p₂*(r² + 2*x²)]
+y_distorted = y + [p₁*(r² + 2*y²) + 2*p₂*x*y]
+```
+
+Where p₁, p₂ are tangential distortion coefficients.
+
+**Implementation**:
+```cpp
+class CameraModel {
+private:
+    double fx, fy, cx, cy;  // Intrinsic parameters
+    double k1, k2, k3;      // Radial distortion
+    double p1, p2;          // Tangential distortion
+
+public:
+    CameraModel(double f_x, double f_y, double c_x, double c_y,
+                double k_1, double k_2, double k_3,
+                double p_1, double p_2) :
+        fx(f_x), fy(f_y), cx(c_x), cy(c_y),
+        k1(k_1), k2(k_2), k3(k_3),
+        p1(p_1), p2(p_2) {}
+
+    cv::Point2d project3DTo2D(const cv::Point3d& point3d) {
+        // Normalize coordinates
+        double x = point3d.x / point3d.z;
+        double y = point3d.y / point3d.z;
+        
+        // Apply radial distortion
+        double r_sq = x*x + y*y;
+        double radial_dist = 1.0 + k1*r_sq + k2*r_sq*r_sq + k3*r_sq*r_sq*r_sq;
+        double x_dist = x * radial_dist;
+        double y_dist = y * radial_dist;
+        
+        // Apply tangential distortion
+        double x_tan = x_dist + (2*p1*x_dist*y_dist + p2*(r_sq + 2*x_dist*x_dist));
+        double y_tan = y_dist + (p1*(r_sq + 2*y_dist*y_dist) + 2*p2*x_dist*y_dist);
+        
+        // Apply intrinsic parameters
+        double u = fx * x_tan + cx;
+        double v = fy * y_tan + cy;
+        
+        return cv::Point2d(u, v);
+    }
+};
+```
+
+#### Depth Camera Simulation
+
+**Principle**:
+Simulating depth sensors like stereo cameras or structured light systems.
+
+**Stereo Camera Model**:
+Using two cameras to estimate depth through triangulation.
+
+**Triangulation**:
+```
+Z = (baseline * focal_length) / disparity
+disparity = x_left - x_right
+```
+
+**Implementation**:
+```cpp
+class StereoCamera {
+private:
+    CameraModel left_camera, right_camera;
+    double baseline;  // Distance between cameras
+
+public:
+    StereoCamera(const CameraModel& left, 
+                 const CameraModel& right, 
+                 double b) : 
+        left_camera(left), right_camera(right), baseline(b) {}
+
+    double calculateDepth(const cv::Point2d& left_pt, 
+                         const cv::Point2d& right_pt) {
+        double disparity = left_pt.x - right_pt.x;
+        if (disparity > 0) {
+            return (baseline * left_camera.fx) / disparity;
+        }
+        return -1;  // Invalid disparity
+    }
+};
+```
+
+#### Noise and Imperfections in Vision Sensors
+
+**Shot Noise**:
+Noise due to the quantum nature of light.
+
+**Characteristics**:
+- **Signal-dependent**: Noise increases with signal
+- **Poisson Distribution**: Follows Poisson statistics
+- **Low Light**: Dominant in low-light conditions
+- **Modeling**: Square root relationship with signal
+
+**Dark Current Noise**:
+Noise from thermal generation of electrons.
+
+**Characteristics**:
+- **Temperature Dependent**: Increases with temperature
+- **Time Dependent**: Increases with exposure time
+- **Fixed Pattern**: Consistent across frames
+- **Modeling**: Additive Gaussian noise
+
+**Quantization Noise**:
+Noise introduced by digitizing the signal.
+
+**Characteristics**:
+- **Uniform Distribution**: Uniformly distributed
+- **Signal-independent**: Independent of signal level
+- **Quantization Step**: Related to bit depth
+- **Modeling**: Uniform noise within quantization step
+
+**Implementation**:
+```cpp
+class CameraNoiseModel {
+private:
+    WhiteNoiseGenerator shot_noise_gen;
+    WhiteNoiseGenerator dark_current_gen;
+    double quantization_step;
+
+public:
+    CameraNoiseModel(double shot_noise_std, 
+                     double dark_current_std,
+                     double quant_step) :
+        shot_noise_gen(0.0, shot_noise_std),
+        dark_current_gen(0.0, dark_current_std),
+        quantization_step(quant_step) {}
+
+    double addNoise(double signal, double exposure_time, double temperature) {
+        // Shot noise (signal-dependent)
+        double shot_noise = shot_noise_gen.generate() * sqrt(std::max(signal, 0.0));
+        
+        // Dark current (temperature and time dependent)
+        double dark_noise = dark_current_gen.generate() * exposure_time * temperature;
+        
+        // Total noise
+        double total_noise = shot_noise + dark_noise;
+        
+        // Apply quantization
+        double noisy_signal = signal + total_noise;
+        double quantized_signal = std::round(noisy_signal / quantization_step) * quantization_step;
+        
+        return quantized_signal;
+    }
+};
+```
+
+### Range and Distance Sensors
+
+#### LIDAR Simulation
+
+**Principle**:
+Light Detection and Ranging - measuring distance using laser light.
+
+**Time-of-Flight Measurement**:
+```
+Distance = (Speed of Light × Time of Flight) / 2
+```
+
+**LIDAR Sensor Model**:
+```cpp
+class LIDARSensor {
+private:
+    double fov;           // Field of view in radians
+    double resolution;    // Angular resolution
+    double max_range;     // Maximum range
+    double min_range;     // Minimum range
+    double noise_std;     // Noise standard deviation
+    int num_beams;        // Number of beams
+
+public:
+    LIDARSensor(double field_of_view, 
+                double ang_resolution,
+                double max_rng, 
+                double min_rng,
+                double noise_std_dev) :
+        fov(field_of_view), resolution(ang_resolution),
+        max_range(max_rng), min_range(min_rng),
+        noise_std(noise_std_dev) {
+        num_beams = static_cast<int>(fov / resolution);
+    }
+
+    std::vector<double> scan(const Environment& env, 
+                            const Pose& sensor_pose) {
+        std::vector<double> ranges(num_beams);
+        
+        for (int i = 0; i < num_beams; i++) {
+            double angle = sensor_pose.theta + (i - num_beams/2) * resolution;
+            
+            // Ray casting to find intersection
+            double range = cast_ray(env, sensor_pose.position, angle);
+            
+            // Apply sensor limitations
+            if (range > max_range) {
+                range = max_range + 1;  // Invalid range marker
+            } else if (range < min_range) {
+                range = min_range;  // Minimum detectable range
+            }
+            
+            // Add noise
+            if (range <= max_range) {
+                range += add_noise(range);
+            }
+            
+            ranges[i] = range;
+        }
+        
+        return ranges;
+    }
+
+private:
+    double cast_ray(const Environment& env, 
+                   const Point2D& start, 
+                   double angle) {
+        // Implement ray casting algorithm
+        // This would typically involve:
+        // 1. Creating a ray from start point in direction
+        // 2. Testing intersection with environment obstacles
+        // 3. Returning distance to nearest obstacle
+        return 0.0;  // Placeholder
+    }
+    
+    double add_noise(double true_range) {
+        // Add realistic noise model
+        // Could include bias, multiplicative noise, etc.
+        WhiteNoiseGenerator noise_gen(0.0, noise_std);
+        return noise_gen.generate();
+    }
+};
+```
+
+#### Ultrasonic Sensor Simulation
+
+**Principle**:
+Measuring distance using sound waves and time-of-flight.
+
+**Speed of Sound**:
+```
+v_sound = 331.3 + 0.606 * T (m/s)
+```
+
+Where T is temperature in Celsius.
+
+**Ultrasonic Model**:
+```cpp
+class UltrasonicSensor {
+private:
+    double beam_angle;    // Beam width in radians
+    double max_range;     // Maximum detection range
+    double min_range;     // Minimum detection range
+    double temperature;   // Ambient temperature
+    double noise_std;     // Noise standard deviation
+
+public:
+    UltrasonicSensor(double beam_width, 
+                     double max_rng,
+                     double min_rng,
+                     double temp,
+                     double noise_std_dev) :
+        beam_angle(beam_width), max_range(max_rng),
+        min_range(min_rng), temperature(temp),
+        noise_std(noise_std_dev) {}
+
+    double measure_distance(const Environment& env, 
+                           const Pose& sensor_pose) {
+        // Calculate speed of sound
+        double speed_of_sound = 331.3 + 0.606 * temperature;
+        
+        // Cast cone for detection
+        double distance = detect_object_in_cone(env, sensor_pose);
+        
+        // Apply range limitations
+        if (distance > max_range || distance < min_range) {
+            return -1;  // No valid measurement
+        }
+        
+        // Add noise
+        distance += add_noise();
+        
+        return distance;
+    }
+
+private:
+    double detect_object_in_cone(const Environment& env, 
+                                const Pose& sensor_pose) {
+        // Implement cone-based detection
+        // This would involve checking for obstacles
+        // within the ultrasonic beam cone
+        return 0.0;  // Placeholder
+    }
+    
+    double add_noise() {
+        WhiteNoiseGenerator noise_gen(0.0, noise_std);
+        return noise_gen.generate();
+    }
+};
+```
+
+#### Infrared Sensor Simulation
+
+**Principle**:
+Measuring distance using infrared light reflection.
+
+**Inverse Square Law**:
+```
+Intensity ∝ 1 / Distance²
+```
+
+**IR Sensor Model**:
+```cpp
+class InfraredSensor {
+private:
+    double max_range;     // Maximum range
+    double min_range;     // Minimum range
+    double power;         // Emitted power
+    double sensitivity;   // Detection sensitivity
+    double noise_std;     // Noise standard deviation
+
+public:
+    InfraredSensor(double max_rng, 
+                   double min_rng,
+                   double emit_power,
+                   double detect_sensitivity,
+                   double noise_std_dev) :
+        max_range(max_rng), min_range(min_rng),
+        power(emit_power), sensitivity(detect_sensitivity),
+        noise_std(noise_std_dev) {}
+
+    double measure_distance(const Environment& env, 
+                           const Pose& sensor_pose) {
+        double distance = detect_object_in_front(env, sensor_pose);
+        
+        if (distance < min_range || distance > max_range) {
+            return -1;  // Out of range
+        }
+        
+        // Calculate received power (inverse square law)
+        double received_power = power / (distance * distance);
+        
+        // Add noise
+        received_power += add_noise();
+        
+        // Convert to distance based on received power
+        double calculated_distance = sqrt(power / received_power);
+        
+        return calculated_distance;
+    }
+
+private:
+    double detect_object_in_front(const Environment& env, 
+                                 const Pose& sensor_pose) {
+        // Implement detection algorithm
+        return 0.0;  // Placeholder
+    }
+    
+    double add_noise() {
+        WhiteNoiseGenerator noise_gen(0.0, noise_std);
+        return noise_gen.generate();
+    }
+};
+```
+
+### Inertial Measurement Unit (IMU) Simulation
+
+#### Accelerometer Simulation
+
+**Principle**:
+Measuring linear acceleration.
+
+**Measurement Model**:
+```
+a_measured = R_body_to_inertial * (g + a_true) + bias + noise
+```
+
+Where:
+- a_measured is the measured acceleration
+- R_body_to_inertial is the rotation matrix
+- g is the gravity vector
+- a_true is the true linear acceleration
+- bias is the sensor bias
+- noise is the measurement noise
+
+**Implementation**:
+```cpp
+class Accelerometer {
+private:
+    Vector3d bias;              // Sensor bias
+    double noise_std;           // Noise standard deviation
+    double bias_drift_std;      // Bias drift standard deviation
+    Vector3d current_bias;      // Current bias state
+    WhiteNoiseGenerator noise_gen;
+
+public:
+    Accelerometer(const Vector3d& initial_bias,
+                  double noise_std_dev,
+                  double drift_std) :
+        bias(initial_bias), noise_std(noise_std_dev),
+        bias_drift_std(drift_std), 
+        current_bias(initial_bias),
+        noise_gen(0.0, noise_std) {}
+
+    Vector3d measure(const Vector3d& true_acceleration,
+                    const Matrix3d& rotation_matrix,
+                    double dt) {
+        // Update bias with random walk
+        Vector3d bias_drift;
+        bias_drift.x = BrownianNoiseGenerator(0.0).generate() * bias_drift_std * dt;
+        bias_drift.y = BrownianNoiseGenerator(0.0).generate() * bias_drift_std * dt;
+        bias_drift.z = BrownianNoiseGenerator(0.0).generate() * bias_drift_std * dt;
+        
+        current_bias += bias_drift;
+        
+        // Apply rotation to convert body-frame acceleration to inertial frame
+        Vector3d rotated_acceleration = rotation_matrix * true_acceleration;
+        
+        // Add gravity (in body frame, opposite to gravity vector)
+        Vector3d gravity_in_body = rotation_matrix.transpose() * Vector3d(0, 0, 9.81);
+        
+        // Calculate measurement
+        Vector3d measurement = rotated_acceleration + gravity_in_body + current_bias;
+        
+        // Add noise
+        measurement.x += noise_gen.generate();
+        measurement.y += noise_gen.generate();
+        measurement.z += noise_gen.generate();
+        
+        return measurement;
+    }
+};
+```
+
+#### Gyroscope Simulation
+
+**Principle**:
+Measuring angular velocity.
+
+**Measurement Model**:
+```
+ω_measured = ω_true + bias + noise
+```
+
+**Gyro Model**:
+```cpp
+class Gyroscope {
+private:
+    Vector3d bias;              // Sensor bias
+    double noise_std;           // Noise standard deviation
+    double bias_drift_std;      // Bias drift standard deviation
+    double random_walk_std;     // Random walk standard deviation
+    Vector3d current_bias;      // Current bias state
+    Vector3d bias_integration;  // Integrated bias drift
+
+public:
+    Gyroscope(const Vector3d& initial_bias,
+              double noise_std_dev,
+              double drift_std,
+              double walk_std) :
+        bias(initial_bias), noise_std(noise_std_dev),
+        bias_drift_std(drift_std), random_walk_std(walk_std),
+        current_bias(initial_bias), bias_integration(0, 0, 0) {}
+
+    Vector3d measure(const Vector3d& true_angular_velocity,
+                    double dt) {
+        // Update bias with random walk (1/f noise model)
+        Vector3d bias_change;
+        bias_change.x = BrownianNoiseGenerator(0.0).generate() * random_walk_std * sqrt(dt);
+        bias_change.y = BrownianNoiseGenerator(0.0).generate() * random_walk_std * sqrt(dt);
+        bias_change.z = BrownianNoiseGenerator(0.0).generate() * random_walk_std * sqrt(dt);
+        
+        bias_integration += bias_change;
+        
+        // Add bias drift
+        Vector3d drift;
+        drift.x = BrownianNoiseGenerator(0.0).generate() * bias_drift_std * dt;
+        drift.y = BrownianNoiseGenerator(0.0).generate() * bias_drift_std * dt;
+        drift.z = BrownianNoiseGenerator(0.0).generate() * bias_drift_std * dt;
+        
+        current_bias = bias + bias_integration + drift;
+        
+        // Calculate measurement
+        Vector3d measurement = true_angular_velocity + current_bias;
+        
+        // Add white noise
+        measurement.x += WhiteNoiseGenerator(0.0, noise_std).generate();
+        measurement.y += WhiteNoiseGenerator(0.0, noise_std).generate();
+        measurement.z += WhiteNoiseGenerator(0.0, noise_std).generate();
+        
+        return measurement;
+    }
+};
+```
+
+#### Magnetometer Simulation
+
+**Principle**:
+Measuring magnetic field strength and direction.
+
+**Measurement Model**:
+```
+B_measured = S * R * B_true + bias + noise
+```
+
+Where S is scale factor matrix, R is installation error matrix.
+
+**Magnetometer Model**:
+```cpp
+class Magnetometer {
+private:
+    Vector3d true_field;        // Local magnetic field vector
+    Matrix3d scale_matrix;      // Scale factor matrix
+    Matrix3d install_matrix;    // Installation error matrix
+    Vector3d bias;              // Sensor bias
+    double noise_std;           // Noise standard deviation
+
+public:
+    Magnetometer(const Vector3d& local_field,
+                 const Matrix3d& scale,
+                 const Matrix3d& install,
+                 const Vector3d& sensor_bias,
+                 double noise_std_dev) :
+        true_field(local_field), scale_matrix(scale),
+        install_matrix(install), bias(sensor_bias),
+        noise_std(noise_std_dev) {}
+
+    Vector3d measure(const Matrix3d& rotation_matrix) {
+        // Rotate true field to body frame
+        Vector3d body_field = rotation_matrix.transpose() * true_field;
+        
+        // Apply scale factors and installation errors
+        Vector3d scaled_field = scale_matrix * install_matrix * body_field;
+        
+        // Add bias
+        Vector3d biased_field = scaled_field + bias;
+        
+        // Add noise
+        biased_field.x += WhiteNoiseGenerator(0.0, noise_std).generate();
+        biased_field.y += WhiteNoiseGenerator(0.0, noise_std).generate();
+        biased_field.z += WhiteNoiseGenerator(0.0, noise_std).generate();
+        
+        return biased_field;
+    }
+};
+```
+
+### Force and Torque Sensors
+
+#### Force/Torque Sensor Simulation
+
+**Principle**:
+Measuring forces and torques applied to the robot.
+
+**6-Axis Force/Torque Sensor**:
+Measuring 3 forces and 3 torques.
+
+**Measurement Model**:
+```
+F_measured = F_applied + F_bias + F_noise
+τ_measured = τ_applied + τ_bias + τ_noise
+```
+
+**FT Sensor Model**:
+```cpp
+class ForceTorqueSensor {
+private:
+    Vector3d force_bias;
+    Vector3d torque_bias;
+    double force_noise_std;
+    double torque_noise_std;
+    Matrix6d calibration_matrix;  // 6x6 calibration matrix
+
+public:
+    ForceTorqueSensor(const Vector3d& f_bias,
+                      const Vector3d& t_bias,
+                      double f_noise,
+                      double t_noise,
+                      const Matrix6d& cal_matrix) :
+        force_bias(f_bias), torque_bias(t_bias),
+        force_noise_std(f_noise), torque_noise_std(t_noise),
+        calibration_matrix(cal_matrix) {}
+
+    Wrench measure(const Wrench& applied_wrench) {
+        // Apply calibration matrix
+        Vector6d applied_vec;
+        applied_vec << applied_wrench.force.x, applied_wrench.force.y, 
+                       applied_wrench.force.z, applied_wrench.torque.x,
+                       applied_wrench.torque.y, applied_wrench.torque.z;
+        
+        Vector6d calibrated_vec = calibration_matrix * applied_vec;
+        
+        Wrench calibrated_wrench;
+        calibrated_wrench.force.x = calibrated_vec(0);
+        calibrated_wrench.force.y = calibrated_vec(1);
+        calibrated_wrench.force.z = calibrated_vec(2);
+        calibrated_wrench.torque.x = calibrated_vec(3);
+        calibrated_wrench.torque.y = calibrated_vec(4);
+        calibrated_wrench.torque.z = calibrated_vec(5);
+        
+        // Add bias and noise
+        calibrated_wrench.force.x += force_bias.x + 
+            WhiteNoiseGenerator(0.0, force_noise_std).generate();
+        calibrated_wrench.force.y += force_bias.y + 
+            WhiteNoiseGenerator(0.0, force_noise_std).generate();
+        calibrated_wrench.force.z += force_bias.z + 
+            WhiteNoiseGenerator(0.0, force_noise_std).generate();
+        calibrated_wrench.torque.x += torque_bias.x + 
+            WhiteNoiseGenerator(0.0, torque_noise_std).generate();
+        calibrated_wrench.torque.y += torque_bias.y + 
+            WhiteNoiseGenerator(0.0, torque_noise_std).generate();
+        calibrated_wrench.torque.z += torque_bias.z + 
+            WhiteNoiseGenerator(0.0, torque_noise_std).generate();
+        
+        return calibrated_wrench;
+    }
+};
+```
+
+### Tactile Sensor Simulation
+
+#### Tactile Array Simulation
+
+**Principle**:
+Simulating arrays of tactile sensors for contact detection.
+
+**Implementation**:
+```cpp
+class TactileArray {
+private:
+    std::vector<std::vector<double>> pressure_map;
+    int rows, cols;
+    double resolution;  // Pressure resolution
+    double noise_std;   // Noise standard deviation
+
+public:
+    TactileArray(int r, int c, double res, double noise) :
+        rows(r), cols(c), resolution(res), noise_std(noise) {
+        pressure_map.resize(rows, std::vector<double>(cols, 0.0));
+    }
+
+    void update(const ContactMap& contact_map) {
+        // Update pressure map based on contact
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Calculate pressure at this tactile element
+                pressure_map[i][j] = calculate_pressure(i, j, contact_map);
+                
+                // Add noise
+                pressure_map[i][j] += WhiteNoiseGenerator(0.0, noise_std).generate();
+                
+                // Apply resolution limits
+                pressure_map[i][j] = round(pressure_map[i][j] / resolution) * resolution;
+            }
+        }
+    }
+
+    double getPressure(int row, int col) const {
+        if (row >= 0 && row < rows && col >= 0 && col < cols) {
+            return pressure_map[row][col];
+        }
+        return 0.0;
+    }
+
+    std::vector<std::vector<double>> getPressureMap() const {
+        return pressure_map;
+    }
+
+private:
+    double calculate_pressure(int row, int col, const ContactMap& contact_map) {
+        // Implement pressure distribution calculation
+        // This would involve spatial interpolation of contact forces
+        // over the tactile array surface
+        return 0.0;  // Placeholder
+    }
+};
+```
+
+### Sensor Fusion in Simulation
+
+#### Kalman Filter for Sensor Fusion
+
+**Concept**:
+Combining multiple sensor measurements optimally.
+
+**State Prediction**:
+```
+x̂_{k|k-1} = F_k * x̂_{k-1|k-1} + B_k * u_k
+P_{k|k-1} = F_k * P_{k-1|k-1} * F_k^T + Q_k
+```
+
+**Measurement Update**:
+```
+K_k = P_{k|k-1} * H_k^T * (H_k * P_{k|k-1} * H_k^T + R_k)^(-1)
+x̂_{k|k} = x̂_{k|k-1} + K_k * (z_k - H_k * x̂_{k|k-1})
+P_{k|k} = (I - K_k * H_k) * P_{k|k-1}
+```
+
+**Implementation**:
+```cpp
+class SensorFusionKalmanFilter {
+private:
+    Eigen::VectorXd state;        // State vector
+    Eigen::MatrixXd covariance;   // Error covariance matrix
+    Eigen::MatrixXd process_noise; // Process noise covariance
+    Eigen::MatrixXd measurement_noise; // Measurement noise covariance
+    int state_dim;
+    int measurement_dim;
+
+public:
+    SensorFusionKalmanFilter(int state_size, int meas_size) :
+        state_dim(state_size), measurement_dim(meas_size) {
+        state = Eigen::VectorXd::Zero(state_dim);
+        covariance = Eigen::MatrixXd::Identity(state_dim, state_dim);
+        process_noise = Eigen::MatrixXd::Identity(state_dim, state_dim) * 0.1;
+        measurement_noise = Eigen::MatrixXd::Identity(measurement_dim, measurement_dim) * 0.1;
+    }
+
+    void predict(const Eigen::MatrixXd& F, const Eigen::MatrixXd& B, 
+                 const Eigen::VectorXd& u) {
+        // Predict state
+        state = F * state + B * u;
+        
+        // Predict covariance
+        covariance = F * covariance * F.transpose() + process_noise;
+    }
+
+    void update(const Eigen::VectorXd& z, 
+                const Eigen::MatrixXd& H) {
+        // Innovation
+        Eigen::VectorXd innovation = z - H * state;
+        
+        // Innovation covariance
+        Eigen::MatrixXd innovation_cov = H * covariance * H.transpose() + measurement_noise;
+        
+        // Kalman gain
+        Eigen::MatrixXd kalman_gain = covariance * H.transpose() * innovation_cov.inverse();
+        
+        // Update state
+        state = state + kalman_gain * innovation;
+        
+        // Update covariance
+        covariance = (Eigen::MatrixXd::Identity(state_dim, state_dim) - 
+                     kalman_gain * H) * covariance;
+    }
+
+    Eigen::VectorXd getState() const { return state; }
+    Eigen::MatrixXd getCovariance() const { return covariance; }
+};
+```
+
+### Real-time Sensor Simulation
+
+#### Performance Considerations
+
+**Computational Efficiency**:
+Optimizing sensor simulation for real-time operation.
+
+**Optimization Techniques**:
+- **Pre-computation**: Pre-compute static transformations
+- **Approximation**: Use approximations for complex calculations
+- **Parallelization**: Parallelize sensor computations
+- **Caching**: Cache intermediate results
+
+**Multi-threading**:
+Running sensor simulation in parallel with other systems.
+
+**Implementation**:
+```cpp
+class MultiThreadedSensorSimulation {
+private:
+    std::vector<std::thread> sensor_threads;
+    std::vector<Sensor*> sensors;
+    std::atomic<bool> simulation_running;
+    std::mutex data_mutex;
+    std::condition_variable data_cv;
+
+public:
+    void startSimulation() {
+        simulation_running = true;
+        
+        for (auto& sensor : sensors) {
+            sensor_threads.emplace_back([this, sensor]() {
+                while (simulation_running) {
+                    // Update sensor
+                    sensor->update();
+                    
+                    // Notify other threads
+                    data_cv.notify_all();
+                    
+                    // Sleep for sensor update rate
+                    std::this_thread::sleep_for(
+                        std::chrono::microseconds(1000000 / sensor->getUpdateRate()));
+                }
+            });
+        }
+    }
+
+    void stopSimulation() {
+        simulation_running = false;
+        data_cv.notify_all();
+        
+        for (auto& thread : sensor_threads) {
+            if (thread.joinable()) {
+                thread.join();
+            }
+        }
+    }
+};
+```
+
+#### Sensor Rate Management
+
+**Variable Update Rates**:
+Different sensors operating at different rates.
+
+**Synchronization**:
+Coordinating sensors with different update rates.
+
+**Implementation**:
+```cpp
+class RateManager {
+private:
+    struct SensorData {
+        std::chrono::steady_clock::time_point last_update;
+        int update_rate_hz;
+        std::function<void()> update_function;
+    };
+    
+    std::vector<SensorData> sensors;
+    std::chrono::steady_clock::time_point simulation_start;
+
+public:
+    void addSensor(int rate_hz, std::function<void()> update_func) {
+        SensorData data;
+        data.update_rate_hz = rate_hz;
+        data.update_function = update_func;
+        data.last_update = std::chrono::steady_clock::now();
+        sensors.push_back(data);
+    }
+
+    void updateAll() {
+        auto current_time = std::chrono::steady_clock::now();
+        
+        for (auto& sensor : sensors) {
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                current_time - sensor.last_update).count();
+            
+            int required_ms = 1000 / sensor.update_rate_hz;
+            
+            if (elapsed >= required_ms) {
+                sensor.update_function();
+                sensor.last_update = current_time;
+            }
+        }
+    }
+};
+```
+
+### Sensor Simulation in Different Environments
+
+#### Indoor Environment Simulation
+
+**Characteristics**:
+- **Structured Environment**: Predictable layouts
+- **Artificial Lighting**: Controlled lighting conditions
+- **Smooth Surfaces**: Regular geometric shapes
+- **Limited Range**: Confined spaces
+
+**Simulation Considerations**:
+- **Lighting Effects**: Consistent lighting models
+- **Reflections**: Proper handling of surface reflections
+- **Occlusions**: Predictable occlusion patterns
+- **Calibration**: Well-defined calibration targets
+
+#### Outdoor Environment Simulation
+
+**Characteristics**:
+- **Unstructured Environment**: Natural and unpredictable
+- **Variable Lighting**: Changing lighting conditions
+- **Rough Surfaces**: Irregular geometric shapes
+- **Large Range**: Vast outdoor spaces
+
+**Simulation Considerations**:
+- **Weather Effects**: Rain, snow, fog simulation
+- **Dynamic Lighting**: Sun position and shadows
+- **Atmospheric Effects**: Haze, scattering
+- **Terrain Modeling**: Complex ground surfaces
+
+#### Dynamic Environment Simulation
+
+**Characteristics**:
+- **Moving Objects**: Other agents and obstacles
+- **Changing Conditions**: Evolving environment
+- **Interactions**: Object-object interactions
+- **Uncertainty**: Unknown future states
+
+**Simulation Considerations**:
+- **Prediction**: Predicting object movements
+- **Uncertainty**: Modeling environmental uncertainty
+- **Real-time Updates**: Handling dynamic changes
+- **Safety**: Ensuring sensor data safety
+
+Understanding sensor simulation and perception is essential for creating realistic and effective robotics simulation environments that can properly test and validate perception and control algorithms.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Sensor Simulation and Perception
+
+### Sensor Fundamentals
+- **Characteristics**: Accuracy, precision, resolution, range
+- **Noise Models**: White, pink, and brownian noise
+- **Error Models**: Bias, drift, and calibration errors
+- **Properties**: Update rate, field of view, linearity
+
+### Vision Sensors
+- **Camera Model**: Pinhole camera and intrinsic/extrinsic parameters
+- **Distortion**: Radial and tangential distortion correction
+- **Depth**: Stereo and structured light depth sensing
+- **Imperfections**: Shot noise, dark current, quantization
+
+### Range Sensors
+- **LIDAR**: Time-of-flight measurement and scanning
+- **Ultrasonic**: Sound-based distance measurement
+- **Infrared**: Light reflection-based distance sensing
+- **Noise**: Range-dependent and environmental effects
+
+### Inertial Sensors
+- **Accelerometer**: Linear acceleration with gravity
+- **Gyroscope**: Angular velocity with bias drift
+- **Magnetometer**: Magnetic field with calibration
+- **Integration**: IMU-based state estimation
+
+### Force & Tactile Sensors
+- **Force/Torque**: 6-axis measurement with calibration
+- **Tactile Arrays**: Pressure distribution sensing
+- **Contact Detection**: Contact force and location
+- **Integration**: Force control and manipulation
+
+### Sensor Fusion
+- **Kalman Filter**: Optimal state estimation
+- **Multi-sensor**: Combining different sensor types
+- **State Estimation**: Position, velocity, orientation
+- **Uncertainty**: Managing sensor uncertainty
+
+### Real-time Simulation
+- **Performance**: Computational efficiency considerations
+- **Multi-threading**: Parallel sensor processing
+- **Rate Management**: Different sensor update rates
+- **Synchronization**: Coordinating sensor updates
+
+### Environment Considerations
+- **Indoor**: Structured, controlled lighting
+- **Outdoor**: Unstructured, variable conditions
+- **Dynamic**: Moving objects and changing states
+- **Effects**: Weather, lighting, atmospheric conditions
+
+</div>
+</TabItem>
+</Tabs>

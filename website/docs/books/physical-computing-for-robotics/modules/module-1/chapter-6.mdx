@@ -1,0 +1,960 @@
+---
+id: chapter-6
+title: "System Integration and Real-time Programming"
+module: "Module 1: Foundations of Physical Computing for Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: System Integration and Real-time Programming
+
+### Introduction to System Integration
+
+System integration in physical computing for robotics involves combining various hardware components, sensors, actuators, and software modules into a cohesive, functional system. Real-time programming is essential for ensuring that the integrated system responds to events and executes tasks within strict timing constraints. This chapter explores the challenges and techniques involved in creating integrated robotic systems that operate reliably in real-time.
+
+### System Architecture and Design
+
+#### Modular System Design
+
+**Concept**:
+Breaking down complex systems into smaller, manageable modules.
+
+**Advantages**:
+- **Maintainability**: Easier to maintain and update
+- **Testability**: Modules can be tested independently
+- **Reusability**: Modules can be reused in different systems
+- **Scalability**: Systems can be scaled by adding modules
+
+**Module Characteristics**:
+- **Well-defined Interfaces**: Clear input/output specifications
+- **Encapsulation**: Internal details hidden from other modules
+- **Independence**: Modules operate independently
+- **Cohesion**: Related functionality grouped together
+
+**Example Module Structure**:
+```
+Sensor Module:
+  - Inputs: Raw sensor data
+  - Outputs: Processed sensor data
+  - Functions: Calibration, filtering, conversion
+
+Control Module:
+  - Inputs: Sensor data, commands
+  - Outputs: Actuator commands
+  - Functions: Control algorithms, safety checks
+
+Communication Module:
+  - Inputs: Data to transmit
+  - Outputs: Received data
+  - Functions: Protocol handling, error detection
+```
+
+#### Hardware-Software Co-design
+
+**Concept**:
+Simultaneous design of hardware and software components for optimal performance.
+
+**Considerations**:
+- **Performance**: Hardware acceleration for critical functions
+- **Power**: Power consumption optimization
+- **Cost**: Cost-effective hardware-software partitioning
+- **Flexibility**: Balancing fixed hardware and programmable software
+
+**Partitioning Strategies**:
+- **Algorithm Analysis**: Identify computationally intensive parts
+- **Timing Analysis**: Determine timing-critical functions
+- **Resource Analysis**: Evaluate hardware resources needed
+- **Trade-off Analysis**: Balance performance vs. cost
+
+### Real-time Programming Concepts
+
+#### Real-time System Characteristics
+
+**Definition**:
+A real-time system is one that must respond to external events within a specified time constraint.
+
+**Types of Real-time Systems**:
+- **Hard Real-time**: Missing deadlines results in system failure
+- **Firm Real-time**: Missing deadlines makes results useless
+- **Soft Real-time**: Missing deadlines degrades performance
+
+**Real-time Constraints**:
+- **Periodicity**: Tasks execute at regular intervals
+- **Deadline**: Tasks must complete by specific time
+- **Priority**: Tasks have different importance levels
+- **Synchronization**: Tasks may need to coordinate
+
+#### Task Scheduling
+
+**Scheduling Algorithms**:
+Methods for determining when tasks execute.
+
+**Rate-Monotonic Scheduling (RMS)**:
+Static priority scheduling based on task period.
+
+**Principles**:
+- **Priority Assignment**: Shorter period → higher priority
+- **Preemption**: Higher priority tasks preempt lower priority
+- **Feasibility**: Task set is schedulable if U ≤ n(2^(1/n) - 1)
+
+**Utilization Test**:
+```
+U = Σ(C_i / T_i) ≤ n(2^(1/n) - 1)
+```
+Where C_i is execution time and T_i is period of task i.
+
+**Earliest Deadline First (EDF)**:
+Dynamic priority scheduling based on deadlines.
+
+**Principles**:
+- **Priority Assignment**: Sooner deadline → higher priority
+- **Preemption**: Higher priority tasks preempt lower priority
+- **Optimality**: Optimal for uniprocessor systems
+
+**Utilization Test**:
+```
+U = Σ(C_i / T_i) ≤ 1
+```
+
+**Priority Inheritance**:
+Mechanism to prevent priority inversion.
+
+**Problem**:
+- **Low Priority Task**: Holds shared resource
+- **High Priority Task**: Needs same resource
+- **Medium Priority Task**: Runs continuously
+- **Result**: High priority task blocked by low priority
+
+**Solution**:
+- **Priority Boost**: Low priority task inherits high priority
+- **Resource Release**: Low priority task releases resource
+- **Priority Restore**: Low priority task returns to original priority
+
+#### Real-time Operating Systems (RTOS)
+
+**Concept**:
+Operating systems designed for real-time applications.
+
+**Key Features**:
+- **Deterministic Scheduling**: Predictable task execution
+- **Fast Interrupt Response**: Low interrupt latency
+- **Priority-based Scheduling**: Preemptive priority scheduling
+- **Synchronization Primitives**: Semaphores, mutexes, queues
+
+**Popular RTOS for Robotics**:
+- **FreeRTOS**: Open-source, widely used
+- **Zephyr**: Open-source, IoT-focused
+- **RT-Thread**: Chinese open-source RTOS
+- **VxWorks**: Commercial, safety-critical systems
+
+**Task Management**:
+```c
+// Example FreeRTOS task creation
+void robot_control_task(void *pvParameters) {
+    TickType_t xLastWakeTime = xTaskGetTickCount();
+    
+    while(1) {
+        // Perform control calculations
+        perform_control_loop();
+        
+        // Wait for next cycle
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(10)); // 10ms period
+    }
+}
+
+// Create task
+xTaskCreate(robot_control_task, 
+           "Control", 
+           configMINIMAL_STACK_SIZE, 
+           NULL, 
+           tskIDLE_PRIORITY + 2, 
+           NULL);
+```
+
+### Inter-Process Communication
+
+#### Shared Memory
+
+**Concept**:
+Multiple processes share a common memory region.
+
+**Advantages**:
+- **Speed**: Fastest IPC mechanism
+- **Efficiency**: No data copying required
+- **Flexibility**: Complex data structures can be shared
+
+**Disadvantages**:
+- **Synchronization**: Requires careful synchronization
+- **Safety**: Risk of race conditions
+- **Complexity**: Complex to implement correctly
+
+**Implementation Example**:
+```c
+// Shared memory structure
+typedef struct {
+    volatile uint32_t sensor_data[8];
+    volatile float motor_commands[4];
+    volatile uint8_t system_status;
+} shared_data_t;
+
+// Shared memory declaration
+volatile shared_data_t *shared_mem = (shared_data_t*)0x20000000;  // Fixed address
+
+// Access with mutual exclusion
+void update_sensor_data(uint8_t sensor_idx, uint32_t value) {
+    taskENTER_CRITICAL();  // Disable interrupts
+    shared_mem->sensor_data[sensor_idx] = value;
+    taskEXIT_CRITICAL();   // Re-enable interrupts
+}
+```
+
+#### Message Queues
+
+**Concept**:
+Processes communicate by sending messages through queues.
+
+**Characteristics**:
+- **Asynchronous**: Sender and receiver operate independently
+- **FIFO**: Messages processed in first-in-first-out order
+- **Buffered**: Messages stored until processed
+- **Typed**: Different message types supported
+
+**Implementation Example**:
+```c
+// Message structure
+typedef enum {
+    MSG_SENSOR_DATA,
+    MSG_MOTOR_COMMAND,
+    MSG_SYSTEM_STATUS
+} msg_type_t;
+
+typedef struct {
+    msg_type_t type;
+    uint32_t timestamp;
+    union {
+        struct {
+            uint8_t sensor_id;
+            float value;
+        } sensor_data;
+        
+        struct {
+            uint8_t motor_id;
+            float command;
+        } motor_command;
+        
+        struct {
+            uint8_t status_code;
+            uint8_t priority;
+        } system_status;
+    } data;
+} robot_message_t;
+
+// Queue creation and usage
+QueueHandle_t sensor_queue;
+sensor_queue = xQueueCreate(10, sizeof(robot_message_t));
+
+// Send message
+robot_message_t msg;
+msg.type = MSG_SENSOR_DATA;
+msg.timestamp = xTaskGetTickCount();
+msg.data.sensor_data.sensor_id = 1;
+msg.data.sensor_data.value = 3.14;
+
+xQueueSend(sensor_queue, &msg, portMAX_DELAY);
+
+// Receive message
+xQueueReceive(sensor_queue, &msg, portMAX_DELAY);
+```
+
+#### Semaphores and Mutexes
+
+**Semaphores**:
+Counting semaphores for resource management.
+
+**Applications**:
+- **Resource Counting**: Track available resources
+- **Signaling**: Synchronize between tasks
+- **Access Control**: Limit concurrent access
+
+**Implementation**:
+```c
+SemaphoreHandle_t resource_semaphore;
+resource_semaphore = xSemaphoreCreateCounting(5, 5); // 5 resources, all available
+
+// Acquire resource
+if (xSemaphoreTake(resource_semaphore, pdMS_TO_TICKS(100)) == pdTRUE) {
+    // Use resource
+    use_resource();
+    
+    // Release resource
+    xSemaphoreGive(resource_semaphore);
+}
+```
+
+**Mutexes**:
+Binary semaphores for mutual exclusion.
+
+**Features**:
+- **Priority Inheritance**: Prevent priority inversion
+- **Recursive Locking**: Same task can lock multiple times
+- **Ownership**: Only owner can unlock
+
+**Implementation**:
+```c
+SemaphoreHandle_t resource_mutex;
+resource_mutex = xSemaphoreCreateMutex();
+
+// Critical section
+if (xSemaphoreTake(resource_mutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+    // Critical section code
+    update_shared_resource();
+    
+    xSemaphoreGive(resource_mutex);
+}
+```
+
+### Timing and Synchronization
+
+#### Clock Management
+
+**System Clock**:
+The master timing source for the system.
+
+**Clock Sources**:
+- **Crystal Oscillator**: High accuracy, low drift
+- **RC Oscillator**: Lower accuracy, lower cost
+- **PLL**: Frequency multiplication for high-speed clocks
+- **Internal**: Built-in oscillator, lower accuracy
+
+**Clock Distribution**:
+- **Prescalers**: Divide clock for different peripherals
+- **Gating**: Enable/disable clocks to save power
+- **Selection**: Choose appropriate clock for each peripheral
+
+#### Time Management
+
+**Tick-Based Timing**:
+Using system ticks for time measurement.
+
+**System Tick**:
+- **Frequency**: Usually 1kHz (1ms resolution)
+- **Interrupt**: Generated at regular intervals
+- **Counter**: Maintains system time
+- **Scheduling**: Used for task scheduling
+
+**High-Resolution Timing**:
+For applications requiring precise timing.
+
+**Timer Peripherals**:
+- **Hardware Timers**: Dedicated timer peripherals
+- **Capture/Compare**: Precise timing measurement
+- **PWM Generation**: Precise pulse generation
+- **Quadrature**: Encoder interface
+
+**Implementation Example**:
+```c
+// High-resolution timer
+volatile uint32_t timer_overflow_count = 0;
+
+// Timer overflow interrupt
+void TIMER_OVERFLOW_ISR(void) {
+    timer_overflow_count++;
+    // Clear overflow flag
+}
+
+// Get high-resolution time
+uint64_t get_high_res_time(void) {
+    uint32_t low_word, high_word;
+    
+    // Disable interrupts to prevent race condition
+    uint8_t sreg = SREG;
+    cli();
+    
+    low_word = TCNT1;  // Timer register
+    high_word = timer_overflow_count;
+    
+    // Re-enable interrupts
+    SREG = sreg;
+    
+    return ((uint64_t)high_word << 16) | low_word;
+}
+```
+
+#### Synchronization Techniques
+
+**Atomic Operations**:
+Operations that complete without interruption.
+
+**Implementation**:
+```c
+// Atomic increment
+uint32_t atomic_increment(volatile uint32_t *target) {
+    uint8_t sreg = SREG;
+    cli();  // Disable interrupts
+    (*target)++;
+    SREG = sreg;  // Re-enable interrupts
+    return *target;
+}
+```
+
+**Barriers**:
+Synchronization points where multiple tasks wait.
+
+**Types**:
+- **Thread Barriers**: All threads reach barrier before continuing
+- **Memory Barriers**: Ensure memory ordering
+- **Compiler Barriers**: Prevent compiler optimizations
+
+### Error Handling and Fault Tolerance
+
+#### Error Detection
+
+**Hardware Error Detection**:
+Built-in mechanisms for detecting hardware faults.
+
+**Types**:
+- **Parity Checking**: Detect single-bit errors
+- **ECC Memory**: Detect and correct memory errors
+- **Watchdog Timers**: Detect software hangs
+- **Brown-out Detection**: Detect power supply issues
+
+**Software Error Detection**:
+Programmatic detection of errors.
+
+**Techniques**:
+- **Bounds Checking**: Verify array indices
+- **Input Validation**: Validate input parameters
+- **State Checking**: Verify system state
+- **Checksums**: Detect data corruption
+
+**Implementation Example**:
+```c
+// Watchdog timer for fault detection
+void watchdog_init(void) {
+    // Enable watchdog with 2-second timeout
+    wdt_enable(WDTO_2S);
+}
+
+void watchdog_reset(void) {
+    // Reset watchdog timer
+    wdt_reset();
+}
+
+// Critical task with watchdog
+void critical_task(void) {
+    while(1) {
+        // Perform critical operation
+        perform_critical_operation();
+        
+        // Reset watchdog to prevent reset
+        watchdog_reset();
+        
+        // Check for errors
+        if (error_detected()) {
+            handle_error();
+        }
+    }
+}
+```
+
+#### Fault Tolerance
+
+**Concept**:
+Systems that continue operating despite component failures.
+
+**Techniques**:
+- **Redundancy**: Multiple components for same function
+- **Error Correction**: Detect and correct errors
+- **Failover**: Switch to backup systems
+- **Graceful Degradation**: Reduce functionality rather than fail
+
+**Redundancy Types**:
+- **Hardware Redundancy**: Multiple hardware components
+- **Software Redundancy**: Multiple software implementations
+- **Information Redundancy**: Error detection/correction codes
+- **Time Redundancy**: Retry operations
+
+**Implementation Example**:
+```c
+// Triple Modular Redundancy (TMR)
+typedef struct {
+    int value1;
+    int value2;
+    int value3;
+} tmr_data_t;
+
+int tmr_majority_vote(tmr_data_t *data) {
+    if (data->value1 == data->value2) {
+        return data->value1;
+    } else if (data->value1 == data->value3) {
+        return data->value1;
+    } else if (data->value2 == data->value3) {
+        return data->value2;
+    } else {
+        // All three disagree - return default or error
+        return ERROR_VALUE;
+    }
+}
+```
+
+### System Integration Patterns
+
+#### Publish-Subscribe Pattern
+
+**Concept**:
+Components publish messages to channels, subscribers receive messages from channels.
+
+**Advantages**:
+- **Decoupling**: Publishers and subscribers don't know each other
+- **Scalability**: Easy to add publishers/subscribers
+- **Flexibility**: Multiple subscribers per topic
+- **Asynchronous**: Non-blocking communication
+
+**Implementation**:
+```c
+#define MAX_TOPICS 10
+#define MAX_SUBSCRIBERS 5
+
+typedef struct {
+    char topic_name[32];
+    void (*callback)(void *data);
+    void *context;
+} subscriber_t;
+
+typedef struct {
+    char topic_name[32];
+    subscriber_t subscribers[MAX_SUBSCRIBERS];
+    uint8_t num_subscribers;
+} topic_t;
+
+static topic_t topics[MAX_TOPICS];
+static uint8_t num_topics = 0;
+
+// Subscribe to topic
+uint8_t subscribe(const char *topic_name, 
+                 void (*callback)(void *data), 
+                 void *context) {
+    for (int i = 0; i < num_topics; i++) {
+        if (strcmp(topics[i].topic_name, topic_name) == 0) {
+            if (topics[i].num_subscribers < MAX_SUBSCRIBERS) {
+                topics[i].subscribers[topics[i].num_subscribers].callback = callback;
+                topics[i].subscribers[topics[i].num_subscribers].context = context;
+                topics[i].num_subscribers++;
+                return 1; // Success
+            }
+        }
+    }
+    return 0; // Failure
+}
+
+// Publish message
+void publish(const char *topic_name, void *data) {
+    for (int i = 0; i < num_topics; i++) {
+        if (strcmp(topics[i].topic_name, topic_name) == 0) {
+            for (int j = 0; j < topics[i].num_subscribers; j++) {
+                topics[i].subscribers[j].callback(data);
+            }
+            break;
+        }
+    }
+}
+```
+
+#### Client-Server Pattern
+
+**Concept**:
+Clients request services from servers.
+
+**Applications**:
+- **Sensor Servers**: Provide sensor data to multiple clients
+- **Control Servers**: Execute control commands
+- **Communication Servers**: Handle network communication
+- **File Servers**: Provide file access
+
+**Implementation Example**:
+```c
+// Sensor server
+typedef struct {
+    uint8_t sensor_id;
+    float last_reading;
+    uint32_t last_update;
+    uint8_t is_valid;
+} sensor_server_t;
+
+sensor_server_t sensor_servers[8];
+
+// Server task
+void sensor_server_task(void *pvParameters) {
+    uint8_t sensor_id = *(uint8_t*)pvParameters;
+    
+    while(1) {
+        // Read sensor
+        float reading = read_sensor(sensor_id);
+        
+        // Update server data
+        sensor_servers[sensor_id].last_reading = reading;
+        sensor_servers[sensor_id].last_update = xTaskGetTickCount();
+        sensor_servers[sensor_id].is_valid = 1;
+        
+        // Wait for next reading
+        vTaskDelay(pdMS_TO_TICKS(100)); // 100ms interval
+    }
+}
+
+// Client function
+float get_sensor_reading(uint8_t sensor_id) {
+    if (sensor_servers[sensor_id].is_valid) {
+        return sensor_servers[sensor_id].last_reading;
+    } else {
+        return DEFAULT_SENSOR_VALUE;
+    }
+}
+```
+
+### Performance Optimization
+
+#### Memory Management
+
+**Static Memory Allocation**:
+Allocate memory at compile time.
+
+**Advantages**:
+- **Predictable**: No allocation runtime
+- **No Fragmentation**: Memory layout is fixed
+- **Real-time Safe**: No allocation blocking
+- **Simple**: Easy to understand and debug
+
+**Dynamic Memory Allocation**:
+Allocate memory at runtime.
+
+**Considerations**:
+- **Fragmentation**: Memory fragmentation over time
+- **Allocation Time**: Time to allocate/deallocate
+- **Pool Allocation**: Pre-allocated memory pools
+- **Bounds Checking**: Prevent buffer overflows
+
+**Memory Pool Implementation**:
+```c
+#define POOL_SIZE 1024
+#define BLOCK_SIZE 64
+#define NUM_BLOCKS (POOL_SIZE / BLOCK_SIZE)
+
+typedef struct {
+    uint8_t pool[POOL_SIZE];
+    uint32_t bitmap[NUM_BLOCKS / 32 + 1];  // Bit per block
+} mem_pool_t;
+
+mem_pool_t g_mem_pool;
+
+void* pool_allocate(size_t size) {
+    if (size > BLOCK_SIZE) {
+        return NULL; // Too large
+    }
+    
+    // Find free block
+    for (int i = 0; i < NUM_BLOCKS; i++) {
+        int word_idx = i / 32;
+        int bit_idx = i % 32;
+        
+        if (!(g_mem_pool.bitmap[word_idx] & (1 << bit_idx))) {
+            // Mark as allocated
+            g_mem_pool.bitmap[word_idx] |= (1 << bit_idx);
+            
+            // Return pointer to block
+            return &g_mem_pool.pool[i * BLOCK_SIZE];
+        }
+    }
+    
+    return NULL; // No free blocks
+}
+
+void pool_free(void* ptr) {
+    // Calculate block number
+    int block_num = ((uint8_t*)ptr - g_mem_pool.pool) / BLOCK_SIZE;
+    
+    if (block_num >= 0 && block_num < NUM_BLOCKS) {
+        int word_idx = block_num / 32;
+        int bit_idx = block_num % 32;
+        
+        // Mark as free
+        g_mem_pool.bitmap[word_idx] &= ~(1 << bit_idx);
+    }
+}
+```
+
+#### Interrupt Handling
+
+**Best Practices**:
+- **Keep ISRs Short**: Minimize interrupt service routine time
+- **Defer Processing**: Use main loop for complex processing
+- **Critical Sections**: Protect shared resources
+- **Stack Usage**: Minimize stack usage in ISRs
+
+**Deferred Processing Pattern**:
+```c
+#define MAX_DEFERRED_TASKS 10
+
+typedef struct {
+    void (*handler)(void);
+    uint8_t priority;
+} deferred_task_t;
+
+static deferred_task_t deferred_tasks[MAX_DEFERRED_TASKS];
+static volatile uint8_t pending_tasks = 0;
+
+// ISR - keep it short
+void sensor_isr(void) {
+    // Set flag for main loop
+    pending_tasks |= (1 << SENSOR_TASK_BIT);
+    
+    // Or add to queue
+    add_to_process_queue(SENSOR_PROCESSING);
+}
+
+// Main loop - process deferred tasks
+void process_deferred_tasks(void) {
+    if (pending_tasks & (1 << SENSOR_TASK_BIT)) {
+        pending_tasks &= ~(1 << SENSOR_TASK_BIT);
+        handle_sensor_processing();
+    }
+    
+    // Process other tasks...
+}
+```
+
+### Testing and Validation
+
+#### Unit Testing
+
+**Concept**:
+Testing individual components in isolation.
+
+**Framework**:
+- **Unity**: C unit testing framework
+- **CMock**: Mock object framework
+- **Ceedling**: Build and test framework
+- **Custom**: Simple assertion-based testing
+
+**Example Test**:
+```c
+// Function to test
+int calculate_pid_output(float error, float kp, float ki, float kd) {
+    static float integral = 0;
+    static float prev_error = 0;
+    
+    integral += error;
+    float derivative = error - prev_error;
+    
+    float output = kp * error + ki * integral + kd * derivative;
+    
+    prev_error = error;
+    return (int)output;
+}
+
+// Test function
+void test_pid_calculate(void) {
+    float error = 1.0;
+    float kp = 1.0, ki = 0.1, kd = 0.01;
+    
+    int output = calculate_pid_output(error, kp, ki, kd);
+    
+    // Simple assertion
+    TEST_ASSERT_TRUE(output > 0);  // Should be positive for positive error
+    
+    // More specific assertions
+    TEST_ASSERT_INT_WITHIN(10, 110, output);  // Should be around 110
+}
+```
+
+#### Integration Testing
+
+**Concept**:
+Testing interaction between multiple components.
+
+**Approaches**:
+- **Top-down**: Test from high-level to low-level
+- **Bottom-up**: Test from low-level to high-level
+- **Sandwich**: Combination of both approaches
+- **Big Bang**: Test all components together
+
+#### Hardware-in-the-Loop Testing
+
+**Concept**:
+Testing with actual hardware components connected to simulation.
+
+**Components**:
+- **Hardware**: Real sensors, actuators, microcontrollers
+- **Simulation**: Simulated environment and dynamics
+- **Interfaces**: Connections between real and simulated
+- **Validation**: Compare real vs. simulated behavior
+
+### Safety and Security Considerations
+
+#### Safety Design
+
+**Safety Standards**:
+- **IEC 61508**: Functional safety for electrical/electronic systems
+- **ISO 13482**: Safety for personal care robots
+- **ISO 10218**: Safety for industrial robots
+- **ISO 21434**: Cybersecurity for road vehicles
+
+**Safety Measures**:
+- **Fail-safe**: System defaults to safe state on failure
+- **Graceful Degradation**: System continues with reduced functionality
+- **Error Recovery**: Automatic recovery from errors
+- **Redundancy**: Multiple systems for critical functions
+
+#### Security Design
+
+**Threat Model**:
+Identifying potential security threats.
+
+**Considerations**:
+- **Data Integrity**: Protecting sensor and control data
+- **Access Control**: Limiting access to system functions
+- **Authentication**: Verifying identity of communicators
+- **Encryption**: Protecting sensitive communications
+
+**Implementation**:
+```c
+// Simple access control
+typedef enum {
+    ACCESS_LEVEL_NONE = 0,
+    ACCESS_LEVEL_USER = 1,
+    ACCESS_LEVEL_ADMIN = 2,
+    ACCESS_LEVEL_SUPER = 3
+} access_level_t;
+
+typedef struct {
+    uint32_t user_id;
+    access_level_t level;
+    uint32_t session_token;
+} user_context_t;
+
+uint8_t check_access(access_level_t required_level, user_context_t *context) {
+    return (context->level >= required_level);
+}
+
+// Example usage
+void critical_system_function(user_context_t *user) {
+    if (!check_access(ACCESS_LEVEL_ADMIN, user)) {
+        return; // Access denied
+    }
+    
+    // Perform critical function
+    execute_critical_operation();
+}
+```
+
+### Real-world Integration Challenges
+
+#### Electromagnetic Interference (EMI)
+
+**Sources**:
+- **Switching Power Supplies**: High-frequency switching noise
+- **Motor Commutation**: Electrical noise from motors
+- **Digital Switching**: Noise from digital circuits
+- **Radio Transmitters**: Interference from RF sources
+
+**Mitigation Techniques**:
+- **Shielding**: Enclose sensitive circuits
+- **Filtering**: Add filters to power and signal lines
+- **Grounding**: Proper grounding techniques
+- **Layout**: Careful PCB layout for EMI reduction
+
+#### Power Supply Design
+
+**Considerations**:
+- **Voltage Regulation**: Stable voltage under load changes
+- **Ripple and Noise**: Minimize power supply noise
+- **Efficiency**: High efficiency to reduce heat generation
+- **Transient Response**: Fast response to load changes
+
+**Power Supply Topologies**:
+- **Linear Regulators**: Low noise, low efficiency
+- **Switching Regulators**: High efficiency, more complex
+- **LDO Regulators**: Low dropout voltage
+- **DC-DC Converters**: Efficient voltage conversion
+
+#### Thermal Management
+
+**Heat Sources**:
+- **Power Components**: Regulators, drivers, processors
+- **Motors**: Heat generation during operation
+- **Processors**: Heat from computation
+- **Ambient**: Environmental temperature effects
+
+**Cooling Methods**:
+- **Conduction**: Heat transfer through materials
+- **Convection**: Heat transfer through air/water flow
+- **Radiation**: Heat transfer through electromagnetic waves
+- **Heat Sinks**: Increase surface area for cooling
+
+Understanding system integration and real-time programming is essential for creating robust, reliable robotic systems that can operate effectively in real-world environments with strict timing constraints.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: System Integration and Real-time Programming
+
+### System Architecture
+- **Modular Design**: Breaking systems into manageable modules
+- **Co-design**: Hardware-software co-design for optimization
+- **Interfaces**: Well-defined module interfaces
+- **Scalability**: Designing for future expansion
+
+### Real-time Concepts
+- **Timing Constraints**: Hard, firm, and soft real-time systems
+- **Scheduling**: RMS, EDF, and priority inheritance
+- **RTOS**: Real-time operating systems and task management
+- **Determinism**: Predictable timing behavior
+
+### Communication & Synchronization
+- **IPC**: Shared memory, message queues, pipes
+- **Semaphores**: Resource counting and signaling
+- **Mutexes**: Mutual exclusion with priority inheritance
+- **Timing**: System ticks, high-resolution timers
+
+### Error Handling
+- **Detection**: Hardware and software error detection
+- **Tolerance**: Redundancy and fault tolerance
+- **Recovery**: Error recovery and fail-safe mechanisms
+- **Validation**: Testing and validation approaches
+
+### Integration Patterns
+- **Publish-Subscribe**: Decoupled message passing
+- **Client-Server**: Request-response architecture
+- **Event-Driven**: Event-based system design
+- **Layered**: Abstraction layers for complexity
+
+### Performance
+- **Memory**: Static vs. dynamic allocation
+- **Interrupts**: Efficient interrupt handling
+- **Optimization**: Code and algorithm optimization
+- **Profiling**: Performance measurement and analysis
+
+### Safety & Security
+- **Standards**: Safety and security standards
+- **Design**: Fail-safe and secure design principles
+- **Validation**: Safety validation and testing
+- **Access Control**: Authentication and authorization
+
+### Real-world Challenges
+- **EMI**: Electromagnetic interference mitigation
+- **Power**: Power supply design and management
+- **Thermal**: Heat management and cooling
+- **Integration**: Combining hardware and software components
+
+</div>
+</TabItem>
+</Tabs>

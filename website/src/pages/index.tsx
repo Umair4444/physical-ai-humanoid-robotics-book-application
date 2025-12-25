@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import NewsletterSignup from '../components/NewsletterSignup/NewsletterSignup';
 import Features from '../components/Features/Features';
 import { Button } from '../components/Button/Button';
+import { featuredBooks } from '../data/bookData';
 
 const HomePage: React.FC = () => {
   const { isDarkMode } = useTheme();
@@ -14,45 +15,16 @@ const HomePage: React.FC = () => {
     'monthly'
   );
 
-  // Sample book data
-  const books = [
-    {
-      id: 'book-1',
-      title: 'Introduction to AI Robotics',
-      description:
-        'Learn the fundamentals of artificial intelligence in robotics applications',
-      coverImage: '/img/book1-cover.jpg',
-      rating: 4.8,
-      price: 29.99,
-    },
-    {
-      id: 'book-2',
-      title: 'Humanoid Design Principles',
-      description:
-        'Deep dive into the design and engineering of humanoid robots',
-      coverImage: '/img/book2-cover.jpg',
-      rating: 4.7,
-      price: 39.99,
-    },
-    {
-      id: 'book-3',
-      title: 'Neural Networks in Motion',
-      description:
-        'Explore how neural networks enable complex robotic movements',
-      coverImage: '/img/book3-cover.jpg',
-      rating: 4.9,
-      price: 44.99,
-    },
-    {
-      id: 'book-4',
-      title: 'Ethics in AI Robotics',
-      description:
-        'Critical examination of ethical considerations in AI-powered robotics',
-      coverImage: '/img/book4-cover.jpg',
-      rating: 4.6,
-      price: 34.99,
-    },
-  ];
+  // Use featured books from shared data
+  const books = featuredBooks.map(book => ({
+    id: `book-${book.id}`,
+    title: book.title,
+    description: book.description,
+    coverImage: book.image || '/img/book-default.jpg',
+    rating: book.rating || 4.5,
+    price: book.price || 29.99,
+    href: book.href || '/books',
+  }));
 
   const pricingTiers = [
     {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTheme } from '@site/src/contexts/ThemeContext';
-import { main } from 'framer-motion/client';
 import Link from '@docusaurus/Link';
 
 interface Book {
@@ -61,7 +60,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
     <>
       <Link href={book.href}>
         <div
-          className={`rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 ${
+          className={`rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 flex flex-col h-full ${
             isDarkMode ? 'bg-gray-800' : 'bg-white'
           }`}
         >
@@ -72,14 +71,14 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="p-6">
+          <div className="p-6 flex-grow flex flex-col">
             <h3
               className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
             >
               {book.title}
             </h3>
             <p
-              className={`mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+              className={`mb-4 flex-grow ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
             >
               {book.description}
             </p>
@@ -98,7 +97,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
                 </div>
               </div>
             </div>
-            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors">
+            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors mt-auto">
               Learn More
             </button>
           </div>

@@ -1,0 +1,352 @@
+---
+id: chapter-1
+title: "Introduction to Physical Computing for Robotics"
+module: "Module 1: Foundations of Physical Computing for Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Introduction to Physical Computing for Robotics
+
+### What is Physical Computing?
+
+Physical computing is an approach to learning computational topics that focuses on the interaction between software and the physical world. In robotics, physical computing involves the integration of sensors, actuators, microcontrollers, and software to create systems that can perceive their environment, process information, and take physical actions.
+
+Physical computing in robotics encompasses several key elements:
+- **Sensing**: Detecting physical properties of the environment
+- **Processing**: Interpreting sensor data and making decisions
+- **Actuation**: Taking physical actions based on decisions
+- **Interfacing**: Connecting hardware components to software systems
+
+### Historical Context and Evolution
+
+The field of physical computing has evolved alongside the development of robotics and embedded systems.
+
+**Early Foundations (1940s-1970s)**:
+- Development of basic electronic circuits and components
+- Early computer-controlled machines
+- Focus on discrete components and analog systems
+
+**Microcontroller Era (1970s-1990s)**:
+- Introduction of microprocessors and microcontrollers
+- Development of programmable logic controllers (PLCs)
+- Rise of embedded systems in industrial applications
+
+**Modern Physical Computing (1990s-2000s)**:
+- Arduino and similar platforms democratize physical computing
+- Integration of sensors and actuators with simple programming
+- Focus on prototyping and rapid development
+
+**Contemporary Robotics (2000s-present)**:
+- Sophisticated embedded systems for robotics
+- Integration of AI and machine learning
+- Cloud connectivity and IoT integration
+- Real-time operating systems for robotics
+
+### Core Components of Physical Computing Systems
+
+#### Microcontrollers
+Microcontrollers are the "brains" of most physical computing systems, integrating a processor, memory, and input/output interfaces on a single chip.
+
+**Key Features**:
+- **Processing Unit**: Executes program instructions
+- **Memory**: Stores program code and data
+- **I/O Ports**: Connect to sensors and actuators
+- **Clock**: Provides timing reference for operations
+
+**Common Platforms**:
+- **Arduino**: Popular for prototyping and education
+- **Raspberry Pi**: More powerful with Linux OS capabilities
+- **ESP32**: Integrated Wi-Fi and Bluetooth connectivity
+- **STM32**: Industrial-grade microcontrollers
+- **Teensy**: High-performance USB microcontrollers
+
+#### Sensors
+Sensors convert physical properties into electrical signals that can be processed by microcontrollers.
+
+**Types of Sensors**:
+- **Position Sensors**: Encoders, potentiometers, GPS
+- **Motion Sensors**: Accelerometers, gyroscopes, IMUs
+- **Environmental Sensors**: Temperature, humidity, pressure
+- **Proximity Sensors**: Ultrasonic, infrared, LIDAR
+- **Force Sensors**: Load cells, force-sensitive resistors
+- **Vision Sensors**: Cameras, photodiodes, phototransistors
+
+#### Actuators
+Actuators convert electrical signals into physical actions.
+
+**Types of Actuators**:
+- **Motors**: DC, stepper, servo motors for rotation
+- **Solenoids**: Linear motion actuators
+- **Pneumatic/Hydraulic**: High-force linear or rotary actuators
+- **LEDs/Lights**: Visual feedback and communication
+- **Speakers/Buzzers**: Audio feedback and communication
+- **Heaters/Coolers**: Thermal control
+
+### Programming Physical Computing Systems
+
+#### Hardware-Software Interface
+Physical computing requires understanding how software commands translate to hardware actions and vice versa.
+
+**Digital I/O**:
+- **Digital Output**: Controlling devices that have on/off states
+- **Digital Input**: Reading switches, buttons, or digital sensors
+- **Pull-up/Pull-down Resistors**: Ensuring stable input states
+
+**Analog I/O**:
+- **Analog-to-Digital Conversion (ADC)**: Reading analog sensor values
+- **Digital-to-Analog Conversion (DAC)**: Creating analog outputs
+- **Pulse Width Modulation (PWM)**: Simulating analog outputs digitally
+
+#### Real-time Considerations
+Physical computing systems often have real-time constraints where timing is critical.
+
+**Timing Requirements**:
+- **Control Loop Frequency**: How often control decisions are made
+- **Sensor Reading Intervals**: Timing for data acquisition
+- **Actuator Response Time**: How quickly actions must be executed
+- **Communication Delays**: Timing for data transmission
+
+### Circuit Design and Electronics
+
+#### Basic Electronic Components
+Understanding fundamental components is essential for physical computing.
+
+**Passive Components**:
+- **Resistors**: Limit current flow and divide voltages
+- **Capacitors**: Store electrical charge and filter signals
+- **Inductors**: Store energy in magnetic fields (less common in robotics)
+
+**Active Components**:
+- **Diodes**: Allow current flow in one direction
+- **Transistors**: Act as switches or amplifiers
+- **Integrated Circuits**: Complex functions in single packages
+
+#### Circuit Design Principles
+Proper circuit design ensures reliable operation and prevents damage to components.
+
+**Power Considerations**:
+- **Voltage Requirements**: Ensuring components receive correct voltage
+- **Current Capacity**: Providing adequate current for all components
+- **Power Regulation**: Using voltage regulators and converters
+- **Heat Dissipation**: Managing thermal effects
+
+**Signal Integrity**:
+- **Noise Reduction**: Minimizing electrical interference
+- **Grounding**: Proper ground connections and layouts
+- **Filtering**: Removing unwanted frequencies from signals
+- **Shielding**: Protecting sensitive signals
+
+### Communication Protocols
+
+#### Serial Communication
+Serial protocols are commonly used to connect microcontrollers with sensors and other devices.
+
+**UART/Serial**:
+- Asynchronous communication using TX/RX lines
+- Configurable baud rates for data transmission
+- Simple but requires separate lines for each connection
+
+**SPI (Serial Peripheral Interface)**:
+- Synchronous communication with master-slave architecture
+- Faster than UART but requires more pins
+- Multiple slaves can share the same bus
+
+**I2C (Inter-Integrated Circuit)**:
+- Two-wire synchronous communication
+- Supports multiple masters and slaves
+- Built-in addressing for multiple devices
+
+#### Wireless Communication
+Wireless protocols enable remote control and monitoring of robotic systems.
+
+**Common Protocols**:
+- **Wi-Fi**: High bandwidth, long range, IP-based
+- **Bluetooth**: Short range, low power, device pairing
+- **Zigbee**: Mesh networking, low power
+- **LoRa**: Long range, low power, wide area networks
+
+### Safety and Reliability
+
+#### Electrical Safety
+Safety considerations are paramount when working with physical computing systems.
+
+**Power Safety**:
+- Proper fusing and current limiting
+- Isolation between high and low voltage systems
+- Protection against short circuits
+- Safe handling of high voltages
+
+**Component Protection**:
+- Reverse voltage protection
+- Overcurrent protection
+- Electrostatic discharge (ESD) protection
+- Thermal protection
+
+#### System Reliability
+Robotic systems must operate reliably in potentially harsh environments.
+
+**Design for Reliability**:
+- Redundant sensors for critical functions
+- Fail-safe mechanisms and error handling
+- Environmental protection (water, dust, temperature)
+- Regular system health monitoring
+
+### Development Tools and Environments
+
+#### Integrated Development Environments (IDEs)
+IDEs provide tools for writing, debugging, and uploading code to microcontrollers.
+
+**Popular Options**:
+- **Arduino IDE**: Simple interface for Arduino platforms
+- **PlatformIO**: Cross-platform development environment
+- **Visual Studio Code**: Extensible with robotics extensions
+- **Processing**: For rapid prototyping and visualization
+
+#### Debugging Tools
+Effective debugging tools are essential for developing physical computing systems.
+
+**Hardware Tools**:
+- **Multimeters**: Measuring voltage, current, and resistance
+- **Oscilloscopes**: Analyzing signal timing and quality
+- **Logic Analyzers**: Capturing and analyzing digital signals
+- **Power Supplies**: Providing stable power for testing
+
+**Software Tools**:
+- **Serial Monitors**: Reading debug messages from microcontrollers
+- **Simulation Environments**: Testing code before hardware deployment
+- **Version Control**: Managing code changes and collaboration
+
+### Applications in Robotics
+
+#### Mobile Robotics
+Physical computing enables robots to navigate and interact with their environment.
+
+**Components**:
+- Motor controllers for locomotion
+- Distance sensors for navigation
+- IMUs for orientation
+- Communication modules for remote control
+
+#### Manipulation Robots
+Robots that interact with objects require precise control of actuators and sensors.
+
+**Components**:
+- Servo motors for precise positioning
+- Force sensors for grasp control
+- Vision systems for object recognition
+- Tactile sensors for fine manipulation
+
+#### Human-Robot Interaction
+Robots that interact with humans need sensors and actuators for communication.
+
+**Components**:
+- Cameras and microphones for perception
+- Speakers and displays for output
+- Haptic interfaces for tactile feedback
+- Safety systems for human protection
+
+### Design Considerations
+
+#### Power Management
+Efficient power management is critical for mobile and autonomous robots.
+
+**Strategies**:
+- Low-power design techniques
+- Power regulation and conversion
+- Battery management and monitoring
+- Energy harvesting when possible
+
+#### Modularity
+Designing modular systems allows for easier development, testing, and maintenance.
+
+**Benefits**:
+- Independent testing of subsystems
+- Easier troubleshooting and repair
+- Reusability of components across projects
+- Parallel development of subsystems
+
+#### Scalability
+Systems should be designed to accommodate future enhancements and modifications.
+
+**Considerations**:
+-预留足够的I/O pins and processing capacity
+- Flexible communication architectures
+- Expandable power systems
+- Modular software architecture
+
+### Future Directions
+
+#### Edge Computing
+Bringing more processing power to the edge of robotic systems for reduced latency and improved autonomy.
+
+**Advantages**:
+- Real-time processing capabilities
+- Reduced reliance on cloud connectivity
+- Improved privacy and security
+- Enhanced reliability
+
+#### AI Integration
+Incorporating artificial intelligence directly into physical computing platforms.
+
+**Trends**:
+- Edge AI chips for embedded systems
+- TinyML for microcontroller-based AI
+- Neuromorphic computing platforms
+- Adaptive learning systems
+
+#### IoT Integration
+Connecting robotic systems to the Internet of Things for enhanced functionality.
+
+**Capabilities**:
+- Remote monitoring and control
+- Data collection and analytics
+- Integration with smart environments
+- Collaborative multi-robot systems
+
+Understanding these foundational concepts sets the stage for deeper exploration of specific components and applications in physical computing for robotics.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Physical computing integrates sensors, actuators, microcontrollers, and software for robotic systems.
+- Core components include microcontrollers, sensors, and actuators.
+- Programming involves hardware-software interfaces and real-time considerations.
+- Circuit design requires understanding of basic electronic components and principles.
+- Communication protocols enable device connectivity and networking.
+- Safety and reliability are paramount in physical computing systems.
+- Applications span mobile, manipulation, and interaction robotics.
+- Future directions include edge computing and AI integration.
+
+</div>
+</TabItem>
+</Tabs>

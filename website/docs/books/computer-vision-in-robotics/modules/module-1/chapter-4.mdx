@@ -1,0 +1,262 @@
+---
+id: chapter-4
+title: "Image Preprocessing and Enhancement"
+module: "Module 1: Foundations of Computer Vision in Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Image Preprocessing and Enhancement
+
+### Introduction to Image Preprocessing
+
+Image preprocessing is a critical step in robotic vision systems that prepares raw camera data for higher-level processing tasks such as feature extraction, object recognition, and scene understanding. The quality of preprocessing directly impacts the performance of subsequent vision algorithms, making it essential for robust robotic applications.
+
+Preprocessing tasks typically include:
+- **Noise reduction**: Removing sensor and environmental noise
+- **Contrast enhancement**: Improving image visibility
+- **Geometric correction**: Fixing lens distortions and perspective
+- **Normalization**: Standardizing images for consistent processing
+
+### Noise and Its Types
+
+Noise in digital images can originate from various sources and significantly degrade the performance of computer vision algorithms. Understanding and mitigating noise is crucial for robust robotic vision.
+
+#### Types of Noise
+
+**Gaussian Noise**:
+- Random variations following a normal distribution
+- Common in camera sensors due to thermal effects
+- Appears as fine-grained variations across the image
+
+**Salt and Pepper Noise**:
+- Random black and white pixels scattered throughout
+- Often caused by sensor errors or data transmission
+- Appears as sparse bright and dark dots
+
+**Poisson Noise**:
+- Signal-dependent noise related to photon counting
+- More prominent in low-light conditions
+- Variance increases with signal intensity
+
+**Speckle Noise**:
+- Multiplicative noise common in coherent imaging systems
+- Particularly relevant in ultrasound and radar-based robotics
+- Creates granular patterns in the image
+
+### Noise Reduction Techniques
+
+#### Linear Filters
+
+**Gaussian Filter**:
+A linear filter that uses a Gaussian kernel to smooth images, effectively reducing Gaussian noise while preserving edges better than simple averaging.
+
+```
+# Example kernel (3x3):
+1/16 * [1 2 1]
+       [2 4 2]
+       [1 2 1]
+```
+
+**Mean Filter**:
+Simple averaging of neighboring pixels, effective for uniform noise but tends to blur edges.
+
+#### Non-linear Filters
+
+**Median Filter**:
+Excellent for removing salt and pepper noise by replacing each pixel with the median value of its neighborhood, preserving edges while removing impulse noise.
+
+**Bilateral Filter**:
+Smooths images while preserving edges by considering both spatial proximity and intensity similarity, making it suitable for robotic applications where edge preservation is critical.
+
+**Non-local Means**:
+Considers similarities across the entire image rather than just local neighborhoods, providing superior denoising for texture-rich robotic environments.
+
+### Contrast Enhancement
+
+Contrast enhancement improves the visibility of features in images, making them more suitable for subsequent processing steps.
+
+#### Histogram Equalization
+
+**Global Histogram Equalization**:
+Redistributes intensity values to achieve a uniform histogram, improving overall contrast but potentially over-enhancing some regions.
+
+**Adaptive Histogram Equalization (AHE)**:
+Applies histogram equalization to small regions of the image, providing better local contrast enhancement.
+
+**Contrast Limited Adaptive Histogram Equalization (CLAHE)**:
+Improves upon AHE by limiting the contrast enhancement to prevent noise amplification, particularly important in robotic vision systems.
+
+#### Other Enhancement Techniques
+
+**Gamma Correction**:
+Adjusts the brightness of images using a power-law transformation, useful for correcting non-linearities in display systems or sensor responses.
+
+**Unsharp Masking**:
+Enhances edges by subtracting a blurred version of the image from the original, making features more distinct for robotic perception.
+
+### Geometric Transformations
+
+Geometric transformations correct for various distortions and align images for further processing.
+
+#### Lens Distortion Correction
+
+**Radial Distortion**:
+Corrects for barrel and pincushion distortions using polynomial models based on camera calibration parameters.
+
+**Tangential Distortion**:
+Corrects for misalignment between lens and image plane, using additional calibration parameters.
+
+#### Perspective Correction
+
+**Homography**:
+Mathematical transformation that maps points from one plane to another, useful for correcting perspective distortions when viewing planar surfaces.
+
+**Affine Transformation**:
+Preserves parallel lines while allowing for scaling, rotation, and shearing, useful for correcting geometric distortions.
+
+### Image Registration
+
+Image registration aligns multiple images of the same scene taken from different viewpoints, times, or sensors, crucial for robotic applications involving multiple cameras or temporal sequences.
+
+#### Feature-Based Registration
+
+**Key Point Detection**:
+Identifying distinctive points in images that can be matched across different views.
+
+**Descriptor Computation**:
+Creating robust representations of local image patches around key points.
+
+**Matching and RANSAC**:
+Finding correspondences between images and using RANSAC to estimate geometric transformations robustly.
+
+#### Direct Registration
+
+**Intensity-Based Methods**:
+Optimizing alignment based on pixel intensity similarities without explicit feature detection.
+
+**Phase Correlation**:
+Frequency-domain method for estimating translation between images, fast and robust for certain applications.
+
+### Normalization Techniques
+
+Image normalization standardizes images to reduce variations due to lighting, sensor differences, or other factors.
+
+#### Intensity Normalization
+
+**Histogram Normalization**:
+Adjusting image intensities to match a reference histogram, useful when consistent appearance is needed.
+
+**Z-score Normalization**:
+Standardizing pixel values to have zero mean and unit variance, making images more suitable for machine learning algorithms.
+
+#### Spatial Normalization
+
+**Size Normalization**:
+Resizing images to a consistent resolution, necessary when processing images from cameras with different resolutions.
+
+**Orientation Normalization**:
+Correcting for rotation differences, important when objects may appear at various orientations.
+
+### Real-time Considerations for Robotics
+
+Robotic vision systems often operate under strict real-time constraints, making computational efficiency a critical consideration for preprocessing algorithms.
+
+#### Computational Complexity
+
+**Filter Separability**:
+Using separable filters to reduce 2D convolution complexity from O(n²) to O(2n), crucial for real-time applications.
+
+**Approximation Techniques**:
+Trading some accuracy for computational speed, such as using box filters instead of Gaussian filters.
+
+#### Pipeline Optimization
+
+**Early Processing**:
+Performing preprocessing early in the pipeline to improve subsequent processing efficiency.
+
+**Parallel Processing**:
+Utilizing SIMD instructions or GPU acceleration for preprocessing operations.
+
+### Quality Assessment
+
+Evaluating preprocessing effectiveness is important for robotic systems to adapt to changing conditions.
+
+#### Objective Metrics
+
+**Peak Signal-to-Noise Ratio (PSNR)**:
+Measures the ratio between the maximum possible power of a signal and the power of corrupting noise.
+
+**Structural Similarity Index (SSIM)**:
+Measures perceived image quality by comparing structural information between images.
+
+#### Application-Specific Metrics
+
+**Feature Preservation**:
+Ensuring that preprocessing does not remove important features needed for subsequent tasks.
+
+**Task Performance**:
+Measuring how preprocessing affects the performance of the ultimate robotic task, such as object recognition accuracy.
+
+### Challenges in Robotic Vision Preprocessing
+
+#### Dynamic Environments
+Robots operate in changing environments where preprocessing parameters may need continuous adaptation.
+
+#### Resource Constraints
+Embedded robotic systems have limited computational and power resources, requiring efficient preprocessing implementations.
+
+#### Multi-sensor Integration
+Robots often use multiple cameras and sensors with different characteristics, requiring sensor-specific preprocessing approaches.
+
+Understanding and implementing effective preprocessing techniques is fundamental for creating robust computer vision systems in robotics that can handle real-world conditions and variations.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Image Preprocessing and Enhancement
+
+### Key Concepts
+- **Preprocessing**: Critical step preparing images for higher-level vision tasks
+- **Noise Reduction**: Removing sensor and environmental noise
+- **Enhancement**: Improving image quality for better feature extraction
+
+### Noise Types
+- **Gaussian**: Random variations following normal distribution
+- **Salt & Pepper**: Random bright/dark pixels
+- **Poisson**: Signal-dependent photon counting noise
+- **Speckle**: Multiplicative noise in coherent systems
+
+### Filtering Techniques
+- **Linear**: Gaussian and mean filters for general smoothing
+- **Non-linear**: Median, bilateral, and non-local means for edge preservation
+- **Applications**: Different filters for different noise types
+
+### Enhancement Methods
+- **Histogram Equalization**: Global and adaptive approaches
+- **Gamma Correction**: Non-linear brightness adjustment
+- **Unsharp Masking**: Edge enhancement technique
+
+### Geometric Corrections
+- **Lens Distortion**: Radial and tangential distortion correction
+- **Perspective**: Homography and affine transformations
+- **Registration**: Aligning multiple images or views
+
+### Real-time Considerations
+- **Efficiency**: Computational complexity management
+- **Optimization**: Pipeline and parallel processing approaches
+- **Constraints**: Resource limitations in robotic systems
+
+</div>
+</TabItem>
+</Tabs>

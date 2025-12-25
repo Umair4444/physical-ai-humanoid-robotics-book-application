@@ -1,0 +1,619 @@
+---
+id: chapter-2
+title: "Sensors and Sensing Technologies"
+module: "Module 1: Foundations of Physical Computing for Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Sensors and Sensing Technologies
+
+### Introduction to Sensors in Robotics
+
+Sensors are the eyes, ears, and skin of robotic systems, providing crucial information about the robot's internal state and external environment. In physical computing for robotics, sensors serve as the interface between the physical world and the digital processing systems that control robot behavior. Understanding sensor technologies, their capabilities, limitations, and integration techniques is fundamental to building effective robotic systems.
+
+### Classification of Sensors
+
+#### By Function
+
+**Proprioceptive Sensors**:
+Sensors that measure the robot's internal state and configuration.
+
+**Examples**:
+- **Encoders**: Measure joint angles and motor positions
+- **Inertial Measurement Units (IMUs)**: Measure orientation and acceleration
+- **Current Sensors**: Measure motor current consumption
+- **Temperature Sensors**: Monitor system temperature
+
+**Advantages**:
+- **Reliability**: Internal measurements are generally reliable
+- **Speed**: Fast response times for internal state
+- **Integration**: Easy to integrate into robot structure
+- **Cost**: Often cost-effective for internal sensing
+
+**Limitations**:
+- **Environment**: Don't provide information about external environment
+- **Accuracy**: May drift or require calibration
+- **Range**: Limited to internal measurements
+- **Context**: Don't provide context about surroundings
+
+**Exteroceptive Sensors**:
+Sensors that measure the external environment.
+
+**Examples**:
+- **Cameras**: Visual information about environment
+- **LIDAR**: Distance measurements to objects
+- **Ultrasonic Sensors**: Distance measurement using sound
+- **Infrared Sensors**: Distance and proximity sensing
+
+**Advantages**:
+- **Environment**: Provide information about external world
+- **Navigation**: Essential for navigation and mapping
+- **Interaction**: Enable interaction with environment
+- **Perception**: Support complex perception tasks
+
+**Limitations**:
+- **Environmental Sensitivity**: Affected by lighting, weather, etc.
+- **Range**: Limited range of operation
+- **Interference**: Can be affected by other sources
+- **Processing**: Often require significant processing
+
+#### By Physical Principle
+
+**Optical Sensors**:
+Sensors that use light to measure properties.
+
+**Types**:
+- **Photodiodes**: Measure light intensity
+- **Cameras**: Capture images and video
+- **LIDAR**: Measure distance using laser light
+- **Optical Encoders**: Measure position using light
+
+**Characteristics**:
+- **High Resolution**: Can provide high-resolution measurements
+- **Non-contact**: Don't require physical contact
+- **Fast Response**: Generally fast response times
+- **Light Sensitivity**: Affected by lighting conditions
+
+**Electromagnetic Sensors**:
+Sensors that use electromagnetic fields.
+
+**Types**:
+- **Hall Effect Sensors**: Measure magnetic fields
+- **Inductive Sensors**: Measure proximity using electromagnetic fields
+- **Magnetometers**: Measure magnetic field strength
+- **RFID Readers**: Read radio frequency tags
+
+**Characteristics**:
+- **Non-contact**: Don't require physical contact
+- **Magnetic Sensitivity**: Affected by magnetic fields
+- **Robustness**: Generally robust to environmental conditions
+- **Range**: Limited range of operation
+
+**Mechanical Sensors**:
+Sensors that measure mechanical properties.
+
+**Types**:
+- **Strain Gauges**: Measure force and pressure
+- **Load Cells**: Measure weight and force
+- **Tactile Sensors**: Measure touch and pressure
+- **Limit Switches**: Detect mechanical limits
+
+**Characteristics**:
+- **Direct Measurement**: Often provide direct physical measurements
+- **Robustness**: Generally robust to environmental conditions
+- **Contact Required**: Often require physical contact
+- **Calibration**: May require regular calibration
+
+### Position and Motion Sensors
+
+#### Encoders
+
+**Rotary Encoders**:
+Measure angular position and rotation.
+
+**Types**:
+- **Incremental Encoders**: Provide relative position changes
+- **Absolute Encoders**: Provide absolute position information
+- **Optical Encoders**: Use light to detect position
+- **Magnetic Encoders**: Use magnetic fields to detect position
+
+**Incremental Encoders**:
+- **Quadrature Encoding**: Use two channels (A and B) to determine direction
+- **Index Pulse**: Provide absolute reference point
+- **Resolution**: Measured in pulses per revolution
+- **Applications**: Motor control, joint angle measurement
+
+**Quadrature Signals**:
+```
+Channel A: 00110011...
+Channel B: 01100110... (90° phase shift)
+```
+
+**Absolute Encoders**:
+- **Binary Output**: Provide unique code for each position
+- **Gray Code**: Reduce errors during position transitions
+- **Multi-turn**: Track multiple rotations
+- **Applications**: Precise positioning, calibration
+
+**Gray Code Example**:
+```
+Position: 0  1  2  3  4  5  6  7
+Binary:   000 001 010 011 100 101 110 111
+Gray:     000 001 011 010 110 111 101 100
+```
+
+**Selection Criteria**:
+- **Resolution**: Required precision for application
+- **Accuracy**: Required measurement accuracy
+- **Environment**: Operating conditions (temperature, humidity, etc.)
+- **Cost**: Budget constraints
+- **Interface**: Compatibility with control system
+
+#### Inertial Measurement Units (IMUs)
+
+**Components**:
+- **Accelerometers**: Measure linear acceleration
+- **Gyroscopes**: Measure angular velocity
+- **Magnetometers**: Measure magnetic field (for heading)
+
+**Accelerometers**:
+- **Principle**: Measure force due to acceleration
+- **Axes**: Typically measure 3-axis acceleration
+- **Applications**: Tilt sensing, vibration detection, motion detection
+- **Limitations**: Cannot distinguish between gravity and acceleration
+
+**Gyroscopes**:
+- **Principle**: Measure angular velocity
+- **Axes**: Typically measure 3-axis angular velocity
+- **Applications**: Rotation detection, stabilization, navigation
+- **Limitations**: Drift over time, sensitive to vibration
+
+**Magnetometers**:
+- **Principle**: Measure magnetic field strength and direction
+- **Applications**: Compass, heading reference
+- **Limitations**: Affected by magnetic interference
+- **Calibration**: Requires hard and soft iron calibration
+
+**Sensor Fusion**:
+Combining data from multiple sensors for improved accuracy.
+
+**Techniques**:
+- **Complementary Filter**: Combine low-frequency and high-frequency information
+- **Kalman Filter**: Optimal estimation with uncertainty modeling
+- **Madgwick Filter**: Computationally efficient orientation estimation
+- **Mahony Filter**: Alternative to Madgwick with different trade-offs
+
+**Madgwick Algorithm Example**:
+```
+q̇ = (1/2) * q ⊗ ω - β * ∇f(q, a, m)
+```
+Where q is quaternion, ω is angular velocity, β is gain, and ∇f is gradient of objective function.
+
+#### GPS and Positioning Systems
+
+**Global Positioning System (GPS)**:
+Provide absolute position information anywhere on Earth.
+
+**Characteristics**:
+- **Global Coverage**: Available worldwide
+- **Absolute Position**: Provide latitude, longitude, altitude
+- **Accuracy**: Typically 3-5 meters for consumer GPS
+- **Update Rate**: Typically 1-10 Hz
+
+**Applications**:
+- **Outdoor Navigation**: Autonomous vehicles, drones
+- **Geolocation**: Mapping and tracking applications
+- **Timing**: Precise time synchronization
+- **Surveying**: Precise position measurement
+
+**Limitations**:
+- **Indoor Operation**: Does not work indoors
+- **Signal Obstruction**: Affected by buildings, trees
+- **Accuracy**: Limited accuracy for precise applications
+- **Update Rate**: May not be fast enough for dynamic systems
+
+**Differential GPS (DGPS)**:
+Improve GPS accuracy using reference stations.
+
+**Improvements**:
+- **Accuracy**: Can achieve sub-meter accuracy
+- **Correction**: Real-time correction of GPS errors
+- **RTK GPS**: Real-time kinematic for centimeter accuracy
+- **Applications**: Precision agriculture, surveying
+
+### Range and Distance Sensors
+
+#### Ultrasonic Sensors
+
+**Principle**:
+Measure distance using sound waves and time-of-flight.
+
+**Operation**:
+1. **Transmit**: Emit ultrasonic pulse
+2. **Echo**: Wait for echo from obstacle
+3. **Receive**: Detect reflected pulse
+4. **Calculate**: Distance = (Speed of sound × Time) / 2
+
+**Speed of Sound**:
+```
+v = 331.3 + 0.606 * T (m/s)
+```
+Where T is temperature in Celsius.
+
+**Characteristics**:
+- **Range**: Typically 3cm to 4m
+- **Accuracy**: ±3mm to ±1cm
+- **Cost**: Very cost-effective
+- **Simple**: Easy to implement
+
+**Limitations**:
+- **Surface Type**: Affected by surface texture and material
+- **Temperature**: Speed of sound varies with temperature
+- **Multiple Echoes**: Can be confused by multiple reflections
+- **Beam Width**: Wide beam angle limits precision
+
+**Applications**:
+- **Obstacle Detection**: Avoiding collisions
+- **Distance Measurement**: Measuring distances to objects
+- **Level Sensing**: Measuring liquid levels
+- **Proximity Detection**: Detecting nearby objects
+
+#### Infrared Sensors
+
+**Types**:
+- **Time-of-Flight**: Measure distance using IR light
+- **Triangulation**: Use triangulation principle
+- **Reflective**: Measure reflected IR light intensity
+
+**Sharp GP2Y0A21YK** (Triangulation):
+- **Range**: 10cm to 80cm
+- **Output**: Analog voltage proportional to distance
+- **Advantages**: High resolution in short range
+- **Limitations**: Non-linear output, affected by surface reflectivity
+
+**Characteristics**:
+- **Range**: Short to medium range (typically 10cm-150cm)
+- **Resolution**: Good resolution in short range
+- **Cost**: Moderate cost
+- **Simple**: Easy to use
+
+**Limitations**:
+- **Surface Reflectivity**: Affected by surface color and material
+- **Sunlight**: Can be affected by ambient IR light
+- **Line-of-Sight**: Requires clear line of sight
+- **Accuracy**: Non-linear response, requires calibration
+
+#### LIDAR Sensors
+
+**Light Detection and Ranging**:
+Use laser light to measure distances.
+
+**Types**:
+- **Time-of-Flight**: Measure time for laser pulse to return
+- **Phase-Shift**: Measure phase shift of modulated light
+- **Triangulation**: Use triangulation with laser line
+
+**Characteristics**:
+- **Accuracy**: Very high accuracy (mm level)
+- **Range**: Wide range of options (cm to km)
+- **Resolution**: High angular resolution
+- **Speed**: Fast measurement rates
+
+**Time-of-Flight LIDAR**:
+```
+Distance = (Speed of light × Time of flight) / 2
+```
+
+**Applications**:
+- **SLAM**: Simultaneous localization and mapping
+- **Obstacle Detection**: High-precision obstacle detection
+- **3D Mapping**: Creating detailed 3D maps
+- **Navigation**: Precise navigation in known environments
+
+**Limitations**:
+- **Cost**: Generally expensive
+- **Power**: High power consumption
+- **Safety**: Eye safety considerations
+- **Weather**: Can be affected by fog, rain
+
+#### Stereo Vision
+
+**Principle**:
+Use two cameras to estimate depth through triangulation.
+
+**Stereo Matching**:
+Find corresponding points in left and right images.
+
+**Disparity Calculation**:
+```
+Disparity = x_left - x_right
+Depth = (Baseline × Focal Length) / Disparity
+```
+
+**Requirements**:
+- **Calibration**: Precise calibration of camera positions
+- **Rectification**: Image rectification for easier matching
+- **Matching**: Stereo correspondence algorithms
+- **Processing**: Significant computational requirements
+
+**Advantages**:
+- **Resolution**: High resolution depth maps
+- **Color**: Provides color information with depth
+- **Flexibility**: Can be implemented with standard cameras
+- **Cost**: Can be cost-effective for some applications
+
+**Disadvantages**:
+- **Processing**: Computationally intensive
+- **Texture**: Requires textured surfaces for matching
+- **Calibration**: Sensitive to calibration errors
+- **Baseline**: Limited by camera baseline
+
+### Force and Tactile Sensors
+
+#### Force/Torque Sensors
+
+**Six-Axis Force/Torque Sensors**:
+Measure forces and torques in all directions.
+
+**Principle**:
+Use strain gauges to measure deformation under load.
+
+**Wheatstone Bridge**:
+```
+V_out = (R₁/(R₁+R₂) - R₃/(R₃+R₄)) × V_excitation
+```
+
+**Characteristics**:
+- **Multi-axis**: Measure 3 forces and 3 torques
+- **Accuracy**: Very high accuracy
+- **Calibration**: Requires precise calibration
+- **Cost**: Expensive sensors
+
+**Applications**:
+- **Grasping**: Measuring grasp forces
+- **Assembly**: Force-controlled assembly operations
+- **Safety**: Limiting forces for safe interaction
+- **Control**: Force feedback for control systems
+
+**Selection Criteria**:
+- **Range**: Required force/torque measurement range
+- **Accuracy**: Required measurement precision
+- **Frequency**: Required measurement frequency
+- **Mounting**: Physical integration requirements
+
+#### Tactile Sensors
+
+**Types**:
+- **Pressure Sensors**: Measure contact pressure
+- **Slip Sensors**: Detect object slip
+- **Temperature Sensors**: Measure contact temperature
+- **Texture Sensors**: Measure surface texture
+
+**Pressure Distribution Sensors**:
+- **Arrays**: Grid of pressure-sensitive elements
+- **Resolution**: Measure pressure distribution
+- **Applications**: Grasping, manipulation, human-robot interaction
+- **Technology**: Resistive, capacitive, or optical sensing
+
+**Characteristics**:
+- **Spatial Resolution**: Number of sensing elements
+- **Sensitivity**: Minimum detectable pressure
+- **Response Time**: Time to detect pressure changes
+- **Durability**: Resistance to wear and tear
+
+**Applications**:
+- **Grasping**: Ensuring stable grasps
+- **Manipulation**: Fine manipulation tasks
+- **Humanoid Robotics**: Human-like touch perception
+- **Quality Control**: Surface inspection
+
+### Environmental Sensors
+
+#### Temperature Sensors
+
+**Types**:
+- **Thermocouples**: Generate voltage proportional to temperature
+- **RTDs (Resistance Temperature Detectors)**: Change resistance with temperature
+- **Thermistors**: Non-linear resistance change with temperature
+- **Digital Sensors**: Integrated temperature sensors
+
+**Characteristics**:
+- **Range**: Different ranges for different sensors
+- **Accuracy**: Varies from ±0.1°C to ±5°C
+- **Response Time**: Milliseconds to seconds
+- **Linearity**: Linear vs. non-linear response
+
+**Applications**:
+- **System Monitoring**: Monitor system temperature
+- **Safety**: Prevent overheating
+- **Calibration**: Temperature compensation
+- **Environmental**: Monitor operating conditions
+
+#### Humidity Sensors
+
+**Types**:
+- **Capacitive**: Measure capacitance change with humidity
+- **Resistive**: Measure resistance change with humidity
+- **Thermal Conductivity**: Measure thermal conductivity changes
+
+**Characteristics**:
+- **Range**: 0-100% relative humidity
+- **Accuracy**: Typically ±2-5% RH
+- **Response Time**: Seconds to minutes
+- **Temperature Compensation**: Often required
+
+**Applications**:
+- **Environmental Monitoring**: Indoor climate control
+- **Agriculture**: Greenhouse monitoring
+- **Safety**: Preventing condensation
+- **Calibration**: Environmental compensation
+
+#### Gas Sensors
+
+**Types**:
+- **Metal Oxide**: Change resistance with gas concentration
+- **Electrochemical**: Generate current proportional to gas concentration
+- **Catalytic**: Measure heat generated by gas combustion
+- **Optical**: Measure light absorption by gases
+
+**Characteristics**:
+- **Selectivity**: Sensitivity to specific gases
+- **Sensitivity**: Detection threshold
+- **Response Time**: Time to detect gas
+- **Drift**: Long-term stability
+
+**Applications**:
+- **Safety**: Detecting dangerous gases
+- **Air Quality**: Monitoring air quality
+- **Industrial**: Process monitoring
+- **Environmental**: Pollution monitoring
+
+### Sensor Integration and Processing
+
+#### Sensor Fusion
+
+**Multi-Sensor Integration**:
+Combining data from multiple sensors for improved accuracy.
+
+**Techniques**:
+- **Kalman Filtering**: Optimal estimation with uncertainty modeling
+- **Particle Filtering**: Non-linear/non-Gaussian estimation
+- **Complementary Filtering**: Combine different frequency characteristics
+- **Bayesian Networks**: Probabilistic sensor fusion
+
+**Kalman Filter**:
+```
+Prediction: x̂_{k|k-1} = F_k * x̂_{k-1|k-1} + B_k * u_k
+          P_{k|k-1} = F_k * P_{k-1|k-1} * F_k^T + Q_k
+
+Update:   K_k = P_{k|k-1} * H_k^T * (H_k * P_{k|k-1} * H_k^T + R_k)^{-1}
+          x̂_{k|k} = x̂_{k|k-1} + K_k * (z_k - H_k * x̂_{k|k-1})
+          P_{k|k} = (I - K_k * H_k) * P_{k|k-1}
+```
+
+#### Signal Conditioning
+
+**Analog Signal Processing**:
+Preparing analog sensor signals for digital processing.
+
+**Components**:
+- **Amplification**: Amplify weak signals
+- **Filtering**: Remove noise and interference
+- **Offset Correction**: Remove DC offsets
+- **Scaling**: Scale to appropriate range
+
+**Digital Signal Processing**:
+Processing digital sensor data.
+
+**Techniques**:
+- **Filtering**: Digital filters for noise reduction
+- **Calibration**: Apply calibration coefficients
+- **Interpolation**: Increase temporal resolution
+- **Feature Extraction**: Extract relevant information
+
+### Sensor Selection and Application
+
+#### Selection Criteria
+
+**Application Requirements**:
+- **Accuracy**: Required measurement accuracy
+- **Range**: Required measurement range
+- **Resolution**: Required measurement resolution
+- **Frequency**: Required measurement frequency
+
+**Environmental Considerations**:
+- **Temperature**: Operating temperature range
+- **Humidity**: Humidity tolerance
+- **Vibration**: Vibration resistance
+- **Chemical Exposure**: Chemical compatibility
+
+**System Integration**:
+- **Interface**: Compatibility with control system
+- **Power**: Power consumption requirements
+- **Size**: Physical size constraints
+- **Cost**: Budget constraints
+
+#### Common Sensor Applications
+
+**Mobile Robotics**:
+- **Navigation**: GPS, IMU, encoders, LIDAR
+- **Obstacle Avoidance**: Ultrasonic, IR, LIDAR
+- **Localization**: IMU, encoders, cameras
+- **Mapping**: LIDAR, cameras, sonar
+
+**Manipulation Robotics**:
+- **Grasping**: Force/torque, tactile, vision
+- **Assembly**: Force/torque, vision, position
+- **Quality Control**: Vision, tactile, force
+- **Safety**: Proximity, force, vision
+
+**Human-Robot Interaction**:
+- **Gesture Recognition**: Cameras, IMU, touch
+- **Proximity Detection**: IR, ultrasonic, LIDAR
+- **Safety**: Force/torque, tactile, vision
+- **Communication**: Audio, visual, haptic
+
+Understanding sensor technologies and their proper integration is essential for creating effective robotic systems that can perceive and interact with their environment.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Sensors and Sensing Technologies
+
+### Sensor Classification
+- **Proprioceptive**: Internal state measurement (encoders, IMU)
+- **Exteroceptive**: External environment measurement (cameras, LIDAR)
+- **Optical**: Light-based sensing (cameras, LIDAR)
+- **Electromagnetic**: Field-based sensing (Hall effect, inductive)
+- **Mechanical**: Physical property sensing (strain gauges, load cells)
+
+### Position & Motion Sensors
+- **Encoders**: Incremental and absolute position measurement
+- **IMUs**: Accelerometers, gyroscopes, magnetometers
+- **GPS**: Global positioning systems
+- **Fusion**: Combining multiple sensors for accuracy
+
+### Range & Distance Sensors
+- **Ultrasonic**: Sound-based distance measurement
+- **Infrared**: IR-based proximity and distance
+- **LIDAR**: Laser-based high-precision ranging
+- **Stereo Vision**: Camera-based depth estimation
+
+### Force & Tactile Sensors
+- **Force/Torque**: Six-axis force and torque measurement
+- **Tactile Arrays**: Pressure distribution sensing
+- **Slip Detection**: Detecting object slip
+- **Applications**: Grasping and manipulation
+
+### Environmental Sensors
+- **Temperature**: Thermocouples, RTDs, thermistors
+- **Humidity**: Capacitive and resistive sensors
+- **Gas Detection**: Chemical and optical sensors
+- **Environmental Monitoring**: Climate and safety
+
+### Integration & Processing
+- **Sensor Fusion**: Combining multiple sensor data
+- **Kalman Filtering**: Optimal estimation techniques
+- **Signal Conditioning**: Preparing sensor signals
+- **Digital Processing**: Processing and filtering
+
+### Selection & Applications
+- **Criteria**: Accuracy, range, resolution, frequency
+- **Environmental**: Temperature, humidity, vibration
+- **Integration**: Interface, power, size, cost
+- **Robotics**: Navigation, manipulation, interaction
+
+</div>
+</TabItem>
+</Tabs>

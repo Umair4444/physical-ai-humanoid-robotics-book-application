@@ -1,0 +1,503 @@
+---
+id: chapter-2
+title: "Legged Locomotion and Bipedal Walking"
+module: "Module 1: Foundations of Robotic Locomotion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Legged Locomotion and Bipedal Walking
+
+### Introduction to Legged Locomotion
+
+Legged locomotion is one of the most versatile forms of robotic mobility, enabling robots to navigate complex terrains that would be challenging or impossible for wheeled or tracked systems. Bipedal walking, in particular, is of special interest as it allows robots to move through human environments designed for human locomotion. This chapter explores the principles, challenges, and techniques involved in legged locomotion and bipedal walking.
+
+### Principles of Legged Locomotion
+
+#### Advantages of Legged Locomotion
+
+**Terrain Adaptability**:
+Legged robots can navigate terrains that would be challenging for other locomotion methods.
+
+**Capabilities**:
+- **Step Over Obstacles**: Ability to step over gaps and obstacles
+- **Rough Terrain Navigation**: Movement over uneven surfaces
+- **Stair Climbing**: Ascending and descending stairs
+- **Variable Ground Conditions**: Adaptation to different surface types
+
+**Applications**:
+- **Search and Rescue**: Navigating disaster areas
+- **Exploration**: Moving through natural environments
+- **Human Environments**: Operating in spaces designed for humans
+- **Maintenance**: Accessing hard-to-reach areas
+
+#### Challenges of Legged Locomotion
+
+**Control Complexity**:
+Legged locomotion requires sophisticated control systems to maintain balance and coordinate movement.
+
+**Key Challenges**:
+- **Balance Maintenance**: Keeping the robot upright during movement
+- **Dynamic Stability**: Managing stability during dynamic motion
+- **Coordination**: Coordinating multiple legs and joints
+- **Energy Efficiency**: Managing power consumption during locomotion
+
+**Mechanical Complexity**:
+Legged robots require multiple joints and actuators, increasing mechanical complexity.
+
+**Issues**:
+- **Increased Failure Points**: More components that can fail
+- **Weight Considerations**: Additional actuators and structure
+- **Maintenance Requirements**: More complex maintenance needs
+- **Cost**: Higher cost due to complexity
+
+### Bipedal Walking Fundamentals
+
+#### Gait Patterns and Phases
+
+**Walking Gait Cycle**:
+The fundamental pattern of human-like walking, adapted for robotic systems.
+
+**Basic Phases**:
+- **Stance Phase**: Foot in contact with ground (about 60% of cycle)
+- **Swing Phase**: Foot not in contact with ground (about 40% of cycle)
+
+**Detailed Sub-phases**:
+- **Initial Contact**: Heel strike at beginning of stance
+- **Loading Response**: Weight transfer to stance leg
+- **Mid Stance**: Body weight fully on stance leg
+- **Terminal Stance**: Heel begins to rise
+- **Pre-swing**: Toe-off and propulsion
+- **Initial Swing**: Acceleration of swing leg
+- **Mid Swing**: Limb passes under body
+- **Terminal Swing**: Deceleration of swing leg
+
+**Double Support Phase**:
+When both feet are in contact with the ground during the transition between steps.
+
+**Single Support Phase**:
+When only one foot is in contact with the ground, requiring active balance control.
+
+#### Balance and Stability in Bipedal Walking
+
+**Center of Mass (CoM) Control**:
+Critical for maintaining balance during bipedal walking.
+
+**CoM Dynamics**:
+- **Horizontal Movement**: CoM moves in an arc-like pattern
+- **Vertical Movement**: CoM rises and falls during walking
+- **Lateral Movement**: CoM moves side-to-side with each step
+- **Stability Requirements**: CoM must remain within support polygon
+
+**Support Polygon**:
+The area defined by ground contact points that must contain the CoM for static stability.
+
+**For Bipedal Robots**:
+- **Single Support**: Support polygon is the area of one foot
+- **Double Support**: Support polygon is the area between feet
+- **Dynamic Balance**: CoM may extend beyond support polygon during dynamic walking
+
+### Zero Moment Point (ZMP) Control
+
+#### ZMP Concept
+
+**Definition**:
+The Zero Moment Point is a point on the ground where the net moment of the ground reaction forces is zero.
+
+**Mathematical Expression**:
+```
+ZMP_x = x_CoM - (h/g) * ẍ_CoM
+ZMP_y = y_CoM - (h/g) * ÿ_CoM
+```
+Where:
+- (x_CoM, y_CoM) is the projection of the center of mass
+- h is the height of the center of mass
+- g is gravitational acceleration
+- (ẍ_CoM, ÿ_CoM) are the accelerations of the center of mass
+
+**Stability Condition**:
+For stable walking, the ZMP must remain within the convex hull of the support polygon (typically the foot area).
+
+#### ZMP-Based Walking Pattern Generation
+
+**Preview Control Method**:
+Using future ZMP references to generate stable walking patterns.
+
+**Approach**:
+- Define desired ZMP trajectory for walking
+- Compute CoM trajectory using preview control
+- Generate joint trajectories to follow CoM path
+- Ensure ZMP remains within support polygon
+
+**Mathematical Framework**:
+The CoM trajectory follows the differential equation:
+```
+ẍ_CoM = ω² * (x_CoM - x_ZMP)
+```
+where ω = √(g/h) for CoM height h.
+
+**Implementation Steps**:
+1. Define ZMP reference trajectory
+2. Solve differential equation for CoM trajectory
+3. Generate footstep locations and timing
+4. Calculate joint trajectories to achieve CoM motion
+
+### Capture Point Control
+
+#### Capture Point Concept
+
+**Definition**:
+The capture point indicates where a robot must step to come to a complete stop.
+
+**Mathematical Expression**:
+```
+Capture_Point = CoM_Position + √(h/g) * CoM_Velocity
+```
+
+**Advantages**:
+- Simpler to compute than ZMP
+- Intuitive concept for step planning
+- Useful for push recovery
+- Applicable to various locomotion patterns
+
+#### Applications in Bipedal Walking
+
+**Step Planning**:
+Using capture point concepts for foot placement during walking.
+
+**Approach**:
+- Calculate current capture point
+- Place foot at or beyond capture point
+- Ensure future stability
+- Adjust for walking speed and step length
+
+**Push Recovery**:
+Using capture point for balance recovery after disturbances.
+
+**Recovery Strategy**:
+- Calculate new capture point after push
+- Take step to capture point location
+- Regain stable walking pattern
+- Minimize recovery time
+
+### Dynamic Walking Principles
+
+#### Passive Dynamic Walking
+
+**Concept**:
+Walking based on the natural dynamics of the mechanical system, requiring minimal actuation.
+
+**Characteristics**:
+- **Energy Efficiency**: Uses gravity and momentum
+- **Natural Gait**: Emerges from mechanical properties
+- **Slope Walking**: Often requires downward slope
+- **Limited Control**: Less active control required
+
+**Applications**:
+- **Energy-Efficient Walking**: Minimizing power consumption
+- **Bio-Inspired Design**: Mimicking human walking dynamics
+- **Simple Control**: Reducing computational requirements
+- **Research Platforms**: Understanding walking mechanics
+
+#### Active Dynamic Walking
+
+**Concept**:
+Walking with active control of joint torques and positions to achieve desired motion.
+
+**Characteristics**:
+- **Full Control**: Complete control over walking pattern
+- **Energy Consumption**: Higher power requirements
+- **Terrain Adaptation**: Ability to adapt to various terrains
+- **Stability**: Active balance control
+
+**Control Approaches**:
+- **Model-Based Control**: Using dynamic models for control
+- **Feedback Control**: Using sensor feedback for corrections
+- **Optimization-Based**: Optimizing for various objectives
+- **Learning-Based**: Learning from experience
+
+### Balance Control Strategies
+
+#### Ankle Strategy
+
+**Concept**:
+Using ankle joint adjustments to maintain balance during small disturbances.
+
+**Implementation**:
+- **PD Control**: Proportional-Derivative control of ankle joints
+- **CoM Feedback**: Using CoM position and velocity feedback
+- **Fast Response**: Quick corrective action for small disturbances
+- **Minimal Upper Body Movement**: Maintaining upper body stability
+
+**Applications**:
+- **Standing Balance**: Maintaining upright posture
+- **Small Disturbances**: Recovering from minor imbalances
+- **Precise Control**: Fine adjustments to balance
+
+#### Hip Strategy
+
+**Concept**:
+Using hip joint movements to recover from medium disturbances.
+
+**Implementation**:
+- **Coordinated Control**: Coordinated hip and trunk motion
+- **Balance Prioritization**: Prioritizing balance over other tasks
+- **Upper Body Stabilization**: Maintaining upper body stability
+- **CoM Repositioning**: Moving CoM to stable position
+
+**Applications**:
+- **Medium Disturbances**: Larger imbalances than ankle strategy can handle
+- **Standing Recovery**: Recovering from moderate disturbances
+- **Walking Balance**: Maintaining balance during walking
+
+#### Stepping Strategy
+
+**Concept**:
+Taking a step to recover from large disturbances by moving the support base.
+
+**Implementation**:
+- **Capture Point Calculation**: Determining where to step
+- **Step Planning**: Planning foot placement location
+- **Step Execution**: Executing the protective step
+- **Post-Step Stabilization**: Stabilizing after the step
+
+**Applications**:
+- **Large Disturbances**: When other strategies are insufficient
+- **Push Recovery**: Recovering from significant pushes
+- **Walking Stability**: Maintaining stability during dynamic walking
+
+### Control Architecture for Bipedal Walking
+
+#### Hierarchical Control Structure
+
+**High-Level Planning**:
+Generating overall walking patterns and gait parameters.
+
+**Functions**:
+- **Step Location Planning**: Where to place feet
+- **Timing Generation**: When to take steps
+- **Speed Control**: Controlling walking speed
+- **Trajectory Planning**: Planning CoM trajectories
+
+**Mid-Level Control**:
+Generating detailed joint trajectories based on high-level commands.
+
+**Functions**:
+- **Inverse Kinematics**: Calculating joint angles for desired positions
+- **Balance Feedback**: Adjusting trajectories based on balance state
+- **Foot Trajectory Generation**: Planning foot movement paths
+- **CoM Trajectory Tracking**: Following planned CoM motion
+
+**Low-Level Control**:
+Controlling individual actuators to follow planned trajectories.
+
+**Functions**:
+- **Joint Control**: Controlling individual joint positions/forces
+- **Motor Commands**: Sending commands to actuators
+- **Feedback Control**: Using sensor feedback for corrections
+- **Safety Systems**: Implementing safety and protection
+
+#### Real-time Control Requirements
+
+**Timing Constraints**:
+Bipedal walking requires precise timing for stability and coordination.
+
+**Critical Frequencies**:
+- **Balance Feedback**: 100-500 Hz for stability control
+- **Trajectory Updates**: 10-100 Hz for trajectory updates
+- **Sensor Processing**: 100-1000 Hz for sensor data processing
+- **Communication**: 100-500 Hz for inter-component communication
+
+**Computational Challenges**:
+- **Real-time Processing**: Meeting strict timing requirements
+- **Optimization**: Solving control problems quickly
+- **Filtering**: Processing noisy sensor data in real-time
+- **Coordination**: Synchronizing multiple control loops
+
+### Mechanical Design Considerations
+
+#### Joint Configuration
+
+**Degrees of Freedom**:
+The number and arrangement of joints affects walking capabilities.
+
+**Typical Configurations**:
+- **3 DOF per Leg**: Hip (3), Knee (1), Ankle (2) = 6 DOF per leg
+- **2 DOF per Leg**: Simpler but more limited walking
+- **Redundant DOF**: Extra DOF for improved capabilities
+- **Optimal Configuration**: Balance between capability and complexity
+
+**Joint Types**:
+- **Revolute Joints**: Rotational joints for most leg movements
+- **Prismatic Joints**: Linear motion joints (less common)
+- **Spherical Joints**: Multi-axis joints (challenging to implement)
+- **Compliance**: Built-in compliance for safety and interaction
+
+#### Actuator Requirements
+
+**Torque and Speed**:
+Actuators must provide sufficient torque and speed for walking.
+
+**Requirements**:
+- **High Torque**: For supporting robot weight and generating motion
+- **Variable Speed**: For different phases of walking
+- **Backdrivability**: For safe human interaction and energy efficiency
+- **Efficiency**: To minimize power consumption
+
+**Actuator Types**:
+- **Electric Motors**: Precise control, mature technology
+- **Series Elastic Actuators**: Built-in compliance and force control
+- **Pneumatic/Hydraulic**: High power density but complex
+- **Variable Stiffness**: Adjustable compliance for different situations
+
+### Sensing and State Estimation
+
+#### Balance-Related Sensors
+
+**Inertial Measurement Units (IMUs)**:
+Critical for measuring orientation and acceleration for balance control.
+
+**Information Provided**:
+- **Attitude**: Robot orientation relative to gravity
+- **Angular Velocity**: Rate of orientation change
+- **Linear Acceleration**: Acceleration measurements
+- **Heading**: Direction relative to magnetic north
+
+**Placement Considerations**:
+- **Torso Mounting**: For overall body orientation
+- **Multiple IMUs**: For segment-specific information
+- **Calibration**: Ensuring accurate measurements
+- **Drift Compensation**: Managing sensor drift over time
+
+#### Force and Torque Sensing
+
+**Foot Force Sensors**:
+Measuring ground reaction forces for balance control.
+
+**Information**:
+- **Ground Contact**: Detection of contact points
+- **Force Magnitude**: Measuring vertical forces
+- **Force Location**: Determining ZMP location
+- **Impact Detection**: Identifying external disturbances
+
+**Implementation**:
+- **Six-Axis Sensors**: Measuring forces and moments
+- **Multiple Sensors**: For redundancy and accuracy
+- **Calibration**: Ensuring accurate force measurements
+- **Filtering**: Reducing sensor noise
+
+#### State Estimation
+
+**Extended Kalman Filter (EKF)**:
+Estimating robot state from noisy sensor measurements.
+
+**State Variables**:
+- **Position and Orientation**: Robot pose in space
+- **Velocity and Angular Velocity**: Motion state
+- **Joint Positions and Velocities**: Internal configuration
+- **External Forces**: Interaction forces with environment
+
+**Applications**:
+- **Balance Control**: Accurate state information for control
+- **Disturbance Detection**: Identifying external forces
+- **Terrain Estimation**: Understanding ground properties
+- **Failure Detection**: Identifying system malfunctions
+
+### Challenges and Future Directions
+
+#### Current Challenges
+
+**Energy Efficiency**:
+Bipedal walking typically requires significant energy compared to other locomotion methods.
+
+**Approaches**:
+- **Optimized Gait Patterns**: Minimizing energy consumption
+- **Passive Dynamics**: Using natural dynamics to reduce actuation
+- **Regenerative Systems**: Recovering energy during walking
+- **Lightweight Design**: Reducing overall robot mass
+
+**Terrain Adaptation**:
+Adapting walking patterns to different terrains remains challenging.
+
+**Techniques**:
+- **Terrain Classification**: Identifying terrain types
+- **Adaptive Gait**: Adjusting walking parameters
+- **Machine Learning**: Learning from experience
+- **Sensing**: Using vision and tactile sensors for terrain assessment
+
+#### Future Developments
+
+**Advanced Control Methods**:
+New control approaches to improve walking performance.
+
+**Techniques**:
+- **Machine Learning**: Learning optimal walking strategies
+- **Model Predictive Control**: Optimizing over prediction horizons
+- **Bio-Inspired Control**: Mimicking biological control systems
+- **Adaptive Control**: Adjusting to changing conditions
+
+**Improved Mechanical Design**:
+New mechanical approaches to enhance walking capabilities.
+
+**Innovations**:
+- **Variable Stiffness**: Adjustable mechanical properties
+- **Compliant Mechanisms**: Built-in compliance for safety
+- **Lightweight Materials**: Reducing overall system mass
+- **Integrated Design**: Better integration of mechanics and control
+
+Understanding legged locomotion and bipedal walking principles is essential for creating robots that can navigate complex environments and operate effectively in human spaces.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Legged Locomotion and Bipedal Walking
+
+### Key Principles
+- **Advantages**: Terrain adaptability and versatility
+- **Challenges**: Control complexity and mechanical complexity
+- **Gait Phases**: Stance and swing phases of walking
+- **Balance Control**: Critical for maintaining stability
+
+### Control Approaches
+- **ZMP Control**: Zero Moment Point stability criterion
+- **Capture Point**: Where to step for balance recovery
+- **Dynamic Walking**: Passive and active approaches
+- **Balance Strategies**: Ankle, hip, and stepping strategies
+
+### Control Architecture
+- **Hierarchical**: High, mid, and low-level control
+- **Real-time**: Strict timing and computational requirements
+- **Sensing**: IMUs, force sensors, and state estimation
+- **Actuation**: Torque, speed, and compliance requirements
+
+### Mechanical Design
+- **Joint Configuration**: DOF and arrangement considerations
+- **Actuator Types**: Electric, SEA, pneumatic, hydraulic
+- **Compliance**: Built-in safety and interaction capabilities
+- **Weight Optimization**: Balancing capability and efficiency
+
+### Challenges
+- **Energy Efficiency**: Power consumption optimization
+- **Terrain Adaptation**: Handling different ground conditions
+- **Stability**: Maintaining balance during dynamic motion
+- **Complexity**: Managing multi-joint coordination
+
+### Future Directions
+- **Advanced Control**: Machine learning and MPC approaches
+- **Mechanical Innovation**: Variable stiffness and compliance
+- **Sensing Improvements**: Better state estimation and feedback
+- **Bio-inspiration**: Learning from biological systems
+
+</div>
+</TabItem>
+</Tabs>

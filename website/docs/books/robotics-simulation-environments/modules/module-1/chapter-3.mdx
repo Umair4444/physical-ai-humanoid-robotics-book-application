@@ -1,0 +1,1059 @@
+---
+id: chapter-3
+title: "Robot Modeling and Simulation"
+module: "Module 1: Foundations of Robotics Simulation"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Robot Modeling and Simulation
+
+### Introduction to Robot Modeling
+
+Robot modeling is the process of creating mathematical and computational representations of robotic systems that can be used for simulation, analysis, and control. Effective robot modeling is essential for robotics simulation environments, as it provides the foundation for understanding and predicting robot behavior. This chapter explores the various approaches to robot modeling, from kinematic models to complex multi-body dynamics, and discusses their applications in simulation environments.
+
+### Mathematical Foundations of Robot Modeling
+
+#### Kinematic Modeling
+
+**Forward Kinematics**:
+Determining the end-effector position and orientation given joint angles.
+
+**Denavit-Hartenberg (DH) Convention**:
+Standardized method for defining coordinate frames on robotic linkages.
+
+**DH Parameters**:
+- **a_i**: Link length (distance along x_i from z_(i-1) to z_i)
+- **α_i**: Link twist (angle from z_(i-1) to z_i about x_i)
+- **d_i**: Link offset (distance along z_(i-1) from x_(i-1) to x_i)
+- **θ_i**: Joint angle (angle from x_(i-1) to x_i about z_(i-1))
+
+**Transformation Matrix**:
+```
+T_i^(i-1) = [cos(θ_i)   -sin(θ_i)cos(α_i)   sin(θ_i)sin(α_i)   a_i*cos(θ_i)]
+            [sin(θ_i)    cos(θ_i)cos(α_i)  -cos(θ_i)sin(α_i)   a_i*sin(θ_i)]
+            [0           sin(α_i)           cos(α_i)           d_i        ]
+            [0           0                  0                  1          ]
+```
+
+**Complete Forward Kinematics**:
+```
+T_0^n = T_0^1 * T_1^2 * ... * T_(n-1)^n
+```
+
+**Example: 2-DOF Planar Robot**:
+```
+// Link lengths
+double l1, l2;
+
+// Joint angles
+double theta1, theta2;
+
+// Forward kinematics
+double x = l1 * cos(theta1) + l2 * cos(theta1 + theta2);
+double y = l1 * sin(theta1) + l2 * sin(theta1 + theta2);
+```
+
+#### Inverse Kinematics
+
+**Problem Statement**:
+Given desired end-effector position and orientation, find joint angles.
+
+**Analytical Solutions**:
+Closed-form solutions for simple kinematic structures.
+
+**Geometric Approach**:
+For planar robots, use geometric relationships.
+
+**Example: 2-DOF Planar Robot**:
+```
+// Desired end-effector position
+double x_d, y_d;
+
+// Inverse kinematics
+double r = sqrt(x_d*x_d + y_d*y_d);
+
+// Check if position is reachable
+if (r > l1 + l2) {
+    // Position is unreachable
+    return false;
+} else if (r < abs(l1 - l2)) {
+    // Position is unreachable
+    return false;
+} else {
+    // Calculate joint angles
+    double cos_theta2 = (l1*l1 + l2*l2 - r*r) / (2*l1*l2);
+    double sin_theta2 = sqrt(1 - cos_theta2*cos_theta2);
+    double theta2 = atan2(sin_theta2, cos_theta2);
+    
+    double k1 = l1 + l2 * cos_theta2;
+    double k2 = l2 * sin_theta2;
+    double theta1 = atan2(y_d, x_d) - atan2(k2, k1);
+    
+    // Joint angles
+    joint_angles[0] = theta1;
+    joint_angles[1] = theta2;
+}
+```
+
+**Numerical Solutions**:
+Iterative methods for complex kinematic structures.
+
+**Jacobian-Based Methods**:
+Using the Jacobian matrix to relate joint velocities to end-effector velocities.
+
+**Jacobian Matrix**:
+```
+J = [∂x/∂θ₁  ∂x/∂θ₂  ...  ∂x/∂θₙ]
+    [∂y/∂θ₁  ∂y/∂θ₂  ...  ∂y/∂θₙ]
+    [∂z/∂θ₁  ∂z/∂θ₂  ...  ∂z/∂θₙ]
+    [∂φ/∂θ₁  ∂φ/∂θ₂  ...  ∂φ/∂θₙ]
+```
+
+**Differential Kinematics**:
+```
+ẋ = J(θ) * θ̇
+```
+
+**Inverse Jacobian Method**:
+```
+θ̇ = J⁺ * ẋ
+```
+
+Where J⁺ is the pseudoinverse of the Jacobian.
+
+**Pseudoinverse Calculation**:
+```
+J⁺ = J^T * (J * J^T + λ² * I)^(-1)
+```
+
+Where λ is the damping factor (DLS method).
+
+**Iterative Solution**:
+```
+θ_{k+1} = θ_k + J⁺ * (x_d - x_k)
+```
+
+#### Dynamics Modeling
+
+**Lagrangian Mechanics**:
+Energy-based approach to deriving equations of motion.
+
+**Lagrangian**:
+```
+L = T - V
+```
+
+Where T is kinetic energy and V is potential energy.
+
+**Lagrange's Equations**:
+```
+d/dt(∂L/∂q̇_i) - ∂L/∂q_i = Q_i
+```
+
+Where q_i are generalized coordinates and Q_i are generalized forces.
+
+**For Robotic Systems**:
+```
+D(q) * q̈ + C(q, q̇) * q̇ + g(q) = τ
+```
+
+Where:
+- D(q): Inertia matrix
+- C(q, q̇): Coriolis and centrifugal forces matrix
+- g(q): Gravity vector
+- τ: Joint torques
+- q: Joint positions
+- q̇: Joint velocities
+- q̈: Joint accelerations
+
+**Inertia Matrix**:
+```
+D(q) = Σᵢ mᵢ * Jvᵢ^T * Jvᵢ + Jωᵢ^T * Iᵢ * Jωᵢ
+```
+
+Where Jvᵢ and Jωᵢ are linear and angular Jacobians for link i.
+
+**Coriolis Matrix**:
+```
+C(q, q̇) = Σᵢ (∂D(q)/∂qᵢ * q̇)
+```
+
+**Gravity Vector**:
+```
+g(q) = Σᵢ mᵢ * g * ∂hᵢ/∂q
+```
+
+Where hᵢ is the height of link i.
+
+**Newton-Euler Method**:
+Recursive approach to dynamics computation.
+
+**Forward Pass**:
+Compute velocities and accelerations from base to tip.
+
+**Backward Pass**:
+Compute forces and torques from tip to base.
+
+**Algorithm**:
+1. **Initialize**: Base velocity and acceleration
+2. **Forward**: Propagate velocities and accelerations
+3. **Backward**: Propagate forces and torques
+4. **Result**: Joint torques
+
+### Robot Description Formats
+
+#### URDF (Unified Robot Description Format)
+
+**Overview**:
+XML-based format for describing robot models.
+
+**Structure**:
+- **Links**: Rigid bodies of the robot
+- **Joints**: Connections between links
+- **Materials**: Visual appearance
+- **Transmissions**: Actuator interfaces
+- **Gazebo**: Simulation-specific extensions
+
+**Example URDF**:
+```xml
+<?xml version="1.0"?>
+<robot name="simple_robot">
+  <!-- Materials -->
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+  
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.6" radius="0.2"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.6" radius="0.2"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+  
+  <!-- Joint -->
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0.3" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="1"/>
+  </joint>
+  
+  <!-- Another Link -->
+  <link name="link1">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.6"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.6"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+</robot>
+```
+
+**URDF Elements**:
+- **`<robot>`**: Root element
+- **`<link>`**: Rigid body with visual, collision, and inertial properties
+- **`<joint>`**: Connection between links
+- **`<transmission>`**: Actuator interface
+- **`<gazebo>`**: Simulation-specific extensions
+
+#### SDF (Simulation Description Format)
+
+**Overview**:
+Alternative XML format to URDF, originally developed for Gazebo.
+
+**Structure**:
+- **Models**: Robot models
+- **Links**: Rigid bodies
+- **Joints**: Connections between links
+- **Plugins**: Simulation plugins
+- **World**: Environment description
+
+**Example SDF**:
+```xml
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="simple_robot">
+    <link name="base_link">
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <mass>10.0</mass>
+        <inertia>
+          <ixx>1.0</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>1.0</iyy>
+          <iyz>0.0</iyz>
+          <izz>1.0</izz>
+        </inertia>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.2</radius>
+            <length>0.6</length>
+          </cylinder>
+        </geometry>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.2</radius>
+            <length>0.6</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+    
+    <joint name="joint1" type="revolute">
+      <parent>base_link</parent>
+      <child>link1</child>
+      <pose>0 0 0.3 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.14</lower>
+          <upper>3.14</upper>
+          <effort>100</effort>
+          <velocity>1</velocity>
+        </limit>
+      </axis>
+    </joint>
+    
+    <link name="link1">
+      <inertial>
+        <mass>1.0</mass>
+        <inertia>
+          <ixx>0.01</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.01</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.01</izz>
+        </inertia>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.6</size>
+          </box>
+        </geometry>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.6</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
+```
+
+#### MJCF (MuJoCo XML)
+
+**Overview**:
+XML-based format for MuJoCo physics engine.
+
+**Features**:
+- **Advanced Physics**: Complex joint types and constraints
+- **Materials**: Sophisticated material properties
+- **Actuators**: Various actuator types
+- **Sensors**: Comprehensive sensor models
+
+### Multi-body Dynamics Simulation
+
+#### Rigid Body Simulation
+
+**Equations of Motion**:
+For each rigid body in the system.
+
+**Translational Motion**:
+```
+m * a = F_external
+```
+
+Where m is mass, a is acceleration, F is external force.
+
+**Rotational Motion**:
+```
+I * α + ω × (I * ω) = τ_external
+```
+
+Where I is inertia tensor, α is angular acceleration, ω is angular velocity, τ is external torque.
+
+**Integration Steps**:
+1. **Force Calculation**: Compute all forces acting on bodies
+2. **Acceleration**: Calculate linear and angular accelerations
+3. **Velocity Update**: Integrate accelerations to get velocities
+4. **Position Update**: Integrate velocities to get positions
+5. **Collision Detection**: Check for collisions
+6. **Collision Response**: Apply collision forces
+7. **Iteration**: Repeat for next time step
+
+#### Constraint Handling
+
+**Joint Constraints**:
+Maintaining relationships between bodies.
+
+**Position Constraints**:
+```
+C(q) = 0
+```
+
+**Velocity Constraints**:
+```
+Ċ(q) = J(q) * q̇ = 0
+```
+
+**Acceleration Constraints**:
+```
+C̈(q) = J(q) * q̈ + Ċ(q) = 0
+```
+
+**Constraint Force Calculation**:
+```
+F_constraint = J^T * λ
+```
+
+Where λ is the Lagrange multiplier vector.
+
+**Constraint Solver**:
+```
+J * M^(-1) * J^T * λ = -J * M^(-1) * (C(q) + Ċ(q))
+```
+
+Where M is the system mass matrix.
+
+#### Contact Dynamics
+
+**Contact Models**:
+How to handle contact between bodies.
+
+**Penalty Method**:
+Apply forces proportional to penetration depth.
+
+**Spring-Damper Model**:
+```
+F_normal = k * penetration_depth + d * relative_velocity_normal
+```
+
+Where k is stiffness and d is damping coefficient.
+
+**Impulse Method**:
+Apply instantaneous impulses to resolve collisions.
+
+**Restitution**:
+```
+v_after = -e * v_before
+```
+
+Where e is the coefficient of restitution.
+
+**Friction**:
+```
+F_friction ≤ μ * F_normal
+```
+
+Where μ is the coefficient of friction.
+
+### Simulation Frameworks
+
+#### Gazebo
+
+**Overview**:
+Popular open-source robotics simulator with physics engine integration.
+
+**Features**:
+- **Physics Engines**: ODE, Bullet, Simbody
+- **Sensors**: Cameras, LIDAR, IMU, force/torque
+- **Plugins**: Extensible architecture
+- **ROS Integration**: Native ROS support
+
+**Components**:
+- **GUI**: Graphical user interface
+- **Server**: Physics simulation engine
+- **Plugins**: Extensible functionality
+- **Transport**: Message passing system
+
+**Plugin Architecture**:
+```cpp
+#include <gazebo/gazebo.hh>
+#include <gazebo/physics/physics.hh>
+
+namespace gazebo
+{
+  class CustomController : public ModelPlugin
+  {
+    public: void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
+    {
+      this->model = _model;
+      this->world = this->model->GetWorld();
+      
+      // Connect to physics update event
+      this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+          boost::bind(&CustomController::OnUpdate, this));
+    }
+
+    public: void OnUpdate()
+    {
+      // Custom control logic
+      math::Vector3 force(1.0, 0.0, 0.0);
+      this->model->GetLink("link_name")->AddForce(force);
+    }
+
+    private: physics::ModelPtr model;
+    private: physics::WorldPtr world;
+    private: event::ConnectionPtr updateConnection;
+  };
+
+  GZ_REGISTER_MODEL_PLUGIN(CustomController)
+}
+```
+
+#### MuJoCo
+
+**Overview**:
+Advanced physics engine with focus on accuracy and efficiency.
+
+**Features**:
+- **Differential Variational Inequalities**: Advanced contact model
+- **Analytical Derivatives**: Efficient gradient computation
+- **Real-time Simulation**: Optimized for real-time operation
+- **Rich Actuator Models**: Various actuator types
+
+**Key Concepts**:
+- **XML Model Description**: MJCF format
+- **Implicit Integration**: Stable for stiff systems
+- **Constraint Stabilization**: Numerical stabilization
+- **Automatic Differentiation**: Derivative computation
+
+#### PyBullet
+
+**Overview**:
+Python bindings for Bullet physics engine.
+
+**Features**:
+- **Python Interface**: Easy scripting and prototyping
+- **Direct API**: Direct access to physics engine
+- **Rendering**: OpenGL-based visualization
+- **Machine Learning**: RL environment support
+
+**Example Usage**:
+```python
+import pybullet as p
+import pybullet_data
+
+# Connect to physics server
+physicsClient = p.connect(p.GUI)  # or p.DIRECT for non-graphical version
+
+# Set gravity
+p.setGravity(0, 0, -9.81)
+
+# Load robot model
+robot = p.loadURDF("path/to/robot.urdf")
+
+# Get joint info
+num_joints = p.getNumJoints(robot)
+for i in range(num_joints):
+    joint_info = p.getJointInfo(robot, i)
+    print(f"Joint {i}: {joint_info[1]}")
+
+# Control joints
+p.setJointMotorControl2(robot, joint_index, p.POSITION_CONTROL, targetPosition=0.5)
+
+# Step simulation
+for i in range(1000):
+    p.stepSimulation()
+    time.sleep(1./240.)
+
+p.disconnect()
+```
+
+### Robot Control in Simulation
+
+#### Control Architecture
+
+**Simulation Control Loop**:
+The structure of control in simulation environments.
+
+**Components**:
+- **State Estimation**: Get current robot state
+- **Controller**: Compute desired actions
+- **Actuator Simulation**: Apply actions to simulation
+- **Physics Update**: Update simulation physics
+- **Sensor Simulation**: Generate sensor readings
+
+**Timing Considerations**:
+- **Control Rate**: How frequently controller runs
+- **Physics Rate**: How frequently physics updates
+- **Sensor Rate**: How frequently sensors update
+- **Communication Rate**: How frequently data is exchanged
+
+**Example Control Loop**:
+```cpp
+// Main control loop
+while (simulation_running) {
+    // Get current state
+    RobotState current_state = get_robot_state();
+    
+    // Compute control command
+    ControlCommand command = controller.compute_command(current_state, target);
+    
+    // Apply command to robot
+    apply_control_command(robot_handle, command);
+    
+    // Step simulation
+    step_simulation(time_step);
+    
+    // Sleep to maintain control rate
+    sleep_until_next_control_cycle();
+}
+```
+
+#### PID Control Implementation
+
+**Proportional-Integral-Derivative Control**:
+Common control strategy in robotics.
+
+**PID Formula**:
+```
+u(t) = K_p * e(t) + K_i * ∫e(t)dt + K_d * de(t)/dt
+```
+
+Where u is control output and e is error.
+
+**Discrete Implementation**:
+```
+u[k] = K_p * e[k] + K_i * Σe[i] + K_d * (e[k] - e[k-1])
+```
+
+**Implementation Example**:
+```cpp
+class PIDController {
+private:
+    double kp, ki, kd;
+    double error_sum;
+    double prev_error;
+    double output_limit;
+
+public:
+    PIDController(double Kp, double Ki, double Kd, double limit) 
+        : kp(Kp), ki(Ki), kd(Kd), output_limit(limit) {
+        error_sum = 0.0;
+        prev_error = 0.0;
+    }
+
+    double compute(double setpoint, double measured_value, double dt) {
+        double error = setpoint - measured_value;
+        
+        // Proportional term
+        double p_term = kp * error;
+        
+        // Integral term
+        error_sum += error * dt;
+        double i_term = ki * error_sum;
+        
+        // Derivative term
+        double derivative = (error - prev_error) / dt;
+        double d_term = kd * derivative;
+        
+        // Calculate output
+        double output = p_term + i_term + d_term;
+        
+        // Apply output limits
+        if (output > output_limit) output = output_limit;
+        if (output < -output_limit) output = -output_limit;
+        
+        // Store error for next iteration
+        prev_error = error;
+        
+        return output;
+    }
+    
+    void reset() {
+        error_sum = 0.0;
+        prev_error = 0.0;
+    }
+};
+```
+
+#### Trajectory Control
+
+**Joint Space Trajectory Control**:
+Following predefined trajectories in joint space.
+
+**Polynomial Trajectories**:
+Smooth trajectories using polynomial interpolation.
+
+**Cubic Polynomial**:
+```
+θ(t) = a₀ + a₁*t + a₂*t² + a₃*t³
+```
+
+**Boundary Conditions**:
+```
+θ(t₀) = θ₀, θ̇(t₀) = θ̇₀
+θ(t₁) = θ₁, θ̇(t₁) = θ̇₁
+```
+
+**Coefficient Calculation**:
+```
+a₀ = θ₀
+a₁ = θ̇₀
+a₂ = (3*(θ₁ - θ₀) - 2*θ̇₀*T - θ̇₁*T) / T²
+a₃ = (2*(θ₀ - θ₁) + (θ̇₀ + θ̇₁)*T) / T³
+```
+
+Where T = t₁ - t₀.
+
+**Implementation Example**:
+```cpp
+class CubicTrajectory {
+private:
+    double a0, a1, a2, a3;
+    double duration;
+    bool initialized;
+
+public:
+    CubicTrajectory() : initialized(false) {}
+
+    void initialize(double t0, double t1, double th0, double th1, 
+                   double v0 = 0.0, double v1 = 0.0) {
+        duration = t1 - t0;
+        double T = duration;
+        
+        a0 = th0;
+        a1 = v0;
+        a2 = (3.0*(th1 - th0) - 2.0*v0*T - v1*T) / (T*T);
+        a3 = (2.0*(th0 - th1) + (v0 + v1)*T) / (T*T*T);
+        
+        initialized = true;
+    }
+
+    double getPosition(double t) {
+        if (!initialized) return 0.0;
+        if (t < 0) t = 0;
+        if (t > duration) t = duration;
+        
+        return a0 + a1*t + a2*t*t + a3*t*t*t;
+    }
+
+    double getVelocity(double t) {
+        if (!initialized) return 0.0;
+        if (t < 0) t = 0;
+        if (t > duration) t = duration;
+        
+        return a1 + 2*a2*t + 3*a3*t*t;
+    }
+
+    double getAcceleration(double t) {
+        if (!initialized) return 0.0;
+        if (t < 0) t = 0;
+        if (t > duration) t = duration;
+        
+        return 2*a2 + 6*a3*t;
+    }
+};
+```
+
+### Sensor Simulation
+
+#### Joint Position Sensors
+
+**Implementation**:
+Reading joint positions from simulation.
+
+**Example**:
+```cpp
+class JointPositionSensor {
+private:
+    std::vector<int> joint_indices;
+    std::vector<double> positions;
+
+public:
+    JointPositionSensor(const std::vector<int>& joints) : joint_indices(joints) {
+        positions.resize(joints.size());
+    }
+
+    void readPositions(void* robot_handle) {
+        for (size_t i = 0; i < joint_indices.size(); ++i) {
+            positions[i] = get_joint_position(robot_handle, joint_indices[i]);
+        }
+    }
+
+    const std::vector<double>& getPositions() const {
+        return positions;
+    }
+};
+```
+
+#### IMU Simulation
+
+**Concept**:
+Simulating Inertial Measurement Unit sensors.
+
+**Components**:
+- **Accelerometer**: Measures linear acceleration
+- **Gyroscope**: Measures angular velocity
+- **Magnetometer**: Measures magnetic field
+
+**Simulation Model**:
+```cpp
+class IMUSensor {
+private:
+    double position[3], orientation[4];  // Position and quaternion
+    double linear_velocity[3], angular_velocity[3];
+    double linear_acceleration[3], angular_acceleration[3];
+    
+    // Noise parameters
+    double acc_noise_density;
+    double gyro_noise_density;
+    double acc_random_walk;
+    double gyro_random_walk;
+
+public:
+    void update(const double& dt) {
+        // Get true values from simulation
+        get_true_values();
+        
+        // Add noise
+        add_noise();
+    }
+
+    void get_true_values() {
+        // Get actual values from physics simulation
+        // This would interface with the simulation engine
+    }
+
+    void add_noise() {
+        // Add realistic noise models
+        // Accelerometer: bias, scale factor, noise
+        // Gyroscope: bias, scale factor, noise
+    }
+};
+```
+
+#### Camera Simulation
+
+**Concept**:
+Simulating vision sensors in robotics.
+
+**Parameters**:
+- **Intrinsics**: Focal length, principal point, distortion
+- **Extrinsics**: Position and orientation in robot frame
+- **Resolution**: Image dimensions
+- **Field of View**: Angular coverage
+
+**Ray Tracing**:
+Computing what the camera sees.
+
+**Pinhole Camera Model**:
+```
+x_image = f * X_world / Z_world
+y_image = f * Y_world / Z_world
+```
+
+**Implementation**:
+```cpp
+class CameraSensor {
+private:
+    double fx, fy, cx, cy;  // Camera intrinsics
+    double width, height;   // Image dimensions
+    double transform[4][4]; // Camera pose relative to robot
+    cv::Mat image_buffer;
+
+public:
+    cv::Mat capture_image(void* world_handle) {
+        // Render scene from camera perspective
+        // This would interface with graphics engine
+        return render_scene_from_camera(world_handle, transform);
+    }
+
+    cv::Point3d project_point(const cv::Point3d& world_point) {
+        // Project 3D world point to 2D image coordinates
+        double x = world_point.x / world_point.z;
+        double y = world_point.y / world_point.z;
+        
+        cv::Point2d image_point;
+        image_point.x = fx * x + cx;
+        image_point.y = fy * y + cy;
+        
+        return cv::Point3d(image_point.x, image_point.y, world_point.z);
+    }
+};
+```
+
+### Model Validation and Verification
+
+#### Model Accuracy
+
+**Kinematic Validation**:
+Verifying that the model accurately represents the real robot's kinematics.
+
+**Methods**:
+- **Forward Kinematics**: Compare model FK to real robot FK
+- **Inverse Kinematics**: Compare model IK solutions to real robot
+- **Workspace Analysis**: Compare reachable workspaces
+- **Singularity Analysis**: Compare singular configurations
+
+**Dynamic Validation**:
+Verifying that the model accurately represents the real robot's dynamics.
+
+**Methods**:
+- **Parameter Identification**: Estimate parameters from real robot data
+- **System Identification**: Fit model to input-output data
+- **Modal Analysis**: Compare natural frequencies and modes
+- **Step Response**: Compare transient responses
+
+#### Simulation Fidelity
+
+**Realism Metrics**:
+Quantifying how closely the simulation matches reality.
+
+**Metrics**:
+- **Kinematic Accuracy**: Position and orientation errors
+- **Dynamic Accuracy**: Force and torque errors
+- **Timing Accuracy**: Response time errors
+- **Stability**: Long-term simulation stability
+
+**Evaluation Methods**:
+- **Cross-validation**: Compare simulation to held-out data
+- **Statistical Tests**: Compare statistical properties
+- **Domain Experts**: Qualitative evaluation by experts
+- **Benchmark Tasks**: Compare performance on standard tasks
+
+### Advanced Modeling Techniques
+
+#### Flexible Body Simulation
+
+**Concept**:
+Modeling robots with flexible or deformable components.
+
+**Approaches**:
+- **Modal Analysis**: Represent flexibility with modal coordinates
+- **Finite Element Method**: Discretize flexible bodies into elements
+- **Lumped Parameter**: Approximate flexibility with springs and dampers
+- **Cosserat Rods**: Model slender flexible structures
+
+**Implementation Challenges**:
+- **Computational Cost**: Flexible body simulation is expensive
+- **Stability**: Flexible bodies can be numerically unstable
+- **Integration**: Coupling flexible and rigid body dynamics
+- **Contact**: Handling contact with flexible bodies
+
+#### Reduced Order Modeling
+
+**Concept**:
+Simplifying complex models while preserving essential dynamics.
+
+**Techniques**:
+- **Proper Orthogonal Decomposition (POD)**: Extract dominant modes
+- **Krylov Subspace Methods**: Preserve input-output behavior
+- **Balanced Truncation**: Preserve controllability and observability
+- **Moment Matching**: Preserve frequency response properties
+
+**Benefits**:
+- **Speed**: Faster simulation
+- **Real-time**: Enables real-time control
+- **Analysis**: Easier system analysis
+- **Optimization**: Faster optimization
+
+**Trade-offs**:
+- **Accuracy**: Reduced accuracy for faster simulation
+- **Validity**: Limited validity range
+- **Complexity**: May require complex model reduction
+- **Tuning**: Need to tune reduction parameters
+
+Understanding robot modeling and simulation is crucial for creating effective simulation environments that can accurately predict robot behavior and support the development of robotic systems.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Robot Modeling and Simulation
+
+### Mathematical Foundations
+- **Kinematics**: Forward and inverse kinematics, DH parameters
+- **Dynamics**: Lagrangian mechanics, Newton-Euler methods
+- **Equations**: Motion equations and constraint formulations
+- **Modeling**: Mathematical representation of robot systems
+
+### Robot Description Formats
+- **URDF**: XML format for robot description
+- **SDF**: Simulation Description Format
+- **MJCF**: MuJoCo XML format
+- **Elements**: Links, joints, materials, and extensions
+
+### Multi-body Dynamics
+- **Rigid Bodies**: Translation and rotation equations
+- **Constraints**: Joint and contact constraints
+- **Integration**: Numerical integration methods
+- **Contact**: Collision detection and response
+
+### Simulation Frameworks
+- **Gazebo**: Open-source with plugin architecture
+- **MuJoCo**: Advanced physics with accuracy
+- **PyBullet**: Python bindings for Bullet engine
+- **Features**: Physics engines, sensors, and visualization
+
+### Control Implementation
+- **PID Control**: Proportional-integral-derivative controllers
+- **Trajectory**: Following predefined movement paths
+- **Architecture**: Control loop and timing considerations
+- **Polynomials**: Smooth trajectory generation
+
+### Sensor Simulation
+- **Joint Sensors**: Position, velocity, and effort sensing
+- **IMU**: Accelerometer and gyroscope simulation
+- **Camera**: Vision sensor modeling and ray tracing
+- **Noise**: Adding realistic sensor noise models
+
+### Validation & Verification
+- **Kinematic**: Verifying position and orientation accuracy
+- **Dynamic**: Validating force and torque models
+- **Fidelity**: Measuring simulation realism
+- **Metrics**: Accuracy and performance measures
+
+### Advanced Techniques
+- **Flexible Bodies**: Modeling deformable components
+- **Reduced Order**: Simplifying complex models
+- **Multi-scale**: Different modeling approaches
+- **Real-time**: Optimization for real-time applications
+
+</div>
+</TabItem>
+</Tabs>

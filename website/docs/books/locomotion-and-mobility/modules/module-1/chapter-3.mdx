@@ -1,0 +1,539 @@
+---
+id: chapter-3
+title: "Wheeled and Tracked Mobility Systems"
+module: "Module 1: Foundations of Robotic Locomotion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Wheeled and Tracked Mobility Systems
+
+### Introduction to Wheeled and Tracked Locomotion
+
+Wheeled and tracked locomotion systems represent two of the most common and practical approaches to robotic mobility. Wheeled systems offer simplicity, efficiency, and speed on relatively flat surfaces, while tracked systems provide superior traction and stability on challenging terrain. Both approaches have distinct advantages and challenges that make them suitable for different applications in robotics.
+
+### Wheeled Locomotion Systems
+
+#### Types of Wheeled Configurations
+
+**Fixed Wheels**:
+Wheels that are fixed in orientation relative to the robot chassis.
+
+**Configuration Types**:
+- **Differential Drive**: Two independently controlled wheels on either side
+- **Ackermann Steering**: Four wheels with front steering (like cars)
+- **Tricycle**: One steerable front wheel, two fixed rear wheels
+- **Omni-Directional**: Wheels with special treads for multi-directional movement
+
+**Differential Drive Systems**:
+Simple and common configuration using two independently controlled wheels.
+
+**Advantages**:
+- **Simplicity**: Fewer mechanical components
+- **Cost-Effective**: Lower manufacturing and maintenance costs
+- **Compact**: Small footprint design
+- **Controllability**: Direct control of turning and forward motion
+
+**Disadvantages**:
+- **Limited Maneuverability**: Cannot move sideways without turning
+- **Tight Turns**: Requires space for turning maneuvers
+- **Slip Issues**: Wheels may slip during turning
+- **Stability**: Less stable at high speeds
+
+**Mathematical Model**:
+```
+v_linear = (v_right + v_left) / 2
+ω = (v_right - v_left) / W
+```
+Where W is the wheelbase (distance between wheels).
+
+**Ackermann Steering Systems**:
+Configuration similar to automobiles with steerable front wheels.
+
+**Advantages**:
+- **Efficient Travel**: Wheels don't slip during turning
+- **High Speed**: Suitable for higher velocity operation
+- **Stability**: More stable at high speeds
+- **Mature Technology**: Well-understood automotive technology
+
+**Disadvantages**:
+- **Complexity**: More mechanical components required
+- **Turning Radius**: Cannot turn in place
+- **Maneuverability**: Less maneuverable in tight spaces
+- **Cost**: Higher cost due to complexity
+
+**Mathematical Model**:
+```
+v = ω * R
+tan(δ_inner) = L / (R - W/2)
+tan(δ_outer) = L / (R + W/2)
+```
+Where L is wheelbase, W is track width, δ are steering angles.
+
+**Omni-Directional Systems**:
+Wheels that can move in multiple directions simultaneously.
+
+**Types**:
+- **Mecanum Wheels**: Wheels with rollers at 45° angles
+- **Omnidirectional Wheels**: Wheels with rollers perpendicular to axis
+- **Spherical Wheels**: Spherical wheels for true 3D movement
+
+**Advantages**:
+- **High Maneuverability**: Can move in any direction without turning
+- **Precise Positioning**: Ability to move sideways and rotate simultaneously
+- **Tight Spaces**: Excellent for confined areas
+- **Complex Maneuvers**: Can perform complex movement patterns
+
+**Disadvantages**:
+- **Efficiency**: Less efficient than fixed wheels
+- **Complexity**: More complex mechanical design
+- **Cost**: Higher cost due to specialized wheels
+- **Maintenance**: More maintenance due to complex wheel design
+
+#### Tracked Locomotion Systems
+
+**Track Configuration**:
+Continuous tracks provide a larger contact area with the ground.
+
+**Components**:
+- **Track Chain**: Flexible track connecting drive and idler wheels
+- **Drive Sprocket**: Powered wheel that propels the track
+- **Idler Wheel**: Adjustable wheel to maintain track tension
+- **Road Wheels**: Wheels that support the vehicle's weight
+- **Track Pads**: Individual segments of the track chain
+
+**Advantages of Tracked Systems**:
+- **Superior Traction**: Large contact area provides excellent grip
+- **Low Ground Pressure**: Better flotation on soft surfaces
+- **Obstacle Negotiation**: Better at climbing over obstacles
+- **Stability**: More stable platform for operations
+- **Weight Distribution**: Even weight distribution across contact area
+
+**Disadvantages of Tracked Systems**:
+- **Speed Limitations**: Generally slower than wheeled systems
+- **Complexity**: More complex mechanical system
+- **Maintenance**: Higher maintenance requirements
+- **Cost**: Higher initial and operational costs
+- **Terrain Limitations**: Not suitable for hard surfaces (damages pavement)
+
+**Mathematical Model**:
+```
+v_linear = (v_right + v_left) / 2
+ω = (v_right - v_left) / W
+```
+Similar to differential drive, but with different traction characteristics.
+
+#### Drive and Steering Mechanisms
+
+**Direct Drive Systems**:
+Motors directly connected to wheels or tracks.
+
+**Advantages**:
+- **Efficiency**: No power losses from transmission
+- **Precision**: Direct control of wheel motion
+- **Simplicity**: Fewer mechanical components
+- **Reliability**: Fewer failure points
+
+**Disadvantages**:
+- **Size Constraints**: Motors must fit within wheel or track system
+- **Torque Limitations**: Limited by motor size constraints
+- **Weight**: Motors contribute to unsprung weight
+
+**Geared Drive Systems**:
+Motors connected to wheels through gearboxes.
+
+**Advantages**:
+- **Torque Multiplication**: Higher torque output
+- **Speed Reduction**: Lower output speeds for better control
+- **Motor Protection**: Gearbox can provide protection
+- **Size Flexibility**: Motors can be located remotely
+
+**Disadvantages**:
+- **Efficiency Loss**: Power losses in transmission
+- **Complexity**: Additional mechanical components
+- **Maintenance**: More components to maintain
+- **Backlash**: Gear backlash affects precision
+
+### Traction and Mobility Factors
+
+#### Ground Contact Mechanics
+
+**Friction and Traction**:
+The interaction between wheels/tracks and ground determines mobility.
+
+**Friction Coefficient**:
+- **Static Friction**: Prevents initial sliding
+- **Kinetic Friction**: Governs sliding behavior
+- **Factors**: Surface material, roughness, moisture, temperature
+
+**Traction Calculation**:
+```
+F_traction = μ * N
+```
+Where μ is friction coefficient and N is normal force.
+
+**Factors Affecting Traction**:
+- **Normal Force**: Weight distribution on contact points
+- **Surface Properties**: Roughness, material, conditions
+- **Tire/Track Design**: Surface pattern and material
+- **Environmental Conditions**: Moisture, temperature, debris
+
+#### Ground Pressure Analysis
+
+**Wheeled Systems**:
+Ground pressure concentrated at contact patches.
+
+**Calculation**:
+```
+P_ground = W / (n * A_contact)
+```
+Where W is weight, n is number of wheels, A_contact is contact area.
+
+**Implications**:
+- **Soft Surfaces**: May sink into soft ground
+- **Hard Surfaces**: Good performance on hard surfaces
+- **Ground Damage**: May damage delicate surfaces
+
+**Tracked Systems**:
+Distributed ground pressure over larger contact area.
+
+**Calculation**:
+```
+P_ground = W / (L_track * W_track)
+```
+Where L_track is track length, W_track is track width.
+
+**Advantages**:
+- **Soft Terrain**: Better performance on soft surfaces
+- **Flotation**: Better flotation characteristics
+- **Ground Preservation**: Less ground damage
+
+### Control Systems for Wheeled and Tracked Robots
+
+#### Kinematic Control
+
+**Differential Drive Control**:
+Controlling the linear and angular velocity of a differential drive robot.
+
+**Control Equations**:
+```
+v_left = (v_linear - ω * W/2) / r
+v_right = (v_linear + ω * W/2) / r
+```
+Where r is wheel radius, W is wheelbase.
+
+**Implementation**:
+- **Velocity Control**: Controlling wheel angular velocities
+- **Position Control**: Controlling robot position and orientation
+- **Trajectory Following**: Following desired paths
+- **Feedback Control**: Using encoders for closed-loop control
+
+**Ackermann Steering Control**:
+Controlling steering angle and speed for Ackermann systems.
+
+**Control Equations**:
+```
+δ = arctan(L / R)
+v = ω * R
+```
+Where δ is steering angle, L is wheelbase, R is turning radius.
+
+**Implementation**:
+- **Steering Control**: Controlling front wheel angles
+- **Speed Control**: Controlling vehicle speed
+- **Path Following**: Following curved trajectories
+- **Stability Control**: Maintaining stability during turns
+
+#### Dynamic Control
+
+**Traction Control**:
+Managing wheel slip and maintaining optimal traction.
+
+**Slip Ratio**:
+```
+slip = (ω_wheel * r - v_robot) / v_robot
+```
+
+**Control Strategies**:
+- **Anti-lock Braking**: Preventing wheel lockup
+- **Traction Control**: Preventing excessive wheel spin
+- **Differential Lock**: Improving traction on slippery surfaces
+- **Torque Vectoring**: Optimizing torque distribution
+
+**Stability Control**:
+Maintaining vehicle stability during operation.
+
+**Roll Stability**:
+- **Center of Gravity**: Lower CG improves stability
+- **Track Width**: Wider track improves stability
+- **Speed Management**: Reducing speed on turns
+- **Load Distribution**: Even load distribution
+
+**Yaw Stability**:
+- **Understeer**: Front wheels lose grip first
+- **Oversteer**: Rear wheels lose grip first
+- **Neutral Steer**: Balanced handling characteristics
+
+### Environmental Considerations
+
+#### Terrain Classification
+
+**Flat Surfaces**:
+Smooth, hard surfaces like concrete, asphalt, or indoor floors.
+
+**Characteristics**:
+- **High Traction**: Good grip for wheeled systems
+- **Low Rolling Resistance**: Efficient operation
+- **Precision**: Good for precise positioning
+- **Speed**: Suitable for high-speed operation
+
+**Rough Terrain**:
+Uneven surfaces with obstacles, loose materials, or irregularities.
+
+**Characteristics**:
+- **Obstacle Negotiation**: Need for ground clearance
+- **Traction Variations**: Changing grip conditions
+- **Suspension Requirements**: Need for shock absorption
+- **Speed Limitations**: Lower speeds for safety
+
+**Soft Surfaces**:
+Surfaces that may be penetrated by wheels, such as sand, mud, or snow.
+
+**Characteristics**:
+- **Ground Pressure**: Critical for preventing sinking
+- **Traction**: Often limited due to surface properties
+- **Ground Damage**: Potential for surface damage
+- **Mobility**: Tracked systems often preferred
+
+#### Environmental Challenges
+
+**Weather Conditions**:
+Environmental factors affecting mobility.
+
+**Rain and Moisture**:
+- **Reduced Traction**: Lower friction coefficients
+- **Electrical Issues**: Water ingress protection needed
+- **Corrosion**: Metal components may corrode
+- **Visibility**: Reduced sensor performance
+
+**Snow and Ice**:
+- **Very Low Traction**: Significant traction challenges
+- **Temperature Effects**: Component performance changes
+- **Accumulation**: Snow/ice buildup on components
+- **Thermal Management**: Heating systems may be needed
+
+**Dust and Debris**:
+- **Component Protection**: Sealing against particles
+- **Sensor Obstruction**: Dust affecting sensor performance
+- **Mechanical Wear**: Particles causing wear
+- **Cooling**: Dust affecting heat dissipation
+
+### Power and Energy Considerations
+
+#### Power Requirements
+
+**Rolling Resistance**:
+Power needed to overcome rolling resistance of wheels/tracks.
+
+**Calculation**:
+```
+P_rolling = C_rr * W * v
+```
+Where C_rr is rolling resistance coefficient, W is weight, v is velocity.
+
+**Factors Affecting Rolling Resistance**:
+- **Tire/Track Design**: Construction and material properties
+- **Ground Properties**: Surface roughness and material
+- **Vehicle Weight**: Normal force on contact points
+- **Speed**: Rolling resistance may increase with speed
+
+**Aerodynamic Drag**:
+Power needed to overcome air resistance (more significant at higher speeds).
+
+**Calculation**:
+```
+P_drag = 0.5 * ρ * C_d * A * v³
+```
+Where ρ is air density, C_d is drag coefficient, A is frontal area.
+
+**Gradient Climbing**:
+Power needed to overcome gravity on inclines.
+
+**Calculation**:
+```
+P_gradient = W * g * sin(θ) * v
+```
+Where θ is incline angle.
+
+#### Energy Efficiency
+
+**Optimization Strategies**:
+Maximizing distance traveled per unit of energy consumed.
+
+**Design Approaches**:
+- **Lightweight Construction**: Reducing vehicle mass
+- **Aerodynamic Design**: Minimizing drag
+- **Efficient Drivetrain**: Minimizing power losses
+- **Regenerative Systems**: Recovering energy during braking
+
+**Operational Strategies**:
+- **Speed Optimization**: Optimal speed for efficiency
+- **Route Planning**: Choosing most efficient paths
+- **Load Management**: Optimizing payload for efficiency
+- **Maintenance**: Keeping systems in optimal condition
+
+### Applications and Selection Criteria
+
+#### Wheeled Robot Applications
+
+**Indoor Navigation**:
+Robots operating in structured indoor environments.
+
+**Examples**:
+- **Service Robots**: Delivery, cleaning, and assistance robots
+- **Industrial Automation**: Material handling and transport
+- **Research Platforms**: Laboratory and testing robots
+- **Personal Mobility**: Wheelchairs and personal transporters
+
+**Advantages for Indoor Use**:
+- **Precision**: Good for precise positioning
+- **Efficiency**: Energy efficient on smooth surfaces
+- **Speed**: Suitable for moderate speeds
+- **Cost**: Lower cost than other systems
+
+**Outdoor Wheeled Robots**:
+Robots operating in outdoor structured environments.
+
+**Examples**:
+- **Agricultural Robots**: Crop monitoring and treatment
+- **Delivery Robots**: Last-mile delivery systems
+- **Security Robots**: Perimeter patrol and monitoring
+- **Exploration**: Planetary rovers and outdoor research
+
+**Challenges for Outdoor Use**:
+- **Terrain Variability**: Need to handle different surface types
+- **Weather Protection**: Exposure to environmental conditions
+- **Durability**: Need for robust construction
+- **Navigation**: More complex navigation requirements
+
+#### Tracked Robot Applications
+
+**Rough Terrain Operation**:
+Robots requiring operation on challenging terrain.
+
+**Examples**:
+- **Military Robots**: Reconnaissance and explosive disposal
+- **Search and Rescue**: Disaster response and recovery
+- **Construction**: Site inspection and monitoring
+- **Agriculture**: Field operations on soft terrain
+
+**Advantages for Rough Terrain**:
+- **Superior Traction**: Better grip on challenging surfaces
+- **Obstacle Negotiation**: Better at climbing over obstacles
+- **Stability**: More stable platform for operations
+- **Ground Pressure**: Better flotation on soft surfaces
+
+**Limitations**:
+- **Speed**: Generally slower than wheeled systems
+- **Maintenance**: Higher maintenance requirements
+- **Cost**: Higher initial and operational costs
+- **Surface Damage**: Not suitable for hard surfaces
+
+### Advanced Wheeled and Tracked Technologies
+
+#### Active Suspension Systems
+
+**Purpose**:
+Improving mobility and stability on challenging terrain.
+
+**Benefits**:
+- **Terrain Adaptation**: Adapting to changing ground conditions
+- **Stability**: Improving vehicle stability
+- **Performance**: Maintaining optimal traction
+- **Comfort**: Reducing vibrations for payloads
+
+**Implementation Approaches**:
+- **Passive**: Fixed spring and damper systems
+- **Semi-Active**: Adjustable damping characteristics
+- **Active**: Powered systems for force control
+- **Adaptive**: Learning systems that adjust over time
+
+#### Intelligent Traction Control
+
+**Advanced Systems**:
+Using sensors and algorithms to optimize traction.
+
+**Technologies**:
+- **Wheel Speed Sensors**: Detecting slip conditions
+- **Inertial Sensors**: Measuring vehicle dynamics
+- **Ground Sensing**: Assessing surface properties
+- **Machine Learning**: Learning optimal traction strategies
+
+**Control Strategies**:
+- **Individual Wheel Control**: Controlling each wheel independently
+- **Predictive Control**: Anticipating traction conditions
+- **Multi-Objective Optimization**: Balancing speed, efficiency, and safety
+- **Adaptive Learning**: Improving performance over time
+
+Understanding wheeled and tracked mobility systems is essential for selecting the appropriate locomotion method for specific robotic applications and environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary: Wheeled and Tracked Mobility Systems
+
+### Wheeled Systems
+- **Configurations**: Differential, Ackermann, Omni-directional
+- **Advantages**: Efficiency, speed, simplicity on flat surfaces
+- **Disadvantages**: Limited terrain adaptability, maneuverability
+- **Applications**: Indoor, structured outdoor environments
+
+### Tracked Systems
+- **Components**: Track chain, drive sprocket, idler wheel, road wheels
+- **Advantages**: Superior traction, low ground pressure, stability
+- **Disadvantages**: Speed limitations, complexity, maintenance
+- **Applications**: Rough terrain, military, search and rescue
+
+### Control Systems
+- **Kinematic**: Position and velocity control approaches
+- **Dynamic**: Traction and stability control systems
+- **Feedback**: Using sensors for closed-loop control
+- **Optimization**: Balancing speed, efficiency, and safety
+
+### Environmental Factors
+- **Terrain**: Flat, rough, soft surface considerations
+- **Weather**: Rain, snow, dust protection requirements
+- **Ground Pressure**: Critical for soft surface operation
+- **Traction**: Friction and contact mechanics
+
+### Power & Energy
+- **Rolling Resistance**: Power losses due to surface contact
+- **Aerodynamic Drag**: Air resistance at higher speeds
+- **Efficiency**: Optimization strategies and design approaches
+- **Gradient Climbing**: Power requirements for inclines
+
+### Selection Criteria
+- **Application**: Indoor, outdoor, rough terrain requirements
+- **Performance**: Speed, precision, maneuverability needs
+- **Environment**: Weather, terrain, operational conditions
+- **Cost**: Initial and operational cost considerations
+
+### Advanced Technologies
+- **Suspension**: Active and adaptive suspension systems
+- **Traction Control**: Intelligent traction management
+- **Sensing**: Advanced ground and environment sensing
+- **Learning**: Adaptive and machine learning approaches
+
+</div>
+</TabItem>
+</Tabs>
