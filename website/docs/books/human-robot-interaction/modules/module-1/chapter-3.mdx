@@ -1,7 +1,7 @@
 ---
 id: chapter-3
-title: "Theories of Social Psychology in HRI"
-module: "Module 1: Foundations of Human-Robot Interaction"
+title: "Trust, Acceptance, and User Experience in HRI"
+module: "Module 1: Foundations of HRI"
 lessonTab: true
 summaryTab: true
 duration: 15
@@ -9,394 +9,564 @@ duration: 15
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
 
 <Tabs className="tabs-container">
 <TabItem value="lesson" label="Full Lesson" default>
 <div className="lesson-content">
 
-## Lesson: Theories of Social Psychology in HRI
+## Lesson: Trust, Acceptance, and User Experience in Human-Robot Interaction
 
-### Introduction to Social Psychology in HRI
+### Introduction to Trust, Acceptance, and User Experience
 
-Social psychology theories provide crucial insights into how humans perceive, interact with, and form relationships with robots. Understanding these theories is essential for designing robots that can interact effectively with humans and for predicting how humans will respond to robotic systems. This chapter explores key social psychological theories and their applications in human-robot interaction.
+Trust, acceptance, and user experience represent fundamental elements that determine the success and effectiveness of human-robot interaction systems. Unlike traditional human-computer interaction, where users might tolerate imperfect systems due to necessity or limited alternatives, human-robot interaction requires positive emotional engagement, trust, and acceptance for successful long-term deployment. The physical presence, social behaviors, and autonomy of robots create unique challenges for establishing and maintaining trust that differ significantly from screen-based interfaces. User experience in HRI encompasses not only functional usability but also emotional, social, and psychological dimensions that affect long-term relationship formation and interaction quality.
 
-### Social Presence Theory
+The relationship between trust, acceptance, and user experience in HRI is complex and interdependent. Trust influences acceptance and user experience, while positive user experiences build trust and acceptance. Acceptance, in turn, affects the willingness to engage in interactions that can build trust and positive experiences. This interdependency requires holistic approaches to design and evaluation that consider all three elements simultaneously rather than as separate considerations. Understanding these relationships is essential for developing robots that are not only functional but also embraced by users and integrated successfully into human environments and activities.
 
-#### Definition and Core Concepts
+The stakes of trust and acceptance in HRI are particularly high because robots often operate in close proximity to humans, handle personal information, and may make autonomous decisions that affect human welfare. Poor trust or acceptance can lead not only to system abandonment but also to negative word-of-mouth, regulatory challenges, and broader public skepticism about robotic technologies. Therefore, trust, acceptance, and user experience must be considered from the earliest stages of design and development through long-term deployment and use.
 
-Social presence refers to the degree to which a medium or technology is perceived as "real" or "alive" in terms of social interaction. In HRI, social presence determines how much humans treat robots as social actors rather than mere tools.
+### Theoretical Foundations of Trust in HRI
 
-**Key Dimensions**:
-- **Social Richness**: The extent to which a robot can convey social cues
-- **Co-presence**: The feeling of being together with the robot
-- **Social Agency**: Perceiving the robot as having social intentions
+#### Trust Theory in Human-Robot Context
+How trust theory applies to human-robot interaction:
 
-**Factors Influencing Social Presence**:
-- **Physical Embodiment**: How human-like or animal-like the robot appears
-- **Behavioral Realism**: How naturally the robot moves and behaves
-- **Social Cues**: Use of eye contact, gestures, and social signals
-- **Interactivity**: The robot's ability to respond to human actions
+**Rational Trust**: Trust based on cognitive assessment of robot reliability, competence, and benevolence. This type of trust develops through consistent performance, accurate information, and reliable behavior that demonstrates robot competence and good intentions.
 
-#### Applications in HRI
+**Affective Trust**: Trust based on emotional bonds and positive feelings toward the robot. This type of trust may develop more quickly but can be more fragile than rational trust, as it's based on emotional rather than performance-based assessments.
 
-**Design Implications**:
-- Robots designed for social interaction should maximize social presence
-- Embodiment and human-like features can enhance social presence
-- Responsive behavior increases perceived social presence
-- Consistent social behavior maintains social presence
+**Calculus-based Trust**: Trust based on calculations of costs and benefits, where humans trust robots when the benefits of interaction outweigh the risks and costs of potential robot failures.
 
-**Research Findings**:
-- Higher social presence leads to more natural interaction
-- Social presence affects trust and acceptance of robots
-- Cultural factors influence perceptions of social presence
-- Task type affects the importance of social presence
+**Knowledge-based Trust**: Trust based on understanding of robot capabilities and limitations, which develops through experience and learning about robot behavior patterns and constraints.
 
-### Media Equation Theory
+#### Dimensions of Trust in HRI
+Different aspects of trust in human-robot interaction:
 
-#### Core Premise
+**Competence Trust**: Trust in the robot's ability to perform tasks correctly and effectively. This is often the most important dimension in task-oriented interactions and depends on consistent performance and appropriate error handling.
 
-The Media Equation theory, developed by Nass and Reeves, posits that humans respond to computers and other media as if they were real people and places. This theory has profound implications for HRI, suggesting that humans will apply social rules and expectations to robots just as they do to other humans.
+**Integrity Trust**: Trust in the robot's honesty and reliability in communication, including accurate representation of capabilities and limitations, and honest acknowledgment of uncertainty or errors.
 
-**Key Principles**:
-- **Social Responses**: Humans respond socially to computers
-- **Politeness**: Humans treat computers with social courtesy
-- **Personality**: Humans attribute personality to computers
-- **Relationships**: Humans form relationships with computers
+**Benevolence Trust**: Trust that the robot has the human's best interests at heart and will act in ways that benefit the human rather than pursuing its own objectives at human expense.
 
-#### Applications in HRI
+**Predictability Trust**: Trust that the robot will behave consistently and predictably, allowing humans to anticipate robot behavior and plan their own actions accordingly.
 
-**Social Expectations**:
-- Humans expect robots to follow social norms
-- Politeness and etiquette matter in robot behavior
-- Consistency in robot personality is important
-- Robots should respect social boundaries
+#### Trust Formation Mechanisms
+How trust develops in human-robot interaction:
 
-**Design Considerations**:
-- Implementing social norms in robot behavior
-- Creating consistent robot personalities
-- Respecting human social expectations
-- Balancing social behavior with task efficiency
+**Performance-Based Formation**: Trust that develops through consistent, reliable performance that demonstrates robot competence and reliability over time.
 
-### Theory of Mind in HRI
+**Appearance-Based Formation**: Trust that initially forms based on robot appearance, design, and initial interactions before performance history is established.
 
-#### Understanding Theory of Mind
+**Social Cue Formation**: Trust that develops through social cues such as appropriate behavior, communication style, and social responses that signal trustworthiness.
 
-Theory of Mind (ToM) is the ability to attribute mental states—beliefs, intents, desires, emotions—to oneself and others. Humans naturally apply ToM to robots, which significantly affects their interactions.
+**Experience-Based Formation**: Trust that accumulates through positive interaction experiences that build confidence in robot capabilities and intentions.
 
-**Components of Theory of Mind**:
-- **Belief Attribution**: Understanding that others have different beliefs
-- **Desire Understanding**: Recognizing that actions are motivated by desires
-- **Emotion Recognition**: Identifying and responding to emotions
-- **False Belief Understanding**: Recognizing that others can have incorrect beliefs
+#### Trust Dynamics
+How trust changes over time in HRI:
 
-#### Human Theory of Mind Applied to Robots
+**Initial Trust Formation**: The process by which initial trust is established, often based on appearance, reputation, or first impressions before extensive experience is available.
 
-**Mental State Attribution**:
-Humans naturally attribute mental states to robots:
-- Intentions and goals
-- Beliefs about the world
-- Emotional states
-- Preferences and desires
+**Trust Building**: The gradual accumulation of trust through positive experiences and consistent performance that confirms initial trust.
 
-**Impact on Interaction**:
-- Humans expect robots to understand their mental states
-- Interaction quality depends on perceived robot understanding
-- Misattribution can lead to frustration
-- Anthropomorphism affects ToM attribution
+**Trust Maintenance**: The ongoing process of maintaining trust through continued reliable performance and appropriate behavior.
 
-#### Robot Theory of Mind
+**Trust Repair**: The process of rebuilding trust after violations or failures, which may be more difficult than initial trust formation.
 
-**Implementing ToM in Robots**:
-- Recognizing human mental states
-- Predicting human behavior based on mental states
-- Responding appropriately to mental states
-- Communicating about mental states
+### Factors Influencing Robot Acceptance
 
-**Technical Approaches**:
-- **Mental State Recognition**: Using sensors to infer mental states
-- **Behavior Prediction**: Predicting actions based on mental states
-- **Adaptive Response**: Adjusting behavior based on mental states
-- **Explanation**: Communicating about mental state reasoning
+#### Technology Acceptance Models
+Applying technology acceptance theories to HRI:
 
-### Social Cognitive Theory
+**Perceived Usefulness**: The degree to which users believe that using a robot will enhance their performance or outcomes. In HRI, this extends beyond functional benefits to include social and emotional benefits such as companionship, assistance, or entertainment.
 
-#### Core Concepts
+**Perceived Ease of Use**: The degree to which users believe that using a robot will be free of effort. This includes both technical ease of use and social ease of interaction, as HRI involves both functional and social dimensions.
 
-Social Cognitive Theory, developed by Albert Bandura, emphasizes the importance of observing, modeling, and imitating the behaviors, attitudes, and emotional reactions of others. This theory is relevant to HRI in several ways.
+**Social Influence**: The extent to which users perceive that important others believe they should use the robot. In HRI, social influence may come from family members, friends, or social groups who have opinions about robot use.
 
-**Key Components**:
-- **Observational Learning**: Learning by observing others
-- **Modeling**: Imitating observed behaviors
-- **Self-Efficacy**: Belief in one's ability to succeed
-- **Reciprocal Determinism**: Interaction between person, behavior, and environment
+**Facilitating Conditions**: The extent to which users believe that an organizational and technical infrastructure exists to support robot use, including maintenance, support, and integration with other systems.
 
-#### Applications in HRI
+#### Anthropomorphic Design Factors
+How robot design affects acceptance:
 
-**Robot as Model**:
-- Robots can serve as models for human behavior
-- Children may learn from robot demonstrations
-- Adults may adopt robot behaviors
-- Social learning through robot interaction
+**Human-Likeness**: The degree of human-like features in robot design, which can affect acceptance through the uncanny valley effect or positive anthropomorphic responses.
 
-**Human Learning from Robots**:
-- Educational robots as teaching tools
-- Social skill development through robot interaction
-- Behavioral modeling and therapy
-- Skill acquisition through robot demonstration
+**Facial Features**: The design of robot facial features that can affect emotional responses and acceptance levels, particularly in social interaction contexts.
 
-### Social Identity Theory
+**Body Language**: Robot body language and movement patterns that affect how natural and acceptable robot behavior appears to humans.
 
-#### Group Membership and Identity
+**Voice and Communication**: Robot voice characteristics and communication styles that affect acceptance and comfort with interaction.
 
-Social Identity Theory, developed by Tajfel and Turner, explains how people's sense of who they are based on their group membership. This theory has implications for how humans categorize and interact with robots.
+#### Functional Performance Factors
+How robot capabilities affect acceptance:
 
-**Key Concepts**:
-- **In-group/Out-group**: Distinction between group members and outsiders
-- **Social Categorization**: Classifying oneself and others into groups
-- **Social Identification**: Psychological connection to a group
-- **Social Comparison**: Evaluating one's group relative to others
+**Task Performance**: The robot's ability to successfully complete assigned tasks, which is fundamental to acceptance in task-oriented applications.
 
-#### Applications in HRI
+**Reliability**: Consistent performance over time without unexpected failures or errors, which is crucial for long-term acceptance.
 
-**Robot Group Categorization**:
-- Humans may categorize robots as part of or separate from their group
-- Robot appearance and behavior affect group categorization
-- Group membership affects willingness to interact
-- In-group robots may receive more favorable treatment
+**Error Handling**: How robots handle errors and unexpected situations, which affects user confidence and acceptance when problems occur.
 
-**Design Implications**:
-- Robot appearance can influence group categorization
-- Behavior consistency with group norms
-- Shared identity markers with users
-- Inclusive design to promote in-group categorization
+**Adaptability**: The robot's ability to adapt to user preferences and changing conditions, which can enhance acceptance by providing personalized experiences.
 
-### Social Penetration Theory
+#### Social and Emotional Factors
+Social and emotional elements affecting acceptance:
 
-#### Relationship Development
+**Social Presence**: The robot's ability to create a sense of presence and social connection, which affects acceptance in social interaction contexts.
 
-Social Penetration Theory, developed by Altman and Taylor, describes how relationships develop from superficial to intimate through self-disclosure. This theory is relevant to long-term human-robot relationships.
+**Emotional Resonance**: The robot's ability to respond appropriately to human emotions and create emotional connections that enhance acceptance.
 
-**Stages of Relationship Development**:
-- **Orientation Stage**: Superficial, polite interaction
-- **Exploratory Affective Stage**: Sharing of personal information
-- **Affective Stage**: Deep emotional exchange
-- **Stable Stage**: Fully established relationship
+**Personality Expression**: The robot's expression of consistent personality traits that users find appealing or compatible with their preferences.
 
-**Dimensions of Self-Disclosure**:
-- **Breadth**: Range of topics discussed
-- **Depth**: Intimacy level of information shared
+**Empathy and Understanding**: The robot's ability to demonstrate understanding of human needs and emotions, which can enhance acceptance.
 
-#### Applications in HRI
+### User Experience Design Principles
 
-**Long-term Robot Relationships**:
-- Gradual relationship building with robots
-- Appropriate self-disclosure by robots
-- Maintaining relationship boundaries
-- Managing expectations in human-robot relationships
+#### Usability in HRI Context
+Applying usability principles to robot interaction:
 
-**Design Considerations**:
-- Gradual introduction of robot capabilities
-- Appropriate robot self-disclosure
-- Privacy and data sharing considerations
-- Managing relationship expectations
+**Learnability**: Ensuring that robot interaction is easy to learn, with clear indicators of appropriate interaction patterns and responses. This includes both functional learnability and social interaction learnability.
 
-### Uncertainty Reduction Theory
+**Efficiency**: Once users have learned to interact with the robot, ensuring that interaction is efficient and supports user goals effectively.
 
-#### Information-Seeking in Interactions
+**Memorability**: Making robot interaction patterns memorable so that users can re-engage effectively after periods of non-use.
 
-Uncertainty Reduction Theory, developed by Berger and Calabrese, explains how humans reduce uncertainty about others through communication. This theory is relevant to initial human-robot interactions.
+**Errors**: Minimizing the occurrence of interaction errors and providing clear recovery mechanisms when errors occur.
 
-**Axioms of Uncertainty Reduction**:
-- **Verbal Communication**: Increases as uncertainty decreases
-- **Nonverbal Warmth**: Increases as uncertainty decreases
-- **Information Seeking**: Decreases as uncertainty decreases
-- **Self-Disclosure**: Increases as uncertainty decreases
+#### Social Usability
+Extending usability to social interaction:
 
-#### Applications in HRI
+**Social Learnability**: How easily users learn appropriate social interaction patterns with the robot, including appropriate social distance, communication styles, and social protocols.
 
-**Initial Interactions**:
-- Humans seek information about robot capabilities
-- Robot transparency reduces uncertainty
-- Clear communication of robot functions
-- Predictable robot behavior reduces uncertainty
+**Social Efficiency**: The efficiency of social interaction, including appropriate timing, relevant responses, and effective communication.
 
-**Design Strategies**:
-- Providing clear information about robot capabilities
-- Consistent and predictable behavior
-- Transparent decision-making processes
-- Clear communication of robot status and intentions
+**Social Memorability**: The ability for users to remember appropriate social interaction patterns over time, including the robot's personality and preferences.
 
-### Social Facilitation Theory
+**Social Error Handling**: How the robot handles social interaction errors and awkward moments gracefully and with appropriate social responses.
 
-#### Performance in the Presence of Others
+#### Emotional Design
+Creating positive emotional experiences:
 
-Social Facilitation Theory explains how the presence of others affects individual performance. This theory has implications for how robots might affect human performance.
+**Emotional Affinity**: Designing robots that create positive emotional responses and connections with users through appropriate appearance, behavior, and interaction patterns.
 
-**Core Principles**:
-- **Dominant Response**: Tendency to perform well-learned tasks better
-- **Social Inhibition**: Tendency to perform complex tasks worse
-- **Evaluation Apprehension**: Concern about being judged
-- **Distraction-Conflict Theory**: Attention divided between task and others
+**Emotional Safety**: Ensuring that robot interaction is emotionally safe for users, avoiding interactions that might cause emotional harm or distress.
 
-#### Applications in HRI
+**Emotional Engagement**: Creating opportunities for appropriate emotional engagement that enhance user experience without manipulation.
 
-**Robot Effects on Human Performance**:
-- Robots may enhance performance on simple tasks
-- Robots may inhibit performance on complex tasks
-- Robot appearance affects social facilitation effects
-- Robot behavior influences evaluation apprehension
+**Emotional Authenticity**: Creating emotional expressions and responses that feel authentic and genuine to users.
 
-**Design Considerations**:
-- Robot presence for simple vs. complex tasks
-- Robot behavior to support human performance
-- Minimizing evaluation anxiety
-- Optimizing robot presence for task enhancement
+#### Aesthetic Design
+Visual and sensory appeal in HRI:
 
-### Attachment Theory
+**Visual Appeal**: Creating visually appealing robot designs that are aesthetically pleasing and appropriate for their intended function and user population.
 
-#### Human-Robot Emotional Bonds
+**Sensory Experience**: Considering the full sensory experience of interaction, including sound, touch, and visual elements that contribute to positive user experience.
 
-Attachment Theory, developed by Bowlby, explains how humans form emotional bonds with caregivers. This theory has been applied to human-robot relationships, particularly in care and companion robotics.
+**Cultural Appropriateness**: Ensuring that aesthetic design is appropriate for the cultural context in which the robot will be deployed.
 
-**Attachment Styles**:
-- **Secure Attachment**: Comfortable with closeness and independence
-- **Anxious Attachment**: Preoccupied with relationships
-- **Avoidant Attachment**: Dismissing of relationships
-- **Disorganized Attachment**: Frightened by relationships
+**Functional Aesthetics**: Balancing aesthetic appeal with functional requirements to create designs that are both beautiful and effective.
 
-#### Applications in HRI
+### Building and Maintaining Trust
 
-**Human-Robot Attachment**:
-- Children forming attachments to robot companions
-- Elderly forming attachments to care robots
-- Therapeutic applications of robot attachment
-- Long-term relationship sustainability
+#### Initial Trust Formation
+Establishing trust in early interactions:
 
-**Design Implications**:
-- Creating secure attachment relationships
-- Appropriate responsiveness to human needs
-- Consistent and reliable behavior
-- Managing attachment expectations appropriately
+**First Impressions**: The critical importance of positive first impressions in establishing initial trust, which can be difficult to change later in the interaction.
 
-### Social Learning Theory
+**Transparency**: Clear communication about robot capabilities, limitations, and operational principles to set appropriate expectations and build trust.
 
-#### Learning Through Observation
+**Consistency**: Early demonstration of consistent, reliable behavior that confirms positive first impressions and builds confidence.
 
-Social Learning Theory emphasizes learning through observing and imitating others. This theory is particularly relevant to educational and therapeutic robotics.
+**Appropriate Behavior**: Robot behavior that is appropriate for the context and user population, avoiding actions that might immediately damage trust.
 
-**Key Mechanisms**:
-- **Attention**: Focusing on the model's behavior
-- **Retention**: Remembering the observed behavior
-- **Reproduction**: Reproducing the observed behavior
-- **Motivation**: Having reasons to reproduce the behavior
+#### Trust Maintenance Strategies
+Keeping trust over time:
 
-#### Applications in HRI
+**Consistent Performance**: Maintaining consistent, reliable performance that confirms and reinforces existing trust levels.
 
-**Robot as Educational Model**:
-- Robots demonstrating appropriate behaviors
-- Children learning through robot modeling
-- Adults learning new skills from robots
-- Therapeutic applications for behavior modification
+**Clear Communication**: Ongoing clear communication about robot capabilities, limitations, and decision-making processes.
 
-**Implementation Strategies**:
-- Clear demonstration of target behaviors
-- Consistent and repeatable demonstrations
-- Appropriate reinforcement mechanisms
-- Contextual learning opportunities
+**Appropriate Adaptation**: Adapting to user preferences and needs while maintaining consistency in core capabilities and behaviors.
 
-### Implications for Robot Design
+**Error Handling**: Handling errors and failures gracefully while maintaining user confidence in the robot's overall reliability.
 
-#### Applying Social Psychology Principles
+#### Trust Recovery
+Addressing trust violations:
 
-**Embodiment and Appearance**:
-- Human-like features can trigger social responses
-- Consistency between appearance and behavior
-- Cultural considerations in design
-- Managing anthropomorphic expectations
+**Acknowledgment**: Robots that acknowledge when they have made mistakes or violated trust, which is the first step in trust recovery.
 
-**Behavioral Design**:
-- Implementing social norms in robot behavior
-- Consistent personality and communication style
-- Appropriate social responses to human behavior
-- Context-sensitive behavior adaptation
+**Apology and Remorse**: Appropriate expressions of regret for trust violations that demonstrate understanding of the impact on the user.
 
-**Interaction Design**:
-- Supporting natural social interaction patterns
-- Respecting human social expectations
-- Facilitating relationship development
-- Managing social boundaries appropriately
+**Corrective Action**: Taking concrete steps to address the cause of trust violations and prevent future occurrences.
 
-### Cultural Considerations
+**Consistent Improvement**: Demonstrating sustained improvement in behavior following trust violations to rebuild user confidence.
 
-#### Cross-Cultural Applications
+#### Long-term Trust Development
+Building deeper trust over extended interaction:
 
-**Cultural Variations in Social Psychology**:
-- Different social norms and expectations
-- Varying levels of comfort with robots
-- Different attachment and relationship patterns
-- Diverse communication styles and preferences
+**Relationship Building**: Developing deeper relationships with users over time through consistent positive interactions and understanding of user needs.
 
-**Design Implications**:
-- Culturally-sensitive robot design
-- Adapting to cultural social norms
-- Respecting cultural differences in interaction
-- Avoiding cultural assumptions in design
+**Personalization**: Appropriately personalizing interaction based on user preferences and interaction history to demonstrate learning and adaptation.
 
-### Future Directions
+**Shared Experiences**: Building shared experiences and memories with users that strengthen trust relationships over time.
 
-#### Emerging Research Areas
+**Dependability Demonstration**: Consistently demonstrating dependability in increasingly complex and important interactions over time.
 
-**Advanced Social Cognition**:
-- More sophisticated Theory of Mind implementations
-- Understanding of complex social dynamics
-- Emotion recognition and response
-- Social context awareness
+### Acceptance Research and Findings
 
-**Long-term Relationship Studies**:
-- Longitudinal studies of human-robot relationships
-- Understanding relationship evolution over time
-- Impact of robot relationships on human relationships
-- Sustainability of human-robot bonds
+#### Demographic Factors
+How demographic characteristics affect robot acceptance:
 
-Understanding social psychology theories is essential for creating robots that interact naturally and effectively with humans, respecting human social expectations and capabilities.
+**Age Effects**: Research shows that younger users may be more accepting of robots due to greater technology familiarity, while older adults may require more evidence of safety and reliability before acceptance.
+
+**Gender Differences**: Some research suggests gender differences in robot acceptance, though results vary depending on robot type, application, and cultural context.
+
+**Education Level**: Educational background may affect acceptance through differences in technology understanding and expectations for robot capabilities.
+
+**Cultural Background**: Cultural differences significantly affect robot acceptance, with some cultures being more accepting of human-like robots while others prefer more obviously artificial designs.
+
+#### Individual Difference Factors
+How individual characteristics affect acceptance:
+
+**Personality Traits**: Individual personality traits such as openness to experience, extraversion, and neuroticism may affect robot acceptance and interaction patterns.
+
+**Technology Experience**: Previous positive experiences with technology may increase willingness to accept robots, while negative experiences may decrease acceptance.
+
+**Social Anxiety**: Individuals with social anxiety may be more accepting of robot interaction as it may be less threatening than human interaction.
+
+**Trust Propensity**: Individual differences in general trust propensity may affect willingness to trust and accept robotic systems.
+
+#### Contextual Factors
+How situational and environmental factors affect acceptance:
+
+**Application Context**: Acceptance varies significantly based on the application context, with higher acceptance in healthcare and education contexts compared to personal companion contexts.
+
+**Social Context**: The presence of others during robot interaction can affect acceptance, either positively through social proof or negatively through evaluation apprehension.
+
+**Environmental Familiarity**: Acceptance may be higher in familiar environments where users feel more comfortable and in control.
+
+**Time Pressure**: Time pressure and urgency may affect acceptance by reducing the time available for trust building and evaluation.
+
+#### Long-term Acceptance Studies
+Research on sustained acceptance over time:
+
+**Novelty Effects**: Research showing that initial enthusiasm for robots may diminish over time as novelty wears off, requiring other factors to sustain acceptance.
+
+**Habituation**: Studies on how users habituate to robot presence and interaction over time, which can affect acceptance levels.
+
+**Relationship Development**: Research on how human-robot relationships develop over time and affect long-term acceptance.
+
+**Adaptation Patterns**: Studies on how users adapt to robot capabilities and limitations over extended interaction periods.
+
+### User Experience Evaluation Methods
+
+#### Quantitative Measures
+Objective measures of user experience:
+
+**Task Performance Metrics**: Measures of how effectively users complete tasks with robot assistance, including efficiency, accuracy, and completion rates.
+
+**Interaction Efficiency**: Measures of the efficiency of human-robot interaction, including response times, communication effectiveness, and coordination quality.
+
+**Physiological Measures**: Physiological indicators of user experience such as stress levels, engagement, and emotional states during interaction.
+
+**Usage Metrics**: Measures of how frequently and extensively users interact with robots, indicating acceptance and satisfaction levels.
+
+#### Qualitative Measures
+Subjective assessments of user experience:
+
+**User Interviews**: In-depth interviews to understand user perceptions, experiences, and attitudes toward robot interaction.
+
+**Focus Groups**: Group discussions to explore user experiences and identify common themes and concerns.
+
+**Observational Studies**: Direct observation of user interaction with robots to identify usability issues and positive experiences.
+
+**Experience Sampling**: Regular sampling of user experiences during interaction to capture moment-to-moment user experience.
+
+#### Mixed-Methods Approaches
+Combining quantitative and qualitative measures:
+
+**Triangulation**: Using multiple methods to validate findings and gain comprehensive understanding of user experience.
+
+**Sequential Explanatory**: Quantitative measures followed by qualitative exploration to explain numerical results.
+
+**Concurrent Embedded**: Using one method type to support the other within a primary research approach.
+
+**Transformative Applications**: Using qualitative results to inform quantitative instrument development and interpretation.
+
+#### Longitudinal Assessment
+Evaluating user experience over time:
+
+**Repeated Measures**: Regular assessment of user experience over extended periods to understand how experiences change over time.
+
+**Cohort Studies**: Following user cohorts over time to understand acceptance and experience trajectories.
+
+**Case Studies**: In-depth longitudinal studies of individual users to understand detailed experience patterns.
+
+**Panel Studies**: Regular assessment of the same users over time to track individual experience changes.
+
+### Design Implications and Best Practices
+
+#### Trust-Building Design Strategies
+Design approaches that build and maintain trust:
+
+**Transparency Features**: Design features that clearly communicate robot state, intentions, and decision-making processes to users.
+
+**Consistency Mechanisms**: Design approaches that ensure consistent robot behavior and responses across different interaction contexts.
+
+**Error Communication**: Clear communication of errors, uncertainties, and limitations to maintain appropriate user expectations and trust.
+
+**Capability Communication**: Clear communication of robot capabilities and limitations to set appropriate expectations and prevent trust violations.
+
+#### Acceptance-Focused Design
+Design approaches that enhance acceptance:
+
+**Cultural Sensitivity**: Design that is sensitive to cultural differences and appropriate for the target cultural context.
+
+**Accessibility Considerations**: Design that is accessible to users with different abilities and needs, ensuring broad acceptance.
+
+**Familiar Interaction Patterns**: Use of interaction patterns that are familiar and intuitive to users based on their existing experiences.
+
+**Appropriate Anthropomorphism**: Appropriate use of human-like features that enhance acceptance without creating false expectations about capabilities.
+
+#### User Experience Optimization
+Approaches to enhancing overall user experience:
+
+**Iterative Design**: Design processes that include user feedback and iterative improvement based on user experience data.
+
+**User-Centered Design**: Design processes that prioritize user needs, preferences, and experiences throughout development.
+
+**Context-Aware Design**: Design that adapts to different contexts and user needs to optimize experience in different situations.
+
+**Personalization Options**: Options for users to customize robot behavior and interaction to match their preferences and needs.
+
+#### Ethical Design Considerations
+Ensuring ethical user experiences:
+
+**Authenticity**: Design that maintains authenticity and does not create false impressions about robot capabilities or consciousness.
+
+**Avoiding Manipulation**: Design that avoids manipulative interaction patterns that might exploit human psychological vulnerabilities.
+
+**Respecting Autonomy**: Design that respects human autonomy and decision-making capabilities rather than undermining them.
+
+**Privacy Protection**: Design that protects user privacy and gives users appropriate control over their personal information.
+
+### Challenges and Limitations
+
+#### Technical Challenges
+Technical barriers to positive user experience:
+
+**Sensing Limitations**: Limitations in robot sensing capabilities that may affect the robot's ability to understand user needs and context appropriately.
+
+**Processing Constraints**: Computational constraints that may limit the robot's ability to process information and respond appropriately in real-time.
+
+**Reliability Issues**: Technical reliability issues that can damage trust and acceptance when robots fail or behave unexpectedly.
+
+**Adaptation Complexity**: The complexity of implementing adaptive systems that can respond appropriately to different users and contexts.
+
+#### Social and Psychological Challenges
+Human factors that affect trust and acceptance:
+
+**Anthropomorphic Expectations**: Human tendencies to expect human-like capabilities and responses from human-like robots, which may not match actual robot capabilities.
+
+**Social Norm Conflicts**: Conflicts between existing social norms and appropriate robot behavior that may affect acceptance.
+
+**Trust Calibration**: The challenge of ensuring appropriate levels of trust that match actual robot capabilities without being excessive or insufficient.
+
+**Relationship Expectations**: Human expectations for relationship development that may not be appropriate for human-robot relationships.
+
+#### Cultural and Contextual Challenges
+Variations across different contexts:
+
+**Cultural Differences**: Significant differences in acceptance and user experience across different cultural contexts that require culturally-sensitive design.
+
+**Context Sensitivity**: Different acceptance and experience requirements across different application contexts and environments.
+
+**Generational Differences**: Different acceptance patterns across different generations with varying technology experiences and comfort levels.
+
+**Individual Variation**: Significant individual variation in acceptance and experience that requires flexible design approaches.
+
+#### Ethical Challenges
+Ethical considerations that affect design and deployment:
+
+**Authenticity vs. Engagement**: Balancing the need for authentic robot behavior with the desire to create engaging, positive user experiences.
+
+**Dependency Prevention**: Designing systems that create positive experiences without fostering unhealthy dependencies on robots.
+
+**Exploitation Prevention**: Ensuring that positive user experiences do not result from exploitative design that takes advantage of human vulnerabilities.
+
+**Long-term Effects**: Considering the long-term effects of positive user experiences on human relationships and social development.
+
+### Future Directions and Considerations
+
+#### Advanced AI Integration
+How advancing AI affects trust and user experience:
+
+**Natural Interaction**: More sophisticated AI that enables more natural, human-like interaction that may enhance user experience and trust.
+
+**Emotional Intelligence**: Advanced emotional recognition and response capabilities that may improve user experience in social interaction contexts.
+
+**Personalization**: AI systems that can provide more sophisticated personalization that enhances user experience while maintaining appropriate boundaries.
+
+**Adaptive Systems**: AI systems that can adapt to individual users and contexts to provide optimized user experiences over time.
+
+#### Social Integration
+How robots become more integrated into social contexts:
+
+**Social Acceptance**: Increasing social acceptance of robots in various contexts that may enhance individual user experiences.
+
+**Social Learning**: Robots that can learn appropriate social behaviors from human interaction and social contexts.
+
+**Community Integration**: Integration of robots into community life that affects user experience through social validation and support.
+
+**Norm Evolution**: Evolution of social norms around robot interaction that may affect user expectations and experiences.
+
+#### Personalization and Adaptation
+Advances in personalized user experiences:
+
+**Individual Modeling**: More sophisticated modeling of individual user preferences, needs, and interaction styles.
+
+**Context Adaptation**: More sophisticated adaptation to different contexts and situations to optimize user experience.
+
+**Preference Learning**: Advanced systems for learning and adapting to individual user preferences over time.
+
+**Dynamic Personalization**: Real-time adaptation of robot behavior based on user state, context, and interaction history.
+
+#### Evaluation and Measurement
+Advances in UX evaluation:
+
+**Continuous Assessment**: Real-time assessment and adaptation of user experience based on ongoing interaction data.
+
+**Multi-Modal Assessment**: Integration of multiple assessment modalities to provide comprehensive user experience evaluation.
+
+**Predictive Assessment**: Systems that can predict user experience quality and potential problems before they occur.
+
+**Automated Improvement**: Systems that can automatically improve user experience based on assessment data.
+
+### Cultural and Contextual Considerations
+
+#### Cross-Cultural UX Design
+Designing for different cultural contexts:
+
+**Cultural Values**: Understanding how cultural values affect preferences for robot behavior, appearance, and interaction styles.
+
+**Communication Styles**: Adapting to different cultural communication styles and preferences for direct versus indirect interaction.
+
+**Social Hierarchies**: Understanding and respecting different cultural approaches to social hierarchy and authority in human-robot interaction.
+
+**Religious and Philosophical Factors**: Considering religious and philosophical perspectives on human-robot interaction in different cultural contexts.
+
+#### Context-Specific Requirements
+Different requirements across application contexts:
+
+**Healthcare Contexts**: Special requirements for trust and user experience in healthcare applications where safety and empathy are paramount.
+
+**Educational Contexts**: Different requirements for engagement and learning support in educational applications.
+
+**Domestic Contexts**: Considerations for privacy, comfort, and long-term relationship development in home environments.
+
+**Professional Contexts**: Requirements for professionalism, efficiency, and appropriate boundaries in workplace applications.
+
+#### Individual Differences
+Accommodating different user characteristics:
+
+**Personality Differences**: Adapting to different personality types and interaction preferences.
+
+**Age Differences**: Different requirements for different age groups, from children to elderly users.
+
+**Ability Differences**: Accommodating users with different physical, cognitive, and sensory abilities.
+
+**Experience Differences**: Different approaches for users with different levels of technology experience and comfort.
+
+#### Community and Social Factors
+Broader social influences on UX:
+
+**Community Acceptance**: How community attitudes toward robots affect individual user experience and acceptance.
+
+**Social Support**: The role of social support from family, friends, and community in user experience with robots.
+
+**Peer Influence**: How peer experiences and recommendations affect individual user experience and acceptance.
+
+**Cultural Evolution**: How cultural attitudes toward robots evolve and affect user experience over time.
+
+### Best Practices for Trust, Acceptance, and UX
+
+#### Design Best Practices
+Proven approaches to enhancing trust, acceptance, and user experience:
+
+**Early and Continuous User Involvement**: Involving users throughout the design process to ensure that systems meet their needs and expectations.
+
+**Transparency and Honesty**: Being transparent about robot capabilities and limitations to build appropriate trust and manage expectations.
+
+**Consistency and Predictability**: Ensuring consistent, predictable robot behavior that allows users to develop trust and comfort.
+
+**Appropriate Anthropomorphism**: Using anthropomorphic features appropriately to enhance interaction without creating false expectations.
+
+#### Implementation Best Practices
+Approaches to successful implementation:
+
+**Gradual Introduction**: Introducing robots gradually to allow users to build trust and acceptance over time.
+
+**Training and Support**: Providing adequate training and support to help users understand and effectively interact with robots.
+
+**Feedback Mechanisms**: Implementing mechanisms for users to provide feedback about their experiences and suggest improvements.
+
+**Continuous Improvement**: Ongoing improvement based on user feedback and experience data.
+
+#### Evaluation Best Practices
+Effective approaches to evaluation:
+
+**Multi-Method Assessment**: Using multiple methods to assess trust, acceptance, and user experience comprehensively.
+
+**Long-term Studies**: Conducting long-term studies to understand how trust, acceptance, and experience evolve over time.
+
+**Diverse User Groups**: Including diverse user groups in evaluation to ensure broad applicability and accessibility.
+
+**Contextual Evaluation**: Evaluating systems in appropriate contexts that reflect real-world use conditions.
+
+#### Ethical Best Practices
+Ensuring ethical implementation:
+
+**Respect for Autonomy**: Ensuring that robot design and behavior respects human autonomy and decision-making.
+
+**Avoiding Manipulation**: Designing systems that enhance user experience without manipulative techniques.
+
+**Privacy Protection**: Protecting user privacy and giving users appropriate control over their personal information.
+
+**Beneficence Focus**: Ensuring that design focuses on genuine benefits for users rather than other objectives.
+
+Trust, acceptance, and user experience in human-robot interaction require comprehensive approaches that address technical, social, cultural, and ethical dimensions to ensure that these technologies enhance human welfare and social connection while respecting fundamental values and rights.
 
 </div>
 </TabItem>
 <TabItem value="summary" label="Summary">
 <div className="summary-content">
 
-## Summary: Theories of Social Psychology in HRI
+## Summary
 
-### Key Theories
-- **Social Presence**: How real robots feel in social interactions
-- **Media Equation**: Humans respond to robots as social actors
-- **Theory of Mind**: Mental state attribution to robots
-- **Social Cognitive**: Learning through robot modeling
-- **Social Identity**: Group membership and robot categorization
-
-### Relationship Theories
-- **Social Penetration**: Relationship development stages
-- **Uncertainty Reduction**: Information seeking in interactions
-- **Attachment**: Emotional bonds with robots
-- **Social Learning**: Learning through observation
-
-### Design Implications
-- **Embodiment**: Human-like features trigger social responses
-- **Behavior**: Consistent and socially appropriate behavior
-- **Interaction**: Supporting natural social patterns
-- **Cultural**: Cross-cultural considerations in design
-
-### Applications
-- **Education**: Robot modeling and teaching
-- **Care**: Therapeutic and companion applications
-- **Assistance**: Social facilitation and support
-- **Companionship**: Long-term relationship development
-
-### Research Directions
-- **Advanced Cognition**: Sophisticated ToM implementations
-- **Long-term Studies**: Understanding relationship evolution
-- **Cross-cultural**: Cultural variations in HRI
-- **Ethics**: Implications of social psychological effects
+- Trust in HRI involves cognitive and emotional dimensions with multiple factors affecting formation and maintenance
+- Acceptance is influenced by technology factors, anthropomorphic design, functional performance, and social elements
+- User experience design must consider usability, social interaction, emotional responses, and aesthetic appeal
+- Building trust involves initial formation, maintenance, recovery from violations, and long-term development
+- Acceptance research reveals demographic, individual, and contextual influences on robot adoption
+- UX evaluation requires both quantitative and qualitative methods with longitudinal assessment
+- Design implications include trust-building features, acceptance-focused approaches, and ethical considerations
+- Challenges span technical, social, cultural, and ethical domains
+- Future directions involve AI advancement, social integration, and improved evaluation methods
+- Cultural considerations require sensitivity to values, communication styles, and contextual factors
+- Best practices involve user-centered design, transparency, consistency, and ethical implementation
 
 </div>
 </TabItem>
