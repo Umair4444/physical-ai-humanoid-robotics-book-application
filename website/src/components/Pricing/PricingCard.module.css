@@ -220,7 +220,7 @@
 
 .priceCardFeatures {
   padding: 0 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   flex-grow: 1;
 }
 
@@ -228,7 +228,7 @@
   display: flex;
   align-items: flex-start;
   margin-bottom: 1rem;
-  padding: 0.5rem 0;
+  padding: 0;
   opacity: 0;
   transform: translateY(10px);
   animation: fadeInUp 0.5s ease forwards;
