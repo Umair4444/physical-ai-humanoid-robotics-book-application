@@ -182,7 +182,9 @@ export const LanguageSelector: React.FC = () => {
         className={styles.languageButton}
       >
         <span className="flex items-center">
-          <span className="mr-2 text-lg hidden sm:block">{currentLang?.flag}</span>
+          <span className="mr-2 text-lg hidden sm:block">
+            {currentLang?.flag}
+          </span>
           <span className="sm:hidden">{currentLang?.value.toUpperCase()}</span>
           <span className="hidden sm:block">{currentLang?.label}</span>
         </span>
@@ -213,8 +215,15 @@ export const LanguageSelector: React.FC = () => {
                   role="option"
                   aria-selected={language === lang.value}
                 >
-                  <span className="mr-2">{lang.flag}</span>
-                  <span>{lang.label}</span>
+                  <span className="flex items-center">
+                    <span className="mr-2 text-lg hidden sm:block">
+                      {lang.flag}
+                    </span>
+                    <span className="sm:hidden">
+                      {lang.value.toUpperCase()}
+                    </span>
+                    <span className="hidden sm:block">{lang.label}</span>
+                  </span>
                 </button>
               </li>
             ))}
