@@ -45,7 +45,7 @@ export const allBooks: Book[] = [
     title: 'Ethics in AI Robotics',
     description: 'Critical examination of ethical considerations in AI-powered robotics',
     image: '/img/book4-cover.jpg',
-    featured: true,
+    featured: false,
     tags: ['Ethics', 'AI', 'Society'],
     href: '/books/ethics-in-ai-robotics/intro',
   },

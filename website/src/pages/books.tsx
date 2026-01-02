@@ -39,7 +39,7 @@ const BooksPage: React.FC = () => {
       title="All Books - AI Robotics Textbook"
       description="Browse all available books on AI Robotics and Humanoid Design"
     >
-      <main className="container mx-auto px-4">
+      <main className="container mx-auto px-4 mb-4">
         <section className="mb-12 text-center">
           <h1 className="text-4xl font-bold mb-4">
             AI Robotics Textbook Library

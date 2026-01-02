@@ -27,7 +27,10 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
 
     for (let i = 0; i < fullStars; i++) {
       stars.push(
-        <span key={i} className="text-yellow-400">
+        <span
+          key={i}
+          className="text-yellow-400 text-base sm:text-lg flex-shrink-0"
+        >
           ★
         </span>
       );
@@ -35,7 +38,10 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
 
     if (hasHalfStar) {
       stars.push(
-        <span key="half" className="text-yellow-400">
+        <span
+          key="half"
+          className="text-yellow-400 text-base sm:text-lg flex-shrink-0"
+        >
           ★½
         </span>
       );
@@ -46,58 +52,56 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
       stars.push(
         <span
           key={`empty-${i}`}
-          className={isDarkMode ? 'text-gray-600' : 'text-gray-300'}
+          className={`${isDarkMode ? 'text-gray-600' : 'text-gray-300'} text-base sm:text-lg flex-shrink-0`}
         >
           ★
         </span>
       );
     }
 
-    return <div className="flex">{stars}</div>;
+    return <div className="inline-flex">{stars}</div>;
   };
 
   return (
     <>
       <Link href={book.href}>
         <div
-          className={`rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 flex flex-col h-full ${
+          className={`rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] flex flex-col h-full ${
             isDarkMode ? 'bg-gray-800' : 'bg-white'
           }`}
         >
-          <div className="h-48 overflow-hidden">
+          <div className="h-40 sm:h-48 md:h-52 overflow-hidden">
             <img
               src={book.coverImage}
               alt={book.title}
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="p-6 flex-grow flex flex-col">
+          <div className="p-4 sm:p-5 md:p-6 flex-grow flex flex-col">
             <h3
-              className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+              className={`text-lg sm:text-xl md:text-2xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
             >
               {book.title}
             </h3>
             <p
-              className={`mb-4 flex-grow ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+              className={`mb-3 sm:mb-4 text-sm sm:text-base flex-grow ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
             >
               {book.description}
             </p>
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
-                  ${book.price.toFixed(2)}
-                </div>
-                <div className="flex items-center">
-                  {renderStars(book.rating)}
-                  <span
-                    className={`ml-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
-                  >
-                    {book.rating}
-                  </span>
-                </div>
+            <div className="inline-flex flex-row justify-between items-center gap-3 sm:gap-0 mb-3 sm:mb-4">
+              <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                ${book.price.toFixed(2)}
+              </div>
+              <div className="inline-flex items-center flex-wrap">
+                {renderStars(book.rating)}
+                <span
+                  className={`ml-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
+                >
+                  {book.rating}
+                </span>
               </div>
             </div>
-            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors mt-auto">
+            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors mt-auto text-sm sm:text-base">
               Learn More
             </button>
           </div>
