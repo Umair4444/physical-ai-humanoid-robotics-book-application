@@ -357,7 +357,7 @@ html[data-theme='dark'] .navCapsule {
 }
 
 html[data-theme='dark'] .navHamburgerLine {
-  background: var(--ifm-color-emphasis-100);
+  background: var(--ifm-color-emphasis-900);
 }
 
 html[data-theme='dark'] .navMobile {
