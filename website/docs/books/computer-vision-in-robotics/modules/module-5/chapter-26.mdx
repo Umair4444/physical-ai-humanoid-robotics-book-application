@@ -1,0 +1,250 @@
+---
+id: chapter-26
+title: "Convolutional Neural Networks for Robotic Vision"
+module: "Module 5: Deep Learning in Robotic Vision"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Convolutional Neural Networks for Robotic Vision
+
+### Introduction to Convolutional Neural Networks
+
+Convolutional Neural Networks (CNNs) are specialized neural networks designed for processing grid-like data such as images. They have become the dominant approach for computer vision tasks in robotics due to their ability to automatically learn spatial hierarchies of features, from low-level edges and textures to high-level object parts and concepts. CNNs are particularly well-suited for robotic vision because they can handle the variability and complexity of real-world visual data.
+
+The key insight behind CNNs is that local patterns in images (like edges, corners, textures) are useful regardless of their location in the image. This allows CNNs to share parameters across space, significantly reducing the number of parameters compared to fully connected networks while maintaining the ability to detect spatial features.
+
+### Convolution Operation
+
+#### Mathematical Foundation
+The convolution operation in CNNs is defined as:
+
+(I * K)(i, j) = Σm Σn I(m, n) K(i - m, j - n)
+
+Where I is the input image, K is the kernel (or filter), and (i, j) represents the output position. In practice, discrete convolution is used with kernels that are flipped both horizontally and vertically.
+
+#### Convolution Properties
+- **Translation Invariance**: The same feature can be detected regardless of its position in the image
+- **Local Connectivity**: Each output unit is connected only to a local region of the input
+- **Parameter Sharing**: The same kernel is applied across the entire input, reducing parameters
+
+#### Stride and Padding
+- **Stride**: The step size by which the kernel moves across the input
+- **Padding**: Adding zeros around the input to control output size
+  - Valid padding: No padding, output size decreases
+  - Same padding: Padding added to maintain input size
+
+### CNN Architecture Components
+
+#### Convolutional Layers
+Convolutional layers apply learnable filters to input data to detect local features. Each filter learns to detect specific features like edges, textures, or object parts. Multiple filters in a layer can detect different features simultaneously.
+
+Key parameters:
+- **Filter size**: Typically 3x3, 5x5, or 7x7
+- **Number of filters**: Determines the depth of the output feature map
+- **Stride**: Controls the subsampling rate
+- **Padding**: Controls the output size
+
+#### Pooling Layers
+Pooling layers reduce the spatial dimensions of feature maps, providing:
+- **Translation invariance**: Making features less sensitive to exact position
+- **Dimensionality reduction**: Reducing computational load
+- **Overfitting reduction**: Providing a form of regularization
+
+Types of pooling:
+- **Max pooling**: Selects the maximum value in each region
+- **Average pooling**: Computes the average value in each region
+- **Global pooling**: Applies pooling over the entire feature map
+
+#### Activation Functions
+Activation functions introduce non-linearity, enabling CNNs to learn complex patterns:
+- **ReLU**: f(x) = max(0, x), most commonly used due to computational efficiency
+- **Leaky ReLU**: f(x) = max(0.01x, x), addresses dying ReLU problem
+- **ELU**: Exponential linear units, provide smoother gradients
+
+#### Normalization Layers
+Normalization layers improve training stability and convergence:
+- **Batch Normalization**: Normalizes inputs across the batch dimension
+- **Layer Normalization**: Normalizes across the feature dimension
+- **Instance Normalization**: Normalizes each instance separately
+
+### Classic CNN Architectures
+
+#### LeNet-5
+LeNet-5, developed by Yann LeCun in 1998, was one of the first successful CNNs for handwritten digit recognition. It consisted of two sets of convolutional and pooling layers followed by fully connected layers.
+
+#### AlexNet
+AlexNet, developed by Alex Krizhevsky et al. in 2012, won the ImageNet competition and popularized deep learning. It introduced:
+- ReLU activation functions
+- Dropout for regularization
+- Data augmentation techniques
+- GPU acceleration for training
+
+#### VGG Networks
+VGG networks, developed by the Visual Geometry Group, used small 3x3 convolutional filters stacked in multiple layers to achieve depth. VGG-16 and VGG-19 have 16 and 19 layers respectively.
+
+#### GoogLeNet/Inception
+GoogLeNet introduced the Inception module, which applies multiple filter sizes (1x1, 3x3, 5x5) and pooling operations in parallel, then concatenates the results. This allows the network to learn features at multiple scales.
+
+#### ResNet
+ResNet introduced residual connections that allow training of very deep networks (100+ layers). The key insight was to learn residual mappings instead of direct mappings:
+
+F(x) + x
+
+Where F(x) is the residual function and x is the input.
+
+### Modern CNN Architectures
+
+#### DenseNet
+DenseNet connects each layer to every other layer in a feed-forward fashion, promoting feature reuse and reducing the vanishing gradient problem.
+
+#### MobileNets
+MobileNets are designed for mobile and embedded applications using depthwise separable convolutions, which separate spatial and channel-wise convolutions to reduce computational cost.
+
+#### EfficientNet
+EfficientNet uses neural architecture search to find optimal architectures and scales them systematically to balance accuracy and efficiency.
+
+### Applications in Robotic Vision
+
+#### Object Detection
+CNNs enable real-time object detection in robotic applications:
+- **Single Shot Detectors (SSD)**: Efficient multi-scale detection
+- **YOLO (You Only Look Once)**: Real-time detection with single network pass
+- **Faster R-CNN**: Two-stage detection with region proposal networks
+
+#### Semantic Segmentation
+CNNs provide pixel-level classification for scene understanding:
+- **FCN (Fully Convolutional Networks)**: Adapted classification networks for dense prediction
+- **U-Net**: Encoder-decoder architecture with skip connections for medical imaging
+- **DeepLab**: Uses atrous convolutions for multi-scale context
+
+#### Visual SLAM
+CNNs enhance visual SLAM systems:
+- **Feature extraction**: Learning more robust features than traditional methods
+- **Place recognition**: Recognizing previously visited locations
+- **Depth estimation**: Predicting depth from single images
+
+#### Visual Servoing
+CNNs enable direct image-to-action learning:
+- **End-to-end learning**: Learning control policies directly from images
+- **Feature learning**: Learning task-specific visual features
+- **Reinforcement learning**: Learning policies through interaction
+
+### Training Considerations for Robotics
+
+#### Data Requirements
+Robotic vision tasks often require large amounts of labeled training data. Strategies include:
+- **Transfer learning**: Adapting models pre-trained on large datasets
+- **Data augmentation**: Increasing dataset diversity with transformations
+- **Synthetic data**: Generating training data from simulations
+
+#### Real-time Performance
+Robotic applications require real-time performance, necessitating efficient architectures:
+- **Model compression**: Pruning, quantization, and knowledge distillation
+- **Efficient architectures**: MobileNets, ShuffleNets, and EfficientNets
+- **Hardware acceleration**: GPUs, TPUs, and specialized vision chips
+
+#### Domain Adaptation
+Robots operate in diverse environments, requiring domain adaptation:
+- **Adversarial training**: Learning domain-invariant representations
+- **Fine-tuning**: Adapting to specific robotic environments
+- **Unsupervised adaptation**: Adapting without labeled target data
+
+### Challenges in Robotic Applications
+
+#### Computational Constraints
+Many robotic platforms have limited computational resources:
+- **Model efficiency**: Designing networks that balance accuracy and speed
+- **Edge computing**: Deploying models on resource-constrained devices
+- **Model optimization**: Techniques like quantization and pruning
+
+#### Safety and Reliability
+Robots must operate safely in real-world environments:
+- **Uncertainty quantification**: Estimating confidence in predictions
+- **Robustness**: Handling adversarial inputs and environmental variations
+- **Verification**: Ensuring model behavior meets safety requirements
+
+#### Continual Learning
+Robots need to adapt to new environments and tasks:
+- **Catastrophic forgetting**: Preventing loss of previously learned knowledge
+- **Online learning**: Learning from streaming data
+- **Few-shot learning**: Adapting to new tasks with minimal data
+
+### Evaluation Metrics
+
+#### Classification Metrics
+- **Top-1 Accuracy**: Percentage of correct predictions for top class
+- **Top-5 Accuracy**: Percentage where correct class is in top 5 predictions
+- **Per-class accuracy**: Accuracy for each object class
+
+#### Detection Metrics
+- **Mean Average Precision (mAP)**: Primary metric for object detection
+- **Precision-Recall curves**: Show trade-off between precision and recall
+- **IoU (Intersection over Union)**: Measures bounding box overlap
+
+#### Segmentation Metrics
+- **Pixel Accuracy**: Percentage of correctly classified pixels
+- **Mean IoU**: Average IoU across all classes
+- **Frequency Weighted IoU**: IoU weighted by class frequency
+
+### Future Directions
+
+#### Efficient Architectures
+Development of more efficient architectures specifically designed for robotic platforms with limited computational resources.
+
+#### 3D CNNs
+Extending CNNs to process 3D data from depth sensors and point clouds for better spatial understanding.
+
+#### Attention Mechanisms
+Incorporating attention mechanisms to focus on relevant parts of images for better efficiency and interpretability.
+
+#### Continual Learning
+Enabling CNNs to learn new tasks without forgetting previously learned ones, essential for lifelong learning robots.
+
+Understanding CNNs is crucial for implementing effective computer vision systems in robotics applications.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- CNNs are specialized for grid-like data like images, using convolution operations.
+- Key components include convolutional layers, pooling layers, and normalization.
+- Classic architectures include LeNet-5, AlexNet, VGG, GoogLeNet, and ResNet.
+- Modern architectures include DenseNet, MobileNets, and EfficientNet.
+- Applications include object detection, segmentation, SLAM, and visual servoing.
+- Training considerations include data requirements and real-time performance.
+- Challenges include computational constraints and safety requirements.
+- Evaluation metrics vary by task (classification, detection, segmentation).
+- Future directions include efficient architectures and 3D CNNs.
+
+</div>
+</TabItem>
+</Tabs>

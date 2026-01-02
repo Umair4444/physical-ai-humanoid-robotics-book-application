@@ -1,0 +1,329 @@
+---
+id: chapter-38
+title: "Computational Photography and Advanced Imaging"
+module: "Module 7: Advanced Robotic Vision Systems"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Computational Photography and Advanced Imaging
+
+### Introduction to Computational Photography
+
+Computational photography is an interdisciplinary field that combines digital imaging, computer graphics, and computer vision to enhance and extend the capabilities of digital cameras. In robotics, computational photography techniques enable robots to capture, process, and interpret visual information in ways that go beyond traditional photography, providing enhanced perception capabilities for navigation, manipulation, and interaction tasks. These techniques allow robots to extract more information from visual data, operate in challenging lighting conditions, and create detailed 3D models of their environment.
+
+The fundamental principle of computational photography is that the boundaries between image capture, processing, and interpretation are fluid. Rather than treating these as separate stages, computational photography considers the entire pipeline from light capture to final image understanding as an integrated system that can be optimized jointly for specific robotic applications.
+
+### Multi-view Stereo and Structure from Motion
+
+#### Multi-view Geometry Fundamentals
+Multi-view geometry provides the mathematical foundation for 3D reconstruction:
+
+- **Epipolar geometry**: Geometric relationship between multiple camera views
+- **Fundamental matrix**: Relates corresponding points between two views
+- **Essential matrix**: Fundamental matrix for calibrated cameras
+- **Triangulation**: Computing 3D points from multiple 2D observations
+
+#### Structure from Motion (SfM)
+SfM reconstructs 3D structure and camera motion from image sequences:
+
+- **Feature detection**: Identifying distinctive points in images
+- **Feature matching**: Finding correspondences between images
+- **Camera pose estimation**: Determining camera positions and orientations
+- **Sparse reconstruction**: Creating initial 3D point cloud
+- **Dense reconstruction**: Generating detailed 3D models
+
+#### Multi-view Stereo (MVS)
+MVS creates dense 3D reconstructions from multiple images:
+
+- **Depth map estimation**: Computing depth for each pixel
+- **Patch-based matching**: Comparing image patches across views
+- **Fusion algorithms**: Combining depth estimates from multiple views
+- **Surface reconstruction**: Creating mesh models from point clouds
+
+### Light Field Imaging
+
+#### Light Field Fundamentals
+Light field cameras capture both spatial and directional information:
+
+- **4D light field**: Position (x, y) and direction (u, v) of light rays
+- **Plenoptic function**: Complete description of light in a volume
+- **Microlens arrays**: Splitting light rays to capture angular information
+- **Sub-aperture images**: Images from different viewpoints within the aperture
+
+#### Light Field Processing
+Processing light field data for robotic applications:
+
+- **Refocusing**: Changing focus after image capture
+- **Depth estimation**: Computing depth from light field data
+- **View synthesis**: Generating new viewpoints from captured data
+- **3D reconstruction**: Creating detailed geometric models
+
+#### Applications in Robotics
+- **Depth sensing**: Accurate depth estimation for navigation
+- **Focus control**: Maintaining sharp focus on objects of interest
+- **Viewpoint synthesis**: Generating optimal viewpoints for tasks
+- **Material analysis**: Understanding surface properties through light interaction
+
+### Polarization Imaging
+
+#### Polarization Fundamentals
+Polarization imaging captures the polarization state of light:
+
+- **Stokes parameters**: Mathematical description of polarization state
+- **Polarization filters**: Linear and circular polarization filters
+- **Polarization cameras**: Specialized sensors for polarization capture
+- **Mueller matrices**: Describing polarization transformations
+
+#### Polarization-based Applications
+- **Surface property analysis**: Distinguishing materials based on polarization
+- **Shape from polarization**: Estimating surface orientation
+- **Glare reduction**: Seeing through reflections and specularities
+- **Object segmentation**: Separating objects based on polarization properties
+
+#### Robotic Applications
+- **Material recognition**: Identifying materials in manipulation tasks
+- **Surface inspection**: Quality control and defect detection
+- **Underwater vision**: Improving visibility in scattering media
+- **Agricultural robotics**: Assessing plant health and properties
+
+### Hyperspectral Imaging
+
+#### Hyperspectral Fundamentals
+Hyperspectral imaging captures images at many narrow spectral bands:
+
+- **Spectral resolution**: Many narrow bands across the spectrum
+- **Spectral signatures**: Unique signatures for different materials
+- **Data cubes**: 3D data with two spatial and one spectral dimension
+- **Spectral unmixing**: Decomposing mixed spectral signatures
+
+#### Applications in Robotics
+- **Material identification**: Distinguishing materials based on spectral properties
+- **Quality assessment**: Evaluating quality of agricultural products
+- **Environmental monitoring**: Detecting pollutants and vegetation health
+- **Medical robotics**: Tissue analysis and surgical guidance
+
+### Time-of-Flight and Depth Imaging
+
+#### Time-of-Flight (ToF) Cameras
+ToF cameras measure distance using light flight time:
+
+- **Principle**: Measure phase shift of modulated light
+- **Range**: Effective for medium-range depth sensing
+- **Resolution**: Lower spatial resolution than other methods
+- **Applications**: Indoor navigation and mapping
+
+#### Structured Light
+Structured light systems project known patterns:
+
+- **Pattern projection**: Projecting known light patterns
+- **Deformation analysis**: Analyzing pattern deformation for depth
+- **Accuracy**: High accuracy for close-range applications
+- **Applications**: Precise manipulation and measurement
+
+#### Stereo Vision
+Stereo vision uses multiple cameras for depth estimation:
+
+- **Binocular stereo**: Two cameras mimicking human vision
+- **Multi-camera systems**: More cameras for better coverage
+- **Real-time processing**: Fast depth estimation for control
+- **Applications**: Navigation and obstacle detection
+
+### Advanced Image Enhancement
+
+#### High Dynamic Range (HDR) Imaging
+HDR techniques capture scenes with extreme brightness variations:
+
+- **Multiple exposures**: Capturing images at different exposure levels
+- **Tone mapping**: Compressing dynamic range for display
+- **Applications**: Outdoor robotics with challenging lighting
+- **Real-time HDR**: Efficient algorithms for robotic applications
+
+#### Image Denoising
+Advanced denoising techniques for low-light conditions:
+
+- **Non-local means**: Using image self-similarity for denoising
+- **Deep learning methods**: CNN-based denoising approaches
+- **Temporal denoising**: Using temporal information for denoising
+- **Applications**: Low-light navigation and inspection
+
+#### Super-resolution
+Super-resolution techniques enhance image resolution:
+
+- **Single-image super-resolution**: Enhancing resolution from single images
+- **Multi-frame super-resolution**: Using multiple frames for enhancement
+- **Deep learning approaches**: CNN-based super-resolution
+- **Applications**: Detailed object analysis and recognition
+
+### Computational Aperture Techniques
+
+#### Synthetic Aperture
+Synthetic aperture techniques improve resolution and depth of field:
+
+- **Synthetic aperture radar**: Extending to optical frequencies
+- **Computational refocusing**: Post-capture focus adjustment
+- **Extended depth of field**: Increasing sharp focus range
+- **Applications**: Robotic inspection and measurement
+
+#### Plenoptic Cameras
+Plenoptic cameras capture light field information:
+
+- **Focused plenoptic**: Better resolution and light efficiency
+- **Light field refocusing**: Post-capture focus and perspective changes
+- **Applications**: Flexible imaging for robotic tasks
+- **Challenges**: Lower spatial resolution due to angular sampling
+
+### Polarimetric Stereo
+
+#### Principles
+Combining polarization and stereo for enhanced depth estimation:
+
+- **Polarization cues**: Using polarization for correspondence matching
+- **Shape from polarization**: Estimating 3D shape from polarization
+- **Material properties**: Incorporating material information
+- **Advantages**: Better performance for specular surfaces
+
+#### Applications
+- **Specular object handling**: Manipulating reflective objects
+- **Surface reconstruction**: Detailed surface geometry
+- **Material classification**: Combining shape and material information
+- **Challenging environments**: Low-texture or reflective surfaces
+
+### Advanced Processing Techniques
+
+#### GPU Acceleration
+Graphics Processing Units for computational photography:
+
+- **Parallel processing**: Exploiting massive parallelism
+- **Real-time performance**: Achieving interactive frame rates
+- **Specialized libraries**: CUDA, OpenCL for GPU programming
+- **Applications**: Real-time robotic vision systems
+
+#### Edge Computing
+Processing computational photography on robotic platforms:
+
+- **Model compression**: Reducing computational requirements
+- **Efficient algorithms**: Optimized implementations for embedded systems
+- **Hardware acceleration**: Specialized chips for image processing
+- **Applications**: Autonomous robots with limited connectivity
+
+### Challenges in Robotic Applications
+
+#### Real-time Requirements
+Computational photography must meet robotic timing constraints:
+
+- **Processing latency**: Minimizing delay for control applications
+- **Power consumption**: Managing energy usage on mobile robots
+- **Algorithm complexity**: Balancing quality with computational cost
+- **Hardware limitations**: Working within embedded system constraints
+
+#### Environmental Robustness
+Systems must operate in diverse conditions:
+
+- **Lighting variations**: Handling different illumination conditions
+- **Weather effects**: Operating in rain, fog, or dust
+- **Vibrations**: Maintaining quality despite robot motion
+- **Temperature variations**: Operating across temperature ranges
+
+#### Calibration and Maintenance
+Advanced imaging systems require careful calibration:
+
+- **Multi-sensor alignment**: Precise calibration of multiple sensors
+- **Temporal stability**: Maintaining calibration over time
+- **Field calibration**: Calibrating without laboratory equipment
+- **Self-calibration**: Automatic calibration during operation
+
+### Evaluation Metrics
+
+#### Reconstruction Quality
+- **Point cloud density**: Number of points per unit area
+- **Geometric accuracy**: Deviation from true geometry
+- **Completeness**: Coverage of the scene
+- **Noise level**: Random errors in reconstruction
+
+#### Image Quality
+- **PSNR (Peak Signal-to-Noise Ratio)**: Objective image quality measure
+- **SSIM (Structural Similarity Index)**: Perceptual image quality
+- **Spectral fidelity**: Accuracy of spectral information
+- **Temporal consistency**: Stability across frames
+
+#### Computational Performance
+- **Processing time**: Time per frame for computation
+- **Memory usage**: Peak memory consumption
+- **Power consumption**: Energy usage during operation
+- **Throughput**: Frames processed per second
+
+### Future Directions
+
+#### AI-Enhanced Computational Photography
+Integrating artificial intelligence with computational photography:
+
+- **Learning-based reconstruction**: AI for 3D reconstruction
+- **Neural rendering**: AI for novel view synthesis
+- **Adaptive processing**: AI for optimizing processing based on content
+- **Applications**: Intelligent robotic vision systems
+
+#### Quantum Imaging
+Quantum effects for enhanced imaging capabilities:
+
+- **Quantum sensing**: Fundamental limits of sensing precision
+- **Quantum illumination**: Enhanced detection in challenging conditions
+- **Quantum entanglement**: Using entangled photons for imaging
+- **Applications**: Long-range and low-light robotic vision
+
+#### Bio-inspired Imaging
+Imaging systems inspired by biological vision:
+
+- **Compound eyes**: Wide field of view with variable resolution
+- **Adaptive optics**: Biological-level adaptation to conditions
+- **Parallel processing**: Bio-inspired computational architectures
+- **Applications**: Efficient and robust robotic vision
+
+Understanding computational photography and advanced imaging is essential for developing robots with sophisticated visual perception capabilities.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Computational photography enhances digital imaging through computational techniques.
+- Multi-view stereo and SfM reconstruct 3D scenes from multiple images.
+- Light field imaging captures both spatial and directional light information.
+- Polarization imaging distinguishes materials based on light polarization.
+- Hyperspectral imaging captures many spectral bands for material analysis.
+- Depth imaging includes ToF, structured light, and stereo vision techniques.
+- Image enhancement includes HDR, denoising, and super-resolution.
+- Computational aperture techniques improve resolution and depth of field.
+- Challenges include real-time requirements and environmental robustness.
+- Future directions include AI-enhanced and quantum imaging approaches.
+
+</div>
+</TabItem>
+</Tabs>

@@ -1,0 +1,258 @@
+---
+id: chapter-24
+title: "Motion Planning with Visual Feedback"
+module: "Module 4: Motion Analysis and Tracking for Robotic Vision"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Motion Planning with Visual Feedback
+
+### Introduction to Visual Feedback in Motion Planning
+
+Motion planning with visual feedback integrates real-time visual information into the robot's path planning and execution processes. This approach enables robots to adapt their motion plans based on current visual observations, improving robustness and performance in dynamic and uncertain environments. Visual feedback allows robots to detect and react to unexpected obstacles, changes in the environment, and dynamic objects that were not accounted for in the initial plan.
+
+The integration of visual feedback with motion planning creates a closed-loop system where perception and action are tightly coupled, enabling more intelligent and adaptive robotic behavior.
+
+### Visual Feedback Integration Approaches
+
+#### Reactive Approaches
+Reactive approaches modify the robot's motion in response to visual observations without replanning the entire trajectory. These methods are computationally efficient and suitable for real-time applications.
+
+Types of reactive approaches:
+- **Obstacle avoidance**: Adjusting motion to avoid detected obstacles
+- **Follow-the-carrot**: Adjusting approach direction based on visual target location
+- **Potential fields**: Using visual information to modify potential field functions
+
+#### Local Replanning
+Local replanning approaches update the motion plan based on recent visual observations while preserving the global structure of the original plan. This balances computational efficiency with adaptability.
+
+Key considerations:
+- **Replanning frequency**: How often to update the plan based on new visual information
+- **Local region size**: The area around the robot that triggers replanning
+- **Smooth transitions**: Ensuring smooth transitions between original and updated plans
+
+#### Global Replanning
+Global replanning approaches completely regenerate the motion plan when significant visual changes are detected. While more computationally expensive, this approach can find better solutions when the environment changes substantially.
+
+#### Predictive Approaches
+Predictive approaches use visual information to anticipate future changes in the environment, allowing the robot to plan ahead for moving obstacles or changing conditions.
+
+### Visual Information for Motion Planning
+
+#### Static Environment Information
+Visual sensors provide information about the static environment:
+- **Obstacle detection**: Identifying static obstacles in the environment
+- **Free space detection**: Identifying navigable areas
+- **Terrain analysis**: Understanding surface properties for navigation
+
+#### Dynamic Environment Information
+Visual feedback is particularly valuable for understanding dynamic aspects:
+- **Moving obstacle tracking**: Tracking people, vehicles, or other robots
+- **Activity recognition**: Understanding human intentions and behaviors
+- **Predictive modeling**: Forecasting future positions of dynamic objects
+
+#### Semantic Information
+Modern visual systems can provide semantic understanding:
+- **Object classification**: Identifying different types of objects and their properties
+- **Scene understanding**: Understanding the functional aspects of the environment
+- **Social context**: Recognizing social situations and appropriate behaviors
+
+### Visual-Motion Planning Algorithms
+
+#### Visual Potential Fields
+Visual potential fields combine traditional potential field methods with visual information:
+- Attractive forces toward visual targets
+- Repulsive forces from detected obstacles
+- Adaptive field parameters based on visual context
+
+#### Visual Model Predictive Control (VMPC)
+VMPC uses visual feedback within a model predictive control framework:
+- Predicts future states based on visual observations
+- Optimizes control inputs over a finite horizon
+- Incorporates visual constraints and objectives
+
+#### Visual Rapidly-exploring Random Trees (VRRT)
+VRRT extends RRT algorithms with visual feedback:
+- Biases tree growth based on visual information
+- Updates the tree structure based on new visual observations
+- Incorporates dynamic obstacle information
+
+#### Visual Navigation Functions
+Visual navigation functions create smooth vector fields for navigation:
+- Incorporate visual obstacle information into navigation functions
+- Ensure convergence to goal while avoiding obstacles
+- Handle dynamic environments through continuous updates
+
+### Closed-loop Motion Planning
+
+#### Perception-Action Coupling
+Closed-loop motion planning tightly couples perception and action:
+- Visual observations directly influence motion commands
+- Motion execution affects the visual observations (active perception)
+- Continuous feedback loop between perception and action
+
+#### Active Perception
+Active perception involves controlling the robot's motion to improve visual information:
+- Adjusting viewpoint to reduce uncertainty
+- Moving to better observe relevant areas
+- Coordinating motion with visual sensing requirements
+
+#### Uncertainty Handling
+Visual feedback helps manage uncertainty in motion planning:
+- Reducing pose uncertainty through visual localization
+- Updating obstacle positions based on visual observations
+- Adapting to uncertain object properties
+
+### Applications in Robotics
+
+#### Autonomous Navigation
+Visual feedback enables robots to navigate safely in complex environments:
+- Detecting and avoiding unexpected obstacles
+- Following visual landmarks or paths
+- Adapting to changing environmental conditions
+
+#### Manipulation with Visual Feedback
+Robots use visual feedback for precise manipulation:
+- Adjusting grasp points based on object pose estimation
+- Correcting motion during manipulation tasks
+- Handling objects with unknown or variable properties
+
+#### Human-Robot Collaboration
+Visual feedback enables safe and effective human-robot collaboration:
+- Detecting human intentions and movements
+- Adapting robot motion to human behavior
+- Ensuring safe distances and interactions
+
+#### Search and Exploration
+Visual feedback guides exploration and search tasks:
+- Identifying areas of interest for closer inspection
+- Avoiding already-explored areas
+- Adapting search patterns based on visual findings
+
+### Challenges in Visual Motion Planning
+
+#### Computational Complexity
+Integrating visual feedback with motion planning can be computationally expensive, requiring efficient algorithms for real-time performance.
+
+#### Temporal Delays
+There are inherent delays in visual processing that must be accounted for in motion planning:
+- Image capture and transmission delays
+- Processing time for visual algorithms
+- Communication delays in distributed systems
+
+#### Sensor Limitations
+Visual sensors have limitations that affect motion planning:
+- Limited field of view
+- Occlusions and visibility constraints
+- Performance degradation in poor lighting
+
+#### Coordination Challenges
+Coordinating visual processing with motion planning requires careful design:
+- Synchronization between perception and action
+- Appropriate feedback frequency
+- Handling of conflicting objectives
+
+### Evaluation Metrics
+
+#### Planning Performance
+- **Success rate**: Percentage of tasks completed successfully
+- **Path optimality**: How close the executed path is to optimal
+- **Computation time**: Time required for planning and replanning
+
+#### Visual Integration
+- **Reactivity**: How quickly the system responds to visual changes
+- **Accuracy**: How accurately visual information is incorporated
+- **Robustness**: Performance under varying visual conditions
+
+#### Safety Metrics
+- **Collision avoidance**: Ability to avoid obstacles and collisions
+- **Safe distances**: Maintenance of appropriate safety margins
+- **Emergency response**: Ability to handle unexpected situations
+
+#### Efficiency Metrics
+- **Path length**: Total distance traveled compared to optimal
+- **Execution time**: Time to complete tasks
+- **Energy consumption**: Energy used during task execution
+
+### Real-time Implementation Considerations
+
+#### Efficient Algorithms
+Real-time implementation requires efficient algorithms:
+- Fast visual processing pipelines
+- Simplified motion planning algorithms
+- Approximation methods that trade accuracy for speed
+
+#### Hardware Acceleration
+Modern robotic platforms often include hardware acceleration:
+- GPUs for visual processing
+- Specialized vision processing units
+- Parallel processing architectures
+
+#### Multi-threading
+Separating visual processing, planning, and control in different threads:
+- Ensuring appropriate synchronization
+- Managing data sharing between threads
+- Handling different update frequencies
+
+### Future Directions
+
+#### Learning-based Integration
+Developing methods that learn optimal integration strategies between visual feedback and motion planning, potentially outperforming hand-designed approaches.
+
+#### Predictive Visual Planning
+Advancing methods that predict future visual observations and plan accordingly, enabling proactive rather than reactive behavior.
+
+#### Multi-robot Coordination
+Extending visual feedback to multi-robot systems where robots share visual information for coordinated motion planning.
+
+#### Semantic Visual Planning
+Incorporating high-level semantic understanding into motion planning, enabling robots to plan based on object functions and social contexts.
+
+Understanding motion planning with visual feedback is essential for developing robots that can operate robustly and adaptively in complex, dynamic environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Motion planning with visual feedback integrates real-time visual information into path planning.
+- Approaches include reactive, local replanning, global replanning, and predictive methods.
+- Visual information includes static/dynamic environment data and semantic understanding.
+- Algorithms include visual potential fields, VMPC, VRRT, and visual navigation functions.
+- Closed-loop planning couples perception and action with active perception.
+- Applications include navigation, manipulation, and human-robot collaboration.
+- Challenges include computational complexity and sensor limitations.
+- Evaluation metrics cover planning performance, visual integration, and safety.
+- Future directions include learning-based integration and predictive planning.
+
+</div>
+</TabItem>
+</Tabs>

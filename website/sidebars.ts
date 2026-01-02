@@ -11,7 +11,8 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // Empty sidebar since we're not using the main docs plugin
+  // Empty sidebar since we're using separate sidebar files for each book
+  // The actual sidebars are defined in src/sidebars/ directory
 };
 
 export default sidebars;

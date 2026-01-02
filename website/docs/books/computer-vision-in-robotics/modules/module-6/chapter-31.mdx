@@ -1,0 +1,296 @@
+---
+id: chapter-31
+title: "Visual-Inertial Odometry and Sensor Fusion"
+module: "Module 6: Sensor Fusion and Multi-modal Perception"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Visual-Inertial Odometry and Sensor Fusion
+
+### Introduction to Visual-Inertial Odometry
+
+Visual-Inertial Odometry (VIO) combines visual information from cameras with inertial measurements from Inertial Measurement Units (IMUs) to estimate the motion and position of a robot. This fusion leverages the complementary strengths of both sensors: cameras provide rich visual information for environment understanding, while IMUs offer high-frequency measurements of acceleration and angular velocity that are crucial for motion estimation, especially during fast movements or in textureless environments where visual features may be insufficient.
+
+VIO has become a cornerstone technology for robotic navigation, particularly in scenarios where GPS is unavailable or unreliable, such as indoor environments, underground, or urban canyons. The tight integration of visual and inertial data enables robust and accurate motion estimation that neither sensor could achieve alone.
+
+### Fundamentals of Inertial Measurement Units
+
+#### IMU Components
+An IMU typically consists of:
+- **Accelerometer**: Measures linear acceleration along three axes
+- **Gyroscope**: Measures angular velocity around three axes
+- **Magnetometer**: Measures magnetic field (optional, for absolute orientation)
+
+#### IMU Measurements
+The IMU provides measurements in the sensor frame:
+- **Acceleration**: a^b = [ax, ay, az]^T (acceleration in body frame)
+- **Angular velocity**: ω^b = [ωx, ωy, ωz]^T (angular velocity in body frame)
+
+Where the superscript 'b' denotes the body frame of the IMU.
+
+#### IMU Error Sources
+IMUs suffer from various error sources:
+- **Bias**: Systematic offset in measurements that changes over time
+- **Scale factor errors**: Deviation from ideal measurement scale
+- **Non-orthogonality**: Deviation from perfectly orthogonal axes
+- **Temperature effects**: Performance changes with temperature
+- **Noise**: Random fluctuations in measurements
+
+### Visual-Inertial Integration Approaches
+
+#### Loose Coupling
+In loose coupling, visual and inertial measurements are processed separately and then combined:
+
+- **Advantages**: Simpler implementation, modularity
+- **Disadvantages**: Suboptimal use of information, potential inconsistency
+- **Process**: Visual odometry + IMU integration → fused pose estimate
+
+#### Tight Coupling
+In tight coupling, raw measurements from both sensors are processed jointly:
+
+- **Advantages**: Optimal information usage, better accuracy
+- **Disadvantages**: More complex implementation, higher computational cost
+- **Process**: Joint optimization of visual features and IMU measurements
+
+#### Direct vs. Feature-based Methods
+- **Feature-based**: Extract and track visual features, fuse with IMU
+- **Direct methods**: Use all pixel information, integrate with IMU
+- **Semi-direct**: Combine aspects of both approaches
+
+### Mathematical Framework
+
+#### State Representation
+The state vector typically includes:
+x = [p, v, q, ba, bg, λ]
+
+Where:
+- p: Position (3D)
+- v: Velocity (3D)
+- q: Orientation quaternion (4D)
+- ba: Accelerometer bias (3D)
+- bg: Gyroscope bias (3D)
+- λ: Feature depth parameters
+
+#### IMU Preintegration
+IMU preintegration efficiently combines IMU measurements between keyframes:
+
+For IMU measurements from time tk to tk+1:
+- Δt = tk+1 - tk
+- R: Rotation matrix
+- δ: Small perturbations
+
+The preintegrated measurements are:
+- δv: Velocity increment
+- δp: Position increment
+- δR: Rotation increment
+
+These are computed as:
+δv = ∫ R(τ) (a^b(τ) - bg) dτ
+δp = ∫∫ R(τ) (a^b(τ) - bg) dτ dτ
+δR = ∫ ω^b(τ) dτ
+
+#### Visual-Inertial Bundle Adjustment
+Visual-inertial bundle adjustment jointly optimizes:
+- Camera poses
+- 3D point positions
+- IMU biases
+- IMU states
+
+The objective function minimizes:
+- Reprojection errors for visual features
+- IMU preintegration errors
+- Prior constraints from IMU measurements
+
+### Key Algorithms
+
+#### MSCKF (Multi-State Constraint Kalman Filter)
+MSCKF maintains multiple past camera poses in the state vector and uses visual features to constrain the IMU integration:
+
+- **Sliding window**: Maintains a fixed number of past poses
+- **Observability**: Ensures the system remains observable
+- **Consistency**: Maintains filter consistency over time
+
+#### OKVIS (Open Keyframe-based Visual-Inertial SLAM)
+OKVIS uses a keyframe-based approach with joint optimization:
+
+- **Keyframe selection**: Selects keyframes based on motion and visual information
+- **Bundle adjustment**: Optimizes poses and landmarks jointly
+- **Real-time performance**: Efficient implementation for real-time operation
+
+#### VINS-Mono
+VINS-Mono is a tightly-coupled, optimization-based approach:
+
+- **Initialization**: Robust initialization using visual-inertial data
+- **Sliding window**: Efficient optimization with marginalization
+- **Loop closure**: Detects and corrects for loop closures
+- **Global optimization**: Performs global bundle adjustment
+
+### Sensor Fusion Techniques
+
+#### Kalman Filtering
+Extended Kalman Filters (EKF) and Unscented Kalman Filters (UKF) are commonly used:
+
+- **State prediction**: Use IMU measurements to predict state
+- **Measurement update**: Use visual features to correct predictions
+- **Covariance propagation**: Track uncertainty in state estimates
+
+#### Optimization-based Methods
+Nonlinear optimization provides more accurate results:
+
+- **Maximum a posteriori (MAP) estimation**: Find most likely state sequence
+- **Sliding window optimization**: Optimize over recent time window
+- **Marginalization**: Remove old states to maintain computational efficiency
+
+#### Particle Filtering
+Particle filters can handle non-Gaussian uncertainties:
+
+- **Multiple hypotheses**: Maintain multiple possible states
+- **Non-linear systems**: Handle complex non-linearities
+- **Computational cost**: Higher computational requirements
+
+### Applications in Robotics
+
+#### Autonomous Navigation
+VIO enables navigation in GPS-denied environments:
+- **Indoor navigation**: Robots navigating inside buildings
+- **Underground exploration**: Robots in mines or tunnels
+- **Urban canyons**: Navigation in areas with poor GPS reception
+
+#### Augmented Reality
+AR applications require accurate pose estimation:
+- **Stable tracking**: Maintaining consistent virtual object placement
+- **Real-time performance**: Low latency for user experience
+- **Robustness**: Handling various lighting and texture conditions
+
+#### Drone Navigation
+Drones benefit from VIO for stable flight:
+- **Indoor flight**: Flying without GPS
+- **Obstacle avoidance**: Accurate motion estimation for safety
+- **Formation flying**: Coordinated motion of multiple drones
+
+#### Humanoid Robotics
+Humanoid robots use VIO for balance and navigation:
+- **Bipedal walking**: Accurate motion estimation for balance
+- **Environment mapping**: Creating maps for navigation
+- **Human-robot interaction**: Understanding spatial relationships
+
+### Challenges and Limitations
+
+#### Initialization
+VIO systems require careful initialization:
+- **Gravity alignment**: Determining absolute orientation
+- **Scale recovery**: For monocular systems
+- **Bias estimation**: Initial IMU bias values
+- **Convergence**: Time to reach stable estimates
+
+#### Degenerate Motions
+Certain motion patterns can cause estimation problems:
+- **Pure rotation**: No translation to constrain position
+- **Linear motion**: No rotation to constrain orientation
+- **Constant velocity**: No acceleration to constrain position
+
+#### Computational Complexity
+VIO can be computationally demanding:
+- **Real-time requirements**: Processing at high frame rates
+- **Optimization overhead**: Solving large optimization problems
+- **Memory usage**: Storing multiple frames and features
+
+#### Calibration
+Accurate calibration is essential:
+- **Camera-IMU extrinsics**: Relative position and orientation
+- **Camera intrinsics**: Focal length, distortion parameters
+- **Temporal synchronization**: Aligning timestamps
+- **IMU calibration**: Bias and scale factor estimation
+
+### Evaluation Metrics
+
+#### Absolute Trajectory Error (ATE)
+ATE measures the difference between estimated and ground truth trajectories:
+ATE = sqrt(1/N Σ ||R_gt * p_est - p_gt||²)
+
+Where R_gt is the rotation matrix aligning the estimated trajectory to ground truth.
+
+#### Relative Pose Error (RPE)
+RPE measures the accuracy of relative pose estimates:
+RPE = sqrt(1/M Σ ||log((T_gt)^(-1) * T_est)||²)
+
+Where T represents transformation matrices and log is the matrix logarithm.
+
+#### Computational Performance
+- **Processing time**: Time per frame for estimation
+- **Memory usage**: Peak memory consumption
+- **Frame rate**: Sustained processing rate
+
+#### Robustness Metrics
+- **Success rate**: Percentage of successful estimations
+- **Failure detection**: Ability to detect tracking failures
+- **Recovery time**: Time to recover from failures
+
+### Future Directions
+
+#### Event-based VIO
+Using event cameras with IMUs for high-speed applications:
+- **High temporal resolution**: Microsecond timing precision
+- **Low latency**: Minimal processing delay
+- **High dynamic range**: Operation in challenging lighting
+
+#### Learning-based VIO
+Incorporating machine learning into VIO:
+- **End-to-end learning**: Learning entire VIO pipeline
+- **Feature learning**: Learning better visual features
+- **Error modeling**: Learning sensor error characteristics
+
+#### Multi-sensor Integration
+Integrating additional sensors:
+- **LiDAR-VIO**: Combining LiDAR with visual-inertial data
+- **Wheel odometry**: Adding wheel encoder information
+- **Barometer**: Using pressure sensors for altitude
+
+Understanding Visual-Inertial Odometry is essential for developing robots with robust motion estimation capabilities.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Visual-Inertial Odometry combines camera and IMU data for motion estimation.
+- IMUs provide high-frequency measurements of acceleration and angular velocity.
+- Integration approaches include loose and tight coupling methods.
+- Mathematical framework involves state representation and preintegration.
+- Key algorithms include MSCKF, OKVIS, and VINS-Mono.
+- Applications include autonomous navigation, AR, and drone navigation.
+- Challenges include initialization, degenerate motions, and computational complexity.
+- Evaluation metrics include ATE, RPE, and computational performance.
+- Future directions include event-based VIO and learning-based approaches.
+
+</div>
+</TabItem>
+</Tabs>

@@ -138,7 +138,7 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({ closeChat }) => {
           >
             <FaRobot className="text-4xl mb-2" aria-hidden="true" />
             <p>
-              Ask me anything about the Physical AI Humanoid Robotics Textbook!
+              Ask me anything about the AI Humanoid Robotics Textbook!
             </p>
           </div>
         ) : (
