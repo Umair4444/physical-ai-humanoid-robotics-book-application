@@ -2,6 +2,18 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import BookCard from './BookCard';
 
+// Mock the ThemeContext
+jest.mock('@site/src/contexts/ThemeContext', () => ({
+  useTheme: () => ({ isDarkMode: false }),
+}));
+
+// Mock the Link component
+jest.mock('@docusaurus/Link', () => {
+  return ({ children, href }: { children: React.ReactNode; href: string }) => {
+    return <a href={href}>{children}</a>;
+  };
+});
+
 const mockBook = {
   id: 'book-1',
   title: 'Introduction to AI Robotics',
