@@ -1,0 +1,352 @@
+---
+id: chapter-25
+title: "Swimming and Underwater Locomotion"
+module: "Module 5: Swimming and Underwater Locomotion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Swimming and Underwater Locomotion
+
+### Introduction to Swimming and Underwater Locomotion
+
+Swimming and underwater locomotion represent specialized forms of robotic mobility that operate in aquatic environments. Unlike terrestrial or aerial locomotion, underwater systems must contend with the unique properties of water, including high density, viscosity, and buoyancy. Understanding the principles of underwater locomotion is essential for creating robots that can operate effectively in marine environments for applications such as exploration, inspection, and environmental monitoring.
+
+Key aspects of swimming and underwater locomotion include:
+
+- **Buoyancy Management**: Controlling the robot's position in the water column
+- **Hydrodynamic Design**: Optimizing shape and motion for efficient water movement
+- **Pressure Resistance**: Withstanding the increasing pressure at depth
+- **Sealing and Waterproofing**: Preventing water ingress into sensitive systems
+- **Communication Challenges**: Operating in an environment that attenuates many signals
+
+### Types of Swimming Locomotion
+
+**Body and Caudal Fin (BCF) Propulsion**: Using body and tail movement to generate thrust.
+
+- **Anguilliform**: Eel-like swimming with undulations along the entire body
+- **Carangiform**: Fish-like swimming with undulations in posterior portion
+- **Subcarangiform**: Similar to carangiform but with more anterior movement
+- **Thunniform**: Tuna-like swimming with only caudal fin movement
+- **Applications: Efficient long-distance swimming for various underwater tasks
+
+**Median and Paired Fin (MPF) Propulsion**: Using fins other than the caudal fin.
+
+- **Rajiform**: Ray-like swimming using enlarged pectoral fins
+- **Labriform**: Wrasse-like swimming using pectoral fins
+- **Oscillation**: Fin oscillation for propulsion and maneuvering
+- **Rowing**: Fin rowing motions for precise movement
+- **Applications: Precise maneuvering and station-keeping tasks
+
+**Jet Propulsion**: Using jet-like expulsion of water for thrust.
+
+- **Cephalopod**: Squid/octopus-like jet propulsion
+- **Squid-like**: Expelling water through siphon for thrust
+- **Efficiency**: Generally less efficient than fin-based propulsion
+- **Maneuverability**: High maneuverability through jet direction
+- **Applications: Rapid escape and precise positioning
+
+**Paddling and Rowing**: Using limb-like appendages for propulsion.
+
+- **Penguin-like**: Wing-propelled swimming
+- **Sea Turtle-like**: Limb-based paddling
+- **Efficiency**: Moderate efficiency with good maneuverability
+- **Control**: Precise control over movement
+- **Applications: Bottom-dwelling and coastal exploration
+
+### Hydrodynamic Principles
+
+**Drag Forces**: Forces that oppose motion through water.
+
+- **Skin Friction**: Drag from water viscosity along the surface
+- **Pressure Drag**: Drag from pressure differences around the body
+- **Wave Drag**: Drag from wave generation (surface vessels)
+- **Interference Drag**: Drag from interaction between components
+- **Reduction**: Streamlining and surface treatments to reduce drag
+
+**Lift Generation**: Forces perpendicular to the direction of motion.
+
+- **Cambered Foils**: Curved surfaces generating lift
+- **Angle of Attack**: Angle between surface and flow direction
+- **Circulation**: Vortex generation creating lift
+- **Applications**: Control surfaces and underwater gliders
+- **Efficiency**: Optimizing lift-to-drag ratios
+
+**Added Mass**: Apparent increase in mass due to water movement.
+
+- **Concept**: Water must be accelerated with the moving body
+- **Effects**: Increases apparent inertia during acceleration
+- **Calculation**: Depends on body shape and motion
+- **Impact**: Affects control and energy consumption
+- **Consideration**: Important for rapid maneuvers
+
+**Boundary Layer**: Thin layer of water adjacent to the surface.
+
+- **Laminar Flow**: Smooth, layered flow near the surface
+- **Turbulent Flow**: Chaotic flow with mixing
+- **Separation**: Detachment of boundary layer causing drag
+- **Control**: Techniques to maintain attached flow
+- **Optimization**: Managing boundary layer for efficiency
+
+### Underwater Vehicle Design
+
+**Hull Design**: The main body of underwater vehicles.
+
+- **Tear-drop Shape**: Classic shape minimizing drag
+- **Cylindrical**: Common for pressure resistance
+- **Biomimetic**: Shapes mimicking aquatic animals
+- **Modular**: Interchangeable components for versatility
+- **Materials**: Specialized materials for pressure and corrosion resistance
+
+**Propulsion Systems**: Methods for generating thrust underwater.
+
+- **Screw Propellers**: Traditional propellers adapted for underwater use
+- **Pump Jets**: Ducted propellers for efficiency and protection
+- **Thruster Arrays**: Multiple thrusters for precise control
+- **Biomimetic Propulsion**: Nature-inspired propulsion methods
+- **Hybrid Systems**: Combining different propulsion methods
+
+**Control Surfaces**: Surfaces for controlling vehicle attitude.
+
+- **Fins**: Fixed and movable fins for control
+- **Rudders**: Vertical surfaces for yaw control
+- **Stabilizers**: Horizontal surfaces for pitch control
+- **Differential Thrust**: Using multiple thrusters for control
+- **Biomimetic Control**: Nature-inspired control surfaces
+
+**Buoyancy Systems**: Managing the vehicle's position in the water column.
+
+- **Fixed Buoyancy**: Permanent buoyancy elements
+- **Variable Ballast**: Adjustable ballast for depth control
+- **Buoyancy Engines**: Systems that change vehicle volume
+- **Foam Systems**: Buoyant foam for emergency surfacing
+- **Trim Systems**: Adjusting center of gravity and buoyancy
+
+### Propulsion Mechanisms
+
+**Screw Propellers**: Traditional underwater propulsion method.
+
+- **Blade Design**: Number, shape, and angle of blades
+- **Cavitation**: Formation of vapor bubbles reducing efficiency
+- **Efficiency**: High efficiency at optimal operating conditions
+- **Control**: Speed and direction control through propeller management
+- **Applications: Primary propulsion for most underwater vehicles
+
+**Pump Jets**: Ducted propeller systems.
+
+- **Duct Design**: Shaped ducts for improved performance
+- **Protection**: Protection of propeller from debris
+- **Efficiency**: Improved efficiency over open propellers
+- **Cavitation**: Reduced cavitation compared to open propellers
+- **Applications: High-performance underwater vehicles
+
+**Thruster Arrays**: Multiple thrusters for precise control.
+
+- **Configuration**: Positioning of multiple thrusters
+- **Vectoring**: Directing thrust in different directions
+- **Redundancy**: Multiple thrusters for system reliability
+- **Control**: Coordinated control of multiple thrusters
+- **Applications: ROVs and precise maneuvering vehicles
+
+**Biomimetic Propulsion**: Nature-inspired propulsion methods.
+
+- **Fin Propulsion**: Undulating fins for efficient movement
+- **Jet Propulsion**: Expelling water for thrust
+- **Flapping Propulsion**: Flapping appendages for thrust
+- **Efficiency**: Often more efficient than traditional methods
+- **Applications: Biomimetic underwater robots
+
+### Control and Navigation
+
+**Underwater Navigation**: Challenges of navigation in aquatic environments.
+
+- **GPS Denial**: GPS signals do not penetrate water
+- **Acoustic Navigation**: Using sound for positioning
+- **Inertial Navigation**: Dead reckoning using inertial sensors
+- **Bottom Mapping**: Using seafloor features for navigation
+- **SLAM**: Simultaneous localization and mapping underwater
+
+**Depth Control**: Managing the vehicle's position in the water column.
+
+- **Ballast Systems**: Adjusting weight to control depth
+- **Buoyancy Control**: Adjusting buoyancy for depth changes
+- **Dynamic Control**: Using control surfaces and thrust for depth
+- **Pressure Sensors**: Monitoring depth through pressure measurement
+- **Stability**: Maintaining stable depth during operations
+
+**Attitude Control**: Controlling the vehicle's orientation.
+
+- **Pitch Control**: Controlling nose-up/down motion
+- **Roll Control**: Controlling side-to-side rotation
+- **Yaw Control**: Controlling left/right rotation
+- **Stability**: Maintaining stable orientation
+- **Maneuverability**: Ability to change orientation
+
+**Motion Control**: Controlling the vehicle's movement.
+
+- **Position Control**: Controlling the vehicle's position
+- **Velocity Control**: Controlling the vehicle's speed
+- **Trajectory Following**: Following predefined paths
+- **Station Keeping**: Maintaining position despite currents
+- **Obstacle Avoidance**: Detecting and avoiding obstacles
+
+### Sensing and Perception Underwater
+
+**Acoustic Sensing**: Using sound for underwater sensing.
+
+- **Sonar**: Sound navigation and ranging
+- **Echo Location**: Determining distance using sound echoes
+- **Imaging**: Creating images using acoustic signals
+- **Doppler Effect**: Measuring velocity using frequency shifts
+- **Applications: Obstacle detection and mapping
+
+**Optical Sensing**: Using light for underwater sensing.
+
+- **Underwater Vision**: Challenges of vision in water
+- **Light Attenuation**: Rapid attenuation of light in water
+- **Color Filtering**: Different wavelengths filtered differently
+- **Artificial Lighting**: Using lights for illumination
+- **Applications: Close-range inspection and identification
+
+**Environmental Sensing**: Measuring underwater environmental conditions.
+
+- **Pressure Sensors**: Measuring depth and pressure
+- **Temperature Sensors**: Measuring water temperature
+- **Salinity Sensors**: Measuring salt content
+- **Current Meters**: Measuring water flow
+- **Chemical Sensors**: Measuring dissolved substances
+
+**Inertial Sensing**: Using onboard sensors for navigation.
+
+- **IMU**: Inertial measurement units for motion sensing
+- **Magnetometers**: Measuring magnetic fields for heading
+- **Depth Sensors**: Measuring pressure for depth determination
+- **Integration**: Combining multiple sensors for navigation
+- **Drift**: Accumulating errors over time
+
+### Applications of Underwater Locomotion
+
+**Marine Research**: Scientific applications in marine environments.
+
+- **Oceanography**: Studying ocean currents and properties
+- **Marine Biology**: Studying marine life and ecosystems
+- **Geology**: Studying seafloor geology and processes
+- **Climate Research**: Studying climate-related ocean processes
+- **Deep-Sea Exploration**: Exploring deep ocean environments
+
+**Commercial Applications**: Business applications in marine environments.
+
+- **Oil and Gas**: Inspecting and maintaining underwater infrastructure
+- **Cable and Pipeline**: Inspecting and maintaining underwater utilities
+- **Aquaculture**: Monitoring and maintaining fish farms
+- **Mining**: Underwater mining operations
+- **Construction**: Underwater construction and inspection
+
+**Defense Applications**: Military applications in marine environments.
+
+- **Surveillance**: Underwater surveillance and monitoring
+- **Mine Countermeasures**: Detecting and neutralizing underwater mines
+- **Intelligence**: Gathering underwater intelligence
+- **Port Security**: Securing ports and harbors
+- **Submarine Support**: Supporting submarine operations
+
+**Environmental Applications**: Environmental monitoring and protection.
+
+- **Pollution Monitoring**: Monitoring water quality and pollution
+- **Habitat Assessment**: Assessing marine habitats
+- **Species Monitoring**: Monitoring marine species populations
+- **Coral Reef Monitoring**: Assessing coral reef health
+- **Climate Monitoring**: Monitoring climate-related changes
+
+### Challenges in Underwater Locomotion
+
+**Pressure Challenges**: Dealing with increasing pressure at depth.
+
+- **Hull Integrity**: Maintaining structural integrity under pressure
+- **Sealing**: Preventing water ingress at high pressure
+- **Component Rating**: Ensuring components can withstand pressure
+- **Testing**: Testing systems at operational pressures
+- **Materials**: Using materials that resist pressure effects
+
+**Communication Challenges**: Operating in an environment that attenuates signals.
+
+- **RF Attenuation**: Radio frequencies strongly attenuated in water
+- **Acoustic Communication**: Using sound for communication
+- **Limited Bandwidth**: Low data rates for underwater communication
+- **Latency**: Delays in communication due to sound speed
+- **Interference**: Environmental noise affecting communication
+
+**Navigation Challenges**: Navigating in an environment with limited positioning options.
+
+- **GPS Denial**: GPS signals do not penetrate water
+- **Limited Visibility**: Reduced visibility in many underwater environments
+- **Currents**: Water currents affecting position and navigation
+- **Feature Scarcity**: Limited features for visual navigation
+- **Accumulating Errors**: Errors accumulating in dead reckoning systems
+
+**Energy Challenges**: Operating in an environment with limited recharging options.
+
+- **Battery Life**: Limited battery life for extended missions
+- **Charging Infrastructure**: Limited charging options underwater
+- **Energy Efficiency**: Critical importance of energy efficiency
+- **Power Management**: Careful management of power consumption
+- **Mission Duration**: Limited by energy storage capacity
+
+### Future Directions
+
+The future of swimming and underwater locomotion includes:
+
+- **Bio-inspired Design**: More closely mimicking biological swimming systems
+- **Advanced Materials**: New materials for better pressure resistance and efficiency
+- **AI Integration**: Using AI for improved navigation and control
+- **Swarm Robotics**: Coordinated operation of multiple underwater robots
+- **Energy Harvesting**: Systems that generate power from the underwater environment
+
+Understanding swimming and underwater locomotion is essential for creating robots that can operate effectively in aquatic environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Underwater locomotion operates in aquatic environments with unique challenges
+- Propulsion types include BCF, MPF, jet, and paddling methods
+- Hydrodynamic principles involve drag, lift, added mass, and boundary layers
+- Vehicle design includes hull, propulsion, control surfaces, and buoyancy systems
+- Propulsion mechanisms include screw propellers, pump jets, and biomimetic methods
+- Control and navigation face GPS denial and acoustic challenges
+- Sensing involves acoustic, optical, and environmental methods
+- Applications span research, commercial, defense, and environmental domains
+- Challenges include pressure, communication, navigation, and energy issues
+- Future directions involve bio-inspired design and AI integration
+
+</div>
+</TabItem>
+</Tabs>

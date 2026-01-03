@@ -1,0 +1,216 @@
+---
+id: chapter-35
+title: "Trust and Safety in Human-Robot Interactions"
+module: "Module 6: Human-Robot Interaction Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Trust and Safety in Human-Robot Interactions
+
+### Introduction to Trust and Safety in Human-Robot Interactions
+
+Trust and safety are fundamental requirements for successful human-robot interactions, particularly for humanoid robots that operate in close proximity to humans. Building trust requires consistent, predictable, and safe behavior, while ensuring safety involves preventing harm to humans, property, and the robot itself. These concepts are interrelated and critical for the acceptance and effectiveness of humanoid robots.
+
+Key requirements for trust and safety in HRI include:
+
+- **Predictability**: Robot behavior should be predictable and consistent
+- **Reliability**: Robot should perform as expected across various situations
+- **Transparency**: Humans should understand robot capabilities and limitations
+- **Physical Safety**: Prevention of physical harm to humans and environment
+- **Psychological Safety**: Prevention of psychological harm or discomfort
+
+### Foundations of Trust in HRI
+
+**Predictability**: Consistent behavior that humans can rely on.
+
+**Competence**: Demonstrating capability to perform required tasks.
+
+**Benevolence**: Acting in the best interest of humans.
+
+**Integrity**: Consistent alignment between robot actions and stated intentions.
+
+**Transparency**: Clear communication about robot capabilities and limitations.
+
+### Building Trust
+
+**Consistency**: Maintaining consistent behavior across interactions.
+
+**Reliability**: Performing tasks reliably and as expected.
+
+**Communication**: Clearly communicating robot intentions and capabilities.
+
+**Error Handling**: Gracefully handling and recovering from errors.
+
+**Learning from Experience**: Improving based on human feedback.
+
+### Safety Principles
+
+**Risk Assessment**: Systematically identifying and evaluating potential risks.
+
+**Hazard Prevention**: Preventing hazards through design and control.
+
+**Fail-Safe Operation**: Ensuring safe operation even when components fail.
+
+**Emergency Response**: Appropriate responses to emergency situations.
+
+**Continuous Monitoring**: Ongoing assessment of safety conditions.
+
+### Physical Safety Considerations
+
+**Collision Avoidance**: Preventing collisions with humans and objects.
+
+**Force Limiting**: Ensuring interaction forces remain within safe limits.
+
+**Speed Control**: Limiting robot speeds to safe levels.
+
+**Emergency Stop**: Immediate stopping of robot motion when needed.
+
+**Safe Zones**: Establishing areas where humans are protected from robot motion.
+
+### Psychological Safety Considerations
+
+**Privacy Protection**: Respecting human privacy during interactions.
+
+**Emotional Safety**: Avoiding emotional distress or discomfort.
+
+**Cultural Sensitivity**: Respecting cultural differences and norms.
+
+**Autonomy Support**: Supporting human decision-making and autonomy.
+
+**Trust Maintenance**: Maintaining trust over time and across interactions.
+
+### Trust Modeling
+
+**Trust Metrics**: Quantifying trust levels between humans and robots.
+
+**Trust Dynamics**: Understanding how trust changes over time.
+
+**Trust Calibration**: Ensuring appropriate levels of trust.
+
+**Trust Recovery**: Recovering trust after negative experiences.
+
+**Trust Propagation**: How trust in one context affects other contexts.
+
+### Safety Standards and Regulations
+
+**ISO 10218**: Safety requirements for industrial robots.
+
+**ISO/TS 15066**: Guidelines for human-robot collaboration safety.
+
+**ISO 13482**: Safety standards for service robots.
+
+**IEC 62061**: Functional safety for machinery.
+
+**Local Regulations**: Compliance with local safety regulations.
+
+### Trust and Safety Challenges
+
+Several challenges exist in implementing effective trust and safety:
+
+**Trust Calibration**: Avoiding both over-trust and under-trust situations.
+
+**Cultural Differences**: Handling different cultural expectations about trust.
+
+**Individual Differences**: Adapting to different individuals' trust preferences.
+
+**Dynamic Environments**: Maintaining safety in changing environments.
+
+**Technology Limitations**: Working within the constraints of current technology.
+
+### Safety Mechanisms
+
+**Hardware Safety**: Safety mechanisms built into robot hardware.
+
+**Software Safety**: Safety checks and constraints in robot software.
+
+**Communication Safety**: Ensuring safe communication between components.
+
+**Operational Safety**: Safety procedures during robot operation.
+
+**Maintenance Safety**: Safety during robot maintenance and updates.
+
+### Trust Evaluation
+
+**Trust Measurement**: Quantifying human trust in robots.
+
+**Trust Indicators**: Observable indicators of trust levels.
+
+**Trust Dynamics**: Understanding how trust changes over time.
+
+**Trust Calibration**: Ensuring appropriate trust levels.
+
+**User Feedback**: Collecting feedback on trust and safety experiences.
+
+### Applications
+
+Trust and safety considerations apply to various applications:
+
+**Healthcare**: Ensuring safety and trust in medical environments.
+
+**Service Robotics**: Maintaining safety in public spaces with diverse populations.
+
+**Manufacturing**: Ensuring safety in collaborative work environments.
+
+**Home Assistance**: Maintaining safety in domestic environments.
+
+**Education**: Ensuring safety around children and in educational settings.
+
+### Future Trends
+
+The future of trust and safety in HRI includes:
+
+- **AI-Based Safety**: Using artificial intelligence for enhanced safety
+- **Predictive Trust**: Predicting and managing trust levels proactively
+- **Collaborative Safety**: Enhanced safety for human-robot collaboration
+- **Ethical AI**: Ensuring trust and safety systems align with ethical principles
+- **Regulatory Evolution**: Evolving standards for increasingly capable robots
+
+Understanding trust and safety in human-robot interactions is essential for creating humanoid robots that can operate effectively and acceptably in human environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Trust and safety are fundamental for successful human-robot interactions
+- Trust foundations include predictability, competence, benevolence, integrity, and transparency
+- Building trust involves consistency, reliability, communication, and error handling
+- Safety principles include risk assessment, hazard prevention, and fail-safe operation
+- Physical safety involves collision avoidance, force limiting, and emergency response
+- Psychological safety includes privacy, emotional safety, and cultural sensitivity
+- Trust modeling involves metrics, dynamics, calibration, and recovery
+- Safety standards include ISO 10218, ISO/TS 15066, and ISO 13482
+- Challenges include trust calibration, cultural differences, and dynamic environments
+- Future trends involve AI-based safety and predictive trust management
+
+</div>
+</TabItem>
+</Tabs>

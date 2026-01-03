@@ -1,0 +1,210 @@
+---
+id: chapter-8
+title: "Balance and Posture Control in Humanoid Robots"
+module: "Module 2: Locomotion and Mobility in Humanoid Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Balance and Posture Control in Humanoid Robots
+
+### Introduction to Balance and Posture Control
+
+Balance and posture control are fundamental capabilities for humanoid robots, enabling them to maintain stability during both static and dynamic activities. These systems are critical for safe operation and effective interaction with the environment, mimicking the complex balance mechanisms found in humans.
+
+Key aspects of balance and posture control include:
+
+- **Stability**: Maintaining the robot's center of mass within its support base
+- **Reactivity**: Responding quickly to disturbances to prevent falls
+- **Adaptability**: Adjusting control strategies based on different tasks and environments
+- **Energy Efficiency**: Maintaining balance with minimal energy consumption
+- **Safety**: Ensuring safe responses to unexpected situations
+
+### Human Balance Systems as Inspiration
+
+Human balance involves multiple systems working together:
+
+**Vestibular System**: Located in the inner ear, detects head position and movement.
+
+**Visual System**: Provides information about the environment and the robot's position relative to it.
+
+**Proprioceptive System**: Sensors throughout the body provide information about joint positions and forces.
+
+**Somatosensory System**: Provides information about touch, pressure, and vibration.
+
+### Balance Control Strategies
+
+**Ankle Strategy**: Using ankle joints as pivot points to maintain balance for small disturbances. This is the primary strategy for minor perturbations.
+
+**Hip Strategy**: Using hip joints to maintain balance for larger disturbances. This involves more significant body movement.
+
+**Stepping Strategy**: Taking a step to expand the support base when other strategies are insufficient.
+
+**Suspension Strategy**: Using arm movements and other body parts to help maintain balance.
+
+### Mathematical Models for Balance
+
+**Zero Moment Point (ZMP)**: A point where the sum of all moments of the active forces equals zero. Maintaining ZMP within the support polygon is crucial for stability.
+
+**Capture Point**: A point where the robot can step to stop its momentum and maintain balance.
+
+**Linear Inverted Pendulum Model (LIPM)**: A simplified model that represents the robot as a point mass supported by a massless leg.
+
+**Cart-Table Model**: An extension of LIPM that includes the vertical motion of the center of mass.
+
+### Control Approaches
+
+**Feedback Control**: Using sensor measurements to adjust the robot's posture in real-time.
+
+**Feedforward Control**: Anticipating disturbances and adjusting posture proactively.
+
+**Impedance Control**: Controlling the robot's mechanical impedance to achieve desired interaction behavior.
+
+**Admittance Control**: Controlling the robot's motion in response to applied forces.
+
+### Posture Control
+
+Posture control involves maintaining the robot's body configuration:
+
+**Static Posture**: Maintaining a fixed body configuration, such as standing upright.
+
+**Dynamic Posture**: Adjusting body configuration during movement, such as walking or reaching.
+
+**Task-Specific Postures**: Adopting postures appropriate for specific tasks.
+
+**Comfort Postures**: Adopting postures that reduce stress on joints and actuators.
+
+### Sensory Integration
+
+Balance control requires integration of multiple sensory inputs:
+
+**Inertial Measurement Units (IMUs)**: Provide information about orientation and acceleration.
+
+**Force/Torque Sensors**: Measure ground reaction forces and joint torques.
+
+**Joint Encoders**: Provide information about joint positions and velocities.
+
+**Vision Systems**: Provide information about the environment and relative position.
+
+**Tactile Sensors**: Provide information about contact with surfaces or objects.
+
+### Disturbance Handling
+
+Humanoid robots must handle various types of disturbances:
+
+**External Forces**: Pushes or pulls applied to the robot.
+
+**Ground Perturbations**: Changes in the surface the robot is standing on.
+
+**Internal Disturbances**: Unexpected movements or changes in the robot's own state.
+
+**Environmental Changes**: Changes in terrain, lighting, or other environmental factors.
+
+### Control Hierarchies
+
+Balance and posture control often use hierarchical control structures:
+
+**High-Level Planner**: Determines overall balance strategy and goals.
+
+**Mid-Level Controller**: Translates high-level goals into specific control actions.
+
+**Low-Level Controller**: Directly controls actuators to achieve desired joint positions or forces.
+
+### Stability Margins
+
+Maintaining stability with appropriate margins is important:
+
+**Static Stability**: Stability when the robot is not moving.
+
+**Dynamic Stability**: Stability during movement.
+
+**Robustness**: Ability to maintain stability despite model errors or disturbances.
+
+**Recovery**: Ability to recover from near-fall situations.
+
+### Challenges in Balance Control
+
+Several challenges exist in implementing effective balance control:
+
+**Real-time Requirements**: Balance control must operate with very strict timing constraints.
+
+**Model Uncertainty**: Real robots differ from their mathematical models.
+
+**Sensor Noise**: Sensor measurements contain noise that must be filtered appropriately.
+
+**Actuator Limitations**: Physical actuators have limitations in speed, force, and precision.
+
+**Environmental Uncertainty**: The robot must operate in environments that may not be fully known.
+
+### Applications
+
+Balance and posture control have numerous applications:
+
+**Bipedal Walking**: Maintaining balance during walking and other locomotion.
+
+**Standing**: Maintaining stable standing posture.
+
+**Recovery**: Recovering from disturbances or near-fall situations.
+
+**Interaction**: Maintaining balance while interacting with objects or humans.
+
+**Transportation**: Maintaining balance while carrying objects.
+
+### Future Directions
+
+The future of balance and posture control includes:
+
+- **Learning-based Control**: Using machine learning to improve balance strategies
+- **Bio-inspired Approaches**: More closely mimicking human balance mechanisms
+- **Enhanced Sensing**: Better integration of multiple sensory modalities
+- **Adaptive Systems**: Automatically adjusting control parameters based on conditions
+- **Human-Robot Collaboration**: Maintaining balance during physical interaction with humans
+
+Understanding balance and posture control is essential for creating stable and safe humanoid robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Balance and posture control enable stability during static and dynamic activities
+- Human systems include vestibular, visual, proprioceptive, and somatosensory
+- Control strategies include ankle, hip, stepping, and suspension strategies
+- Mathematical models include ZMP, capture point, and LIPM
+- Control approaches include feedback, feedforward, impedance, and admittance
+- Posture control involves static, dynamic, and task-specific postures
+- Sensory integration combines IMU, force, joint, vision, and tactile sensors
+- Disturbance handling addresses external, ground, internal, and environmental changes
+- Control hierarchies organize high, mid, and low-level controllers
+- Challenges include real-time requirements and sensor/model limitations
+
+</div>
+</TabItem>
+</Tabs>

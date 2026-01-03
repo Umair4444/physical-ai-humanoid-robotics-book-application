@@ -1,0 +1,226 @@
+---
+id: chapter-18
+title: "Humanoid Manipulation Safety and Compliance"
+module: "Module 3: Manipulation and Grasping Systems"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Manipulation Safety and Compliance
+
+### Introduction to Manipulation Safety and Compliance
+
+Safety and compliance are critical considerations in humanoid manipulation, particularly when robots operate in close proximity to humans. Ensuring safe manipulation requires careful design of mechanical systems, control algorithms, and operational procedures that prevent harm to humans, property, and the robot itself.
+
+Key aspects of manipulation safety and compliance include:
+
+- **Mechanical Safety**: Designing safe physical systems
+- **Control Safety**: Implementing safe control algorithms
+- **Operational Safety**: Establishing safe operational procedures
+- **Compliance**: Ensuring robots respond appropriately to external forces
+- **Risk Assessment**: Identifying and mitigating potential hazards
+
+### Mechanical Safety Design
+
+**Inherently Safe Design**: Designing systems that are safe by default.
+
+**Compliant Mechanisms**: Using mechanical compliance to reduce impact forces.
+
+**Force Limiting**: Implementing mechanical limits on applied forces.
+
+**Collision Mitigation**: Designing to minimize harm during collisions.
+
+**Encapsulation**: Protecting humans from sharp edges or moving parts.
+
+### Control-Based Safety
+
+**Force Control**: Limiting forces applied during manipulation.
+
+**Velocity Limiting**: Restricting movement speeds to safe levels.
+
+**Collision Detection**: Identifying when collisions occur.
+
+**Emergency Stop**: Implementing systems to stop all motion immediately.
+
+**Safe Motion Planning**: Planning paths that avoid collisions.
+
+### Compliance in Manipulation
+
+**Intrinsic Compliance**: Mechanical compliance built into the system.
+
+**Active Compliance**: Control-based compliance that adapts to conditions.
+
+**Impedance Control**: Controlling the robot's mechanical impedance.
+
+**Admittance Control**: Controlling the robot's response to external forces.
+
+**Variable Stiffness**: Adjusting joint stiffness based on task requirements.
+
+### Force and Torque Limiting
+
+**Joint Torque Limits**: Ensuring actuators don't exceed safe torque limits.
+
+**End-effector Force Limits**: Limiting forces applied by the robot's hands.
+
+**Contact Force Management**: Managing forces during object contact.
+
+**Impact Force Reduction**: Minimizing forces during unexpected contacts.
+
+**Force Control Algorithms**: Implementing precise force control.
+
+### Collision Detection and Avoidance
+
+**Proximity Sensing**: Detecting nearby objects before collision.
+
+**Contact Detection**: Identifying when contact occurs.
+
+**Collision Prediction**: Predicting potential collisions.
+
+**Reactive Avoidance**: Responding to detected collisions.
+
+**Predictive Avoidance**: Avoiding collisions before they occur.
+
+### Human-Robot Interaction Safety
+
+**Physical Interaction**: Ensuring safe physical contact with humans.
+
+**Workspace Monitoring**: Monitoring areas where humans and robots interact.
+
+**Safety Zones**: Establishing safe distances and areas.
+
+**Collaborative Control**: Sharing control between humans and robots.
+
+**Trust and Acceptance**: Building human trust in robot safety.
+
+### Risk Assessment and Management
+
+**Hazard Identification**: Identifying potential sources of harm.
+
+**Risk Analysis**: Assessing the likelihood and severity of risks.
+
+**Safety Standards**: Following established safety standards and guidelines.
+
+**Safety Validation**: Testing and validating safety systems.
+
+**Continuous Monitoring**: Ongoing assessment of safety performance.
+
+### Standards and Regulations
+
+**ISO 10218**: Safety requirements for industrial robots.
+
+**ISO/TS 15066**: Collaborative robots safety guidelines.
+
+**ISO 13482**: Safety standards for personal care robots.
+
+**Local Regulations**: Compliance with local safety regulations.
+
+**Industry Standards**: Following industry-specific safety standards.
+
+### Compliance Control Strategies
+
+**Impedance Control**: Adjusting mechanical impedance for safe interaction.
+
+**Admittance Control**: Controlling response to external forces.
+
+**Hybrid Force/Position Control**: Combining force and position control.
+
+**Variable Compliance**: Adjusting compliance based on task requirements.
+
+**Learning-based Compliance**: Using learning to improve compliance.
+
+### Emergency Procedures
+
+**Emergency Stop Systems**: Immediate stopping of all motion.
+
+**Safe Positioning**: Moving to safe positions during emergencies.
+
+**Graceful Degradation**: Maintaining basic functionality during failures.
+
+**Recovery Procedures**: Returning to safe states after emergencies.
+
+**Communication**: Alerting humans to emergency situations.
+
+### Testing and Validation
+
+**Safety Testing**: Testing safety systems under various conditions.
+
+**Compliance Verification**: Verifying compliance with safety standards.
+
+**Risk Assessment**: Conducting thorough risk assessments.
+
+**Performance Validation**: Validating safety without compromising performance.
+
+**Continuous Monitoring**: Ongoing safety monitoring and improvement.
+
+### Applications
+
+Safety and compliance are important in various applications:
+
+**Healthcare**: Safe interaction with patients and medical equipment.
+
+**Service Robotics**: Safe operation in public spaces with humans.
+
+**Manufacturing**: Collaborative robots working alongside humans.
+
+**Home Assistance**: Safe operation in domestic environments.
+
+**Education**: Safe interaction with students and educators.
+
+### Future Directions
+
+The future of manipulation safety and compliance includes:
+
+- **Advanced Sensing**: Better detection of humans and hazards
+- **Learning-based Safety**: Using machine learning to improve safety
+- **Predictive Safety**: Predicting and preventing safety issues
+- **Human-Centered Design**: Safety systems designed around human needs
+- **Regulatory Evolution**: Evolving standards for increasingly capable robots
+
+Understanding safety and compliance is essential for creating humanoid robots that can operate safely around humans.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Safety and compliance are critical for humanoid manipulation near humans
+- Mechanical safety includes inherently safe design and compliant mechanisms
+- Control-based safety involves force control, velocity limiting, and collision detection
+- Compliance includes intrinsic, active, and variable stiffness approaches
+- Force limiting applies to joints, end-effectors, and contact management
+- Collision detection uses proximity sensing and contact identification
+- Human-robot interaction safety requires workspace monitoring and safety zones
+- Risk management involves hazard identification and safety validation
+- Standards include ISO 10218, ISO/TS 15066, and ISO 13482
+- Future directions involve advanced sensing and learning-based safety
+
+</div>
+</TabItem>
+</Tabs>

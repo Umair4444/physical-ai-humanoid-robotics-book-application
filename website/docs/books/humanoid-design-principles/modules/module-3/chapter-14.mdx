@@ -1,0 +1,214 @@
+---
+id: chapter-14
+title: "Humanoid Hand Design and Dexterity"
+module: "Module 3: Manipulation and Grasping Systems"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Hand Design and Dexterity
+
+### Introduction to Humanoid Hand Design
+
+The design of humanoid hands is one of the most challenging aspects of humanoid robotics, requiring a balance between anthropomorphic appearance, functional dexterity, and practical engineering constraints. Humanoid hands must replicate the complex capabilities of human hands while operating within the limitations of mechanical and electronic systems.
+
+Key requirements for humanoid hand design include:
+
+- **Dexterity**: Achieving human-like manipulation capabilities
+- **Strength**: Providing sufficient force for manipulation tasks
+- **Safety**: Ensuring safe interaction with humans and objects
+- **Aesthetics**: Maintaining human-like appearance
+- **Cost**: Balancing functionality with economic constraints
+
+### Human Hand Anatomy as Inspiration
+
+The human hand provides the model for humanoid hand design:
+
+**Skeletal Structure**: 27 bones providing the framework for hand movement.
+
+**Joint Complexity**: Multiple joints per finger allowing for complex movements.
+
+**Muscle Arrangement**: Complex arrangement of muscles and tendons enabling precise control.
+
+**Opposable Thumb**: Critical for precision grasps and dexterity.
+
+**Sensory Distribution**: High concentration of tactile sensors, particularly in fingertips.
+
+### Degrees of Freedom in Humanoid Hands
+
+**Human Hand DOF**: A human hand has approximately 22-27 DOF (including wrist).
+
+**Robotic Hand DOF**: Typically ranges from 13-22 DOF depending on design.
+
+**Underactuation**: Many designs use fewer actuators than DOF for simplicity.
+
+**Coupled Actuation**: Linking finger movements to reduce complexity.
+
+### Hand Design Approaches
+
+**Anthropomorphic Hands**: Designed to closely resemble human hands in appearance and function.
+
+**Simplified Hands**: Fewer DOF but sufficient for specific tasks.
+
+**Underactuated Hands**: Fewer actuators than DOF, using mechanical design for compliance.
+
+**Modular Hands**: Interchangeable components for different tasks.
+
+**Tool-based Approach**: Specialized end-effectors for specific tasks.
+
+### Finger Design
+
+**Number of Fingers**: Typically 4-5 fingers, with variations based on requirements.
+
+**Opposable Thumb**: Critical for precision grasps and dexterity.
+
+**Joint Configuration**: Determining the number of joints per finger (typically 3-4).
+
+**Actuation**: Individual or coupled actuation for finger movements.
+
+**Sensing**: Tactile, force, and position sensors in fingertips and joints.
+
+### Actuation Systems
+
+**Servo Motors**: Individual motors for each joint or finger.
+
+**Tendon-Driven Systems**: Using tendons to transmit forces from actuators to joints.
+
+**Pneumatic Muscles**: Providing human-like compliance and lightweight actuation.
+
+**Shape Memory Alloys**: Materials that change shape when heated.
+
+**Series Elastic Actuators**: Including springs for improved force control.
+
+### Materials and Construction
+
+**Structural Materials**: Lightweight yet strong materials like carbon fiber or advanced polymers.
+
+**Compliant Elements**: Materials that provide appropriate compliance for safe interaction.
+
+**Covering Materials**: Skin-like materials for appearance and tactile sensing.
+
+**Cable Management**: Routing cables and tendons through the hand structure.
+
+### Sensory Systems
+
+**Tactile Sensors**: Detect contact, pressure, and texture.
+
+**Force/Torque Sensors**: Measure forces applied during grasping.
+
+**Temperature Sensors**: Detect temperature of objects being manipulated.
+
+**Slip Sensors**: Detect when objects are slipping from the grasp.
+
+**Proprioceptive Sensors**: Monitor joint positions and velocities.
+
+### Control Challenges
+
+**Redundancy**: Multiple solutions for achieving the same grasp, requiring optimization.
+
+**Real-time Requirements**: Fast computation for responsive control.
+
+**Coordination**: Coordinating multiple fingers for complex grasps.
+
+**Safety**: Ensuring safe operation in human environments.
+
+**Calibration**: Maintaining accurate sensor and actuator calibration.
+
+### Grasp Types and Dexterity
+
+**Power Grasps**: Used for holding objects firmly.
+
+**Precision Grasps**: Used for fine manipulation tasks.
+
+**Cylindrical Grasps**: For holding cylindrical objects.
+
+**Spherical Grasps**: For holding spherical objects.
+
+**Pinch Grasps**: Using thumb and one or more fingers.
+
+**Adaptive Grasps**: Adjusting to object shape and properties.
+
+### Safety Considerations
+
+**Force Limiting**: Preventing excessive forces during interaction.
+
+**Collision Detection**: Identifying and responding to collisions.
+
+**Emergency Stop**: Systems to quickly stop all motion if needed.
+
+**Compliance**: Designing for safe interaction with humans.
+
+**Enclosure**: Protecting internal components while maintaining functionality.
+
+### Applications
+
+Humanoid hand design serves various applications:
+
+**Assistive Robotics**: Helping elderly or disabled individuals with daily tasks.
+
+**Manufacturing**: Assembly, inspection, and quality control tasks.
+
+**Healthcare**: Surgical assistance and patient care.
+
+**Service Industries**: Food preparation, cleaning, and customer service.
+
+**Research**: Studying human-robot interaction and manipulation.
+
+### Future Directions
+
+The future of humanoid hand design includes:
+
+- **Soft Robotics**: Using compliant materials for safer and more adaptable designs
+- **Bio-inspired Materials**: New materials that better mimic biological systems
+- **Enhanced Sensing**: Better tactile and force sensing capabilities
+- **Learning-based Control**: Systems that learn and improve manipulation skills
+- **Modular Design**: Interchangeable components for task-specific configurations
+
+Understanding hand design is essential for creating humanoid robots with effective manipulation capabilities.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Humanoid hand design balances dexterity, strength, safety, and aesthetics
+- Human hand has 27 bones and 22-27 DOF as inspiration for design
+- Design approaches include anthropomorphic, simplified, and underactuated hands
+- Key considerations include DOF, actuation, materials, and sensing
+- Actuation systems include servo motors, tendons, and pneumatic muscles
+- Sensory systems include tactile, force, temperature, and slip sensors
+- Control challenges include redundancy, real-time requirements, and safety
+- Grasp types include power, precision, cylindrical, spherical, and pinch
+- Safety features include force limiting, collision detection, and compliance
+- Applications span assistive, manufacturing, healthcare, and service robotics
+
+</div>
+</TabItem>
+</Tabs>

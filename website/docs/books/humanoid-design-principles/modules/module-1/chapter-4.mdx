@@ -1,0 +1,153 @@
+---
+id: chapter-4
+title: "Humanoid Kinematics and Dynamics"
+module: "Module 1: Foundations of Humanoid Design Principles"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Kinematics and Dynamics
+
+### Introduction to Kinematics and Dynamics
+
+Kinematics and dynamics are fundamental concepts in robotics that describe the motion of mechanical systems. In humanoid robotics, these concepts are essential for understanding and controlling the complex movements of robots designed to mimic human motion.
+
+**Kinematics** is the study of motion without considering the forces that cause it. It deals with position, velocity, and acceleration of various parts of the robot.
+
+**Dynamics** is the study of motion with consideration of the forces that cause it. It involves understanding how forces and torques affect the motion of the robot.
+
+### Kinematic Chains in Humanoid Robots
+
+Humanoid robots are typically composed of multiple interconnected rigid bodies forming kinematic chains. These chains can be:
+
+**Open Chains**: Where each link connects to at most two other links, forming a tree structure. Examples include arms and legs.
+
+**Closed Chains**: Where links form loops. Examples include when a humanoid robot uses both hands to hold an object.
+
+**Hybrid Chains**: Combinations of open and closed chains, which are common in humanoid robots when interacting with the environment.
+
+### Forward and Inverse Kinematics
+
+**Forward Kinematics** is the process of determining the position and orientation of the end-effector (e.g., hand or foot) given the joint angles. This is typically straightforward to calculate.
+
+**Inverse Kinematics** is the process of determining the joint angles required to achieve a desired position and orientation of the end-effector. This is more complex and often has multiple solutions or no solution.
+
+For humanoid robots, inverse kinematics is particularly challenging due to:
+- Multiple degrees of freedom
+- Redundancy (more joints than necessary to achieve a task)
+- Joint limits and constraints
+- Collision avoidance requirements
+
+### Degrees of Freedom (DOF)
+
+Degrees of freedom refer to the number of independent parameters that define the configuration of a mechanical system. Humanoid robots typically have many DOF to achieve human-like motion:
+
+- **Head**: 3 DOF (pitch, yaw, roll)
+- **Arm**: 7 DOF each (3 for shoulder, 1 for elbow, 3 for wrist)
+- **Leg**: 6 DOF each (3 for hip, 1 for knee, 2 for ankle)
+- **Trunk**: 6 DOF (3 for position, 3 for orientation)
+
+The total DOF of a humanoid robot can range from 20 to 40 or more, depending on the design.
+
+### Dynamic Modeling
+
+Dynamic modeling involves understanding the forces and torques required to achieve desired motions. Key concepts include:
+
+**Rigid Body Dynamics**: Modeling each link as a rigid body with mass, center of mass, and moment of inertia.
+
+**Lagrangian Mechanics**: A method for deriving equations of motion using energy concepts.
+
+**Newton-Euler Formulation**: A recursive method for computing inverse dynamics efficiently.
+
+### Balance and Stability
+
+Balance is a critical aspect of humanoid robotics, particularly for bipedal locomotion. Key concepts include:
+
+**Zero Moment Point (ZMP)**: A point where the sum of all moments of the active forces equals zero. Maintaining the ZMP within the support polygon is crucial for stability.
+
+**Center of Mass (CoM)**: The point where the total mass of the robot can be considered to be concentrated. Controlling the CoM position is essential for balance.
+
+**Support Polygon**: The convex hull of the contact points with the ground. Stability is maintained by keeping the ZMP within this polygon.
+
+### Control Strategies
+
+Various control strategies are used in humanoid robotics:
+
+**PID Control**: Proportional-Integral-Derivative control for basic joint control.
+
+**Computed Torque Control**: Linearizing the dynamics to achieve desired trajectories.
+
+**Impedance Control**: Controlling the robot's mechanical impedance to achieve desired interaction behavior.
+
+**Model Predictive Control**: Using a model to predict future states and optimize control inputs.
+
+### Challenges in Humanoid Kinematics and Dynamics
+
+Several challenges arise in humanoid kinematics and dynamics:
+
+**Computational Complexity**: Solving inverse kinematics and dynamics in real-time for systems with many DOF.
+
+**Redundancy Resolution**: Determining which of multiple possible solutions to use for redundant systems.
+
+**Real-time Constraints**: Meeting strict timing requirements for stable control.
+
+**Model Accuracy**: Ensuring the dynamic model accurately represents the real robot.
+
+### Applications
+
+Kinematics and dynamics are applied in various aspects of humanoid robotics:
+
+**Motion Planning**: Determining feasible trajectories for the robot.
+
+**Walking Control**: Implementing stable bipedal locomotion.
+
+**Manipulation**: Controlling arms and hands for object interaction.
+
+**Whole-body Control**: Coordinating all parts of the robot for complex tasks.
+
+Understanding kinematics and dynamics is essential for creating stable and capable humanoid robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Kinematics studies motion without forces; dynamics studies motion with forces
+- Kinematic chains can be open, closed, or hybrid
+- Forward kinematics determines end-effector position from joint angles
+- Inverse kinematics determines joint angles for desired end-effector position
+- Humanoid robots have many degrees of freedom for human-like motion
+- Balance requires controlling ZMP and CoM within support polygon
+- Control strategies include PID, computed torque, and impedance control
+- Challenges include computational complexity and real-time constraints
+
+</div>
+</TabItem>
+</Tabs>

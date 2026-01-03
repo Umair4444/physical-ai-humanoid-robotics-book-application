@@ -1,0 +1,184 @@
+---
+id: chapter-5
+title: "Humanoid Actuation Systems"
+module: "Module 1: Foundations of Humanoid Design Principles"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Actuation Systems
+
+### Introduction to Actuation in Humanoid Robots
+
+Actuation systems are the components that provide motion and force in humanoid robots. These systems are critical for achieving human-like movement and interaction with the environment. The choice of actuation technology significantly impacts the robot's performance, safety, and overall design.
+
+Key requirements for humanoid actuation systems include:
+
+- **High Torque-to-Weight Ratio**: To achieve human-like strength while maintaining reasonable weight
+- **Backdrivability**: Allowing the robot to be moved by external forces, important for safety
+- **Energy Efficiency**: To maximize operational time between charges
+- **Precision**: To achieve fine control necessary for human-like movements
+- **Safety**: To ensure safe interaction with humans and the environment
+
+### Types of Actuators
+
+**Electric Motors**: The most common type of actuator in humanoid robots, including:
+
+- **DC Motors**: Simple and reliable, but often require gearboxes
+- **Brushless DC Motors**: More efficient and longer-lasting than brushed motors
+- **Servo Motors**: Include position feedback for precise control
+- **Stepper Motors**: Provide precise position control through discrete steps
+
+**Pneumatic Actuators**: Use compressed air to generate motion, offering:
+
+- High power-to-weight ratio
+- Inherent compliance and safety
+- Challenges with air supply and control
+
+**Hydraulic Actuators**: Use pressurized fluid to generate motion, providing:
+
+- Very high force capabilities
+- Precise control
+- Challenges with complexity, weight, and maintenance
+
+**Series Elastic Actuators (SEA)**: Include a spring in series with the motor, offering:
+
+- Improved force control
+- Enhanced safety through compliance
+- Better shock absorption
+
+**Variable Stiffness Actuators (VSA)**: Allow adjustment of joint stiffness, providing:
+
+- Adaptability to different tasks
+- Improved safety and energy efficiency
+- More complex control requirements
+
+### Actuator Design Considerations
+
+**Torque Requirements**: Humanoid robots need actuators that can generate sufficient torque to support their weight and perform tasks. This requires careful analysis of the forces required for different movements.
+
+**Speed Requirements**: Different movements require different speeds. Walking requires relatively slow, controlled movements, while some manipulation tasks may require faster responses.
+
+**Power Consumption**: Battery life is critical for humanoid robots. Actuators must be designed to minimize power consumption while meeting performance requirements.
+
+**Thermal Management**: Actuators generate heat during operation. Proper thermal management is essential to prevent overheating and maintain performance.
+
+**Backdrivability**: For safe human interaction, actuators should allow the robot to be moved by external forces. This is particularly important for collaborative tasks.
+
+### Joint Design
+
+Humanoid robots have various types of joints, each with specific actuation requirements:
+
+**Revolute Joints**: Allow rotation around a single axis, common in limbs and neck.
+
+**Prismatic Joints**: Allow linear motion, less common in humanoid robots.
+
+**Spherical Joints**: Allow rotation around multiple axes, used in shoulders and hips.
+
+**Complex Joints**: Multi-DOF joints that combine multiple types of motion.
+
+### Transmission Systems
+
+Actuators rarely connect directly to joints. Transmission systems are used to:
+
+**Gear Ratios**: Adjust the speed and torque characteristics of the actuator.
+
+**Backlash Reduction**: Minimize play in the transmission system for precise control.
+
+**Compact Design**: Allow actuators to be placed away from joints to optimize space and weight distribution.
+
+Common transmission systems include:
+
+- **Harmonic Drives**: Provide high reduction ratios in compact packages
+- **Planetary Gears**: Offer high torque density and efficiency
+- **Timing Belts**: Provide smooth, quiet operation with moderate reduction
+- **Lead Screws**: Convert rotary to linear motion
+
+### Control Considerations
+
+**Position Control**: Maintaining specific joint angles, important for posture and manipulation.
+
+**Velocity Control**: Controlling the speed of joint movements.
+
+**Force/Torque Control**: Controlling the forces applied by the robot, important for safe interaction.
+
+**Impedance Control**: Controlling the robot's mechanical impedance to achieve desired interaction behavior.
+
+### Safety and Compliance
+
+Safety is paramount in humanoid robotics, particularly for robots that interact with humans:
+
+**Inherent Compliance**: Using actuators and transmissions that naturally provide compliance.
+
+**Active Compliance**: Using control algorithms to adjust the robot's response to external forces.
+
+**Emergency Stop**: Systems to quickly stop all motion in case of emergency.
+
+**Collision Detection**: Identifying when the robot has collided with an object or person.
+
+### Energy Efficiency
+
+Energy efficiency is critical for humanoid robots:
+
+**Regenerative Braking**: Recovering energy during deceleration.
+
+**Optimal Trajectory Planning**: Minimizing energy consumption through efficient movement planning.
+
+**Sleep Modes**: Reducing power consumption when the robot is idle.
+
+### Future Trends
+
+The future of humanoid actuation includes:
+
+- **Bio-inspired Actuators**: More closely mimicking biological muscle systems
+- **Soft Actuators**: Using flexible materials for safer human interaction
+- **Advanced Materials**: New materials for higher performance actuators
+- **Integrated Systems**: Better integration of actuation, sensing, and control
+
+Understanding actuation systems is crucial for designing effective and safe humanoid robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Actuation systems provide motion and force in humanoid robots
+- Key requirements include high torque-to-weight ratio, backdrivability, and safety
+- Types include electric, pneumatic, hydraulic, SEA, and VSA actuators
+- Design considerations include torque, speed, power, and thermal management
+- Joint types include revolute, prismatic, spherical, and complex joints
+- Transmission systems adjust speed/torque and enable compact designs
+- Control includes position, velocity, force, and impedance control
+- Safety features include compliance, emergency stops, and collision detection
+- Future trends involve bio-inspired and soft actuators
+
+</div>
+</TabItem>
+</Tabs>

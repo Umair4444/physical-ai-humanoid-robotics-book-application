@@ -1,0 +1,362 @@
+---
+id: chapter-26
+title: "Underwater Vehicle Design and Propulsion"
+module: "Module 5: Swimming and Underwater Locomotion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Underwater Vehicle Design and Propulsion
+
+### Introduction to Underwater Vehicle Design and Propulsion
+
+Underwater vehicle design and propulsion represent critical aspects of aquatic robotics, determining the vehicle's ability to operate effectively in marine environments. Unlike terrestrial or aerial vehicles, underwater systems must be designed to withstand pressure, manage buoyancy, and operate in a dense, viscous medium. The design and propulsion systems must account for the unique challenges of underwater operation while maximizing efficiency and mission capability.
+
+Key aspects of underwater vehicle design and propulsion include:
+
+- **Pressure Resistance**: Withstanding the increasing pressure at depth
+- **Buoyancy Management**: Controlling the vehicle's position in the water column
+- **Hydrodynamic Efficiency**: Optimizing shape and propulsion for water movement
+- **Sealing and Waterproofing**: Preventing water ingress into sensitive systems
+- **Propulsion Efficiency**: Maximizing thrust while minimizing energy consumption
+
+### Vehicle Design Principles
+
+**Hull Design**: The main body structure of underwater vehicles.
+
+- **Pressure Hull**: Structure designed to withstand external pressure
+- **Shape Optimization**: Streamlining for reduced drag and improved efficiency
+- **Material Selection**: Choosing materials for strength, weight, and corrosion resistance
+- **Modular Design**: Interchangeable components for versatility
+- **Access Points**: Sealed access points for maintenance and payload
+
+**Pressure Considerations**: Designing for pressure at operational depths.
+
+- **Wall Thickness**: Calculating wall thickness for pressure resistance
+- **Shape Effects**: How shape affects pressure distribution
+- **Safety Factors**: Incorporating safety margins for pressure loads
+- **Testing**: Pressure testing to verify design adequacy
+- **Materials**: Selecting materials for pressure resistance
+
+**Buoyancy Design**: Managing the vehicle's position in the water column.
+
+- **Neutral Buoyancy**: Balancing weight and buoyant force
+- **Positive Buoyancy**: Designing for surface floating
+- **Negative Buoyancy**: Designing for sinking or diving
+- **Variable Buoyancy**: Systems for adjusting buoyancy during operation
+- **Trim**: Balancing fore-aft and port-starboard buoyancy
+
+**Hydrodynamic Design**: Optimizing shape for efficient movement through water.
+
+- **Streamlining**: Reducing drag through shape optimization
+- **Flow Attachment**: Maintaining attached flow to reduce drag
+- **Surface Finish**: Minimizing surface roughness to reduce skin friction
+- **Appendage Design**: Optimizing external components for minimal drag
+- **Flow Control**: Techniques to manage flow separation
+
+### Propulsion Systems
+
+**Screw Propellers**: Traditional underwater propulsion method.
+
+- **Blade Design**: Number, shape, and angle of propeller blades
+- **Cavitation**: Formation of vapor bubbles reducing efficiency and causing damage
+- **Efficiency**: Optimizing for maximum thrust per unit power
+- **Cavitation-Free Operation**: Designing to avoid cavitation at operating conditions
+- **Reversibility**: Capability for forward and reverse thrust
+
+**Pump Jets**: Ducted propeller systems for improved performance.
+
+- **Duct Design**: Shaping ducts to improve propeller performance
+- **Protection**: Protecting propeller from debris and damage
+- **Efficiency**: Improved efficiency over open propellers
+- **Cavitation Reduction**: Reduced cavitation compared to open propellers
+- **Thrust Vectoring**: Capability for directing thrust in different directions
+
+**Thruster Arrays**: Multiple thrusters for precise control.
+
+- **Configuration**: Positioning multiple thrusters for optimal control
+- **Vectoring**: Directing thrust in different directions
+- **Redundancy**: Multiple thrusters for system reliability
+- **Control Coordination**: Coordinating multiple thrusters for desired motion
+- **Efficiency**: Optimizing thruster operation for efficiency
+
+**Biomimetic Propulsion**: Nature-inspired propulsion methods.
+
+- **Fin Propulsion**: Undulating fins for efficient movement
+- **Jet Propulsion**: Expelling water for thrust (like jellyfish)
+- **Flapping Propulsion**: Flapping appendages for thrust (like penguins)
+- **Efficiency**: Often more efficient than traditional methods
+- **Maneuverability**: Superior maneuverability in some cases
+
+**Alternative Propulsion Methods**:
+
+- **Magneto-hydrodynamic**: Using electromagnetic forces to propel water
+- **Ionic Propulsion**: Using ionic movement for thrust (experimental)
+- **Peristaltic**: Wave-like motion for propulsion
+- **Undulatory**: Wave-like motion of flexible surfaces
+- **Hybrid Systems**: Combining different propulsion methods
+
+### Propulsion System Design
+
+**Motor Selection**: Choosing appropriate motors for underwater propulsion.
+
+- **Hermetically Sealed**: Motors sealed against water ingress
+- **Cooling**: Managing heat dissipation in water environment
+- **Efficiency**: Selecting motors for optimal efficiency
+- **Speed Control**: Capability for variable speed operation
+- **Torque Characteristics**: Matching motor torque to propeller requirements
+
+**Gearbox Design**: Transmitting power from motor to propeller.
+
+- **Sealed Gearboxes**: Preventing water ingress into gearbox
+- **Lubrication**: Using appropriate lubricants for underwater operation
+- **Efficiency**: Minimizing losses in power transmission
+- **Reduction Ratios**: Optimizing for propeller speed requirements
+- **Maintenance**: Designing for underwater maintenance
+
+**Shaft Design**: Transmitting power through the pressure hull.
+
+- **Sealing**: Preventing water ingress at shaft penetrations
+- **Bearings**: Supporting shaft with appropriate bearings
+- **Vibration**: Managing vibration from rotating components
+- **Alignment**: Ensuring proper alignment of rotating components
+- **Materials**: Selecting materials for corrosion resistance
+
+**Propeller Design**: Optimizing propellers for underwater operation.
+
+- **Cavitation Prevention**: Designing to avoid cavitation at operating conditions
+- **Efficiency Optimization**: Maximizing thrust per unit power
+- **Cavitation-Free Speed**: Determining maximum speed without cavitation
+- **Blade Loading**: Distributing load across propeller blades
+- **Wake Effects**: Accounting for wake from hull and other components
+
+### Control Systems
+
+**Attitude Control**: Controlling the vehicle's orientation in water.
+
+- **Pitch Control**: Controlling nose-up/nose-down motion
+- **Roll Control**: Controlling side-to-side rotation
+- **Yaw Control**: Controlling left/right rotation
+- **Stability**: Maintaining stable orientation during operation
+- **Maneuverability**: Ability to change orientation as needed
+
+**Position Control**: Controlling the vehicle's position in three-dimensional space.
+
+- **Depth Control**: Controlling vertical position in water column
+- **Horizontal Positioning**: Controlling position in horizontal plane
+- **Station Keeping**: Maintaining position despite currents
+- **Trajectory Following**: Following predefined paths
+- **Obstacle Avoidance**: Detecting and avoiding obstacles
+
+**Motion Control**: Controlling the vehicle's movement through water.
+
+- **Speed Control**: Controlling forward speed
+- **Direction Control**: Controlling direction of movement
+- **Maneuvering**: Ability to change direction and speed
+- **Stability**: Maintaining stable motion during operation
+- **Efficiency**: Optimizing motion for energy efficiency
+
+**Control Surface Design**: Designing surfaces for controlling vehicle motion.
+
+- **Fins**: Fixed and movable fins for control
+- **Rudders**: Vertical surfaces for yaw control
+- **Stabilizers**: Horizontal surfaces for pitch control
+- **Differential Thrust**: Using multiple thrusters for control
+- **Biomimetic Control**: Nature-inspired control surfaces
+
+### Energy and Power Systems
+
+**Battery Systems**: Powering underwater vehicles.
+
+- **Chemistry Selection**: Choosing appropriate battery chemistry
+- **Packaging**: Packaging batteries for pressure and waterproofing
+- **Capacity**: Sizing batteries for mission requirements
+- **Management**: Managing battery charging and discharging
+- **Safety**: Ensuring safe operation of battery systems
+
+**Power Management**: Managing power consumption during operation.
+
+- **Efficiency**: Maximizing efficiency of all systems
+- **Load Shedding**: Reducing power consumption during low-power situations
+- **Power Prioritization**: Prioritizing power use during low-power situations
+- **Monitoring**: Monitoring power consumption and remaining capacity
+- **Conservation**: Implementing power conservation strategies
+
+**Energy Recovery**: Systems that recover energy during operation.
+
+- **Regenerative Systems**: Systems that recover energy during operation
+- **Energy Storage**: Storing recovered energy for later use
+- **Efficiency Gains**: Quantifying energy recovery benefits
+- **Implementation**: Practical implementation of recovery systems
+- **Benefits**: Operational benefits of energy recovery
+
+### Sealing and Waterproofing
+
+**Hull Sealing**: Preventing water ingress into the main hull.
+
+- **Gaskets**: Sealing joints with appropriate gaskets
+- **O-Rings**: Using O-rings for circular sealing applications
+- **Pressure Testing**: Testing seals at operational pressures
+- **Materials**: Selecting appropriate sealing materials
+- **Maintenance**: Designing for seal maintenance and replacement
+
+**Penetration Sealing**: Sealing points where cables or shafts penetrate hull.
+
+- **Cable Penetrations**: Sealing electrical and data cables
+- **Shaft Seals**: Sealing rotating shafts passing through hull
+- **Connector Seals**: Sealing removable connectors
+- **Testing**: Testing penetration seals at operational pressures
+- **Redundancy**: Multiple seals for critical penetrations
+
+**Environmental Sealing**: Protecting sensitive components from water.
+
+- **Component Enclosures**: Enclosing sensitive components
+- **Pressure Equalization**: Managing pressure differences across seals
+- **Moisture Protection**: Protecting against moisture ingress
+- **Corrosion Prevention**: Preventing corrosion of components
+- **Maintenance Access**: Providing access for maintenance while maintaining seals
+
+### Sensing and Navigation
+
+**Underwater Navigation**: Challenges of navigation in aquatic environments.
+
+- **GPS Denial**: GPS signals do not penetrate water
+- **Acoustic Navigation**: Using sound for positioning
+- **Inertial Navigation**: Dead reckoning using inertial sensors
+- **Bottom Mapping**: Using seafloor features for navigation
+- **SLAM**: Simultaneous localization and mapping underwater
+
+**Environmental Sensing**: Measuring underwater environmental conditions.
+
+- **Pressure Sensors**: Measuring depth and pressure
+- **Temperature Sensors**: Measuring water temperature
+- **Salinity Sensors**: Measuring salt content
+- **Current Meters**: Measuring water flow
+- **Chemical Sensors**: Measuring dissolved substances
+
+**Obstacle Detection**: Detecting obstacles in the underwater environment.
+
+- **Sonar Systems**: Using sound for obstacle detection
+- **Optical Systems**: Using light for close-range detection
+- **Collision Avoidance**: Systems for avoiding obstacles
+- **Mapping**: Creating maps of obstacles in the environment
+- **Path Planning**: Planning paths around obstacles
+
+### Applications and Examples
+
+**Autonomous Underwater Vehicles (AUVs)**: Unmanned vehicles for underwater missions.
+
+- **Long-Range AUVs**: Vehicles for extended missions
+- **Deep-Sea AUVs**: Vehicles for deep-ocean exploration
+- **Coastal AUVs**: Vehicles for shallow-water operations
+- **Scientific AUVs**: Vehicles for research applications
+- **Commercial AUVs**: Vehicles for commercial operations
+
+**Remotely Operated Vehicles (ROVs)**: Tethered vehicles controlled remotely.
+
+- **Observation ROVs**: Small ROVs for inspection
+- **Work Class ROVs**: Large ROVs for manipulation tasks
+- **Light Work ROVs**: Medium-sized ROVs for light work
+- **Heavy Work ROVs**: Large ROVs for heavy manipulation
+- **Specialized ROVs**: ROVs for specific applications
+
+**Hybrid Vehicles**: Combining AUV and ROV capabilities.
+
+- **Tethered AUVs**: AUVs with tether for communication
+- **Self-Deploying ROVs**: ROVs that can operate autonomously
+- **Docking Systems**: Systems for AUVs to dock with ROVs
+- **Communication**: Communication between different vehicle types
+- **Mission Coordination**: Coordinating missions between vehicle types
+
+### Challenges in Underwater Design
+
+**Pressure Challenges**: Dealing with increasing pressure at depth.
+
+- **Structural Design**: Designing structures to withstand pressure
+- **Sealing**: Maintaining seals under pressure
+- **Component Rating**: Ensuring components can withstand pressure
+- **Testing**: Testing systems at operational pressures
+- **Materials**: Using materials that resist pressure effects
+
+**Corrosion Challenges**: Dealing with corrosive saltwater environment.
+
+- **Material Selection**: Choosing corrosion-resistant materials
+- **Coatings**: Applying protective coatings
+- **Cathodic Protection**: Using cathodic protection systems
+- **Maintenance**: Regular maintenance to prevent corrosion
+- **Design**: Designing to minimize corrosion effects
+
+**Thermal Challenges**: Managing heat in underwater environment.
+
+- **Heat Dissipation**: Managing heat dissipation in water
+- **Temperature Regulation**: Maintaining optimal operating temperatures
+- **Thermal Expansion**: Accounting for thermal expansion effects
+- **Insulation**: Insulating components as needed
+- **Cooling Systems**: Designing active cooling systems
+
+**Communication Challenges**: Operating in an environment that attenuates signals.
+
+- **RF Attenuation**: Radio frequencies strongly attenuated in water
+- **Acoustic Communication**: Using sound for communication
+- **Limited Bandwidth**: Low data rates for underwater communication
+- **Latency**: Delays in communication due to sound speed
+- **Interference**: Environmental noise affecting communication
+
+### Future Developments
+
+The future of underwater vehicle design and propulsion includes:
+
+- **Advanced Materials**: New materials for better pressure resistance and efficiency
+- **Bio-inspired Design**: More closely mimicking biological swimming systems
+- **AI Integration**: Using AI for improved navigation and control
+- **Swarm Robotics**: Coordinated operation of multiple underwater robots
+- **Energy Harvesting**: Systems that generate power from the underwater environment
+
+Understanding underwater vehicle design and propulsion is essential for creating effective and reliable underwater robotic systems.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Underwater vehicles must withstand pressure, manage buoyancy, and operate in dense medium
+- Hull design involves pressure resistance, shape optimization, and material selection
+- Propulsion systems include screw propellers, pump jets, thruster arrays, and biomimetic methods
+- Control systems manage attitude, position, and motion in three-dimensional space
+- Energy systems involve batteries, power management, and energy recovery
+- Sealing and waterproofing prevent water ingress into sensitive systems
+- Sensing includes navigation, environmental monitoring, and obstacle detection
+- Applications span AUVs, ROVs, and hybrid vehicles
+- Challenges include pressure, corrosion, thermal, and communication issues
+- Future developments involve advanced materials and AI integration
+
+</div>
+</TabItem>
+</Tabs>

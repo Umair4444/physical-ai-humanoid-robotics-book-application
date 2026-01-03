@@ -1,0 +1,228 @@
+---
+id: chapter-26
+title: "Feedback Control and Stability"
+module: "Module 5: Control Systems and Architecture"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Feedback Control and Stability
+
+### Introduction to Feedback Control and Stability
+
+Feedback control is fundamental to humanoid robotics, enabling robots to maintain stability, track desired trajectories, and respond to disturbances. Stability ensures that humanoid robots can operate safely and effectively in dynamic environments. These concepts are essential for creating robots that can maintain balance during locomotion and manipulation tasks.
+
+Key requirements for feedback control and stability include:
+
+- **Stability**: Ensuring the system remains bounded under various conditions
+- **Performance**: Achieving desired tracking and response characteristics
+- **Robustness**: Maintaining performance despite model uncertainties
+- **Safety**: Ensuring safe operation under all conditions
+- **Efficiency**: Achieving control goals with minimal energy consumption
+
+### Types of Feedback Control
+
+**Proportional Control (P)**: Control action proportional to the error.
+
+**Proportional-Integral Control (PI)**: Eliminates steady-state error.
+
+**Proportional-Integral-Derivative Control (PID)**: Adds derivative action for improved response.
+
+**State Feedback Control**: Uses full state information for control.
+
+**Output Feedback Control**: Uses only measurable outputs for control.
+
+### Stability Concepts
+
+**Bounded-Input Bounded-Output (BIBO) Stability**: Bounded inputs produce bounded outputs.
+
+**Lyapunov Stability**: Small perturbations result in small deviations from equilibrium.
+
+**Asymptotic Stability**: System returns to equilibrium after perturbation.
+
+**Exponential Stability**: System returns to equilibrium exponentially fast.
+
+**Marginal Stability**: System remains bounded but doesn't return to equilibrium.
+
+### Control System Analysis
+
+**Time Domain Analysis**: Analyzing system response in the time domain.
+
+**Frequency Domain Analysis**: Analyzing system response to sinusoidal inputs.
+
+**Root Locus**: Graphical method for analyzing system stability.
+
+**Bode Plots**: Graphical representation of frequency response.
+
+**Nyquist Criterion**: Stability analysis using frequency response.
+
+### Stability in Humanoid Systems
+
+**Static Stability**: Stability when the robot is not moving.
+
+**Dynamic Stability**: Stability during movement.
+
+**Local Stability**: Stability in a neighborhood of an equilibrium point.
+
+**Global Stability**: Stability for all possible initial conditions.
+
+**Input-to-State Stability**: Stability considering external inputs.
+
+### Balance Control Strategies
+
+**Ankle Strategy**: Using ankle joints to maintain balance for small disturbances.
+
+**Hip Strategy**: Using hip joints for larger disturbances.
+
+**Stepping Strategy**: Taking a step to expand the support base.
+
+**Suspension Strategy**: Using arm movements to help maintain balance.
+
+### Mathematical Models for Stability
+
+**Linear Time-Invariant (LTI) Systems**: Systems with constant parameters.
+
+**Linear Time-Varying (LTV) Systems**: Systems with time-varying parameters.
+
+**Nonlinear Systems**: Systems with nonlinear dynamics.
+
+**Hybrid Systems**: Systems with both continuous and discrete dynamics.
+
+**Switched Systems**: Systems that switch between different modes.
+
+### Control Design Methods
+
+**Classical Control**: Using transfer functions and frequency domain methods.
+
+**Modern Control**: Using state-space representations and optimization.
+
+**Robust Control**: Designing controllers that work despite uncertainties.
+
+**Adaptive Control**: Controllers that adjust parameters online.
+
+**Optimal Control**: Controllers that optimize a performance criterion.
+
+### Stability Analysis Tools
+
+**Lyapunov Functions**: Mathematical functions that prove stability.
+
+**Linear Matrix Inequalities (LMIs)**: Convex optimization for stability analysis.
+
+**Small Gain Theorem**: For interconnected systems.
+
+**Passivity Theory**: For energy-based stability analysis.
+
+**Circle Criterion**: For nonlinear systems with sector-bounded nonlinearities.
+
+### Challenges in Feedback Control
+
+Several challenges exist in implementing effective feedback control:
+
+**Model Uncertainty**: Real systems differ from mathematical models.
+
+**Time Delays**: Delays in sensing, computation, or actuation.
+
+**Nonlinearities**: Real systems exhibit nonlinear behavior.
+
+**Disturbances**: External forces and torques affecting the system.
+
+**Computational Constraints**: Limited computational resources.
+
+### Real-time Implementation
+
+**Discretization**: Converting continuous controllers to discrete implementations.
+
+**Sampling Effects**: Effects of finite sampling rates on stability.
+
+**Quantization**: Effects of finite precision in digital implementations.
+
+**Computational Delay**: Time required for computation affecting control.
+
+**Implementation Platforms**: Choosing appropriate hardware platforms.
+
+### Applications
+
+Feedback control and stability are important in various applications:
+
+**Balance Control**: Maintaining stability during standing and walking.
+
+**Trajectory Tracking**: Following desired movement trajectories.
+
+**Force Control**: Applying desired forces during manipulation.
+
+**Adaptive Control**: Adjusting to changing conditions.
+
+**Safety Systems**: Ensuring safe operation under all conditions.
+
+### Safety Considerations
+
+Feedback control systems must operate safely:
+
+**Stability Margins**: Maintaining adequate stability margins.
+
+**Saturation Handling**: Managing actuator saturation safely.
+
+**Emergency Responses**: Ensuring safe responses to emergencies.
+
+**Fault Tolerance**: Maintaining stability despite component failures.
+
+**Human Safety**: Ensuring safe interaction with humans.
+
+### Future Trends
+
+The future of feedback control and stability includes:
+
+- **Learning-based Control**: Using machine learning to improve control
+- **Bio-inspired Control**: More closely mimicking biological control systems
+- **Distributed Control**: Coordinating multiple control agents
+- **Predictive Control**: Using prediction for better control performance
+- **Human-Centered Control**: Optimizing for human interaction and safety
+
+Understanding feedback control and stability is essential for creating safe and effective humanoid robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Feedback control enables stability, tracking, and disturbance response
+- Control types include P, PI, PID, state, and output feedback
+- Stability concepts include BIBO, Lyapunov, asymptotic, and exponential stability
+- Analysis methods include time and frequency domain techniques
+- Humanoid stability involves static, dynamic, local, and global stability
+- Balance strategies include ankle, hip, stepping, and suspension approaches
+- Mathematical models include LTI, LTV, nonlinear, and hybrid systems
+- Design methods include classical, modern, robust, adaptive, and optimal control
+- Analysis tools include Lyapunov functions, LMIs, and passivity theory
+- Challenges include model uncertainty, delays, and computational constraints
+
+</div>
+</TabItem>
+</Tabs>

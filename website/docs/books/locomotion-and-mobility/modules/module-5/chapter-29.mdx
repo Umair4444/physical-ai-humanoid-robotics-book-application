@@ -1,0 +1,376 @@
+---
+id: chapter-29
+title: "Sensing and Perception in Aquatic Environments"
+module: "Module 5: Swimming and Underwater Locomotion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Sensing and Perception in Aquatic Environments
+
+### Introduction to Sensing and Perception in Aquatic Environments
+
+Sensing and perception in aquatic environments present unique challenges that distinguish them from terrestrial systems. The underwater environment significantly affects the performance of various sensing modalities, requiring specialized approaches and technologies. Understanding these challenges and the specialized techniques developed to address them is essential for creating effective underwater robotic systems.
+
+Key aspects of sensing and perception in aquatic environments include:
+
+- **Signal Attenuation**: The severe attenuation of electromagnetic signals in water
+- **Acoustic Sensing**: The primary method for underwater sensing
+- **Optical Challenges**: The limited effectiveness of optical sensing underwater
+- **Environmental Effects**: Effects of water properties on sensing systems
+- **System Integration**: Integrating sensing with navigation and control systems
+
+### Acoustic Sensing Systems
+
+**Sonar Systems**: Sound navigation and ranging for underwater sensing.
+
+- **Echo Location**: Determining distance using sound echoes
+- **Pulse Compression**: Improving range resolution using coded pulses
+- **Beamforming**: Directing acoustic energy in specific directions
+- **Doppler Processing**: Measuring velocity using frequency shifts
+- **Imaging**: Creating images using acoustic signals
+
+**Types of Sonar**:
+
+- **Active Sonar**: Transmitting sound and receiving echoes
+- **Passive Sonar**: Listening for sounds from other sources
+- **Side-scan Sonar**: Creating images of seafloor and objects
+- **Multibeam Sonar**: Creating detailed bathymetric maps
+- **Split-beam Sonar**: Measuring fish abundance and distribution
+
+**Sonar Parameters**: Key parameters affecting sonar performance.
+
+- **Frequency**: Lower frequencies travel farther but have lower resolution
+- **Power**: Higher power increases range but may disturb marine life
+- **Pulse Duration**: Affecting range resolution and power requirements
+- **Beamwidth**: Affecting angular resolution and coverage
+- **Pulse Repetition Rate**: Affecting maximum unambiguous range
+
+**Processing Techniques**: Methods for processing sonar data.
+
+- **Matched Filtering**: Optimally detecting known signals in noise
+- **Beamforming**: Combining signals from multiple elements
+- **Doppler Processing**: Analyzing frequency shifts for velocity
+- **Imaging Algorithms**: Creating images from sonar data
+- **Target Classification**: Identifying objects from sonar returns
+
+### Optical Sensing in Water
+
+**Challenges of Underwater Vision**: Difficulties with optical sensing underwater.
+
+- **Light Attenuation**: Rapid attenuation of light in water
+- **Wavelength Effects**: Different wavelengths attenuated differently
+- **Turbidity**: Suspended particles reducing visibility
+- **Color Filtering**: Different wavelengths filtered differently
+- **Artificial Lighting**: Need for artificial lighting for vision
+
+**Underwater Optics**: How light behaves in water.
+
+- **Absorption**: Light absorbed by water and particles
+- **Scattering**: Light scattered by particles and molecules
+- **Attenuation Coefficient**: Rate of light intensity decrease
+- **Beam Spread**: Light beam spreading due to scattering
+- **Volume Scattering**: Scattering within the water volume
+
+**Imaging Techniques**: Methods for underwater optical imaging.
+
+- **Artificial Illumination**: Using lights for underwater imaging
+- **Strobe Lighting**: Using strobes to minimize backscatter
+- **Laser Line Scanners**: Using laser lines for 3D imaging
+- **Structured Light**: Projecting patterns for 3D measurement
+- **Polarization Imaging**: Using polarization for improved imaging
+
+**Image Enhancement**: Techniques for improving underwater images.
+
+- **Color Correction**: Correcting for wavelength-dependent attenuation
+- **Contrast Enhancement**: Improving image contrast
+- **Dehazing**: Removing haze caused by backscattered light
+- **Sharpening**: Improving image sharpness
+- **Noise Reduction**: Reducing noise in underwater images
+
+### Environmental Sensing
+
+**Water Property Sensors**: Measuring properties of the water column.
+
+- **Temperature Sensors**: Measuring water temperature
+- **Conductivity Sensors**: Measuring electrical conductivity (salinity)
+- **Pressure Sensors**: Measuring depth and pressure
+- **Turbidity Sensors**: Measuring suspended particle concentration
+- **Dissolved Oxygen**: Measuring oxygen concentration in water
+
+**Chemical Sensors**: Measuring chemical properties of water.
+
+- **pH Sensors**: Measuring acidity/alkalinity
+- **ORP Sensors**: Measuring oxidation-reduction potential
+- **CO2 Sensors**: Measuring carbon dioxide concentration
+- **Nutrient Sensors**: Measuring nutrients like nitrogen and phosphorus
+- **Pollutant Sensors**: Measuring various pollutants
+
+**Biological Sensors**: Measuring biological properties of water.
+
+- **Chlorophyll Sensors**: Measuring phytoplankton concentration
+- **Fluorescence Sensors**: Measuring fluorescent compounds
+- **Tryptophan Sensors**: Measuring organic matter
+- **Cell Counters**: Counting biological cells
+- **DNA Sensors**: Detecting specific DNA sequences
+
+### Inertial and Positioning Sensors
+
+**Inertial Measurement Units (IMUs)**: Measuring vehicle motion and orientation.
+
+- **Accelerometers**: Measuring linear acceleration
+- **Gyroscopes**: Measuring angular velocity
+- **Magnetometers**: Measuring magnetic field for heading reference
+- **Calibration**: Ensuring accurate sensor measurements
+- **Integration**: Combining sensor data for navigation
+
+**Depth Sensors**: Measuring depth and pressure.
+
+- **Pressure Sensors**: Measuring depth through pressure
+- **Absolute Pressure**: Measuring absolute pressure
+- **Differential Pressure**: Measuring pressure differences
+- **Accuracy**: Achieving required accuracy for applications
+- **Calibration**: Calibrating pressure sensors
+
+**Current Meters**: Measuring water flow and currents.
+
+- **Acoustic Doppler Current Profilers (ADCPs)**: Measuring current profiles
+- **Mechanical Current Meters**: Measuring current with mechanical sensors
+- **Electromagnetic Current Meters**: Measuring current with electromagnetic sensors
+- **Accuracy**: Achieving required accuracy for current measurements
+- **Applications**: Various applications of current measurement
+
+### Sensor Fusion in Aquatic Environments
+
+**Multi-sensor Integration**: Combining information from multiple sensors.
+
+- **Acoustic and Optical**: Combining acoustic and optical sensors
+- **Inertial and Acoustic**: Combining inertial and acoustic navigation
+- **Environmental and Position**: Combining environmental and position data
+- **Redundancy**: Using multiple sensors for reliability
+- **Complementarity**: Using sensors that complement each other
+
+**Kalman Filtering**: Optimal combination of sensor measurements.
+
+- **State Estimation**: Estimating the vehicle's state from sensor data
+- **Uncertainty Modeling**: Modeling uncertainty in sensor measurements
+- **Prediction and Update**: Predicting state and updating with measurements
+- **Optimality**: Optimal estimation under certain assumptions
+- **Extended Kalman Filter**: For nonlinear systems
+
+**Particle Filtering**: Non-parametric approach to sensor fusion.
+
+- **Non-linear Systems**: Handling non-linear systems effectively
+- **Non-Gaussian Noise**: Handling non-Gaussian noise effectively
+- **Sample Representation**: Representing probability distributions with samples
+- **Resampling**: Techniques for maintaining sample diversity
+- **Applications**: Applications where Kalman filtering is inadequate
+
+**Data Association**: Determining which measurements correspond to which objects.
+
+- **Feature Matching**: Matching features between measurements
+- **Tracking**: Associating measurements with tracks
+- **Ambiguity Resolution**: Resolving ambiguities in associations
+- **Validation**: Validating data associations
+- **Algorithms**: Algorithms for data association
+
+### Challenges in Aquatic Sensing
+
+**Signal Attenuation**: Severe attenuation of electromagnetic signals.
+
+- **RF Signals**: Radio frequencies strongly attenuated in water
+- **Light Signals**: Light strongly attenuated in water
+- **Frequency Effects**: Higher frequencies more severely attenuated
+- **Depth Effects**: Attenuation increases with depth
+- **Alternative Methods**: Need for alternative sensing methods
+
+**Environmental Variations**: Changing environmental conditions affecting sensing.
+
+- **Temperature**: Temperature affecting sensor performance
+- **Salinity**: Salinity affecting acoustic propagation
+- **Turbidity**: Turbidity affecting optical sensing
+- **Currents**: Currents affecting sensor measurements
+- **Pressure**: Pressure affecting sensor performance
+
+**Biofouling**: Biological growth affecting sensors.
+
+- **Growth**: Biological growth on sensor surfaces
+- **Performance**: Reduced sensor performance due to fouling
+- **Maintenance**: Regular maintenance required to prevent fouling
+- **Antifouling**: Coatings and treatments to prevent fouling
+- **Design**: Designing sensors to minimize fouling effects
+
+**Corrosion**: Corrosive effects of seawater on sensors.
+
+- **Material Selection**: Choosing corrosion-resistant materials
+- **Coatings**: Applying protective coatings
+- **Cathodic Protection**: Using cathodic protection systems
+- **Maintenance**: Regular maintenance to prevent corrosion
+- **Design**: Designing to minimize corrosion effects
+
+**Vibration and Shock**: Effects of vibration and shock on sensors.
+
+- **Vehicle Vibration**: Vibration from vehicle propulsion systems
+- **Shock**: Shock from impacts and other events
+- **Isolation**: Isolating sensors from vibration and shock
+- **Mounting**: Proper mounting to minimize effects
+- **Calibration**: Regular calibration to account for effects
+
+### Underwater Mapping and Perception
+
+**Bathymetric Mapping**: Creating maps of seafloor topography.
+
+- **Multibeam Sonar**: Creating detailed bathymetric maps
+- **Resolution**: Achieving desired resolution in mapping
+- **Accuracy**: Ensuring accuracy of bathymetric data
+- **Processing**: Processing bathymetric data for maps
+- **Applications**: Various applications of bathymetric mapping
+
+**Object Detection and Classification**: Identifying objects in underwater environments.
+
+- **Acoustic Detection**: Using sonar for object detection
+- **Optical Detection**: Using vision for object detection
+- **Classification**: Classifying detected objects
+- **Machine Learning**: Using machine learning for classification
+- **Validation**: Validating detection and classification results
+
+**Habitat Mapping**: Mapping marine habitats and ecosystems.
+
+- **Acoustic Classification**: Using acoustic methods for habitat classification
+- **Optical Classification**: Using optical methods for habitat classification
+- **Multispectral Imaging**: Using multiple wavelengths for classification
+- **Machine Learning**: Using machine learning for habitat classification
+- **Applications**: Various applications of habitat mapping
+
+**Change Detection**: Detecting changes in underwater environments.
+
+- **Temporal Analysis**: Comparing data from different times
+- **Statistical Methods**: Using statistics to detect changes
+- **Machine Learning**: Using machine learning for change detection
+- **Validation**: Validating change detection results
+- **Applications**: Various applications of change detection
+
+### Applications of Underwater Sensing
+
+**Marine Research**: Scientific applications of underwater sensing.
+
+- **Oceanography**: Studying ocean currents and properties
+- **Marine Biology**: Studying marine life and ecosystems
+- **Geology**: Studying seafloor geology and processes
+- **Climate Research**: Studying climate-related ocean processes
+- **Deep-Sea Exploration**: Exploring deep ocean environments
+
+**Commercial Applications**: Business applications of underwater sensing.
+
+- **Oil and Gas**: Inspecting and maintaining underwater infrastructure
+- **Cable and Pipeline**: Inspecting and maintaining underwater utilities
+- **Aquaculture**: Monitoring and maintaining fish farms
+- **Mining**: Underwater mining operations
+- **Construction**: Underwater construction and inspection
+
+**Defense Applications**: Military applications of underwater sensing.
+
+- **Surveillance**: Underwater surveillance and monitoring
+- **Mine Countermeasures**: Detecting and neutralizing underwater mines
+- **Intelligence**: Gathering underwater intelligence
+- **Port Security**: Securing ports and harbors
+- **Submarine Support**: Supporting submarine operations
+
+**Environmental Applications**: Environmental monitoring and protection.
+
+- **Pollution Monitoring**: Monitoring water quality and pollution
+- **Habitat Assessment**: Assessing marine habitats
+- **Species Monitoring**: Monitoring marine species populations
+- **Coral Reef Monitoring**: Assessing coral reef health
+- **Climate Monitoring**: Monitoring climate-related changes
+
+### Future Directions
+
+**Advanced Acoustic Sensing**: More sophisticated acoustic sensing methods.
+
+- **Parametric Arrays**: Using parametric arrays for improved resolution
+- **Synthetic Aperture Sonar**: Using synthetic aperture techniques
+- **Nonlinear Acoustics**: Using nonlinear acoustic effects
+- **Coherent Processing**: Using coherent processing techniques
+- **Applications**: Various applications of advanced acoustic sensing
+
+**Optical Sensing Improvements**: Enhanced optical sensing in water.
+
+- **Blue-Green Lasers**: Using blue-green wavelengths for better penetration
+- **Laser Induced Fluorescence**: Using fluorescence for detection
+- **Raman Spectroscopy**: Using Raman spectroscopy for analysis
+- **Hyperspectral Imaging**: Using hyperspectral techniques
+- **Applications**: Various applications of advanced optical sensing
+
+**Bio-inspired Sensing**: Sensing systems inspired by biological systems.
+
+- **Lateral Line Systems**: Mimicking fish lateral line systems
+- **Electroreception**: Mimicking electroreceptive systems
+- **Magnetoreception**: Mimicking magnetoreceptive systems
+- **Applications**: Various applications of bio-inspired sensing
+- **Integration**: Integrating bio-inspired sensors with conventional sensors
+
+**AI Integration**: Using artificial intelligence for sensing and perception.
+
+- **Machine Learning**: Using machine learning for sensor processing
+- **Deep Learning**: Using deep learning for complex perception tasks
+- **Computer Vision**: Advanced computer vision for underwater imagery
+- **Sensor Fusion**: AI-based sensor fusion techniques
+- **Autonomous Perception**: Fully autonomous perception systems
+
+**Swarm Sensing**: Coordinated sensing by multiple underwater vehicles.
+
+- **Distributed Sensing**: Distributing sensing across multiple vehicles
+- **Cooperative Perception**: Vehicles cooperating on perception tasks
+- **Data Fusion**: Fusing data from multiple vehicles
+- **Communication**: Communication between vehicles for sensing
+- **Applications**: Various applications of swarm sensing
+
+Understanding sensing and perception in aquatic environments is essential for creating effective underwater robotic systems that can operate autonomously in marine environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Aquatic sensing faces unique challenges due to signal attenuation and environmental effects
+- Acoustic sensing (sonar) is primary method for underwater sensing
+- Optical sensing faces challenges due to light attenuation and turbidity
+- Environmental sensors measure water properties and chemistry
+- Inertial sensors provide motion and positioning information
+- Sensor fusion combines multiple sensors for improved performance
+- Challenges include signal attenuation, environmental variations, and biofouling
+- Applications span research, commercial, defense, and environmental domains
+- Future directions involve advanced acoustics, optical improvements, and AI integration
+- Swarm sensing enables coordinated multi-vehicle perception
+
+</div>
+</TabItem>
+</Tabs>

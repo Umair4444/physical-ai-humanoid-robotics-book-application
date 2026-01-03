@@ -1,0 +1,202 @@
+---
+id: chapter-11
+title: "Whole-Body Motion Control in Humanoid Robots"
+module: "Module 2: Locomotion and Mobility in Humanoid Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Whole-Body Motion Control in Humanoid Robots
+
+### Introduction to Whole-Body Motion Control
+
+Whole-body motion control refers to the coordination of all joints and degrees of freedom in a humanoid robot to achieve complex tasks while maintaining balance and stability. This approach is essential for humanoid robots that must perform tasks requiring simultaneous manipulation and locomotion.
+
+Key aspects of whole-body motion control include:
+
+- **Coordination**: Synchronizing multiple joints and limbs for complex tasks
+- **Balance**: Maintaining stability while performing dynamic movements
+- **Optimization**: Finding optimal solutions for redundant systems
+- **Real-time Performance**: Computing control commands within strict timing constraints
+- **Task Prioritization**: Managing competing demands between different tasks
+
+### Mathematical Foundations
+
+**Kinematic Chains**: Modeling the robot as interconnected rigid bodies forming kinematic chains.
+
+**Jacobian Matrices**: Relating joint velocities to end-effector velocities.
+
+**Task Space**: Defining desired movements in Cartesian space (position, orientation).
+
+**Joint Space**: The space of all possible joint configurations.
+
+**Null Space**: The space of joint motions that don't affect the primary task.
+
+### Control Hierarchies
+
+**Priority-Based Control**: Assigning priorities to different tasks (e.g., balance > manipulation).
+
+**Task Sequencing**: Executing tasks in a specific order when they conflict.
+
+**Parallel Execution**: Executing tasks simultaneously when possible.
+
+**Reactive Control**: Adjusting to unexpected events or disturbances.
+
+### Optimization Approaches
+
+**Quadratic Programming (QP)**: Formulating control problems as optimization problems with quadratic objectives.
+
+**Weighted Least Squares**: Balancing multiple objectives with different weights.
+
+**Constraint Handling**: Managing joint limits, collision avoidance, and other constraints.
+
+**Multi-objective Optimization**: Balancing competing objectives like energy efficiency and task performance.
+
+### Balance and Locomotion Integration
+
+**Dynamic Balance**: Maintaining balance during movement using ZMP or capture point concepts.
+
+**Locomotion Planning**: Coordinating walking with other tasks.
+
+**Reactive Stepping**: Taking steps to maintain balance when disturbed.
+
+**Gait Adaptation**: Adjusting walking patterns based on task requirements.
+
+### Manipulation and Locomotion Coordination
+
+**Bimanual Tasks**: Coordinating both arms while maintaining balance.
+
+**Whole-body Manipulation**: Using the entire body to enhance manipulation capabilities.
+
+**Locomotion-Assisted Manipulation**: Using stepping or body motion to improve manipulation.
+
+**Multi-task Optimization**: Balancing manipulation and locomotion objectives.
+
+### Sensory Integration
+
+**Proprioceptive Feedback**: Using joint encoders, IMUs, and force sensors.
+
+**Exteroceptive Feedback**: Using vision, LIDAR, and other environmental sensors.
+
+**Fusion Algorithms**: Combining multiple sensor inputs for robust perception.
+
+**State Estimation**: Estimating the robot's state for control purposes.
+
+### Control Strategies
+
+**Inverse Kinematics**: Determining joint angles to achieve desired end-effector positions.
+
+**Inverse Dynamics**: Computing required joint torques to achieve desired motions.
+
+**Operational Space Control**: Controlling end-effectors in Cartesian space.
+
+**Null Space Optimization**: Using redundant DOF for secondary objectives.
+
+### Constraints in Whole-Body Control
+
+**Joint Limits**: Ensuring joint angles remain within safe ranges.
+
+**Velocity Limits**: Managing joint velocities to prevent damage.
+
+**Force/Torque Limits**: Ensuring actuators don't exceed their capabilities.
+
+**Collision Avoidance**: Preventing self-collisions and environmental collisions.
+
+**Stability Constraints**: Maintaining balance during motion.
+
+### Real-time Implementation
+
+**Computational Efficiency**: Solving control problems within timing constraints.
+
+**Model Simplification**: Using simplified models for faster computation.
+
+**Predictive Control**: Anticipating future states and planning accordingly.
+
+**Hierarchical Decomposition**: Breaking complex problems into manageable parts.
+
+### Challenges in Whole-Body Control
+
+Several challenges exist in implementing effective whole-body control:
+
+**Computational Complexity**: Solving optimization problems in real-time.
+
+**Model Accuracy**: Ensuring models accurately represent the real robot.
+
+**Sensor Noise**: Filtering noisy sensor data for reliable control.
+
+**Task Conflicts**: Managing competing demands between different tasks.
+
+**Environmental Uncertainty**: Operating in uncertain or changing environments.
+
+### Applications
+
+Whole-body motion control has numerous applications:
+
+**Humanoid Walking**: Coordinating walking with other tasks.
+
+**Object Manipulation**: Performing manipulation while maintaining balance.
+
+**Human-Robot Interaction**: Moving safely around humans.
+
+**Search and Rescue**: Navigating complex environments while performing tasks.
+
+**Assistive Robotics**: Helping humans with daily activities.
+
+### Future Directions
+
+The future of whole-body motion control includes:
+
+- **Learning-based Approaches**: Using machine learning to improve control strategies
+- **Bio-inspired Control**: More closely mimicking human whole-body coordination
+- **Enhanced Sensing**: Better integration of multiple sensory modalities
+- **Predictive Control**: Improved prediction of future states and disturbances
+- **Human-Robot Collaboration**: Coordinating motion with human partners
+
+Understanding whole-body motion control is essential for creating humanoid robots capable of complex, coordinated behavior.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Whole-body motion control coordinates all joints for complex tasks while maintaining balance
+- Mathematical foundations include kinematic chains, Jacobians, and task/joint spaces
+- Control hierarchies use priority-based, sequential, or parallel execution
+- Optimization approaches include QP, weighted least squares, and multi-objective methods
+- Balance integration maintains stability during locomotion and manipulation
+- Sensory integration combines proprioceptive and exteroceptive feedback
+- Control strategies include inverse kinematics, dynamics, and operational space control
+- Constraints include joint limits, velocity limits, and collision avoidance
+- Real-time implementation requires computational efficiency and model simplification
+- Challenges include complexity, model accuracy, and environmental uncertainty
+
+</div>
+</TabItem>
+</Tabs>

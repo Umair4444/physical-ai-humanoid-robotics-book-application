@@ -24,83 +24,83 @@ This comprehensive textbook covers all aspects of Physical AI and humanoid robot
 
 ### Module 1: Foundations of Physical AI and Humanoid Robotics
 - Chapter 1: Introduction to Physical AI and Humanoid Robotics
-- Chapter 2: Biomechanics and Biomimicry in Robot Design
-- Chapter 3: Sensorimotor Integration in Physical AI Systems
-- Chapter 4: Actuation Systems and Control in Humanoid Robots
-- Chapter 5: Perception Systems for Physical AI
-- Chapter 6: Cognitive Architectures for Humanoid Robots
+- Chapter 2: Embodiment and Sensorimotor Integration
+- Chapter 3: Biomechanics and Biomimetic Design
+- Chapter 4: Control Theory for Physical Systems
+- Chapter 5: Learning in Physical Systems
+- Chapter 6: Hardware-Software Co-design
 
 ### Module 2: Advanced Control and Learning in Physical AI
-- Chapter 7: Advanced Sensorimotor Control and Learning
-- Chapter 8: Deep Learning for Physical AI and Motor Skills
-- Chapter 9: Adaptive Control and Online Learning in Physical AI
-- Chapter 10: Humanoid Locomotion and Balance Control
-- Chapter 11: Dexterous Manipulation and Grasping in Physical AI
-- Chapter 12: Social Interaction and Communication in Humanoid Robots
+- Chapter 7: Adaptive Control for Physical Systems
+- Chapter 8: Reinforcement Learning for Physical Control
+- Chapter 9: Model Predictive Control for Robotics
+- Chapter 10: Imitation Learning and Physical Skills
+- Chapter 11: Multi-Modal Learning in Physical Systems
+- Chapter 12: Transfer Learning Across Physical Platforms
 
 ### Module 3: Hardware and System Integration in Humanoid Robotics
-- Chapter 13: Humanoid Robot Hardware Design and Integration
+- Chapter 13: Humanoid Robot Design Principles
 - Chapter 14: Actuator Technologies for Humanoid Robots
-- Chapter 15: Sensing and Perception Hardware for Physical AI
-- Chapter 16: Power Systems and Energy Management for Humanoid Robots
-- Chapter 17: Safety Systems and Fail-Safe Mechanisms in Humanoid Robotics
-- Chapter 18: System Integration and Architecture for Humanoid Robots
+- Chapter 15: Sensing Systems for Humanoid Robots
+- Chapter 16: Power and Energy Management
+- Chapter 17: Safety Systems and Human Safety
+- Chapter 18: Mechanical Design and Manufacturing
 
 ### Module 4: Software Infrastructure and Development Tools
-- Chapter 19: Humanoid Robot Operating Systems and Middleware
-- Chapter 20: Development Tools and Simulators for Physical AI
-- Chapter 21: Robotics Frameworks and Libraries for Humanoid Development
-- Chapter 22: Programming Paradigms for Humanoid Robot Control
-- Chapter 23: Simulation and Testing for Humanoid Robot Development
-- Chapter 24: Cloud Robotics and Remote Control Systems
+- Chapter 19: Robotics Operating Systems
+- Chapter 20: Development Frameworks and Libraries
+- Chapter 21: Simulation Environments
+- Chapter 22: Programming Models for Physical AI
+- Chapter 23: Testing and Validation Frameworks
+- Chapter 24: Cloud and Edge Computing for Robotics
 
 ### Module 5: Human-Robot Interaction and Social Robotics
-- Chapter 25: Human-Robot Interaction Design and Principles
-- Chapter 26: Social Cognition and Emotional Intelligence in Humanoid Robots
-- Chapter 27: Gesture Recognition and Body Language in Physical AI
-- Chapter 28: Natural Language Processing for Social Robotics
-- Chapter 29: Trust and Safety in Human-Robot Interactions
-- Chapter 30: Ethics and Social Implications of Humanoid Robots
+- Chapter 25: Social Interaction Design
+- Chapter 26: Trust and Acceptance in Human-Robot Interaction
+- Chapter 27: Communication Modalities for Human-Robot Interaction
+- Chapter 28: Ethical Considerations in Human-Robot Interaction
+- Chapter 29: Cultural Adaptation in Social Robotics
+- Chapter 30: Long-term Human-Robot Relationships
 
 ### Module 6: Motion Control and Locomotion
-- Chapter 31: Advanced Control Algorithms for Humanoid Locomotion
-- Chapter 32: Dynamic Balance and Posture Control in Physical AI
-- Chapter 33: Footstep Planning and Path Generation for Humanoid Navigation
-- Chapter 34: Manipulation and Grasping Control in Humanoid Robots
-- Chapter 35: Whole-Body Motion Control and Coordination
-- Chapter 36: Advanced Motion Planning for Humanoid Robots
+- Chapter 31: Bipedal Locomotion Principles
+- Chapter 32: Balance Control and Stability
+- Chapter 33: Gait Generation and Adaptation
+- Chapter 34: Terrain Adaptation and Navigation
+- Chapter 35: Whole-Body Motion Control
+- Chapter 36: Manipulation and Locomotion Coordination
 
 ### Module 7: Perception and Sensing Technologies
-- Chapter 37: Perception Systems for Physical AI and Robotics
-- Chapter 38: 3D Perception and Spatial Understanding for Humanoids
-- Chapter 39: Tactile and Haptic Sensing Technologies
-- Chapter 40: Sensor Fusion and Data Integration in Physical AI
-- Chapter 41: Simultaneous Localization and Mapping (SLAM) for Humanoid Robots
-- Chapter 42: Advanced Sensing Technologies for Physical AI
+- Chapter 37: Multimodal Perception Systems
+- Chapter 38: 3D Perception and Reconstruction
+- Chapter 39: Tactile and Proprioceptive Sensing
+- Chapter 40: Sensor Fusion for Physical AI
+- Chapter 41: Real-time Perception Systems
+- Chapter 42: Perception for Interaction and Manipulation
 
 ### Module 8: AI and Learning Systems
-- Chapter 43: AI and Machine Learning Integration in Humanoid Robotics
-- Chapter 44: Deep Learning and Neural Networks for Physical AI
-- Chapter 45: Reinforcement Learning for Robot Control and Behavior
-- Chapter 46: Cognitive Architectures and Planning Systems in Physical AI
-- Chapter 47: Learning from Demonstration and Transfer Learning
-- Chapter 48: Ethical AI and Responsible Learning in Robotics
+- Chapter 43: Deep Learning for Physical Systems
+- Chapter 44: Neural-Symbolic Integration
+- Chapter 45: Causal Reasoning in Physical AI
+- Chapter 46: Memory Systems for Physical AI
+- Chapter 47: Planning and Reasoning in Physical Environments
+- Chapter 48: Explainable AI for Physical Systems
 
 ### Module 9: Applications and Deployment
-- Chapter 49: Applications and Use Cases of Humanoid Robots
-- Chapter 50: Healthcare and Medical Applications of Humanoid Robots
-- Chapter 51: Service and Hospitality Applications of Humanoid Robots
-- Chapter 52: Education and Research Applications of Humanoid Robots
-- Chapter 53: Industrial and Manufacturing Applications of Humanoid Robots
-- Chapter 54: Entertainment and Social Applications of Humanoid Robots
+- Chapter 49: Healthcare and Assistive Robotics
+- Chapter 50: Service Robotics Applications
+- Chapter 51: Educational Robotics
+- Chapter 52: Industrial and Manufacturing Applications
+- Chapter 53: Entertainment and Companion Robotics
+- Chapter 54: Research Platforms and Experimental Robotics
 
 ### Module 10: Deployment, Economics, and Future Outlook
-- Chapter 55: Deployment Strategies and Best Practices
-- Chapter 56: Economic Impact and Business Models
-- Chapter 57: Regulatory Framework and Safety Standards
-- Chapter 58: Future Trends and Technology Forecast
-- Chapter 59: Societal Impact and Future Outlook
-- Chapter 60: Conclusion and Future Research Directions
+- Chapter 55: Deployment Strategies and Challenges
+- Chapter 56: Economic Models and Business Cases
+- Chapter 57: Regulatory and Safety Standards
+- Chapter 58: Societal Impact and Adoption
+- Chapter 59: Future Research Directions
+- Chapter 60: Conclusions and Future Outlook
 
 ## Key Features
 

@@ -1,0 +1,201 @@
+---
+id: chapter-6
+title: "Sensory Systems for Humanoid Robots"
+module: "Module 1: Foundations of Humanoid Design Principles"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Sensory Systems for Humanoid Robots
+
+### Introduction to Sensory Systems
+
+Sensory systems are critical components of humanoid robots that enable them to perceive and interact with their environment. These systems provide the information necessary for navigation, manipulation, human interaction, and safe operation. The design of sensory systems significantly impacts a robot's ability to function effectively in human environments.
+
+Key requirements for humanoid sensory systems include:
+
+- **Environmental Awareness**: Understanding the robot's surroundings
+- **Self-Awareness**: Monitoring the robot's own state and position
+- **Human Interaction**: Sensing and interpreting human behavior and communication
+- **Safety**: Detecting potential hazards and ensuring safe operation
+- **Real-time Processing**: Providing timely information for responsive behavior
+
+### Types of Sensors
+
+**Proprioceptive Sensors**: Provide information about the robot's own state:
+
+- **Encoders**: Measure joint angles and motor positions
+- **Inertial Measurement Units (IMUs)**: Measure orientation, angular velocity, and acceleration
+- **Force/Torque Sensors**: Measure forces and torques at joints or end-effectors
+- **Current Sensors**: Monitor motor current to estimate applied forces
+
+**Exteroceptive Sensors**: Provide information about the external environment:
+
+- **Cameras**: Visual information for object recognition, navigation, and human interaction
+- **LIDAR**: Precise distance measurements for mapping and obstacle detection
+- **Ultrasonic Sensors**: Short-range distance measurements
+- **Tactile Sensors**: Detect touch, pressure, and texture
+
+**Audio Sensors**: Enable auditory perception:
+
+- **Microphones**: Capture speech and environmental sounds
+- **Audio Processing**: Recognize speech and sound patterns
+
+### Vision Systems
+
+Vision is one of the most important sensory modalities for humanoid robots:
+
+**Stereo Vision**: Uses two cameras to perceive depth, similar to human vision.
+
+**RGB-D Cameras**: Provide both color and depth information in a single sensor.
+
+**Visual Processing**: Includes object recognition, face detection, gesture recognition, and scene understanding.
+
+**Challenges**: Lighting conditions, occlusions, and real-time processing requirements.
+
+### Tactile Sensing
+
+Tactile sensing is crucial for safe and effective interaction:
+
+**Contact Detection**: Identifying when the robot makes contact with objects or humans.
+
+**Force Sensing**: Measuring the magnitude and direction of contact forces.
+
+**Texture Recognition**: Identifying surface properties through touch.
+
+**Slip Detection**: Sensing when objects are slipping from the robot's grasp.
+
+### Auditory Systems
+
+Auditory systems enable communication and environmental awareness:
+
+**Speech Recognition**: Understanding human speech commands and questions.
+
+**Sound Source Localization**: Identifying the direction and distance of sound sources.
+
+**Environmental Sound Recognition**: Identifying specific sounds that may indicate events or hazards.
+
+**Challenges**: Noise filtering, speaker identification, and real-time processing.
+
+### Sensor Fusion
+
+Sensor fusion combines information from multiple sensors to improve perception:
+
+**Data-Level Fusion**: Combining raw sensor data before processing.
+
+**Feature-Level Fusion**: Combining processed features from different sensors.
+
+**Decision-Level Fusion**: Combining decisions made by individual sensors.
+
+**Kalman Filtering**: A common approach for combining sensor data with uncertainty estimates.
+
+**Particle Filtering**: Useful for non-linear systems with complex uncertainty models.
+
+### Safety and Redundancy
+
+Safety is paramount in humanoid robotics:
+
+**Redundant Sensors**: Multiple sensors for critical functions to ensure reliability.
+
+**Cross-Verification**: Using multiple sensors to verify critical information.
+
+**Fail-Safe Mechanisms**: Ensuring safe operation even when sensors fail.
+
+**Collision Detection**: Using sensors to detect and avoid collisions.
+
+### Integration with Control Systems
+
+Sensory information must be effectively integrated with control systems:
+
+**Real-time Requirements**: Sensors must provide information quickly enough for responsive control.
+
+**Calibration**: Ensuring sensors provide accurate and consistent measurements.
+
+**Coordinate Systems**: Aligning information from different sensors in a common reference frame.
+
+**Filtering**: Processing sensor data to reduce noise and improve accuracy.
+
+### Human-Robot Interaction
+
+Sensory systems play a key role in human-robot interaction:
+
+**Gesture Recognition**: Identifying human gestures for communication.
+
+**Facial Expression Recognition**: Understanding human emotions and intentions.
+
+**Gaze Tracking**: Monitoring where humans are looking.
+
+**Proxemics**: Understanding personal space and appropriate distances.
+
+### Challenges in Sensory System Design
+
+Several challenges arise in designing sensory systems for humanoid robots:
+
+**Computational Complexity**: Processing large amounts of sensor data in real-time.
+
+**Calibration**: Ensuring sensors remain properly calibrated during operation.
+
+**Environmental Robustness**: Operating reliably in various lighting, temperature, and noise conditions.
+
+**Cost**: Balancing performance with economic constraints.
+
+**Integration**: Combining multiple sensors into a coherent system.
+
+### Future Trends
+
+The future of sensory systems in humanoid robotics includes:
+
+- **Bio-inspired Sensors**: More closely mimicking biological sensory systems
+- **Advanced Materials**: New materials for more sensitive and robust sensors
+- **Edge Computing**: Processing sensor data locally for reduced latency
+- **AI Integration**: Using artificial intelligence for more sophisticated perception
+- **Haptic Feedback**: Enhanced tactile sensing and feedback systems
+
+Understanding sensory systems is essential for creating humanoid robots that can effectively perceive and interact with their environment.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Sensory systems enable humanoid robots to perceive and interact with their environment
+- Types include proprioceptive, exteroceptive, and audio sensors
+- Vision systems provide critical environmental information
+- Tactile sensing enables safe interaction and manipulation
+- Auditory systems enable communication and environmental awareness
+- Sensor fusion combines information from multiple sensors
+- Safety requires redundant and fail-safe sensor systems
+- Integration with control systems requires real-time processing
+- Human-robot interaction relies on advanced sensory capabilities
+- Future trends include bio-inspired sensors and AI integration
+
+</div>
+</TabItem>
+</Tabs>

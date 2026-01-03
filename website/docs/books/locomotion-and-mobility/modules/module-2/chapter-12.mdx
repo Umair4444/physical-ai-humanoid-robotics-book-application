@@ -1,0 +1,304 @@
+---
+id: chapter-12
+title: "Leg Design and Actuation for Locomotion"
+module: "Module 2: Legged Locomotion and Bipedal Walking"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Leg Design and Actuation for Locomotion
+
+### Introduction to Leg Design and Actuation
+
+Leg design and actuation are fundamental aspects of legged locomotion systems, determining the robot's ability to move effectively, efficiently, and safely. The design of legs and their actuation systems directly impacts the robot's mobility, stability, energy efficiency, and overall performance. Understanding the principles of leg design and actuation is essential for creating effective legged robots.
+
+Key aspects of leg design and actuation include:
+
+- **Mechanical Design**: Physical structure and configuration of legs
+- **Actuation Systems**: Mechanisms that provide power and motion
+- **Transmission Systems**: Components that transfer power from actuators to joints
+- **Sensing Integration**: Incorporating sensors for control and feedback
+- **Energy Efficiency**: Optimizing design for minimal energy consumption
+
+### Leg Design Principles
+
+**Degrees of Freedom (DOF)**: The number of independent parameters defining leg configuration.
+
+- **2 DOF Legs**: Simple legs with hip and knee joints
+- **3 DOF Legs**: Adding ankle pitch for better terrain adaptation
+- **4 DOF Legs**: Adding ankle roll for enhanced stability
+- **5 DOF Legs**: Adding hip roll for improved balance
+- **6 DOF Legs**: Full range of motion for maximum adaptability
+
+**Joint Configuration**: How joints are arranged in the leg.
+
+- **Serial Configuration**: Joints connected in a chain from hip to foot
+- **Parallel Configuration**: Multiple chains connecting hip to foot
+- **Hybrid Configuration**: Combination of serial and parallel elements
+- **Cabled Configuration**: Tendon-driven systems
+- **Hydraulic Configuration**: Fluid-powered joint systems
+
+**Link Design**: The physical structure of leg segments.
+
+- **Lightweight Design**: Minimizing mass to reduce energy consumption
+- **Structural Integrity**: Ensuring sufficient strength and stiffness
+- **Aerodynamic Considerations**: Reducing air resistance for fast robots
+- **Modular Design**: Enabling easy maintenance and replacement
+- **Integration**: Incorporating sensors and wiring within links
+
+### Actuation Systems
+
+**Electric Motors**: The most common actuation method for legged robots.
+
+- **DC Motors**: Simple and reliable, often requiring gearboxes
+- **Brushless DC Motors**: More efficient and longer-lasting than brushed motors
+- **Servo Motors**: Include position feedback for precise control
+- **Stepper Motors**: Provide precise position control through discrete steps
+- **Direct Drive**: Motors connected directly to joints without gearboxes
+
+**Series Elastic Actuators (SEA)**: Actuators with integrated springs for improved force control.
+
+- **Force Control**: Better force control and safety through compliance
+- **Energy Efficiency**: Improved energy efficiency through spring storage
+- **Safety**: Inherent safety through compliance and shock absorption
+- **Control**: Enhanced control through force feedback
+- **Complexity**: Increased mechanical complexity compared to rigid actuators
+
+**Variable Stiffness Actuators (VSA)**: Actuators that can adjust their stiffness.
+
+- **Adaptability**: Ability to adjust to different tasks and conditions
+- **Energy Efficiency**: Optimizing stiffness for energy efficiency
+- **Safety**: Adjusting compliance for safe interaction
+- **Control**: Enhanced control through variable impedance
+- **Complexity**: Increased mechanical and control complexity
+
+**Pneumatic Actuators**: Using compressed air to generate motion.
+
+- **Compliance**: Inherent compliance and safety
+- **Power-to-Weight**: High power-to-weight ratio
+- **Control**: Challenging to control precisely
+- **Infrastructure**: Requires air supply and control systems
+- **Applications**: Suitable for specific applications requiring compliance
+
+**Hydraulic Actuators**: Using pressurized fluid to generate motion.
+
+- **High Force**: Very high force capabilities
+- **Precision**: Precise control of high forces
+- **Complexity**: Complex systems requiring pumps and valves
+- **Maintenance**: Higher maintenance requirements
+- **Applications**: Suitable for high-force applications
+
+### Transmission Systems
+
+**Gear Systems**: Methods for transferring power from actuators to joints.
+
+- **Harmonic Drives**: High reduction ratios in compact packages
+- **Planetary Gears**: High torque density and efficiency
+- **Spur Gears**: Simple and efficient for specific applications
+- **Worm Gears**: High reduction ratios with self-locking capability
+- **Bevel Gears**: Changing direction of rotation
+
+**Tendon Systems**: Cable-driven systems for power transmission.
+
+- **Tendon-Driven**: Using cables to transmit forces from actuators to joints
+- **Underactuation**: Using fewer actuators than degrees of freedom
+- **Compliance**: Inherent compliance through cable elasticity
+- **Backdrivability**: High backdrivability for safe interaction
+- **Complexity**: Complex routing and control requirements
+
+**Linkage Systems**: Mechanical linkages for power transmission.
+
+- **Four-bar Linkages**: Simple linkages for specific motion patterns
+- **Parallel Linkages**: Multiple links in parallel for enhanced capabilities
+- **Geared Linkages**: Linkages combined with gear systems
+- **Compliant Linkages**: Linkages with integrated compliance
+- **Custom Linkages**: Specialized linkages for specific applications
+
+### Leg Design Considerations
+
+**Weight Distribution**: How mass is distributed along the leg.
+
+- **Proximal Mass**: Concentrating mass near the body to reduce inertia
+- **Distal Mass**: Minimizing mass at the end of the leg
+- **Inertial Properties**: Optimizing mass distribution for dynamic performance
+- **Energy Efficiency**: Reducing energy consumption through mass optimization
+- **Stability**: Ensuring stable locomotion through proper mass distribution
+
+**Range of Motion**: The extent of movement possible at each joint.
+
+- **Joint Limits**: Physical limits of joint movement
+- **Workspace**: The volume of space the foot can reach
+- **Gait Requirements**: Range of motion needed for specific gaits
+- **Terrain Adaptation**: Range needed for different terrains
+- **Safety Margins**: Additional range for safety and recovery
+
+**Stiffness and Compliance**: How the leg responds to external forces.
+
+- **Structural Stiffness**: Stiffness of the leg structure
+- **Joint Compliance**: Compliance at the joints
+- **Tendon Compliance**: Compliance in tendon-driven systems
+- **Adaptive Compliance**: Systems that can adjust compliance
+- **Safety**: Compliance for safe interaction with environment
+
+### Sensing Integration
+
+**Position Sensing**: Measuring joint positions and velocities.
+
+- **Encoders**: Measuring joint angles with high precision
+- **Potentiometers**: Measuring joint positions with analog output
+- **Resolvers**: Robust position sensors for harsh environments
+- **IMUs**: Measuring orientation and acceleration of leg segments
+- **Vision-based**: Using vision for position measurement
+
+**Force Sensing**: Measuring forces and torques in the leg.
+
+- **Force/Torque Sensors**: Measuring forces and torques at joints
+- **Load Cells**: Measuring forces in specific directions
+- **Strain Gauges**: Measuring strain to infer forces
+- **Tendon Force Sensors**: Measuring forces in tendon systems
+- **Foot Sensors**: Measuring ground reaction forces
+
+**Tactile Sensing**: Sensing contact and surface properties.
+
+- **Contact Switches**: Binary detection of contact
+- **Pressure Sensors**: Measuring pressure distribution
+- **Tactile Arrays**: Arrays of tactile sensors
+- **Slip Detection**: Detecting when feet slip
+- **Surface Properties**: Sensing surface characteristics
+
+### Energy Efficiency Considerations
+
+**Actuator Efficiency**: How efficiently actuators convert energy to motion.
+
+- **Motor Efficiency**: Efficiency of the motor itself
+- **Transmission Efficiency**: Efficiency of power transmission
+- **Control Efficiency**: Efficiency of control algorithms
+- **Regenerative Systems**: Systems that recover energy
+- **Optimization**: Optimizing for specific tasks and conditions
+
+**Mechanical Design**: How design affects energy consumption.
+
+- **Weight Minimization**: Reducing mass to reduce energy consumption
+- **Friction Minimization**: Reducing friction losses
+- **Aerodynamic Design**: Reducing air resistance
+- **Structural Optimization**: Optimizing structure for minimal energy loss
+- **Material Selection**: Choosing materials that minimize energy loss
+
+**Control Strategies**: How control affects energy consumption.
+
+- **Optimal Control**: Control strategies that minimize energy
+- **Passive Dynamics**: Using natural dynamics to reduce energy consumption
+- **Regenerative Braking**: Recovering energy during deceleration
+- **Gait Optimization**: Optimizing gait patterns for energy efficiency
+- **Predictive Control**: Predicting and optimizing energy usage
+
+### Applications and Examples
+
+**Humanoid Robots**: Two-legged robots with human-like form.
+
+- **Honda ASIMO**: Early example with sophisticated leg design
+- **Boston Dynamics Atlas**: Advanced hydraulically actuated legs
+- **Toyota HSR**: Human Support Robot with optimized leg design
+- **Engineered Arts RoboThespian**: Entertainment robot with expressive legs
+- **SoftBank Pepper**: Commercial robot with basic legged mobility
+
+**Quadrupedal Robots**: Four-legged robots for various applications.
+
+- **Boston Dynamics Spot**: Commercial quadruped with optimized leg design
+- **MIT Cheetah**: Research robot focusing on dynamic locomotion
+- **ETH ANYmal**: Industrial quadruped for inspection and logistics
+- **Ghost Robotics Vision**: Military and security quadruped
+- **Unitree Go1**: Consumer quadruped with efficient actuation
+
+**Specialized Applications**: Robots for specific applications.
+
+- **Search and Rescue**: Robots designed for disaster response
+- **Military**: Robots for reconnaissance and logistics
+- **Scientific Exploration**: Robots for planetary and deep-sea exploration
+- **Entertainment**: Robots for entertainment and companionship
+- **Research**: Platforms for studying locomotion and control
+
+### Challenges in Leg Design and Actuation
+
+**Trade-offs**: Balancing competing design requirements.
+
+- **Power vs. Weight**: Balancing power requirements with weight constraints
+- **Stiffness vs. Compliance**: Balancing stability with safety
+- **Precision vs. Robustness**: Balancing precision with durability
+- **Cost vs. Performance**: Balancing cost with performance requirements
+- **Complexity vs. Reliability**: Balancing complexity with reliability
+
+**Manufacturing Constraints**: Limitations in manufacturing processes.
+
+- **Material Properties**: Limitations of available materials
+- **Manufacturing Tolerances**: Precision limitations in manufacturing
+- **Assembly Complexity**: Complexity of assembling complex leg systems
+- **Cost Constraints**: Manufacturing cost limitations
+- **Scalability**: Scaling manufacturing for different robot sizes
+
+**Control Complexity**: Managing the complexity of controlling leg systems.
+
+- **High DOF**: Managing control of many degrees of freedom
+- **Real-time Requirements**: Meeting timing constraints for stable locomotion
+- **Sensor Integration**: Managing data from many sensors
+- **Adaptive Control**: Adapting to changing conditions
+- **Learning Systems**: Implementing learning-based control
+
+### Future Directions
+
+The future of leg design and actuation includes:
+
+- **Advanced Materials**: New materials for lightweight, strong legs
+- **Bio-inspired Actuation**: More closely mimicking biological actuation
+- **Soft Robotics**: Compliant, adaptable leg systems
+- **Energy Harvesting**: Systems that generate power during locomotion
+- **Modular Systems**: Standardized, interchangeable leg components
+
+Understanding leg design and actuation is essential for creating effective and efficient legged locomotion systems.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Leg design and actuation determine robot mobility and performance
+- Design principles include DOF, joint configuration, and link design
+- Actuation systems include electric, SEA, VSA, pneumatic, and hydraulic
+- Transmission systems involve gears, tendons, and linkages
+- Design considerations include weight distribution and range of motion
+- Sensing integration involves position, force, and tactile sensors
+- Energy efficiency involves actuator, mechanical, and control strategies
+- Applications span humanoid, quadrupedal, and specialized robots
+- Challenges include trade-offs, manufacturing, and control complexity
+- Future directions involve advanced materials and bio-inspired approaches
+
+</div>
+</TabItem>
+</Tabs>

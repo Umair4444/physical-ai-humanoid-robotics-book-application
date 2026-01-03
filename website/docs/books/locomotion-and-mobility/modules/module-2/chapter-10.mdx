@@ -1,0 +1,301 @@
+---
+id: chapter-10
+title: "Balance and Stability Control in Legged Systems"
+module: "Module 2: Legged Locomotion and Bipedal Walking"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Balance and Stability Control in Legged Systems
+
+### Introduction to Balance and Stability Control
+
+Balance and stability control are critical for the successful operation of legged robotic systems. Unlike wheeled systems that maintain continuous contact with the ground, legged robots must manage dynamic balance during locomotion, making stability control significantly more complex. Effective balance control enables legged robots to operate safely and efficiently in various environments while maintaining stability during movement and in response to disturbances.
+
+Key aspects of balance and stability control in legged systems include:
+
+- **Dynamic Balance**: Maintaining stability during active movement
+- **Disturbance Recovery**: Recovering from unexpected perturbations
+- **Multi-contact Transitions**: Managing transitions between different contact states
+- **Real-time Control**: Meeting strict timing requirements for stable locomotion
+- **Energy Efficiency**: Maintaining balance while minimizing energy consumption
+
+### Mathematical Foundations
+
+**Zero Moment Point (ZMP)**: A fundamental concept for balance control in legged systems.
+
+- **Definition**: Point where the sum of moments of active forces equals zero
+- **Stability Condition**: ZMP must remain within the support polygon
+- **Calculation**: ZMP = (x + h/g * ẍ, y + h/g * ÿ) where h is height, g is gravity
+- **Application**: Used extensively in bipedal robot control
+- **Limitations**: May not be sufficient for all dynamic conditions
+
+**Capture Point**: A point where the robot can step to stop its momentum.
+
+- **Definition**: Point where the robot can step to come to a stop
+- **Calculation**: Capture Point = CoM position + CoM velocity * √(h/g)
+- **Application**: Used for dynamic balance and gait planning
+- **Advantage**: More intuitive than ZMP for some applications
+- **Limitations**: Assumes linear inverted pendulum model
+
+**Linear Inverted Pendulum Model (LIPM)**: A simplified model for balance analysis.
+
+- **Assumptions**: Constant height, point mass, linearized dynamics
+- **Equations**: ẍ = g/h * (x - zmp), ÿ = g/h * (y - zmp)
+- **Simplicity**: Allows for analytical solutions
+- **Applications**: Used for gait planning and balance control
+- **Limitations**: Simplified assumptions may not hold in practice
+
+**Cart-Table Model**: An extension of LIPM that includes vertical motion.
+
+- **Vertical Motion**: Allows for changes in center of mass height
+- **Applications**: Useful for robots that change height during locomotion
+- **Complexity**: More complex than LIPM but more realistic
+- **Control**: Enables more sophisticated balance strategies
+- **Flexibility**: Better represents real-world balance scenarios
+
+### Balance Control Strategies
+
+**Ankle Strategy**: Using ankle joints as pivot points to maintain balance for small disturbances.
+
+- **Inverted Pendulum**: Model where body sways over fixed feet
+- **Ankle Torques**: Torques applied at ankle joints to maintain balance
+- **Small Disturbances**: Effective for small perturbations
+- **Limitations**: Limited effectiveness for large disturbances
+- **Energy Efficiency**: Generally more energy efficient than other strategies
+
+**Hip Strategy**: Using hip joints to maintain balance for larger disturbances.
+
+- **Body Sway**: Moving the upper body to counteract disturbances
+- **Hip Torques**: Torques applied at hip joints
+- **Larger Disturbances**: Effective for larger perturbations than ankle strategy
+- **Energy Consumption**: Generally higher energy consumption than ankle strategy
+- **Coordination**: Requires coordination with other joints
+
+**Stepping Strategy**: Taking a step to expand the support base when other strategies are insufficient.
+
+- **Recovery Step**: Taking a step to prevent a fall
+- **Step Location**: Determining where to place the recovery step
+- **Timing**: When to initiate the recovery step
+- **Effectiveness**: Most effective for large disturbances
+- **Recovery Time**: May require significant time to recover
+
+**Suspension Strategy**: Using arm movements and other body parts to help maintain balance.
+
+- **Arm Swinging**: Using arm movements to counteract disturbances
+- **Trunk Movement**: Using torso movement for balance
+- **Coordination**: Coordinating multiple body parts for balance
+- **Complementary**: Often used with other strategies
+- **Flexibility**: Provides additional balance control options
+
+### Control Approaches
+
+**Feedback Control**: Using sensor measurements to adjust the robot's posture.
+
+- **Proportional Control**: Control action proportional to error
+- **PID Control**: Proportional-Integral-Derivative control
+- **State Feedback**: Using complete state information for control
+- **Stability**: Ensures stable response to disturbances
+- **Implementation**: Relatively straightforward to implement
+
+**Feedforward Control**: Anticipating disturbances and adjusting posture proactively.
+
+- **Predictive Control**: Predicting future states and adjusting accordingly
+- **Gait Planning**: Planning balance adjustments in advance
+- **Disturbance Anticipation**: Anticipating known disturbances
+- **Performance**: Can provide better performance than feedback alone
+- **Model Dependency**: Requires accurate models of the system
+
+**Impedance Control**: Controlling the robot's mechanical impedance.
+
+- **Stiffness Control**: Adjusting how the robot responds to forces
+- **Damping Control**: Conting energy dissipation
+- **Adaptive Impedance**: Adjusting impedance based on conditions
+- **Safety**: Provides inherent safety through compliance
+- **Flexibility**: Allows for variable interaction characteristics
+
+**Model Predictive Control (MPC)**: Using models to predict and optimize future behavior.
+
+- **Prediction Horizon**: How far ahead the controller looks
+- **Optimization**: Optimizing future behavior based on model
+- **Constraints**: Handling constraints on states and inputs
+- **Computational Requirements**: Higher computational requirements
+- **Performance**: Can provide excellent performance with proper tuning
+
+### Multi-legged Balance Control
+
+**Quadrupedal Balance**: Balance strategies for four-legged robots.
+
+- **Support Polygon**: Larger support polygon provides more stability
+- **Gait Adaptation**: Adjusting gaits for balance requirements
+- **Load Distribution**: Distributing weight across four legs
+- **Redundancy**: Ability to maintain balance with fewer legs
+- **Terrain Adaptation**: Better adaptation to uneven terrain
+
+**Hexapodal Balance**: Balance strategies for six-legged robots.
+
+- **Tripod Gait**: Very stable gait with three legs always in contact
+- **Fault Tolerance**: Ability to continue operation with damaged legs
+- **Stability**: High stability with multiple contact points
+- **Complexity**: More complex coordination requirements
+- **Energy**: Higher energy consumption due to more legs
+
+**Multi-contact Transitions**: Managing transitions between different contact states.
+
+- **Liftoff**: Controlling the transition from contact to swing phase
+- **Touchdown**: Controlling the transition from swing to contact phase
+- **Impact Mitigation**: Reducing impact forces during contact transitions
+- **Smooth Transitions**: Ensuring smooth transitions between states
+- **Stability Maintenance**: Maintaining stability during transitions
+
+### Sensory Integration for Balance
+
+**Inertial Measurement Units (IMUs)**: Providing information about orientation and acceleration.
+
+- **Gyroscopes**: Measure angular velocity
+- **Accelerometers**: Measure linear acceleration
+- **Orientation**: Determine body orientation relative to gravity
+- **Integration**: Combine measurements to estimate state
+- **Drift Correction**: Correcting for sensor drift over time
+
+**Force/Torque Sensors**: Measuring ground reaction forces and joint torques.
+
+- **Foot Sensors**: Measure forces at contact points
+- **ZMP Calculation**: Calculate ZMP from force measurements
+- **Contact Detection**: Detect when contact occurs
+- **Slip Detection**: Detect when feet slip
+- **Load Distribution**: Understanding how weight is distributed
+
+**Proprioceptive Sensors**: Providing information about joint positions and velocities.
+
+- **Encoders**: Measure joint angles
+- **Joint Position**: Determine robot configuration
+- **Velocity Estimation**: Estimate joint velocities
+- **State Estimation**: Combine with other sensors for complete state
+- **Calibration**: Ensuring accurate sensor measurements
+
+**Vision Systems**: Providing information about the environment and relative position.
+
+- **Visual Odometry**: Estimate motion using visual information
+- **Obstacle Detection**: Detect obstacles that might affect balance
+- **Terrain Analysis**: Analyze terrain for safe foot placement
+- **External Reference**: Use visual landmarks for orientation
+- **Depth Information**: Understanding 3D environment structure
+
+### Challenges in Balance Control
+
+**Real-time Requirements**: Balance control must operate with very strict timing constraints.
+
+- **Control Frequency**: Balance control often requires high-frequency updates
+- **Computation Time**: Calculations must complete within time constraints
+- **Sensor Latency**: Delays in sensor measurements affect control
+- **Actuator Dynamics**: Delays in actuator response affect control
+- **System Integration**: Coordinating multiple systems within timing constraints
+
+**Model Uncertainty**: Real robots differ from their mathematical models.
+
+- **Parameter Errors**: Errors in mass, inertia, and other parameters
+- **Unmodeled Dynamics**: Dynamics not included in the model
+- **Environmental Uncertainty**: Uncertainty about the environment
+- **Adaptation**: Systems that adapt to model errors
+- **Robustness**: Maintaining stability despite model errors
+
+**Environmental Disturbances**: Robots must operate in environments with disturbances.
+
+- **External Forces**: Pushes, pulls, and other external forces
+- **Terrain Variations**: Uneven or changing terrain
+- **Dynamic Environments**: Moving obstacles or changing conditions
+- **Robustness**: Systems that maintain stability despite disturbances
+- **Recovery**: Ability to recover from disturbances
+
+**Multi-contact Scenarios**: Balance during complex contact situations.
+
+- **Multiple Support Points**: When the robot has multiple contact points
+- **Changing Contacts**: When contacts are made or broken
+- **Contact Forces**: Managing forces at multiple contact points
+- **Complexity**: Significantly more complex than single contact
+- **Transitions**: Managing transitions between contact states
+
+### Applications of Balance Control
+
+**Humanoid Robotics**: Balance in two-legged robots.
+
+- **Bipedal Walking**: Maintaining balance during two-legged locomotion
+- **Human Interaction**: Maintaining balance during human interaction
+- **Manipulation**: Balancing while manipulating objects
+- **Stair Climbing**: Maintaining balance on stairs and steps
+- **Obstacle Negotiation**: Balancing while avoiding obstacles
+
+**Quadrupedal Robotics**: Balance in four-legged robots.
+
+- **Rough Terrain**: Maintaining balance on uneven surfaces
+- **Dynamic Gaits**: High-speed gaits that require dynamic balance
+- **Load Carrying**: Maintaining balance while carrying loads
+- **Human Interaction**: Balancing during physical human-robot interaction
+- **Search and Rescue**: Balancing in challenging environments
+
+**Assistive Technologies**: Balance in devices that assist human mobility.
+
+- **Exoskeletons**: Maintaining balance in wearable devices
+- **Prosthetics**: Balance control in artificial limbs
+- **Rehabilitation**: Balance training and assistance devices
+- **Mobility Aids**: Devices that assist with human balance
+- **Therapeutic Applications**: Balance therapy and training
+
+### Future Directions
+
+The future of balance and stability control in legged systems includes:
+
+- **Learning-based Control**: Using machine learning to improve balance
+- **Bio-inspired Approaches**: More closely mimicking biological balance systems
+- **Adaptive Systems**: Systems that adapt to changing conditions
+- **Human-Robot Collaboration**: Balancing during physical human-robot interaction
+- **Swarm Robotics**: Coordinated balance in multi-robot systems
+
+Understanding balance and stability control is essential for creating legged robots that can operate safely and effectively in real-world environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Balance control is critical for legged robot stability and safety
+- Mathematical foundations include ZMP, capture point, and LIPM
+- Control strategies include ankle, hip, stepping, and suspension approaches
+- Control approaches involve feedback, feedforward, and MPC methods
+- Multi-legged systems offer enhanced stability and redundancy
+- Sensory integration involves IMUs, force sensors, and proprioception
+- Challenges include real-time requirements and model uncertainty
+- Applications span humanoid, quadrupedal, and assistive robotics
+- Future directions involve learning-based and bio-inspired approaches
+
+</div>
+</TabItem>
+</Tabs>

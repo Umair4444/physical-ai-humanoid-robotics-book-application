@@ -1,0 +1,214 @@
+---
+id: chapter-10
+title: "Humanoid Arm and Hand Design"
+module: "Module 2: Locomotion and Mobility in Humanoid Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Arm and Hand Design
+
+### Introduction to Humanoid Arm and Hand Design
+
+The design of arms and hands is critical for humanoid robots, as these components enable interaction with the environment through manipulation and grasping. Effective arm and hand design must balance dexterity, strength, robustness, and safety while maintaining human-like proportions and appearance.
+
+Key design considerations include:
+
+- **Dexterity**: Achieving human-like manipulation capabilities
+- **Strength**: Providing sufficient force for manipulation tasks
+- **Safety**: Ensuring safe interaction with humans and objects
+- **Aesthetics**: Maintaining human-like appearance
+- **Cost**: Balancing functionality with economic constraints
+
+### Human Arm Anatomy as Inspiration
+
+The human arm provides the model for humanoid arm design:
+
+**Shoulder Complex**: Three joints (glenohumeral, acromioclavicular, sternoclavicular) providing multiple degrees of freedom.
+
+**Upper Arm**: Humerus bone connecting shoulder to elbow.
+
+**Elbow Joint**: Hinge joint allowing flexion and extension.
+
+**Forearm**: Two bones (radius and ulna) allowing pronation and supination.
+
+**Wrist Joint**: Complex joint allowing multiple types of movement.
+
+### Degrees of Freedom in Humanoid Arms
+
+**Shoulder**: Typically 3 DOF (abduction/adduction, flexion/extension, internal/external rotation).
+
+**Elbow**: Typically 1 DOF (flexion/extension), though some designs include pronation/supination.
+
+**Forearm**: 1 DOF for pronation/supination.
+
+**Wrist**: 2-3 DOF (flexion/extension, abduction/adduction, and optionally radial/ulnar deviation).
+
+**Hand**: Multiple DOF depending on design (typically 15-20 for full dexterity).
+
+### Arm Design Considerations
+
+**Joint Configuration**: Determining the number and types of joints to include.
+
+**Range of Motion**: Ensuring sufficient range to perform required tasks.
+
+**Payload Capacity**: Designing for the maximum weight to be manipulated.
+
+**Workspace**: The volume of space the arm can reach.
+
+**Backdrivability**: Allowing the arm to be moved by external forces for safety.
+
+### Actuation Systems for Arms
+
+**Servo Motors**: Provide precise position control with integrated feedback.
+
+**Series Elastic Actuators (SEA)**: Include springs for improved force control and safety.
+
+**Pneumatic Muscles**: Provide human-like compliance and lightweight actuation.
+
+**Hydraulic Systems**: Offer high power-to-weight ratio but with increased complexity.
+
+**Tendon-Driven Systems**: Use tendons to transmit forces from actuators to joints.
+
+### Hand Design Approaches
+
+**Anthropomorphic Hands**: Designed to closely resemble human hands in appearance and function.
+
+**Simplified Hands**: Fewer DOF but sufficient for specific tasks.
+
+**Underactuated Hands**: Fewer actuators than DOF, using mechanical design for compliance.
+
+**Modular Hands**: Interchangeable components for different tasks.
+
+**Tool-based Approach**: Specialized end-effectors for specific tasks.
+
+### Finger Design
+
+**Number of Fingers**: Typically 4-5 fingers, with variations based on requirements.
+
+**Opposable Thumb**: Critical for precision grasps and dexterity.
+
+**Joint Configuration**: Determining the number of joints per finger.
+
+**Actuation**: Individual or coupled actuation for finger movements.
+
+**Sensing**: Tactile, force, and position sensors in fingertips and joints.
+
+### Materials and Construction
+
+**Structural Materials**: Lightweight yet strong materials like carbon fiber or advanced polymers.
+
+**Compliant Elements**: Materials that provide appropriate compliance for safe interaction.
+
+**Covering Materials**: Skin-like materials for appearance and tactile sensing.
+
+**Cable Management**: Routing cables and tendons through the arm structure.
+
+### Sensory Systems
+
+**Tactile Sensors**: Detect contact, pressure, and texture.
+
+**Force/Torque Sensors**: Measure forces applied during manipulation.
+
+**Proprioceptive Sensors**: Monitor joint positions and velocities.
+
+**Temperature Sensors**: Detect temperature of objects being manipulated.
+
+**Slip Sensors**: Detect when objects are slipping from the grasp.
+
+### Control Challenges
+
+**Redundancy**: Multiple solutions for reaching the same position, requiring optimization.
+
+**Real-time Requirements**: Fast computation for responsive control.
+
+**Coordination**: Coordinating multiple joints for smooth movement.
+
+**Safety**: Ensuring safe operation in human environments.
+
+**Calibration**: Maintaining accurate sensor and actuator calibration.
+
+### Safety Considerations
+
+**Force Limiting**: Preventing excessive forces during interaction.
+
+**Collision Detection**: Identifying and responding to collisions.
+
+**Emergency Stop**: Systems to quickly stop all motion if needed.
+
+**Compliance**: Designing for safe interaction with humans.
+
+**Enclosure**: Protecting internal components while maintaining functionality.
+
+### Applications
+
+Humanoid arm and hand design serves various applications:
+
+**Assistive Robotics**: Helping elderly or disabled individuals with daily tasks.
+
+**Manufacturing**: Assembly, inspection, and quality control tasks.
+
+**Healthcare**: Surgical assistance and patient care.
+
+**Service Industries**: Food preparation, cleaning, and customer service.
+
+**Research**: Studying human-robot interaction and manipulation.
+
+### Future Directions
+
+The future of humanoid arm and hand design includes:
+
+- **Soft Robotics**: Using compliant materials for safer and more adaptable designs
+- **Bio-inspired Materials**: New materials that better mimic biological systems
+- **Enhanced Sensing**: Better tactile and force sensing capabilities
+- **Learning-based Control**: Systems that learn and improve manipulation skills
+- **Modular Design**: Interchangeable components for task-specific configurations
+
+Understanding arm and hand design is essential for creating humanoid robots capable of effective environmental interaction.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Arm and hand design enables environmental interaction through manipulation
+- Human anatomy provides model for joint configuration and DOF
+- Key considerations include dexterity, strength, safety, and aesthetics
+- Arms typically have 7+ DOF; hands have 15-20 DOF for full dexterity
+- Actuation systems include servo motors, SEA, pneumatic, and hydraulic
+- Hand designs range from anthropomorphic to simplified and modular
+- Finger design includes number, opposable thumb, and actuation
+- Materials include structural, compliant, and covering materials
+- Sensory systems include tactile, force, proprioceptive, and temperature sensors
+- Challenges include redundancy, real-time requirements, and safety
+
+</div>
+</TabItem>
+</Tabs>

@@ -1,0 +1,190 @@
+---
+id: chapter-7
+title: "Humanoid Locomotion and Gait Planning"
+module: "Module 2: Locomotion and Mobility in Humanoid Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Locomotion and Gait Planning
+
+### Introduction to Humanoid Locomotion
+
+Humanoid locomotion refers to the methods by which humanoid robots achieve movement, particularly bipedal walking. This is one of the most challenging aspects of humanoid robotics, as it requires balancing, coordination, and adaptability to various terrains and conditions.
+
+Key challenges in humanoid locomotion include:
+
+- **Balance Maintenance**: Keeping the robot stable during movement
+- **Terrain Adaptation**: Adjusting gait for different surfaces and obstacles
+- **Energy Efficiency**: Minimizing power consumption during locomotion
+- **Real-time Control**: Making adjustments quickly enough to maintain stability
+- **Safety**: Ensuring safe movement around humans and obstacles
+
+### Types of Locomotion
+
+**Static Walking**: The robot maintains stability at all times, with at least one foot always in contact with the ground. This is slower but more stable.
+
+**Dynamic Walking**: The robot may have moments of instability, similar to human walking. This is more efficient but requires sophisticated control.
+
+**Running**: Involves periods where both feet are off the ground, requiring even more advanced control.
+
+**Climbing**: Moving up stairs, ladders, or other elevated surfaces.
+
+**Transitioning**: Moving between different types of locomotion or navigating obstacles.
+
+### Gait Planning Fundamentals
+
+Gait planning involves determining the sequence of movements that will achieve locomotion:
+
+**Footstep Planning**: Determining where and when to place each foot.
+
+**Center of Mass (CoM) Trajectory**: Planning the path of the robot's center of mass during movement.
+
+**Zero Moment Point (ZMP) Trajectory**: Planning the ZMP path to ensure stability.
+
+**Joint Trajectory Planning**: Determining the movement of all joints to achieve the desired gait.
+
+### Walking Patterns
+
+**Periodic Gaits**: Regular, repeating patterns of movement, such as normal walking.
+
+**Aperiodic Gaits**: Non-repeating patterns, such as stepping over obstacles.
+
+**Symmetric Gaits**: Both legs follow similar patterns.
+
+**Asymmetric Gaits**: Legs follow different patterns, useful for turning or navigating obstacles.
+
+### Control Strategies
+
+**ZMP-Based Control**: Maintains the ZMP within the support polygon for stability.
+
+**Capture Point Control**: Uses the capture point concept to maintain balance.
+
+**Model Predictive Control (MPC)**: Predicts future states and optimizes control inputs.
+
+**Virtual Model Control**: Uses simplified models to generate control commands.
+
+**Central Pattern Generators (CPGs)**: Neural network models that generate rhythmic patterns.
+
+### Balance Control
+
+Balance control is critical for stable locomotion:
+
+**Ankle Strategy**: Using ankle joints to maintain balance for small disturbances.
+
+**Hip Strategy**: Using hip joints for larger disturbances.
+
+**Stepping Strategy**: Taking a step to restore balance when other strategies are insufficient.
+
+**Arm Swing**: Using arm movements to assist with balance.
+
+### Terrain Adaptation
+
+Humanoid robots must adapt to various terrains:
+
+**Flat Ground**: The simplest case, but still requires sophisticated control.
+
+**Uneven Terrain**: Adjusting foot placement and body posture for stability.
+
+**Stairs**: Requires specific gait patterns and precise foot placement.
+
+**Slopes**: Adjusting body orientation and gait for inclines and declines.
+
+**Slippery Surfaces**: Adjusting gait parameters for reduced traction.
+
+### Energy Efficiency
+
+Efficient locomotion is crucial for practical humanoid robots:
+
+**Passive Dynamics**: Using the robot's natural dynamics to reduce energy consumption.
+
+**Optimized Trajectories**: Planning movements that minimize energy use.
+
+**Regenerative Systems**: Recovering energy during certain phases of locomotion.
+
+**Gait Selection**: Choosing the most efficient gait for specific conditions.
+
+### Challenges and Limitations
+
+Several challenges remain in humanoid locomotion:
+
+**Computational Complexity**: Real-time gait planning and control require significant computational resources.
+
+**Model Accuracy**: Control systems depend on accurate models of the robot and environment.
+
+**Environmental Uncertainty**: Dealing with unknown or changing environments.
+
+**Robustness**: Maintaining stability despite model errors or disturbances.
+
+**Human-like Movement**: Achieving natural, human-like walking patterns.
+
+### Applications
+
+Humanoid locomotion has various applications:
+
+**Assistive Devices**: Exoskeletons and prosthetics for human mobility assistance.
+
+**Search and Rescue**: Navigating complex environments for emergency response.
+
+**Service Robotics**: Moving through human environments for various tasks.
+
+**Research**: Understanding human locomotion and balance control.
+
+### Future Directions
+
+The future of humanoid locomotion includes:
+
+- **Learning-based Approaches**: Using machine learning to improve gait patterns
+- **Bio-inspired Control**: More closely mimicking human locomotion strategies
+- **Enhanced Sensing**: Better perception of terrain and environment
+- **Adaptive Systems**: Automatically adjusting gait based on conditions
+- **Human-Robot Collaboration**: Moving together with humans in shared spaces
+
+Understanding locomotion and gait planning is essential for creating humanoid robots that can navigate human environments effectively.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Humanoid locomotion involves balancing, coordination, and terrain adaptation
+- Types include static, dynamic walking, running, and climbing
+- Gait planning involves footstep, CoM, ZMP, and joint trajectory planning
+- Control strategies include ZMP-based, MPC, and CPG approaches
+- Balance control uses ankle, hip, and stepping strategies
+- Terrain adaptation handles flat ground, uneven surfaces, stairs, and slopes
+- Energy efficiency involves passive dynamics and optimized trajectories
+- Challenges include computational complexity and environmental uncertainty
+- Applications include assistive devices, search and rescue, and service robotics
+- Future directions involve learning-based and bio-inspired approaches
+
+</div>
+</TabItem>
+</Tabs>

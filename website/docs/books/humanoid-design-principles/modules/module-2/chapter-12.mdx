@@ -1,0 +1,234 @@
+---
+id: chapter-12
+title: "Humanoid Robot Control Architectures"
+module: "Module 2: Locomotion and Mobility in Humanoid Design"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Humanoid Robot Control Architectures
+
+### Introduction to Control Architectures
+
+Control architectures define the structure and organization of software and hardware components that enable humanoid robots to perceive, reason, and act. These architectures must handle the complexity of coordinating multiple subsystems while ensuring real-time performance and safety.
+
+Key requirements for humanoid control architectures include:
+
+- **Real-time Performance**: Meeting strict timing constraints for stable control
+- **Modularity**: Organizing components for maintainability and extensibility
+- **Scalability**: Supporting increasing complexity as robots evolve
+- **Safety**: Ensuring safe operation in human environments
+- **Robustness**: Handling failures and unexpected situations gracefully
+
+### Hierarchical Control Structures
+
+**High-Level Planning**: Task planning, path planning, and mission management.
+
+**Mid-Level Control**: Trajectory generation, gait planning, and behavior selection.
+
+**Low-Level Control**: Joint control, motor control, and sensor processing.
+
+**Feedback Integration**: Connecting all levels with appropriate feedback loops.
+
+### Centralized vs. Distributed Control
+
+**Centralized Control**: A single controller manages all robot functions.
+
+- Advantages: Coherent decision-making, global optimization
+- Disadvantages: Computational bottlenecks, single point of failure
+
+**Distributed Control**: Multiple controllers manage different subsystems.
+
+- Advantages: Parallel processing, fault tolerance, modularity
+- Disadvantages: Coordination complexity, potential conflicts
+
+**Hybrid Approaches**: Combining centralized and distributed elements.
+
+### Software Architectures
+
+**ROS (Robot Operating System)**: A flexible framework for robot software development.
+
+**Component-Based Architecture**: Organizing functionality into reusable components.
+
+**Service-Oriented Architecture**: Using services for communication between components.
+
+**Event-Driven Architecture**: Responding to events from sensors or external sources.
+
+### Real-time Operating Systems
+
+**RT-Linux**: Real-time extensions to the Linux operating system.
+
+**VxWorks**: Commercial real-time operating system.
+
+**QNX**: Unix-like real-time operating system.
+
+**RTAI**: Real-time application interface for Linux.
+
+### Middleware Solutions
+
+**ROS/ROS2**: Standardized communication between robot components.
+
+**YARP**: Yet Another Robot Platform for communication and control.
+
+**OpenRTP**: Real-time platform for robot control.
+
+**ICE**: Internet Communications Engine for distributed systems.
+
+### Control Loop Timing
+
+**Fast Control Loops**: Joint control at 1-10 kHz for stability.
+
+**Medium Control Loops**: Balance control at 100-500 Hz for responsiveness.
+
+**Slow Control Loops**: Task planning at 1-10 Hz for high-level decisions.
+
+**Asynchronous Processing**: Background tasks like mapping or learning.
+
+### Safety and Fault Tolerance
+
+**Emergency Stop Systems**: Immediate stopping of all motion when needed.
+
+**Fault Detection**: Identifying failures in sensors, actuators, or software.
+
+**Graceful Degradation**: Maintaining basic functionality despite partial failures.
+
+**Recovery Procedures**: Returning to safe states after failures.
+
+**Redundancy**: Backup systems for critical functions.
+
+### Communication Protocols
+
+**CAN Bus**: Controller Area Network for reliable communication.
+
+**Ethernet**: High-speed communication for complex data.
+
+**Wireless**: WiFi or Bluetooth for remote communication.
+
+**Proprietary Protocols**: Manufacturer-specific communication methods.
+
+### Sensor Integration
+
+**Sensor Drivers**: Low-level interfaces to hardware sensors.
+
+**Sensor Fusion**: Combining data from multiple sensors.
+
+**Calibration**: Ensuring accurate sensor measurements.
+
+**Synchronization**: Coordinating data from multiple sensors.
+
+### Actuator Control
+
+**Motor Controllers**: Low-level control of individual motors.
+
+**Joint Controllers**: Coordinating multiple motors for joint movement.
+
+**Trajectory Execution**: Following planned movement trajectories.
+
+**Force Control**: Controlling applied forces and torques.
+
+### Task and Motion Planning
+
+**Motion Planning**: Generating collision-free paths for robot movement.
+
+**Task Planning**: Sequencing high-level tasks to achieve goals.
+
+**Replanning**: Adjusting plans based on new information.
+
+**Multi-robot Coordination**: Coordinating multiple robots if applicable.
+
+### Learning and Adaptation
+
+**Online Learning**: Adapting behavior based on recent experiences.
+
+**Offline Learning**: Improving behavior based on past experiences.
+
+**Parameter Tuning**: Adjusting control parameters for optimal performance.
+
+**Skill Acquisition**: Learning new behaviors or improving existing ones.
+
+### Challenges in Control Architecture Design
+
+Several challenges exist in designing effective control architectures:
+
+**Timing Constraints**: Meeting real-time requirements across all components.
+
+**System Integration**: Connecting diverse hardware and software components.
+
+**Debugging**: Identifying and fixing issues in complex systems.
+
+**Performance Optimization**: Maximizing efficiency while maintaining functionality.
+
+**Safety Assurance**: Ensuring safe operation under all conditions.
+
+### Applications
+
+Control architectures support various applications:
+
+**Humanoid Walking**: Coordinating complex locomotion behaviors.
+
+**Object Manipulation**: Managing dexterous manipulation tasks.
+
+**Human-Robot Interaction**: Enabling safe and effective interaction.
+
+**Autonomous Navigation**: Moving through complex environments.
+
+**Collaborative Tasks**: Working with humans or other robots.
+
+### Future Directions
+
+The future of humanoid robot control architectures includes:
+
+- **Cloud Robotics**: Leveraging cloud computing for complex processing
+- **Edge Computing**: Processing data locally for reduced latency
+- **AI Integration**: Incorporating advanced AI for better decision-making
+- **Modular Architectures**: More flexible and reusable system designs
+- **Human-Centered Design**: Architectures optimized for human interaction
+
+Understanding control architectures is essential for creating functional and reliable humanoid robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Control architectures organize software and hardware for humanoid robot operation
+- Hierarchical structures include high-level planning, mid-level control, and low-level control
+- Approaches include centralized, distributed, and hybrid control
+- Software architectures include ROS, component-based, and service-oriented designs
+- Real-time systems ensure timing constraints are met
+- Middleware solutions facilitate communication between components
+- Control loops operate at different frequencies for different functions
+- Safety features include emergency stops, fault detection, and graceful degradation
+- Communication protocols include CAN, Ethernet, and wireless options
+- Challenges include timing, integration, debugging, and safety assurance
+
+</div>
+</TabItem>
+</Tabs>

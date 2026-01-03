@@ -1,0 +1,169 @@
+---
+id: chapter-1
+title: "Introduction to Locomotion and Mobility in Robotics"
+module: "Module 1: Foundations of Robotic Locomotion"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Introduction to Locomotion and Mobility in Robotics
+
+### Introduction to Robotic Locomotion
+
+Robotic locomotion refers to the various methods and mechanisms by which robots move from one location to another. This field encompasses the design, control, and implementation of systems that enable robots to navigate through diverse environments. Understanding locomotion is fundamental to robotics as it determines a robot's ability to perform tasks in real-world scenarios.
+
+Key aspects of robotic locomotion include:
+
+- **Mechanical Design**: The physical mechanisms that enable movement
+- **Control Systems**: The algorithms and systems that coordinate movement
+- **Environmental Interaction**: How robots interact with their surroundings
+- **Energy Efficiency**: Optimizing power consumption during movement
+- **Stability**: Maintaining balance and control during locomotion
+
+### Types of Locomotion
+
+**Legged Locomotion**: Movement using articulated limbs, similar to animals.
+
+- Advantages: Ability to traverse rough terrain, step over obstacles
+- Disadvantages: Complex control, high energy consumption
+- Examples: Humanoid robots, quadruped robots, hexapods
+
+**Wheeled Locomotion**: Movement using rotating wheels.
+
+- Advantages: Energy efficient, smooth motion on flat surfaces
+- Disadvantages: Limited to relatively flat terrain
+- Examples: Mobile robots, rovers, delivery robots
+
+**Tracked Locomotion**: Movement using continuous tracks.
+
+- Advantages: Good traction, ability to traverse soft terrain
+- Disadvantages: Higher complexity, limited speed
+- Examples: Military robots, construction robots
+
+**Aerial Locomotion**: Movement through flight.
+
+- Advantages: Ability to overcome obstacles, 3D navigation
+- Disadvantages: High energy consumption, limited payload
+- Examples: Drones, quadcopters, fixed-wing UAVs
+
+**Swimming/Aquatic Locomotion**: Movement through water.
+
+- Advantages: Access to aquatic environments
+- Disadvantages: Sealing requirements, drag considerations
+- Examples: Underwater vehicles, swimming robots
+
+### Fundamental Principles
+
+**Kinematics**: The study of motion without considering forces.
+
+- Forward kinematics: Determining end-effector position from joint angles
+- Inverse kinematics: Determining joint angles for desired end-effector position
+- Velocity kinematics: Relationship between joint velocities and end-effector velocities
+
+**Dynamics**: The study of motion with consideration of forces.
+
+- Newton-Euler formulation: Classical approach to dynamic modeling
+- Lagrangian mechanics: Energy-based approach to dynamic modeling
+- Force and torque analysis: Understanding forces during locomotion
+
+**Stability**: Maintaining balance during movement.
+
+- Static stability: Stability when motion is not required
+- Dynamic stability: Stability during active movement
+- Zero Moment Point (ZMP): Critical concept for bipedal stability
+
+### Locomotion Challenges
+
+**Terrain Adaptation**: Adapting to various surface types and conditions.
+
+- Rough terrain: Rocks, debris, uneven surfaces
+- Soft terrain: Sand, mud, snow
+- Slippery surfaces: Ice, wet surfaces
+- Obstacles: Steps, curbs, barriers
+
+**Energy Efficiency**: Minimizing power consumption during movement.
+
+- Optimal gait selection: Choosing energy-efficient movement patterns
+- Regenerative systems: Recovering energy during movement
+- Lightweight design: Reducing energy requirements through design
+
+**Control Complexity**: Managing the complexity of locomotion systems.
+
+- Real-time constraints: Meeting timing requirements for stable locomotion
+- Sensor integration: Using multiple sensors for control
+- Adaptation: Adjusting to changing conditions
+
+### Applications of Robotic Locomotion
+
+**Exploration**: Robots for space, deep sea, and disaster environments.
+
+- Mars rovers: Long-duration exploration in harsh environments
+- Deep sea vehicles: Underwater exploration and research
+- Disaster response: Navigation in dangerous environments
+
+**Service Robotics**: Robots for commercial and domestic applications.
+
+- Delivery robots: Autonomous package delivery
+- Cleaning robots: Floor cleaning and maintenance
+- Personal mobility: Assistive devices for mobility
+
+**Industrial Applications**: Robots for manufacturing and logistics.
+
+- Warehouse automation: Mobile robots for material handling
+- Inspection robots: Automated inspection of infrastructure
+- Agricultural robotics: Autonomous farming equipment
+
+### Future Directions
+
+The future of robotic locomotion includes:
+
+- **Bio-inspired Design**: More closely mimicking biological locomotion systems
+- **Adaptive Systems**: Robots that adapt their locomotion to changing conditions
+- **Multi-modal Locomotion**: Robots that can switch between different locomotion modes
+- **Energy Harvesting**: Systems that generate power during locomotion
+- **Swarm Locomotion**: Coordinated movement of robot teams
+
+Understanding the fundamentals of robotic locomotion is essential for designing effective mobile robots.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Robotic locomotion encompasses methods for robot movement and navigation
+- Types include legged, wheeled, tracked, aerial, and aquatic locomotion
+- Fundamental principles involve kinematics, dynamics, and stability
+- Challenges include terrain adaptation and energy efficiency
+- Applications span exploration, service, and industrial robotics
+- Future directions involve bio-inspired and multi-modal systems
+
+</div>
+</TabItem>
+</Tabs>

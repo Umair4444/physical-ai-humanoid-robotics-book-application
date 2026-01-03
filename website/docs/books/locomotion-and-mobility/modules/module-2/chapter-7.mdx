@@ -1,0 +1,219 @@
+---
+id: chapter-7
+title: "Legged Locomotion and Bipedal Walking"
+module: "Module 2: Legged Locomotion and Bipedal Walking"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Legged Locomotion and Bipedal Walking
+
+### Introduction to Legged Locomotion
+
+Legged locomotion is one of the most versatile forms of robotic mobility, enabling robots to traverse terrain that would be inaccessible to wheeled or tracked vehicles. Bipedal walking, in particular, is of special interest as it mimics human locomotion and allows robots to operate in human-designed environments. This form of locomotion presents unique challenges in terms of balance, coordination, and control.
+
+Key aspects of legged locomotion include:
+
+- **Terrain Versatility**: Ability to navigate rough, uneven terrain
+- **Obstacle Negotiation**: Capability to step over obstacles
+- **Balance Control**: Maintaining stability during dynamic movement
+- **Energy Efficiency**: Optimizing power consumption during walking
+- **Human-like Movement**: Operating effectively in human environments
+
+### Types of Legged Locomotion
+
+**Bipedal Locomotion**: Movement using two legs, similar to human walking.
+
+- Advantages: Human-like form factor, ability to navigate human environments
+- Disadvantages: Inherently unstable, complex control requirements
+- Examples: Humanoid robots like Honda ASIMO, Boston Dynamics Atlas
+
+**Quadrupedal Locomotion**: Movement using four legs.
+
+- Advantages: More stable than bipedal, good load-carrying capacity
+- Disadvantages: More complex than bipedal, requires more actuators
+- Examples: Boston Dynamics Spot, MIT Cheetah
+
+**Hexapodal Locomotion**: Movement using six legs.
+
+- Advantages: Very stable, can continue locomotion with damaged legs
+- Disadvantages: Complex control, higher energy consumption
+- Examples: Research robots for rough terrain navigation
+
+**Multi-legged Systems**: Movement using more than six legs.
+
+- Advantages: Extremely stable, fault-tolerant
+- Disadvantages: Very complex control and coordination
+- Examples: Bio-inspired robots mimicking insects
+
+### Fundamentals of Bipedal Walking
+
+**Gait Cycle**: The sequence of movements that constitutes a complete walking cycle.
+
+- **Stance Phase**: When the foot is in contact with the ground
+- **Swing Phase**: When the foot is off the ground and moving forward
+- **Double Support**: When both feet are in contact with the ground
+- **Single Support**: When only one foot is in contact with the ground
+
+**Center of Mass (CoM) Motion**: How the body's center of mass moves during walking.
+
+- **Lateral Movement**: Side-to-side motion of the CoM
+- **Vertical Movement**: Up and down motion of the CoM
+- **Forward Movement**: Propelling the CoM forward
+- **Energy Efficiency**: Minimizing CoM movement for efficiency
+
+**Ground Reaction Forces**: Forces exerted by the ground on the feet during walking.
+
+- **Vertical Forces**: Supporting the robot's weight
+- **Horizontal Forces**: Propelling the robot forward
+- **Medial-Lateral Forces**: Controlling side-to-side motion
+- **Force Distribution**: How forces are distributed during the gait cycle
+
+### Balance Control in Bipedal Walking
+
+**Zero Moment Point (ZMP)**: A critical concept for bipedal stability.
+
+- **Definition**: Point where the sum of moments of active forces equals zero
+- **Stability Condition**: ZMP must remain within the support polygon
+- **Control Strategy**: Controlling ZMP position to maintain balance
+- **Limitations**: ZMP-based control may not be sufficient for all conditions
+
+**Capture Point**: A point where the robot can step to stop its momentum.
+
+- **Definition**: Point where the robot can step to come to a stop
+- **Calculation**: Capture Point = CoM position + CoM velocity * √(h/g)
+- **Application**: Used for dynamic balance and gait planning
+- **Advantage**: More intuitive than ZMP for some applications
+
+**Balance Strategies**: Different approaches to maintaining balance during walking.
+
+- **Ankle Strategy**: Using ankle torques to maintain balance
+- **Hip Strategy**: Using hip torques for larger disturbances
+- **Stepping Strategy**: Taking recovery steps when needed
+- **Arm Swing**: Using arm movements to assist balance
+
+### Control Approaches for Bipedal Walking
+
+**Inverted Pendulum Models**: Simplified models for understanding bipedal dynamics.
+
+- **Linear Inverted Pendulum Model (LIPM)**: Constant height assumption
+- **Variable-Height Inverted Pendulum**: Allowing height variations
+- **Pendulum-based Control**: Using pendulum dynamics for control
+- **Simplicity**: Allows for analytical solutions
+
+**Trajectory Generation**: Planning the motion of robot joints and body.
+
+- **Foot Placement**: Planning where feet should be placed
+- **Body Trajectory**: Planning CoM and trunk motion
+- **Joint Trajectories**: Planning individual joint movements
+- **Smoothness**: Ensuring smooth, natural-looking motion
+
+**Pattern Generators**: Approaches that generate walking patterns.
+
+- **Central Pattern Generators (CPGs)**: Neural network models for rhythmic movement
+- **Coupled Oscillators**: Systems of interconnected oscillators
+- **Learning-based Patterns**: Patterns learned from human or animal walking
+- **Adaptability**: Ability to adapt patterns to different conditions
+
+### Challenges in Bipedal Walking
+
+**Stability**: Maintaining balance during dynamic movement.
+
+- **Dynamic Balance**: Balance during active movement rather than static stance
+- **Perturbation Recovery**: Recovering from unexpected disturbances
+- **Multi-contact Transitions**: Managing transitions between different contact states
+- **Real-time Requirements**: Meeting timing constraints for stable control
+
+**Terrain Adaptation**: Adapting to various surface types and conditions.
+
+- **Uneven Terrain**: Walking on surfaces with varying heights
+- **Soft Terrain**: Walking on sand, mud, or other soft surfaces
+- **Slippery Surfaces**: Maintaining traction on low-friction surfaces
+- **Obstacle Negotiation**: Stepping over or around obstacles
+
+**Control Complexity**: Managing the complexity of bipedal control systems.
+
+- **High Degrees of Freedom**: Many joints that need coordinated control
+- **Underactuation**: Systems with fewer actuators than degrees of freedom
+- **Nonlinear Dynamics**: Complex, nonlinear equations of motion
+- **Real-time Computation**: Meeting computational requirements for control
+
+### Applications of Bipedal Walking
+
+**Humanoid Robotics**: Robots designed to operate in human environments.
+
+- **Service Robots**: Assisting humans in homes and workplaces
+- **Entertainment Robots**: Robots for entertainment and companionship
+- **Research Platforms**: Platforms for studying human locomotion
+- **Educational Robots**: Robots for educational purposes
+
+**Assistive Technologies**: Devices to assist human mobility.
+
+- **Exoskeletons**: Wearable devices to assist human walking
+- **Prosthetics**: Artificial limbs for amputees
+- **Rehabilitation Devices**: Equipment for gait training and rehabilitation
+- **Mobility Aids**: Devices to assist with walking
+
+**Search and Rescue**: Robots for emergency response applications.
+
+- **Disaster Response**: Navigating disaster sites
+- **Search Operations**: Searching for survivors in difficult terrain
+- **Hazardous Environments**: Operating in dangerous conditions
+- **Human-robot Teams**: Working alongside human rescuers
+
+### Future Directions
+
+The future of legged locomotion and bipedal walking includes:
+
+- **Learning-based Control**: Using machine learning to improve walking
+- **Bio-inspired Approaches**: More closely mimicking human and animal locomotion
+- **Adaptive Systems**: Systems that adapt to changing conditions
+- **Human-robot Collaboration**: Safe and effective physical interaction
+- **Enhanced Sensing**: Better perception for challenging environments
+
+Understanding legged locomotion and bipedal walking is essential for creating robots that can navigate complex environments effectively.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Legged locomotion enables navigation of rough terrain and obstacle negotiation
+- Types include bipedal, quadrupedal, and hexapodal locomotion
+- Bipedal walking fundamentals involve gait cycle and CoM motion
+- Balance control uses ZMP, capture point, and various strategies
+- Control approaches include inverted pendulum models and pattern generators
+- Challenges include stability, terrain adaptation, and control complexity
+- Applications span humanoid robotics, assistive technologies, and search and rescue
+- Future directions involve learning-based and bio-inspired approaches
+
+</div>
+</TabItem>
+</Tabs>

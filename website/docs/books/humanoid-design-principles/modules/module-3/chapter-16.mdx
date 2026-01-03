@@ -1,0 +1,220 @@
+---
+id: chapter-16
+title: "Bimanual Manipulation and Coordination"
+module: "Module 3: Manipulation and Grasping Systems"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Bimanual Manipulation and Coordination
+
+### Introduction to Bimanual Manipulation
+
+Bimanual manipulation refers to the coordinated use of both hands to perform tasks that are difficult or impossible with a single hand. This capability is essential for humanoid robots to perform complex manipulation tasks that require the dexterity and coordination of human-like hands.
+
+Key aspects of bimanual manipulation include:
+
+- **Coordination**: Synchronizing the movements of both hands
+- **Task Decomposition**: Dividing tasks between the two hands
+- **Role Assignment**: Determining which hand performs which function
+- **Temporal Synchronization**: Coordinating the timing of movements
+- **Spatial Coordination**: Managing the spatial relationships between hands
+
+### Human Bimanual Coordination as Inspiration
+
+Human bimanual coordination provides the model for robotic systems:
+
+**Leading and Supporting Roles**: One hand often leads while the other supports.
+
+**Complementary Actions**: Hands performing different but complementary actions.
+
+**Symmetric and Asymmetric Tasks**: Both synchronized and independent movements.
+
+**Cross-body Coordination**: Managing tasks that span both sides of the body.
+
+**Learning and Adaptation**: Humans improve bimanual skills through practice.
+
+### Types of Bimanual Tasks
+
+**Symmetric Tasks**: Both hands perform similar actions simultaneously.
+
+**Asymmetric Tasks**: Hands perform different actions that complement each other.
+
+**Transfer Tasks**: Moving objects from one hand to the other.
+
+**Assembly Tasks**: Using both hands to assemble components.
+
+**Tool Use**: One hand manipulating a tool while the other holds the workpiece.
+
+**Support Tasks**: One hand stabilizing while the other manipulates.
+
+### Coordination Strategies
+
+**Leader-Follower**: One hand leads the task while the other follows.
+
+**Symmetric Control**: Both hands move in coordinated, similar patterns.
+
+**Role-Based**: Hands assigned specific roles based on task requirements.
+
+**Adaptive Coordination**: Adjusting coordination based on task demands.
+
+**Hierarchical Control**: High-level coordination with low-level execution.
+
+### Control Approaches
+
+**Centralized Control**: A single controller managing both hands.
+
+**Decentralized Control**: Separate controllers with coordination mechanisms.
+
+**Hierarchical Control**: High-level coordination with local control.
+
+**Learning-based Control**: Using machine learning to improve coordination.
+
+**Model Predictive Control**: Predicting and optimizing coordinated movements.
+
+### Task Planning for Bimanual Systems
+
+**Task Decomposition**: Breaking complex tasks into bimanual components.
+
+**Grasp Planning**: Coordinating grasps between both hands.
+
+**Motion Planning**: Planning collision-free paths for both hands.
+
+**Force Distribution**: Distributing forces between hands appropriately.
+
+**Temporal Sequencing**: Determining the timing of bimanual actions.
+
+### Challenges in Bimanual Coordination
+
+**Computational Complexity**: Managing the increased complexity of two-hand systems.
+
+**Coordination Constraints**: Ensuring hands don't interfere with each other.
+
+**Real-time Requirements**: Computing coordinated movements within timing constraints.
+
+**Uncertainty Management**: Dealing with uncertainty in object properties and positions.
+
+**Learning Complexity**: Learning coordinated behaviors is more complex than single-hand tasks.
+
+### Sensory Integration
+
+**Visual Feedback**: Coordinating both hands using visual information.
+
+**Tactile Feedback**: Using tactile sensors in both hands for coordinated manipulation.
+
+**Proprioceptive Feedback**: Monitoring the position and movement of both hands.
+
+**Force Feedback**: Managing forces applied by both hands.
+
+**Cross-Modal Integration**: Combining information from multiple sensory modalities.
+
+### Applications
+
+Bimanual manipulation has numerous applications:
+
+**Assembly Tasks**: Manufacturing and construction activities requiring two hands.
+
+**Cooking**: Food preparation tasks that require bimanual coordination.
+
+**Musical Instruments**: Playing instruments that require both hands.
+
+**Surgical Assistance**: Complex medical procedures requiring precise coordination.
+
+**Household Tasks**: Activities like opening jars, cutting, or folding clothes.
+
+### Human-Robot Collaboration
+
+**Physical Collaboration**: Direct physical interaction between human and robot hands.
+
+**Task Sharing**: Dividing tasks between human and robot hands.
+
+**Safety Considerations**: Ensuring safe interaction during bimanual tasks.
+
+**Communication**: Non-verbal communication through hand movements.
+
+**Trust Building**: Establishing trust through coordinated actions.
+
+### Learning and Adaptation
+
+**Imitation Learning**: Learning bimanual tasks by observing humans.
+
+**Reinforcement Learning**: Improving coordination through trial and error.
+
+**Transfer Learning**: Applying learned skills to new tasks.
+
+**Social Learning**: Learning through interaction with humans.
+
+**Adaptive Control**: Adjusting coordination based on task requirements.
+
+### Challenges in Implementation
+
+Several challenges exist in implementing effective bimanual manipulation:
+
+**Model Complexity**: Modeling the complex interactions between two hands.
+
+**Real-time Performance**: Computing coordinated movements within strict timing constraints.
+
+**Safety**: Ensuring safe operation with two active manipulators.
+
+**Calibration**: Maintaining accurate calibration of both hands.
+
+**Scalability**: Extending approaches to more complex bimanual tasks.
+
+### Future Directions
+
+The future of bimanual manipulation includes:
+
+- **Learning-based Approaches**: Using machine learning to improve coordination
+- **Bio-inspired Methods**: More closely mimicking human bimanual coordination
+- **Enhanced Sensing**: Better integration of multiple sensory modalities
+- **Human-Robot Collaboration**: Safe and effective physical interaction with humans
+- **Autonomous Skill Learning**: Robots that learn bimanual skills autonomously
+
+Understanding bimanual manipulation and coordination is essential for creating humanoid robots capable of complex manipulation tasks.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Bimanual manipulation coordinates both hands for complex tasks
+- Human coordination provides model for leading/supporting roles and complementary actions
+- Task types include symmetric, asymmetric, transfer, assembly, and support tasks
+- Coordination strategies include leader-follower, symmetric, and role-based approaches
+- Control approaches range from centralized to learning-based methods
+- Task planning involves decomposition, grasp planning, and motion planning
+- Challenges include complexity, coordination constraints, and real-time requirements
+- Sensory integration combines visual, tactile, proprioceptive, and force feedback
+- Applications span manufacturing, cooking, surgery, and household tasks
+- Future directions involve learning-based and bio-inspired approaches
+
+</div>
+</TabItem>
+</Tabs>
