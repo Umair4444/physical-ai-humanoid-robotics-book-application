@@ -118,21 +118,13 @@
   .languageButton {
     min-width: auto;
     padding: 0.5rem;
-    max-width: 60px;
+    max-width: 100px; /* Increased width to accommodate text */
   }
 }
 
 @media (max-width: 480px) {
   .languageButton {
-    max-width: 50px;
+    max-width: 80px; /* Increased width to accommodate text */
     padding: 0.3rem;
-  }
-
-  .languageButton span:last-child {
-    display: none;
-  }
-
-  .languageButton span:nth-child(2) {
-    display: none;
   }
 }
