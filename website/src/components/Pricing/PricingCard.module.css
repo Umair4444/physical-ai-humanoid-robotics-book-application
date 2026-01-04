@@ -1,7 +1,7 @@
 /* Enhanced pricing component styles */
 
 .pricingSection {
-  padding: 2rem 1rem;
+  padding: 1rem 1rem;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -220,7 +220,7 @@
 
 .priceCardFeatures {
   padding: 0 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   flex-grow: 1;
 }
 
@@ -228,7 +228,7 @@
   display: flex;
   align-items: flex-start;
   margin-bottom: 1rem;
-  padding: 0.5rem 0;
+  padding: 0;
   opacity: 0;
   transform: translateY(10px);
   animation: fadeInUp 0.5s ease forwards;
@@ -408,7 +408,7 @@
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   .pricingSection {
-    padding: 1.5rem 0.5rem;
+    padding: 1rem 0.5rem;
   }
 
   .titleGradient {
@@ -453,7 +453,7 @@
 
 @media (min-width: 1200px) {
   .pricingSection {
-    padding: 3rem 2rem;
+    padding: 1rem 2rem;
   }
 
   .titleGradient {

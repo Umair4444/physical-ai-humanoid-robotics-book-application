@@ -1,0 +1,232 @@
+---
+id: chapter-24
+title: "Perception for Human-Robot Interaction"
+module: "Module 4: Sensory Systems and Perception"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Perception for Human-Robot Interaction
+
+### Introduction to Perception for Human-Robot Interaction
+
+Perception for human-robot interaction (HRI) encompasses the sensory and processing capabilities that enable humanoid robots to understand and respond to human behavior, communication, and intentions. This specialized area of perception is critical for creating robots that can interact naturally and safely with humans in various contexts.
+
+Key requirements for HRI perception include:
+
+- **Social Awareness**: Understanding human social behaviors and norms
+- **Communication Recognition**: Detecting and interpreting human communication
+- **Safety**: Ensuring safe interaction with humans
+- **Naturalness**: Responding in ways that feel natural to humans
+- **Adaptability**: Adjusting to different humans and contexts
+
+### Human Detection and Tracking
+
+**Person Detection**: Identifying the presence of humans in the environment.
+
+**Multiple Person Tracking**: Tracking multiple humans simultaneously.
+
+**Pose Estimation**: Understanding human body posture and movement.
+
+**Gaze Tracking**: Determining where humans are looking.
+
+**Activity Recognition**: Identifying human activities and behaviors.
+
+### Facial Expression and Emotion Recognition
+
+**Facial Feature Detection**: Identifying key facial features and landmarks.
+
+**Expression Classification**: Recognizing basic emotions (happy, sad, angry, etc.).
+
+**Micro-expression Detection**: Identifying subtle emotional expressions.
+
+**Emotion Intensity Estimation**: Determining the intensity of emotional expressions.
+
+**Cross-cultural Recognition**: Adapting to cultural differences in expression.
+
+### Gesture Recognition
+
+**Static Gesture Recognition**: Identifying static hand and body poses.
+
+**Dynamic Gesture Recognition**: Recognizing moving gestures and actions.
+
+**Deictic Gestures**: Understanding pointing and other referential gestures.
+
+**Iconic Gestures**: Recognizing gestures that represent objects or actions.
+
+**Regulatory Gestures**: Identifying gestures that control interaction.
+
+### Speech and Language Understanding
+
+**Speech Recognition**: Converting human speech to text.
+
+**Speaker Identification**: Recognizing different speakers.
+
+**Language Understanding**: Interpreting the meaning of spoken language.
+
+**Paralinguistic Features**: Understanding tone, pitch, and other speech characteristics.
+
+**Multilingual Support**: Supporting multiple languages and accents.
+
+### Proxemics and Spatial Awareness
+
+**Personal Space Recognition**: Understanding human concepts of personal space.
+
+**Social Distance Management**: Maintaining appropriate distances during interaction.
+
+**Spatial Relationship Understanding**: Understanding spatial relationships between humans and objects.
+
+**Crowd Behavior Analysis**: Understanding group dynamics and behaviors.
+
+**Navigation in Human Spaces**: Moving safely around humans.
+
+### Attention and Intention Recognition
+
+**Attention Detection**: Identifying where humans are focusing their attention.
+
+**Intention Inference**: Understanding human goals and intentions.
+
+**Joint Attention**: Establishing shared focus on objects or activities.
+
+**Attention Direction**: Understanding what humans are attending to.
+
+**Predictive Attention**: Anticipating where humans will direct attention.
+
+### Multimodal Integration
+
+**Cross-modal Association**: Linking information from different sensory modalities.
+
+**Multimodal Fusion**: Combining visual, auditory, and other sensory information.
+
+**Context Integration**: Incorporating contextual information into perception.
+
+**Temporal Integration**: Combining information over time.
+
+**Uncertainty Management**: Handling uncertainty in multimodal perception.
+
+### Challenges in HRI Perception
+
+Several challenges exist in implementing effective HRI perception:
+
+**Social Norms**: Understanding and respecting diverse social norms and expectations.
+
+**Individual Differences**: Adapting to different individuals and their behaviors.
+
+**Cultural Variations**: Handling cultural differences in communication and behavior.
+
+**Real-time Requirements**: Processing information quickly enough for natural interaction.
+
+**Privacy Concerns**: Respecting privacy while gathering necessary information.
+
+### Safety Considerations
+
+HRI perception must operate safely in human environments:
+
+**Collision Avoidance**: Detecting and avoiding collisions with humans.
+
+**Emergency Recognition**: Identifying emergency situations involving humans.
+
+**Safe Interaction**: Ensuring physical interaction is safe and appropriate.
+
+**Privacy Protection**: Handling personal information appropriately.
+
+**Trust Building**: Building trust through appropriate perception and response.
+
+### Applications
+
+HRI perception enables various applications:
+
+**Assistive Robotics**: Helping elderly or disabled individuals with daily tasks.
+
+**Service Robotics**: Providing services in public spaces like hotels and restaurants.
+
+**Educational Robotics**: Supporting learning in educational environments.
+
+**Healthcare Robotics**: Assisting in medical and therapeutic contexts.
+
+**Companion Robotics**: Providing social interaction and companionship.
+
+### Learning and Adaptation
+
+**Personalization**: Adapting to individual users and their preferences.
+
+**Cultural Adaptation**: Adjusting to different cultural contexts.
+
+**Behavioral Learning**: Learning from human behavior to improve interaction.
+
+**Feedback Integration**: Incorporating human feedback to improve perception.
+
+**Social Learning**: Learning appropriate social behaviors from humans.
+
+### Integration with Interaction Systems
+
+HRI perception must be integrated with other interaction systems:
+
+**Behavior Generation**: Using perception to guide robot behavior.
+
+**Dialogue Systems**: Integrating perception with spoken interaction.
+
+**Motion Planning**: Using perception to plan safe and appropriate movements.
+
+**Learning Systems**: Using perception data to improve robot capabilities.
+
+**Safety Systems**: Using perception for safety monitoring and responses.
+
+### Future Trends
+
+The future of HRI perception includes:
+
+- **Affective Computing**: Better recognition and response to human emotions
+- **Bio-inspired Perception**: More closely mimicking human perception capabilities
+- **Edge Computing**: Processing perception data locally for reduced latency
+- **Collaborative Perception**: Sharing perception information between robots
+- **Ethical AI**: Ensuring perception systems respect human values and rights
+
+Understanding perception for human-robot interaction is essential for creating humanoid robots that can interact naturally and safely with humans.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- HRI perception enables robots to understand and respond to human behavior
+- Human detection includes person detection, tracking, pose estimation, and activity recognition
+- Emotion recognition involves facial features, expressions, and micro-expressions
+- Gesture recognition covers static, dynamic, deictic, iconic, and regulatory gestures
+- Speech understanding includes recognition, identification, and language processing
+- Proxemics involves personal space, social distance, and spatial awareness
+- Attention recognition includes detection, intention inference, and joint attention
+- Multimodal integration combines visual, auditory, and contextual information
+- Challenges include social norms, individual differences, and real-time requirements
+- Future trends involve affective computing and ethical AI considerations
+
+</div>
+</TabItem>
+</Tabs>

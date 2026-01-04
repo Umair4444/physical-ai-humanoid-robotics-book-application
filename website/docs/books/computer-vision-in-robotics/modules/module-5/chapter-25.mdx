@@ -1,0 +1,233 @@
+---
+id: chapter-25
+title: "Deep Learning Fundamentals for Computer Vision"
+module: "Module 5: Deep Learning in Robotic Vision"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Deep Learning Fundamentals for Computer Vision
+
+### Introduction to Deep Learning in Computer Vision
+
+Deep learning has revolutionized computer vision, enabling robots to perform complex visual tasks with unprecedented accuracy and robustness. Unlike traditional computer vision approaches that rely on hand-crafted features and algorithms, deep learning methods automatically learn hierarchical feature representations from data, making them particularly well-suited for robotic applications where environments and tasks can be highly variable.
+
+The success of deep learning in computer vision stems from its ability to learn complex, non-linear mappings from raw pixel values to high-level semantic concepts. This capability has enabled breakthroughs in object detection, recognition, segmentation, and many other computer vision tasks essential for robotic perception.
+
+### Neural Network Fundamentals
+
+#### Artificial Neurons
+The basic building block of neural networks is the artificial neuron (or node), which receives inputs, applies weights, sums them with a bias, and passes the result through an activation function:
+
+y = f(Σ(wi * xi) + b)
+
+Where:
+- xi are the inputs
+- wi are the weights
+- b is the bias
+- f is the activation function
+- y is the output
+
+#### Activation Functions
+Activation functions introduce non-linearity into the network, enabling it to learn complex patterns:
+
+- **Sigmoid**: σ(x) = 1 / (1 + e^(-x)), outputs values between 0 and 1
+- **Tanh**: tanh(x) = (e^x - e^(-x)) / (e^x + e^(-x)), outputs values between -1 and 1
+- **ReLU**: f(x) = max(0, x), computationally efficient with good gradient properties
+- **Leaky ReLU**: f(x) = max(0.01x, x), addresses dying ReLU problem
+- **Softmax**: Used in output layers for multi-class classification
+
+#### Network Architecture
+Neural networks consist of layers of interconnected neurons:
+- **Input layer**: Receives raw data (e.g., pixel values)
+- **Hidden layers**: Process information through learned transformations
+- **Output layer**: Produces the final prediction or classification
+
+### Convolutional Neural Networks (CNNs)
+
+#### Convolution Operation
+The convolution operation is the core of CNNs, applying learnable filters (kernels) to input data to detect features:
+
+(I * K)(i, j) = Σm Σn I(m, n) K(i - m, j - n)
+
+Where I is the input image and K is the kernel.
+
+#### CNN Architecture Components
+- **Convolutional Layers**: Apply filters to detect local features like edges, textures
+- **Pooling Layers**: Downsample feature maps to reduce spatial dimensions
+  - Max pooling: Selects maximum value in each region
+  - Average pooling: Computes average value in each region
+- **Fully Connected Layers**: Combine features for final classification
+- **Normalization Layers**: Improve training stability (e.g., Batch Normalization)
+
+#### Famous CNN Architectures
+- **LeNet-5**: Early CNN for handwritten digit recognition
+- **AlexNet**: Introduced ReLU and dropout, won ImageNet 2012
+- **VGG**: Deep networks with small 3x3 filters
+- **GoogLeNet/Inception**: Used inception modules with multiple filter sizes
+- **ResNet**: Introduced residual connections to train very deep networks
+- **DenseNet**: Connected all layers directly to each other
+
+### Training Deep Networks
+
+#### Loss Functions
+Loss functions measure the difference between predicted and true values:
+- **Mean Squared Error (MSE)**: For regression tasks
+- **Cross-Entropy Loss**: For classification tasks
+- **Dice Loss**: For segmentation tasks
+- **Focal Loss**: Addresses class imbalance in object detection
+
+#### Backpropagation
+Backpropagation computes gradients of the loss function with respect to network parameters using the chain rule, enabling parameter updates through gradient descent.
+
+#### Optimization Algorithms
+- **Stochastic Gradient Descent (SGD)**: Updates parameters based on gradient
+- **Adam**: Adaptive learning rates for different parameters
+- **RMSprop**: Adapts learning rates based on recent gradient magnitudes
+
+#### Regularization Techniques
+- **Dropout**: Randomly sets neurons to zero during training
+- **Data Augmentation**: Increases training data diversity
+- **Weight Decay**: L2 regularization to prevent overfitting
+- **Batch Normalization**: Normalizes inputs to each layer
+
+### Transfer Learning
+
+Transfer learning leverages pre-trained networks on large datasets (like ImageNet) and adapts them to new tasks with limited data. This approach is particularly valuable in robotics where collecting large, labeled datasets can be challenging.
+
+#### Fine-tuning Approaches
+- **Feature extraction**: Freeze early layers, train only final layers
+- **Fine-tuning**: Train all layers with a lower learning rate
+- **Domain adaptation**: Adapt to new domains with unlabeled target data
+
+### Applications in Robotic Vision
+
+#### Object Detection
+CNNs have enabled real-time object detection with high accuracy:
+- **R-CNN series**: Region-based approaches for object detection
+- **YOLO**: Real-time object detection with single network pass
+- **SSD**: Single shot multibox detector for efficient detection
+
+#### Semantic Segmentation
+Pixel-level classification for scene understanding:
+- **FCN**: Fully convolutional networks for segmentation
+- **U-Net**: Encoder-decoder architecture with skip connections
+- **DeepLab**: Uses atrous convolutions for multi-scale context
+
+#### Visual SLAM
+Deep learning enhances visual SLAM with better feature detection and matching:
+- **CNN features**: Learn more robust features than traditional methods
+- **End-to-end SLAM**: Learn entire SLAM pipeline from data
+- **Place recognition**: Recognize previously visited locations
+
+#### Visual Servoing
+Deep learning enables direct mapping from images to robot actions:
+- **End-to-end learning**: Learn control policies directly from images
+- **Feature learning**: Learn task-specific visual features
+- **Reinforcement learning**: Learn policies through interaction
+
+### Challenges in Robotic Applications
+
+#### Computational Requirements
+Deep networks require significant computational resources, challenging for resource-constrained robotic platforms. Techniques for model compression include:
+- **Pruning**: Removing unnecessary connections
+- **Quantization**: Using lower precision arithmetic
+- **Knowledge distillation**: Training smaller "student" networks
+
+#### Real-time Performance
+Robotic applications often require real-time performance, necessitating efficient architectures:
+- **MobileNets**: Efficient networks for mobile applications
+- **ShuffleNets**: Designed for computational efficiency
+- **EfficientNet**: Scaled networks balancing accuracy and efficiency
+
+#### Data Requirements
+Deep learning typically requires large amounts of labeled training data, which can be difficult to obtain for specific robotic tasks. Solutions include:
+- **Synthetic data**: Generate training data from simulations
+- **Domain randomization**: Train with varied synthetic environments
+- **Few-shot learning**: Learn from limited examples
+
+#### Safety and Reliability
+Robots operating in real-world environments must be safe and reliable:
+- **Uncertainty quantification**: Estimate confidence in predictions
+- **Adversarial robustness**: Handle perturbed inputs
+- **Explainability**: Understand why networks make decisions
+
+### Evaluation Metrics
+
+#### Classification Metrics
+- **Accuracy**: Percentage of correct predictions
+- **Precision**: True positives / (True positives + False positives)
+- **Recall**: True positives / (True positives + False negatives)
+- **F1-score**: Harmonic mean of precision and recall
+
+#### Detection Metrics
+- **Mean Average Precision (mAP)**: Primary metric for object detection
+- **Intersection over Union (IoU)**: Measures bounding box overlap
+- **False Positive Rate**: Percentage of incorrect detections
+
+#### Segmentation Metrics
+- **Pixel Accuracy**: Percentage of correctly classified pixels
+- **Mean IoU**: Average IoU across all classes
+- **Dice Coefficient**: Measures overlap between predicted and ground truth masks
+
+### Future Directions
+
+#### Efficient Architectures
+Development of more efficient architectures for deployment on resource-constrained robotic platforms, including neural architecture search (NAS) methods.
+
+#### Continual Learning
+Enabling robots to learn new visual tasks without forgetting previously learned ones, essential for lifelong learning systems.
+
+#### Few-shot and Zero-shot Learning
+Methods that can adapt to new visual tasks with minimal training data, important for robots operating in new environments.
+
+#### Explainable AI
+Making deep learning models more interpretable to understand their decision-making process, crucial for safety-critical robotic applications.
+
+Understanding deep learning fundamentals is essential for developing advanced computer vision systems in robotics.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Deep learning has revolutionized computer vision with automatic feature learning.
+- Neural networks consist of interconnected artificial neurons with activation functions.
+- CNNs use convolution operations and are fundamental for visual tasks.
+- Training involves loss functions, backpropagation, and optimization algorithms.
+- Transfer learning adapts pre-trained networks to new robotic tasks.
+- Applications include object detection, segmentation, SLAM, and visual servoing.
+- Challenges include computational requirements and data needs.
+- Evaluation metrics vary by task (classification, detection, segmentation).
+- Future directions include efficient architectures and continual learning.
+
+</div>
+</TabItem>
+</Tabs>

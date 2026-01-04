@@ -1,0 +1,221 @@
+---
+id: chapter-28
+title: "Motion Planning and Trajectory Generation"
+module: "Module 5: Control Systems and Architecture"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Motion Planning and Trajectory Generation
+
+### Introduction to Motion Planning and Trajectory Generation
+
+Motion planning and trajectory generation are critical components of humanoid robotics that determine how robots move from one configuration to another while avoiding obstacles and satisfying various constraints. These systems must handle the complexity of high-dimensional configuration spaces while ensuring dynamic feasibility and safety.
+
+Key requirements for motion planning and trajectory generation include:
+
+- **Collision Avoidance**: Ensuring the robot does not collide with obstacles
+- **Dynamic Feasibility**: Generating motions that are physically achievable
+- **Optimality**: Finding efficient or optimal paths
+- **Real-time Performance**: Computing plans within timing constraints
+- **Smoothness**: Generating smooth, natural-looking motions
+
+### Configuration Space Concepts
+
+**Configuration Space (C-Space)**: The space of all possible robot configurations.
+
+**Obstacle Space**: The subset of C-space corresponding to collision configurations.
+
+**Free Space**: The subset of C-space where the robot doesn't collide with obstacles.
+
+**Dimensionality**: The number of degrees of freedom in the robot.
+
+**Topological Complexity**: The complexity of the C-space structure.
+
+### Motion Planning Approaches
+
+**Sampling-Based Methods**: 
+- **RRT (Rapidly-exploring Random Trees)**: Incrementally building a tree of possible paths
+- **PRM (Probabilistic Roadmap)**: Pre-computing a roadmap of possible paths
+- **RRT***: Asymptotically optimal version of RRT
+
+**Grid-Based Methods**:
+- **A***: Optimal pathfinding on discrete grids
+- **D***: Dynamic version of A* for changing environments
+- **Potential Fields**: Using artificial potential functions
+
+**Optimization-Based Methods**:
+- **CHOMP**: Covariant Hamiltonian Optimization for Motion Planning
+- **STOMP**: Stochastic Trajectory Optimization
+- **TrajOpt**: Trajectory Optimization
+
+### Whole-Body Motion Planning
+
+**Task Space Planning**: Planning in Cartesian space for end-effector positions.
+
+**Joint Space Planning**: Planning in the robot's joint configuration space.
+
+**Operational Space Planning**: Combining multiple task constraints.
+
+**Null Space Optimization**: Using redundancy for secondary objectives.
+
+**Multi-task Prioritization**: Managing competing motion objectives.
+
+### Trajectory Generation
+
+**Polynomial Trajectories**: Using polynomials for smooth motion generation.
+
+**Spline-Based Trajectories**: Using splines for smooth path interpolation.
+
+**Bézier Curves**: Using parametric curves for motion generation.
+
+**Minimum Jerk Trajectories**: Minimizing jerk for smooth motions.
+
+**Time-Optimal Trajectories**: Minimizing execution time.
+
+### Dynamic Motion Planning
+
+**Kinodynamic Planning**: Considering both kinematic and dynamic constraints.
+
+**Trajectory Optimization**: Optimizing trajectories for dynamic systems.
+
+**Model Predictive Control**: Using predictive models for motion planning.
+
+**Feedback Motion Planning**: Incorporating feedback into planning.
+
+**Receding Horizon Planning**: Planning over a finite horizon.
+
+### Humanoid-Specific Considerations
+
+**Balance Constraints**: Maintaining balance during motion execution.
+
+**ZMP (Zero Moment Point) Planning**: Ensuring dynamic balance.
+
+**Capture Point Planning**: Using capture point for balance planning.
+
+**Gait Planning**: Planning walking patterns for bipedal robots.
+
+**Multi-Contact Planning**: Planning motions with multiple contact points.
+
+### Real-time Motion Planning
+
+**Incremental Planning**: Updating plans as new information becomes available.
+
+**Anytime Algorithms**: Algorithms that can be interrupted with valid solutions.
+
+**Lazy Evaluation**: Deferring collision checks until necessary.
+
+**Hierarchical Planning**: Planning at multiple levels of abstraction.
+
+**Parallel Processing**: Using multiple processors for planning.
+
+### Motion Primitives
+
+**Predefined Motions**: Reusable motion patterns for common tasks.
+
+**Motion Libraries**: Collections of pre-computed motions.
+
+**Parameterized Motions**: Motions that can be adjusted for specific situations.
+
+**Learning Motion Primitives**: Learning reusable motion patterns.
+
+**Composition**: Combining primitives for complex motions.
+
+### Challenges in Motion Planning
+
+Several challenges exist in implementing effective motion planning:
+
+**Curse of Dimensionality**: Exponential growth in complexity with DOF.
+
+**Dynamic Environments**: Planning in environments that change over time.
+
+**Uncertainty**: Planning with uncertain information about the environment.
+
+**Computational Complexity**: Managing computational requirements.
+
+**Real-time Constraints**: Meeting strict timing requirements.
+
+### Integration with Control Systems
+
+**Trajectory Tracking**: Following planned trajectories with feedback control.
+
+**Replanning**: Adjusting plans based on execution errors.
+
+**Feedback Integration**: Using feedback to improve planning.
+
+**Control-Planning Coordination**: Coordinating planning and control.
+
+**Safety Integration**: Ensuring safety during motion execution.
+
+### Applications
+
+Motion planning and trajectory generation enable various applications:
+
+**Navigation**: Moving through environments with obstacles.
+
+**Manipulation**: Planning arm motions for object interaction.
+
+**Locomotion**: Planning walking and other movement patterns.
+
+**Human-Robot Interaction**: Planning safe motions around humans.
+
+**Collaborative Tasks**: Planning motions for human-robot collaboration.
+
+### Future Trends
+
+The future of motion planning and trajectory generation includes:
+
+- **Learning-based Planning**: Using machine learning to improve planning
+- **Human-Aware Planning**: Planning that considers human behavior
+- **Multi-robot Coordination**: Coordinating motion planning between multiple robots
+- **Bio-inspired Planning**: More closely mimicking biological motion planning
+- **Predictive Planning**: Planning that anticipates future events
+
+Understanding motion planning and trajectory generation is essential for creating humanoid robots that can move effectively in complex environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Motion planning determines how robots move while avoiding obstacles
+- Configuration space concepts include C-space, obstacle space, and free space
+- Approaches include sampling-based, grid-based, and optimization-based methods
+- Whole-body planning involves task space, joint space, and operational space planning
+- Trajectory generation uses polynomials, splines, and optimization techniques
+- Dynamic planning considers kinodynamic constraints and predictive models
+- Humanoid-specific considerations include balance and gait planning
+- Real-time planning uses incremental, anytime, and hierarchical approaches
+- Motion primitives provide reusable patterns for common tasks
+- Challenges include dimensionality, dynamic environments, and real-time constraints
+
+</div>
+</TabItem>
+</Tabs>

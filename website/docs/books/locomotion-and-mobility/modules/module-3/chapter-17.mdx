@@ -1,0 +1,331 @@
+---
+id: chapter-17
+title: "Terrain Navigation and Path Planning for Wheeled Systems"
+module: "Module 3: Wheeled and Tracked Mobility Systems"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Terrain Navigation and Path Planning for Wheeled Systems
+
+### Introduction to Terrain Navigation and Path Planning for Wheeled Systems
+
+Terrain navigation and path planning for wheeled systems involve the complex process of determining optimal routes and controlling robot motion to navigate effectively across various terrains while avoiding obstacles and respecting system constraints. For wheeled robots, this process must account for the specific kinematic and dynamic constraints of wheeled locomotion, including non-holonomic constraints and traction limitations.
+
+Key aspects of terrain navigation and path planning for wheeled systems include:
+
+- **Terrain Assessment**: Understanding and classifying different terrain types
+- **Path Planning**: Computing optimal paths considering terrain and robot constraints
+- **Motion Planning**: Generating feasible motion trajectories
+- **Obstacle Avoidance**: Detecting and avoiding obstacles in the environment
+- **Real-time Adaptation**: Adjusting plans based on changing conditions
+
+### Terrain Assessment and Classification
+
+**Terrain Types**: Different categories of terrain that affect wheeled mobility.
+
+- **Paved Surfaces**: Concrete, asphalt, and other hard surfaces
+- **Unpaved Surfaces**: Dirt roads, gravel, and other unpaved surfaces
+- **Rough Terrain**: Rocky surfaces, debris, and uneven terrain
+- **Soft Terrain**: Sand, mud, grass, and other soft surfaces
+- **Mixed Terrain**: Combinations of different surface types
+
+**Terrain Properties**: Physical characteristics that affect wheeled mobility.
+
+- **Traversability**: How easily terrain can be navigated by wheeled vehicles
+- **Traction**: Coefficient of friction between wheels and surface
+- **Roughness**: Surface irregularities that affect ride quality
+- **Slope**: Inclination of terrain that affects climbing ability
+- **Obstacle Density**: Number and size of obstacles per unit area
+
+**Sensing for Terrain Assessment**: Methods for perceiving terrain properties.
+
+- **Vision-Based Sensing**: Using cameras to identify terrain types
+- **LIDAR Sensing**: Using LIDAR for precise terrain mapping
+- **Inertial Sensing**: Using IMUs to assess terrain roughness
+- **Force Sensing**: Using wheel force sensors to assess traction
+- **Acoustic Sensing**: Using sound to assess terrain properties
+
+**Traversability Analysis**: Methods for determining terrain traversability.
+
+- **Visual Analysis**: Analyzing visual features to assess traversability
+- **Geometric Analysis**: Using geometric features to assess traversability
+- **Machine Learning**: Using ML to classify terrain traversability
+- **Physical Models**: Using physical models to predict traversability
+- **Historical Data**: Using past experience to predict traversability
+
+### Path Planning Algorithms
+
+**Graph-Based Methods**: Representing the environment as a graph for path planning.
+
+- **A* Algorithm**: Optimal path planning with heuristic guidance
+- **Dijkstra's Algorithm**: Optimal path planning without heuristics
+- **Visibility Graphs**: Planning paths using visibility between points
+- **Voronoi Diagrams**: Planning paths using Voronoi regions
+- **Probabilistic Roadmaps**: Precomputed graphs for path planning
+
+**Sampling-Based Methods**: Using random sampling for path planning.
+
+- **RRT (Rapidly-exploring Random Trees)**: Growing trees to explore space
+- **RRT***: Asymptotically optimal RRT variant
+- **PRM (Probabilistic Roadmap)**: Pre-computing roadmaps for planning
+- **EST (Expansive Space Trees)**: Growing trees in unexplored regions
+- **SBL (Single-query Bi-directional)**: Bidirectional sampling-based planning
+
+**Optimization-Based Methods**: Using optimization for path planning.
+
+- **CHOMP (Covariant Hamiltonian Optimization)**: Trajectory optimization
+- **STOMP (Stochastic Trajectory Optimization)**: Stochastic optimization
+- **TrajOpt**: Trajectory optimization with constraints
+- **Model Predictive Control**: Predictive optimization for path following
+- **Nonlinear Optimization**: General optimization methods
+
+**Wheeled-Specific Methods**: Path planning methods designed for wheeled systems.
+
+- **Dubins Paths**: Minimum-length paths for systems with turning constraints
+- **Reeds-Shepp Paths**: Paths allowing backward motion
+- **Curvature-Constrained Paths**: Paths respecting curvature limits
+- **Car-Like Robot Planning**: Planning for car-like kinematics
+- **Differential Drive Planning**: Planning for differential drive kinematics
+
+### Motion Planning for Wheeled Systems
+
+**Kinodynamic Planning**: Considering both kinematic and dynamic constraints.
+
+- **System Dynamics**: Incorporating robot dynamics into planning
+- **Control Constraints**: Respecting control input limits
+- **State Constraints**: Respecting state variable limits
+- **Temporal Planning**: Planning over time with dynamic constraints
+- **Optimization**: Optimizing trajectories with dynamic constraints
+
+**Curvature-Constrained Motion**: Planning paths respecting turning limits.
+
+- **Minimum Turning Radius**: Planning paths with minimum radius constraints
+- **Curvature Continuity**: Ensuring smooth curvature transitions
+- **Clothoid Curves**: Using clothoids for smooth transitions
+- **Spiral Curves**: Using spirals for curvature transitions
+- **Optimal Curvature**: Minimizing curvature for smooth motion
+
+**Non-holonomic Motion Planning**: Planning for systems with non-holonomic constraints.
+
+- **Differential Drive Constraints**: Planning for differential drive kinematics
+- **Car-like Constraints**: Planning for car-like kinematics
+- **Rolling Without Slipping**: Ensuring wheels roll without slipping
+- **Velocity Constraints**: Respecting velocity constraints
+- **Admissible Paths**: Ensuring paths satisfy non-holonomic constraints
+
+### Obstacle Avoidance
+
+**Static Obstacle Avoidance**: Avoiding fixed obstacles in the environment.
+
+- **Configuration Space**: Planning in robot configuration space
+- **Minkowski Sums**: Expanding obstacles by robot footprint
+- **Buffer Zones**: Creating safety margins around obstacles
+- **Path Refinement**: Refining paths to avoid obstacles
+- **Optimization**: Optimizing paths to minimize obstacle proximity
+
+**Dynamic Obstacle Avoidance**: Avoiding moving obstacles in the environment.
+
+- **Temporal Planning**: Planning with time-varying obstacles
+- **Predictive Models**: Predicting future obstacle positions
+- **Reactive Avoidance**: Reacting to unexpected obstacles
+- **Velocity Obstacles**: Using velocity obstacles for planning
+- **Optimal Reciprocal Collision Avoidance**: Multi-agent collision avoidance
+
+**Uncertainty Handling**: Managing uncertainty in obstacle positions.
+
+- **Probabilistic Obstacles**: Modeling obstacles with uncertainty
+- **Robust Planning**: Planning robust to obstacle uncertainty
+- **Chance Constraints**: Planning with probabilistic constraints
+- **Monte Carlo Methods**: Using sampling to handle uncertainty
+- **Bayesian Planning**: Using Bayesian inference for planning
+
+### Control Strategies for Path Following
+
+**Pure Pursuit**: Following a path by pursuing a look-ahead point.
+
+- **Look-ahead Distance**: Distance ahead to select pursuit point
+- **Curvature Calculation**: Calculating curvature from pursuit point
+- **Steering Control**: Controlling steering based on curvature
+- **Speed Control**: Adjusting speed based on path curvature
+- **Adaptive Look-ahead**: Adjusting look-ahead distance based on conditions
+
+**Stanley Method**: Path following with heading and cross-track error correction.
+
+- **Cross-track Error**: Error perpendicular to the path
+- **Heading Error**: Difference between robot heading and path tangent
+- **Control Law**: Combining cross-track and heading errors
+- **Gain Tuning**: Tuning gains for optimal performance
+- **Adaptive Control**: Adjusting parameters based on conditions
+
+**Model Predictive Path Following**: Using predictive models for path following.
+
+- **Prediction Horizon**: How far ahead to predict and optimize
+- **Cost Function**: Function to optimize for path following
+- **Constraints**: Constraints on states and inputs
+- **Receding Horizon**: Re-planning at each time step
+- **Real-time Optimization**: Solving optimization in real-time
+
+**Feedback Linearization**: Linearizing the path following system.
+
+- **Coordinate Transformation**: Transforming to path-following coordinates
+- **Linearization**: Linearizing the error dynamics
+- **Controller Design**: Designing controllers for linearized system
+- **Stability**: Ensuring stability of the closed-loop system
+- **Performance**: Optimizing performance of the controller
+
+### Tracked Vehicle Navigation
+
+**Differential Steering Navigation**: Navigation for tracked vehicles with differential steering.
+
+- **Turning Constraints**: Accounting for turning radius constraints
+- **Track Slip**: Managing track slip during navigation
+- **Traction Limits**: Respecting traction limits during navigation
+- **Stability**: Maintaining stability during turning maneuvers
+- **Energy Efficiency**: Optimizing energy consumption during navigation
+
+**Terrain-Specific Navigation**: Navigation adapted to specific terrain types.
+
+- **Soft Terrain Navigation**: Special techniques for soft terrain
+- **Rough Terrain Navigation**: Techniques for navigating rough terrain
+- **Slope Navigation**: Techniques for navigating sloped terrain
+- **Mixed Terrain Navigation**: Adapting to mixed terrain conditions
+- **Environmental Adaptation**: Adapting to environmental conditions
+
+### Multi-robot Coordination
+
+**Formation Control**: Coordinating multiple wheeled robots in formations.
+
+- **Leader-Follower**: One robot leads, others follow
+- **Behavior-Based**: Robots follow behavioral rules
+- **Virtual Structure**: Robots maintain virtual geometric structure
+- **Consensus-Based**: Robots reach consensus on formation
+- **Optimization-Based**: Optimizing formation performance
+
+**Collision Avoidance**: Avoiding collisions between multiple robots.
+
+- **Centralized Coordination**: Centralized planning for all robots
+- **Decentralized Coordination**: Distributed planning for robots
+- **Priority-Based**: Assigning priorities to robots
+- **Reservation-Based**: Reserving space and time for robots
+- **Game-Theoretic**: Game-theoretic approaches to coordination
+
+**Task Allocation**: Allocating navigation tasks among robots.
+
+- **Auction-Based**: Auctioning tasks to robots
+- **Market-Based**: Market-based task allocation
+- **Consensus-Based**: Consensus on task allocation
+- **Optimization-Based**: Optimizing task allocation
+- **Learning-Based**: Learning optimal task allocation
+
+### Challenges in Terrain Navigation
+
+**Perception Challenges**: Difficulties in sensing and understanding terrain.
+
+- **Occlusions**: Parts of terrain not visible to sensors
+- **Sensor Limitations**: Limited range and accuracy of sensors
+- **Environmental Conditions**: Weather and lighting affecting sensing
+- **Real-time Processing**: Processing sensor data in real-time
+- **Uncertainty**: Dealing with uncertainty in terrain assessment
+
+**Planning Challenges**: Difficulties in planning paths for wheeled systems.
+
+- **Computational Complexity**: Complex algorithms requiring significant computation
+- **Real-time Requirements**: Meeting timing constraints for navigation
+- **Optimality vs. Speed**: Balancing optimal solutions with speed
+- **Dynamic Environments**: Planning in changing environments
+- **Uncertainty**: Planning despite uncertainty in environment
+
+**Control Challenges**: Difficulties in controlling wheeled robots.
+
+- **Model Uncertainty**: Differences between model and reality
+- **Disturbance Rejection**: Handling unexpected disturbances
+- **Stability**: Maintaining stability during navigation
+- **Energy Efficiency**: Maintaining efficiency while ensuring stability
+- **Robustness**: Maintaining performance despite uncertainties
+
+### Applications of Terrain Navigation
+
+**Autonomous Vehicles**: Self-driving cars and trucks.
+
+- **Urban Navigation**: Navigating city streets and traffic
+- **Highway Driving**: Autonomous highway driving
+- **Parking**: Autonomous parking systems
+- **Delivery**: Autonomous delivery vehicles
+- **Public Transit**: Autonomous public transportation
+
+**Industrial Applications**: Robots for manufacturing and logistics.
+
+- **Automated Guided Vehicles**: Factory and warehouse navigation
+- **Material Handling**: Moving materials in industrial environments
+- **Inspection**: Inspecting industrial facilities
+- **Maintenance**: Performing maintenance tasks
+- **Security**: Patrolling industrial facilities
+
+**Service Applications**: Robots for commercial and domestic use.
+
+- **Delivery Robots**: Last-mile delivery robots
+- **Cleaning Robots**: Autonomous floor cleaning robots
+- **Security Robots**: Autonomous security robots
+- **Healthcare Robots**: Transporting supplies in hospitals
+- **Retail Robots**: Assisting in retail environments
+
+### Future Directions
+
+The future of terrain navigation and path planning for wheeled systems includes:
+
+- **Learning-based Approaches**: Using machine learning to improve navigation
+- **AI Integration**: Advanced AI for better decision-making
+- **Edge Computing**: Processing navigation algorithms at the edge
+- **Swarm Intelligence**: Coordinated navigation of robot teams
+- **Human-Robot Collaboration**: Safe and effective human-robot navigation
+
+Understanding terrain navigation and path planning is essential for creating wheeled robots that can operate effectively in real-world environments.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Terrain navigation involves assessing terrain and planning optimal paths
+- Terrain assessment includes classification and traversability analysis
+- Path planning algorithms include graph-based, sampling-based, and optimization methods
+- Motion planning considers kinodynamic and non-holonomic constraints
+- Obstacle avoidance handles static and dynamic obstacles
+- Control strategies include pure pursuit, Stanley method, and MPC
+- Tracked vehicle navigation has unique constraints and challenges
+- Multi-robot coordination involves formation control and collision avoidance
+- Challenges include perception, planning, and control difficulties
+- Applications span autonomous vehicles, industrial, and service domains
+- Future directions involve learning-based and AI approaches
+
+</div>
+</TabItem>
+</Tabs>

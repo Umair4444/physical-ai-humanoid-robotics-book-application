@@ -1,0 +1,297 @@
+---
+id: chapter-13
+title: "Wheeled and Tracked Mobility Systems"
+module: "Module 3: Wheeled and Tracked Mobility Systems"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Wheeled and Tracked Mobility Systems
+
+### Introduction to Wheeled and Tracked Mobility Systems
+
+Wheeled and tracked mobility systems represent the most common and energy-efficient forms of robotic locomotion for operation on relatively flat surfaces. These systems offer significant advantages in terms of energy efficiency, speed, and simplicity compared to legged systems, making them ideal for many applications. Understanding the principles of wheeled and tracked mobility is essential for designing effective mobile robots for various applications.
+
+Key aspects of wheeled and tracked mobility systems include:
+
+- **Energy Efficiency**: Generally more energy efficient than legged systems
+- **Speed**: Capable of higher speeds than most legged systems
+- **Simplicity**: Simpler mechanical design and control than legged systems
+- **Terrain Limitations**: Limited to relatively flat surfaces
+- **Load Capacity**: Often higher load capacity than legged systems
+
+### Types of Wheeled Systems
+
+**Fixed-Wheel Systems**: Wheels with fixed orientation relative to the robot body.
+
+- **Differential Drive**: Two independently controlled wheels on either side
+- **Advantages: Simple design, good maneuverability in tight spaces
+- **Disadvantages: Cannot move sideways, requires turning in place
+- **Applications: Indoor robots, small mobile platforms
+
+**Ackermann Steering**: Car-like steering with front wheels that turn.
+
+- **Configuration: Two fixed rear wheels, two steerable front wheels
+- **Advantages: Efficient for forward motion, good for long distances
+- **Disadvantages: Requires space for turning, complex steering mechanism
+- **Applications: Autonomous cars, large delivery robots
+
+**Omni-directional Wheels**: Wheels that can move in any direction.
+
+- **Mecanum Wheels: Wheels with rollers at 45-degree angles
+- **Advantages: Can move in any direction without turning
+- **Disadvantages: Complex mechanics, less efficient than fixed wheels
+- **Applications: Warehouse robots, precise positioning systems
+
+**Swerve Drive**: Wheels that can rotate to any orientation.
+
+- **Configuration: Each wheel can rotate independently
+- **Advantages: Maximum maneuverability, can move in any direction
+- **Disadvantages: Complex mechanics and control
+- **Applications: Industrial robots, precise positioning systems
+
+### Types of Tracked Systems
+
+**Continuous Track Systems**: Vehicles using continuous tracks instead of wheels.
+
+- **Configuration: Flexible track wrapped around wheels
+- **Advantages: Excellent traction, good for soft terrain
+- **Disadvantages: Higher complexity, more maintenance
+- **Applications: Military robots, construction robots
+
+**Dual-Track Systems**: Two parallel tracks for enhanced stability.
+
+- **Configuration: Two separate track systems on either side
+- **Advantages: Better stability, good for rough terrain
+- **Disadvantages: Higher weight and complexity
+- **Applications: Military vehicles, heavy-duty robots
+
+**Multi-Track Systems**: More than two tracks for specialized applications.
+
+- **Configuration: Three or more track systems
+- **Advantages: Enhanced stability and load distribution
+- **Disadvantages: Very high complexity and maintenance
+- **Applications: Specialized heavy-duty applications
+
+### Kinematic Principles
+
+**Differential Drive Kinematics**: Mathematical relationships for differential drive robots.
+
+- **Forward Motion: Both wheels rotate in the same direction
+- **Turning: Wheels rotate at different speeds or directions
+- **Instantaneous Center of Curvature: Point around which robot is turning
+- **Non-holonomic Constraint: Robot cannot move sideways instantaneously
+- **Equations: Relating wheel velocities to robot motion
+
+**Ackermann Steering Kinematics**: Mathematical relationships for Ackermann steering.
+
+- **Steering Geometry: Wheels aligned to turn around a common point
+- **Inside vs. Outside Wheels: Different turning radii for inner and outer wheels
+- **Steering Angle: Relationship between steering input and wheel angles
+- **Turning Radius: Minimum radius the vehicle can turn
+- **Equations: Relating steering angle to turning motion
+
+**Omni-directional Kinematics**: Mathematical relationships for omni-directional systems.
+
+- **Mecanum Drive: Relating wheel velocities to robot motion in any direction
+- **Swerve Drive: Controlling wheel orientation and speed independently
+- **Holonomic Constraints: Robot can move in any direction
+- **Coordinate Transformations: Converting between wheel and robot coordinates
+- **Singularities: Configurations where control is lost
+
+### Dynamic Principles
+
+**Traction and Friction**: How wheels interact with the ground.
+
+- **Static Friction: Friction when wheel is not sliding
+- **Kinetic Friction: Friction when wheel is sliding
+- **Rolling Resistance: Resistance to rolling motion
+- **Traction Control: Managing friction for optimal performance
+- **Slip and Slide: Understanding when wheels lose traction
+
+**Load Distribution**: How weight is distributed across wheels or tracks.
+
+- **Static Load: Weight distribution when robot is stationary
+- **Dynamic Load: Weight distribution during motion
+- **Center of Gravity: How CoG affects load distribution
+- **Stability: Maintaining stability during motion
+- **Tipping Prevention: Preventing robot from tipping over
+
+**Power Requirements**: Energy needed for different types of motion.
+
+- **Rolling Resistance: Power to overcome rolling resistance
+- **Gradient Climbing: Power needed to climb inclines
+- **Acceleration: Power needed to accelerate
+- **Air Resistance: Power needed to overcome air resistance
+- **Total Power: Sum of all power requirements
+
+### Control Strategies
+
+**Differential Drive Control**: Controlling differential drive robots.
+
+- **Velocity Control: Controlling linear and angular velocity
+- **Trajectory Following: Following predefined paths
+- **Feedback Control: Using sensors to correct motion errors
+- **Motion Planning: Planning motion to avoid obstacles
+- **Stability: Maintaining stable motion during control
+
+**Ackermann Steering Control**: Controlling Ackermann steering systems.
+
+- **Steering Control: Controlling the steering angle
+- **Speed Control: Controlling the forward speed
+- **Path Following: Following curved paths
+- **Parking: Precise positioning for parking
+- **Stability: Maintaining stability during steering
+
+**Omni-directional Control**: Controlling omni-directional systems.
+
+- **Motion Control: Controlling motion in any direction
+- **Force Control: Controlling forces applied to the environment
+- **Coordinated Control: Coordinating multiple omni-wheels
+- **Singularity Avoidance: Avoiding configurations where control is lost
+- **Optimization: Optimizing wheel usage for efficiency
+
+### Tracked Vehicle Dynamics
+
+**Track Mechanics**: How tracks interact with the ground.
+
+- **Track Tension: Maintaining proper track tension
+- **Ground Contact: How track contacts the ground
+- **Traction: How tracks provide traction
+- **Wear: How tracks wear over time
+- **Maintenance: Maintaining track systems
+
+**Steering in Tracked Vehicles**: How tracked vehicles turn.
+
+- **Differential Steering: Varying track speeds to turn
+- **Track Braking: Using brakes to assist turning
+- **Turning Radius: How tight the vehicle can turn
+- **Sliding: How tracks slide during turning
+- **Efficiency: Energy efficiency during turning
+
+**Load Distribution in Tracked Systems**: How weight is distributed across tracks.
+
+- **Track Pressure: Pressure distribution along the track
+- **Ground Pressure: Pressure on the ground surface
+- **Sinkage: How much the vehicle sinks into soft ground
+- **Flotation: Ability to float on soft surfaces
+- **Stability: Maintaining stability with track systems
+
+### Applications of Wheeled and Tracked Systems
+
+**Industrial Applications**: Robots for manufacturing and logistics.
+
+- **Automated Guided Vehicles (AGVs): Transporting materials in factories
+- **Warehouse Robots: Moving goods in warehouses
+- **Assembly Line Robots: Moving along assembly lines
+- **Inspection Robots: Inspecting industrial facilities
+- **Maintenance Robots: Performing maintenance tasks
+
+**Service Applications**: Robots for commercial and domestic use.
+
+- **Delivery Robots: Delivering packages and food
+- **Cleaning Robots: Floor cleaning and maintenance
+- **Security Robots: Patrolling and monitoring facilities
+- **Healthcare Robots: Transporting supplies in hospitals
+- **Retail Robots: Assisting in retail environments
+
+**Military Applications**: Robots for military operations.
+
+- **Logistics Robots: Transporting supplies in military operations
+- **Reconnaissance Robots: Gathering intelligence
+- **Explosive Ordnance Disposal: Handling explosive devices
+- **Combat Support: Supporting military operations
+- **Surveillance Robots: Monitoring areas
+
+**Scientific Applications**: Robots for research and exploration.
+
+- **Planetary Rovers: Exploring other planets
+- **Underwater Vehicles: Exploring underwater environments
+- **Environmental Monitoring: Monitoring environmental conditions
+- **Archaeological Robots: Assisting in archaeological sites
+- **Geological Surveys: Conducting geological surveys
+
+### Challenges in Wheeled and Tracked Systems
+
+**Terrain Limitations**: Limitations in the types of terrain that can be traversed.
+
+- **Obstacle Negotiation: Difficulty with obstacles that wheeled systems can't cross
+- **Soft Terrain: Difficulty with sand, mud, or other soft surfaces
+- **Steep Inclines: Limitations on the steepness of inclines
+- **Rough Terrain: Difficulty with very rough or uneven surfaces
+- **Stairs: Inability to navigate stairs or steps
+
+**Control Complexity**: Managing the complexity of control systems.
+
+- **Non-holonomic Constraints: Managing constraints on robot motion
+- **Dynamic Modeling: Modeling complex dynamic interactions
+- **Sensor Integration: Integrating multiple sensors for control
+- **Real-time Requirements: Meeting timing constraints for control
+- **Adaptive Control: Adapting to changing conditions
+
+**Maintenance Requirements**: Ongoing maintenance needs of wheeled and tracked systems.
+
+- **Tire Wear: Wear and replacement of tires
+- **Track Maintenance: Maintaining track systems
+- **Bearing Maintenance: Maintaining wheel bearings
+- **Motor Maintenance: Maintaining drive motors
+- **Cleaning: Keeping systems clean of debris
+
+### Future Directions
+
+The future of wheeled and tracked mobility systems includes:
+
+- **Advanced Materials**: New materials for better traction and durability
+- **Smart Wheels**: Wheels with integrated sensing and control
+- **Adaptive Systems**: Systems that adapt to changing terrain conditions
+- **Hybrid Systems**: Combining wheeled/tracked with other locomotion methods
+- **Autonomous Navigation**: Enhanced autonomous navigation capabilities
+
+Understanding wheeled and tracked mobility systems is essential for creating efficient and effective mobile robots for many applications.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Wheeled and tracked systems offer energy efficiency and speed on flat surfaces
+- Wheeled systems include differential drive, Ackermann steering, and omni-directional
+- Tracked systems provide better traction on soft terrain
+- Kinematic principles govern motion relationships for different systems
+- Dynamic principles involve traction, load distribution, and power requirements
+- Control strategies vary by system type and application
+- Tracked vehicles have unique mechanics and steering methods
+- Applications span industrial, service, military, and scientific domains
+- Challenges include terrain limitations and maintenance requirements
+- Future directions involve advanced materials and adaptive systems
+
+</div>
+</TabItem>
+</Tabs>

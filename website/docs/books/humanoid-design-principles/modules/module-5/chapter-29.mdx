@@ -1,0 +1,228 @@
+---
+id: chapter-29
+title: "Impedance and Admittance Control"
+module: "Module 5: Control Systems and Architecture"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Impedance and Admittance Control
+
+### Introduction to Impedance and Admittance Control
+
+Impedance and admittance control are fundamental approaches for regulating the interaction between humanoid robots and their environment. These control strategies allow robots to exhibit desired mechanical behaviors when in contact with objects or humans, enabling safe and effective physical interaction.
+
+Key requirements for impedance and admittance control include:
+
+- **Safety**: Ensuring safe interaction with humans and objects
+- **Compliance**: Providing appropriate mechanical compliance
+- **Stability**: Maintaining stable interaction behavior
+- **Performance**: Achieving desired interaction characteristics
+- **Adaptability**: Adjusting behavior based on task requirements
+
+### Impedance Control Fundamentals
+
+**Impedance**: The relationship between force and position in mechanical systems.
+
+**Impedance Controller**: Controls the robot's mechanical impedance to the environment.
+
+**Desired Impedance Model**: Defines the desired force-displacement relationship.
+
+**Stiffness Control**: Regulating the robot's resistance to displacement.
+
+**Damping Control**: Regulating the robot's resistance to velocity.
+
+### Admittance Control Fundamentals
+
+**Admittance**: The inverse of impedance, relating position to applied force.
+
+**Admittance Controller**: Controls the robot's admittance to environmental forces.
+
+**Desired Admittance Model**: Defines the desired position response to force.
+
+**Compliance Control**: Regulating the robot's compliance to external forces.
+
+**Response Characteristics**: Determining how the robot responds to disturbances.
+
+### Mathematical Models
+
+**Spring-Damper Model**: Basic model with stiffness and damping components.
+
+**Mass-Spring-Damper Model**: Includes inertial effects in the model.
+
+**Nonlinear Impedance**: Models with position or velocity-dependent parameters.
+
+**Frequency-Dependent Impedance**: Models that vary with excitation frequency.
+
+**Multi-DOF Impedance**: Models for systems with multiple degrees of freedom.
+
+### Control Architectures
+
+**Impedance Control Architecture**: 
+- Computes desired forces based on position/velocity errors
+- Applies these forces using inverse dynamics
+
+**Admittance Control Architecture**:
+- Computes desired motion based on measured forces
+- Commands this motion to the robot
+
+**Hybrid Impedance-Admittance**: Combines both approaches.
+
+**Task-Space Impedance**: Controls impedance in task space.
+
+**Joint-Space Impedance**: Controls impedance in joint space.
+
+### Humanoid-Specific Considerations
+
+**Balance Maintenance**: Ensuring impedance control doesn't compromise balance.
+
+**Multi-Contact Scenarios**: Managing impedance during multi-point contact.
+
+**Locomotion Integration**: Coordinating impedance with walking patterns.
+
+**Manipulation Tasks**: Adjusting impedance for different manipulation tasks.
+
+**Human Interaction**: Providing appropriate compliance for human interaction.
+
+### Stability Analysis
+
+**Passivity**: Ensuring the controlled system is passive for stability.
+
+**Stability Criteria**: Mathematical conditions for stable interaction.
+
+**Robustness**: Maintaining stability despite model uncertainties.
+
+**Delay Effects**: Analyzing stability with communication or processing delays.
+
+**Sampling Effects**: Considering discrete-time implementation effects.
+
+### Implementation Challenges
+
+**Model Uncertainty**: Dealing with inaccuracies in robot models.
+
+**Sensor Noise**: Managing noise in force and position measurements.
+
+**Actuator Limitations**: Working within actuator force and speed limits.
+
+**Real-time Requirements**: Meeting strict timing constraints.
+
+**Calibration**: Ensuring accurate force/torque measurements.
+
+### Applications in Humanoid Robotics
+
+**Safe Human Interaction**: Providing compliant behavior during human contact.
+
+**Object Manipulation**: Adjusting compliance for different objects.
+
+**Locomotion**: Controlling foot-ground interaction during walking.
+
+**Grasping**: Controlling grasp compliance for delicate objects.
+
+**Physical Assistance**: Providing appropriate support forces.
+
+### Advanced Control Techniques
+
+**Variable Impedance Control**: Adjusting impedance parameters online.
+
+**Learning-Based Impedance**: Using learning to optimize impedance parameters.
+
+**Adaptive Impedance**: Adjusting impedance based on task requirements.
+
+**Optimal Impedance**: Optimizing impedance for specific objectives.
+
+**Bio-inspired Impedance**: Mimicking biological impedance characteristics.
+
+### Force Control Integration
+
+**Force Tracking**: Following desired force trajectories.
+
+**Impedance-Force Hybrid**: Combining impedance and force control.
+
+**Stiffness-Force Switching**: Switching between control modes.
+
+**Force Limiting**: Ensuring forces remain within safe limits.
+
+**Safety Monitoring**: Detecting unsafe force conditions.
+
+### Multi-Modal Control
+
+**Visual-Haptic Integration**: Combining visual and haptic feedback.
+
+**Tactile-Impedance**: Using tactile feedback to adjust impedance.
+
+**Audio-Haptic**: Using audio cues in haptic control.
+
+**Multi-Sensory Fusion**: Integrating multiple sensory modalities.
+
+**Context-Aware Control**: Adjusting based on environmental context.
+
+### Safety Considerations
+
+**Force Limiting**: Preventing excessive interaction forces.
+
+**Emergency Stop**: Stopping interaction when unsafe conditions are detected.
+
+**Compliance Monitoring**: Ensuring compliance remains within safe ranges.
+
+**Human Safety**: Prioritizing human safety in all interactions.
+
+**System Protection**: Protecting the robot from damage.
+
+### Future Trends
+
+The future of impedance and admittance control includes:
+
+- **Learning-based Approaches**: Using machine learning to optimize control
+- **Bio-inspired Control**: More closely mimicking biological systems
+- **Predictive Control**: Anticipating interaction needs
+- **Human-Centered Design**: Optimizing for human comfort and safety
+- **Soft Robotics Integration**: Combining with soft robotic systems
+
+Understanding impedance and admittance control is essential for creating humanoid robots capable of safe and effective physical interaction.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Impedance and admittance control regulate robot-environment interaction
+- Impedance relates force to position; admittance relates position to force
+- Models include spring-damper, mass-spring-damper, and multi-DOF systems
+- Architectures include pure impedance, admittance, and hybrid approaches
+- Humanoid considerations include balance, multi-contact, and locomotion
+- Stability analysis involves passivity, robustness, and delay effects
+- Challenges include model uncertainty, sensor noise, and real-time requirements
+- Applications span human interaction, manipulation, and locomotion
+- Advanced techniques include variable, learning-based, and adaptive control
+- Safety considerations prioritize force limiting and human protection
+
+</div>
+</TabItem>
+</Tabs>

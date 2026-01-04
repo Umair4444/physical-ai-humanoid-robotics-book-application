@@ -1,6 +1,6 @@
 ---
 id: chapter-11
-title: "Terrain Adaptation and Footstep Planning"
+title: "Terrain Adaptation and Rough Terrain Navigation"
 module: "Module 2: Legged Locomotion and Bipedal Walking"
 lessonTab: true
 summaryTab: true
@@ -31,385 +31,239 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 <TabItem value="lesson" label="Full Lesson" default>
 <div className="lesson-content">
 
-## Lesson: Terrain Adaptation and Footstep Planning
+## Lesson: Terrain Adaptation and Rough Terrain Navigation
 
-### Introduction to Terrain Adaptation
+### Introduction to Terrain Adaptation and Rough Terrain Navigation
 
-Terrain adaptation is a critical capability for legged robots operating in real-world environments. Unlike wheeled robots that are limited to relatively flat and smooth surfaces, legged robots can navigate rough terrain by carefully selecting where to place their feet. This requires sophisticated perception systems to understand the environment, planning algorithms to determine appropriate foot placement, and control systems to execute the planned movements while maintaining balance and stability.
+Terrain adaptation and rough terrain navigation are critical capabilities for legged robots operating in unstructured environments. These capabilities enable robots to traverse challenging terrains such as rocky surfaces, stairs, slopes, and other obstacles that would be impassable for wheeled or tracked vehicles. Effective terrain adaptation requires sophisticated perception, planning, and control systems that can handle the complexity and variability of natural environments.
 
-Terrain adaptation encompasses:
-- **Environmental perception**: Understanding the characteristics of the terrain
-- **Footstep planning**: Determining optimal foot placement locations
-- **Gait adaptation**: Modifying walking patterns based on terrain
-- **Stability maintenance**: Ensuring balance despite challenging terrain
+Key aspects of terrain adaptation and rough terrain navigation include:
 
-### Environmental Perception for Terrain Analysis
+- **Terrain Classification**: Identifying different types of terrain and their properties
+- **Footstep Planning**: Determining where to place feet for stable locomotion
+- **Gait Adaptation**: Adjusting movement patterns based on terrain characteristics
+- **Stability Control**: Maintaining balance on challenging surfaces
+- **Real-time Adaptation**: Adjusting to changing terrain conditions
 
-#### Sensing Technologies
-Different sensors for understanding terrain characteristics:
+### Terrain Classification and Analysis
 
-**Vision-based sensing**:
-- **Stereo vision**: Using two cameras to estimate depth
-- **Structured light**: Projecting patterns to measure surface geometry
-- **Time-of-flight**: Measuring distance using light travel time
-- **RGB-D cameras**: Combining color and depth information
+**Terrain Types**: Different categories of terrain that robots may encounter.
 
-**Lidar systems**:
-- **3D mapping**: Creating detailed 3D maps of the environment
-- **Obstacle detection**: Identifying obstacles and free space
-- **Surface analysis**: Understanding surface properties and geometry
-- **Real-time processing**: Processing data in real-time for navigation
+- **Flat Surfaces**: Smooth, level surfaces like floors and roads
+- **Rough Terrain**: Surfaces with rocks, debris, and uneven features
+- **Sloped Terrain**: Inclined surfaces with various angles
+- **Stairs and Steps**: Discrete level changes requiring special navigation
+- **Soft Terrain**: Surfaces like sand, mud, or snow with low bearing capacity
 
-**Tactile sensing**:
-- **Ground contact**: Sensing when feet make contact with ground
-- **Force measurement**: Measuring forces during contact
-- **Slip detection**: Detecting when feet slip on surfaces
-- **Surface properties**: Inferring surface properties from contact
+**Terrain Properties**: Physical characteristics that affect locomotion.
 
-#### Terrain Classification
-Understanding different terrain types and their characteristics:
-
-**Surface properties**:
-- **Firmness**: How stable the surface is under load
-- **Friction**: How much grip the surface provides
-- **Compliance**: How much the surface deforms under pressure
-- **Slipperiness**: How likely feet are to slip
-
-**Geometric properties**:
-- **Height variation**: Changes in elevation across the terrain
-- **Obstacle size**: Size and shape of obstacles to navigate
-- **Step height**: Height of steps or ledges to climb
-- **Surface roughness**: Small-scale variations in surface geometry
-
-**Traversability assessment**:
+- **Traversability**: How easily terrain can be navigated
 - **Stability**: How stable the surface is for foot placement
-- **Accessibility**: Whether the surface can be reached by the robot
-- **Safety**: Risk of damage to the robot from the terrain
-- **Efficiency**: Energy cost of traversing the terrain
+- **Friction**: Coefficient of friction between feet and surface
+- **Compliance**: How the surface deforms under load
+- **Obstacle Density**: How many obstacles are present per unit area
 
-### Footstep Planning Algorithms
+**Sensing for Terrain Analysis**: Methods for perceiving terrain properties.
 
-#### Grid-Based Planning
-Discretizing space into a grid for planning:
+- **Vision-Based Sensing**: Using cameras to identify terrain types
+- **LIDAR Sensing**: Using LIDAR for precise terrain mapping
+- **Tactile Sensing**: Using touch to assess surface properties
+- **Force Sensing**: Using force sensors to assess surface characteristics
+- **Acoustic Sensing**: Using sound to assess terrain properties
 
-**2D occupancy grids**:
-- **Discretization**: Dividing the ground plane into cells
-- **Cost assignment**: Assigning costs based on terrain properties
-- **Path planning**: Using algorithms like A* to find optimal paths
-- **Resolution**: Balancing accuracy with computational complexity
+### Footstep Planning
 
-**3D voxel grids**:
-- **Volumetric representation**: Representing space in 3D
-- **Height mapping**: Capturing elevation changes
-- **Obstacle representation**: Representing 3D obstacles
-- **Complexity**: Higher computational requirements
+**Planning Algorithms**: Methods for determining optimal foot placement.
 
-#### Sampling-Based Planning
-Using random sampling for complex environments:
+- **A* Algorithm**: Graph-based search for optimal path planning
+- **RRT (Rapidly-exploring Random Trees)**: Sampling-based planning
+- **Visibility Graphs**: Planning based on visibility between points
+- **Potential Fields**: Planning using artificial potential functions
+- **Sampling-based Methods**: Probabilistic approaches to planning
 
-**Rapidly-exploring Random Trees (RRT)**:
-- **Tree growth**: Growing a tree of possible foot placements
-- **Collision checking**: Ensuring feet don't collide with obstacles
-- **Biasing**: Guiding search toward promising areas
-- **Probabilistic completeness**: Guaranteed to find solution if one exists
+**Stability Considerations**: Factors that affect the stability of foot placements.
 
-**Probabilistic Roadmaps (PRM)**:
-- **Random sampling**: Sampling potential foot locations
-- **Connection**: Connecting nearby valid samples
-- **Path extraction**: Finding paths through the roadmap
-- **Preprocessing**: Building roadmap offline
+- **Support Polygon**: Ensuring CoM remains within support polygon
+- **ZMP Constraints**: Keeping ZMP within safe limits
+- **Foot Orientation**: Proper orientation of feet on sloped surfaces
+- **Step Width**: Maintaining appropriate lateral stability
+- **Step Length**: Ensuring steps are within reach and stability limits
 
-#### Optimization-Based Planning
-Formulating footstep planning as an optimization problem:
+**Dynamic Considerations**: Factors related to motion during footstep planning.
 
-**Mixed-integer programming**:
-- **Discrete decisions**: Which cells to step on
-- **Continuous variables**: Exact foot positions
-- **Constraints**: Balance, kinematic, and terrain constraints
-- **Objective**: Minimizing energy, time, or other metrics
-
-**Nonlinear optimization**:
-- **Complex constraints**: Nonlinear stability constraints
-- **Trajectory optimization**: Optimizing complete sequences
-- **Multi-objective**: Balancing multiple objectives
-- **Real-time**: Solving optimization in real-time
-
-### Advanced Footstep Planning Techniques
-
-#### Predictive Footstep Planning
-Planning steps based on predictive models:
-
-**Dynamic models**:
-- **Robot dynamics**: Incorporating robot dynamic constraints
-- **Balance prediction**: Predicting future balance states
-- **Stability margins**: Maintaining stability throughout the sequence
-- **Capture point**: Using capture point for balance planning
-
-**Environmental prediction**:
-- **Moving obstacles**: Planning around dynamic obstacles
-- **Changing terrain**: Adapting to changing terrain conditions
-- **Uncertainty**: Planning with uncertain terrain information
-- **Risk assessment**: Accounting for planning uncertainty
-
-#### Multi-Step Planning
-Planning longer sequences of steps:
-
-**Horizon selection**:
-- **Short horizon**: Faster computation, local optimization
-- **Long horizon**: Better global optimization, higher computation
-- **Adaptive horizon**: Adjusting based on terrain complexity
-- **Sliding window**: Planning in overlapping windows
-
-**Sequence optimization**:
-- **Step timing**: Optimizing when to take each step
-- **Step placement**: Optimizing where to place each step
-- **Gait pattern**: Optimizing the overall gait pattern
-- **Energy efficiency**: Minimizing energy consumption
-
-#### Reactive Planning
-Adjusting plans based on real-time feedback:
-
-**Online replanning**: 
-- **Disturbance handling**: Adjusting to unexpected disturbances
-- **Terrain updates**: Incorporating new terrain information
-- **Sensor feedback**: Using real-time sensor data
-- **Fast replanning**: Replanning quickly to maintain real-time performance
-
-**Fallback strategies**:
-- **Safe states**: Predefined safe configurations
-- **Emergency stops**: Stopping safely when needed
-- **Alternative plans**: Precomputed alternative sequences
-- **Recovery planning**: Planning for recovery from failures
+- **Capture Point**: Planning steps to maintain dynamic balance
+- **Momentum**: Accounting for robot momentum during planning
+- **Swing Trajectory**: Planning safe trajectories for moving feet
+- **Timing**: Coordinating foot placement with gait timing
+- **Recovery Steps**: Planning emergency steps for balance recovery
 
 ### Gait Adaptation Strategies
 
-#### Step Parameter Adaptation
-Modifying step characteristics based on terrain:
+**Adaptive Gait Selection**: Choosing appropriate gaits based on terrain.
 
-**Step height adjustment**:
-- **Obstacle clearance**: Adjusting height to clear obstacles
-- **Energy efficiency**: Minimizing unnecessary step height
-- **Stability**: Maintaining stability during high steps
-- **Actuator limits**: Respecting actuator capabilities
+- **Terrain-Based Selection**: Selecting gaits based on terrain characteristics
+- **Speed Adaptation**: Adjusting gait parameters for different speeds
+- **Stability Prioritization**: Using more stable gaits on challenging terrain
+- **Energy Optimization**: Selecting energy-efficient gaits when possible
+- **Load Consideration**: Adjusting gaits based on carried loads
 
-**Step length adaptation**:
-- **Terrain roughness**: Shorter steps on rough terrain
-- **Stability requirements**: Adjusting for balance needs
-- **Speed requirements**: Longer steps for faster locomotion
-- **Kinematic constraints**: Respecting reach limitations
+**Parameter Adaptation**: Modifying gait parameters for terrain conditions.
 
-**Step timing modification**:
-- **Contact time**: Adjusting how long feet remain in contact
-- **Swing time**: Adjusting how long feet swing between contacts
-- **Double support**: Adjusting double support duration
-- **Rhythm changes**: Modifying overall walking rhythm
+- **Step Height**: Adjusting step height for obstacles and stairs
+- **Step Length**: Modifying step length for stability and efficiency
+- **Step Width**: Adjusting step width for lateral stability
+- **Swing Trajectory**: Modifying foot trajectories for obstacles
+- **Timing Parameters**: Adjusting gait timing for terrain conditions
 
-#### Dynamic Gait Selection
-Choosing different gait patterns based on terrain:
+**Dynamic Adaptation**: Adjusting gait in real-time based on conditions.
 
-**Gait switching**:
-- **Walking gaits**: Different walking patterns for different conditions
-- **Running gaits**: Faster gaits for appropriate terrain
-- **Climbing gaits**: Specialized patterns for steep terrain
-- **Careful gaits**: Conservative patterns for dangerous terrain
+- **Online Adaptation**: Modifying gait parameters during locomotion
+- **Sensor Feedback**: Using sensor data to adjust gait in real-time
+- **Predictive Adaptation**: Anticipating terrain changes and adjusting
+- **Learning-based Adaptation**: Learning optimal gait parameters over time
+- **Robust Control**: Maintaining stability despite parameter changes
 
-**Gait parameter tuning**:
-- **Stability focus**: Parameters prioritizing stability
-- **Efficiency focus**: Parameters prioritizing energy efficiency
-- **Speed focus**: Parameters prioritizing speed
-- **Adaptive tuning**: Automatically adjusting parameters
+### Rough Terrain Navigation Techniques
 
-### Balance and Stability in Challenging Terrain
+**Obstacle Negotiation**: Strategies for navigating around or over obstacles.
 
-#### Perturbation Handling
-Managing disturbances from uneven terrain:
+- **Step Over**: Lifting legs to step over obstacles
+- **Step Around**: Going around obstacles when possible
+- **Step Through**: Stepping through gaps between obstacles
+- **Climbing**: Ascending obstacles when necessary
+- **Descending**: Safely descending from obstacles
 
-**Ground irregularities**:
-- **Unexpected height changes**: Handling unperceived terrain changes
-- **Slip conditions**: Recovering from foot slippage
-- **Compliance effects**: Managing compliant terrain
-- **Impact forces**: Handling high-impact contacts
+**Stair Navigation**: Specialized techniques for navigating stairs.
 
-**Recovery strategies**:
-- **Ankle adjustments**: Using ankle compliance for small perturbations
-- **Hip strategies**: Using hip motion for larger perturbations
-- **Stepping recovery**: Taking emergency steps when needed
-- **Upper body motion**: Using arms and torso for balance
+- **Step Detection**: Identifying individual steps in a staircase
+- **Foot Placement**: Precise placement on step edges
+- **Balance Control**: Maintaining balance on discrete level changes
+- **Gait Modification**: Adjusting gait for stair climbing/descending
+- **Safety Considerations**: Ensuring safe navigation of stairs
 
-#### Multi-Contact Strategies
-Using multiple contact points for stability:
+**Slope Navigation**: Techniques for traversing inclined surfaces.
 
-**Hand contact**: Using hands for additional support:
-- **Assistive contact**: Light contact for stability
-- **Full support**: Using hands for full support when needed
-- **Contact planning**: Planning hand contact locations
-- **Coordination**: Coordinating with leg motion
+- **Pitch Control**: Managing body pitch on sloped terrain
+- **Foot Orientation**: Adjusting foot orientation for sloped surfaces
+- **Stability Maintenance**: Maintaining balance on inclined surfaces
+- **Energy Management**: Managing energy consumption on slopes
+- **Slip Prevention**: Preventing slips on sloped surfaces
 
-**Multi-foot contact**: Using multiple feet for stability:
-- **Tripod gaits**: Using three feet for stability
-- **Extended support**: Extending support polygon
-- **Redundancy**: Maintaining stability with fewer feet
-- **Load distribution**: Distributing loads appropriately
+### Control Strategies for Rough Terrain
 
-### Learning-Based Terrain Adaptation
+**Adaptive Control**: Adjusting control parameters based on terrain.
 
-#### Terrain Learning
-Learning to understand and adapt to terrain:
+- **Terrain Recognition**: Identifying terrain type and properties
+- **Parameter Adjustment**: Modifying control parameters accordingly
+- **Stability Maintenance**: Ensuring stability on all terrain types
+- **Energy Efficiency**: Maintaining efficiency across terrain types
+- **Robustness**: Maintaining performance despite terrain uncertainty
 
-**Terrain classification learning**:
-- **Feature learning**: Learning relevant terrain features
-- **Classification**: Learning to classify terrain types
-- **Generalization**: Generalizing to new terrain types
-- **Online learning**: Learning during operation
+**Impedance Control**: Adjusting mechanical impedance for terrain conditions.
 
-**Adaptive control learning**:
-- **Parameter learning**: Learning optimal gait parameters
-- **Control policy learning**: Learning control policies
-- **Imitation learning**: Learning from expert demonstrations
-- **Reinforcement learning**: Learning through interaction
+- **Stiffness Adjustment**: Modifying joint stiffness based on terrain
+- **Damping Control**: Adjusting damping for different surfaces
+- **Compliance**: Using appropriate compliance for surface properties
+- **Impact Mitigation**: Reducing impact forces on rough terrain
+- **Stability Enhancement**: Improving stability through impedance control
 
-#### Footstep Planning Learning
-Learning to plan effective footstep sequences:
+**Predictive Control**: Using prediction for terrain adaptation.
 
-**Learning from demonstration**:
-- **Expert trajectories**: Learning from human or expert planners
-- **Behavior cloning**: Cloning demonstrated planning behavior
-- **Generalization**: Generalizing to new scenarios
-- **Correction learning**: Learning from corrections
+- **Terrain Prediction**: Predicting upcoming terrain characteristics
+- **Gait Prediction**: Predicting optimal gait parameters
+- **Balance Prediction**: Predicting balance requirements
+- **Footstep Prediction**: Predicting optimal foot placements
+- **Energy Prediction**: Predicting energy requirements
 
-**Learning-based optimization**:
-- **Neural networks**: Learning complex planning functions
-- **Policy learning**: Learning planning policies
-- **Multi-objective learning**: Learning to balance objectives
-- **Transfer learning**: Transferring learning to new robots
+### Sensing and Perception for Terrain Adaptation
 
-### Implementation Challenges
+**3D Mapping**: Creating detailed maps of the terrain.
 
-#### Computational Complexity
-Managing the computational demands of terrain adaptation:
+- **SLAM**: Simultaneous localization and mapping
+- **Point Clouds**: Creating 3D representations of terrain
+- **Elevation Maps**: Mapping terrain height variations
+- **Traversability Maps**: Mapping terrain traversability
+- **Real-time Updates**: Updating maps as the robot moves
 
-**Real-time requirements**:
-- **Planning frequency**: Need for frequent replanning
-- **Computation limits**: Working within computational constraints
-- **Prediction horizon**: Balancing prediction length with computation
-- **Parallel processing**: Using parallel computation where possible
+**Surface Property Estimation**: Assessing properties of surfaces.
 
-**Algorithm efficiency**:
-- **Approximation methods**: Trading accuracy for speed
-- **Hierarchical planning**: Planning at different levels of detail
-- **Pre-computation**: Computing solutions offline when possible
-- **Caching**: Storing and reusing computed solutions
+- **Friction Estimation**: Estimating surface friction coefficients
+- **Stability Assessment**: Assessing surface stability for foot placement
+- **Compliance Measurement**: Measuring surface compliance
+- **Material Classification**: Identifying surface materials
+- **Slip Detection**: Detecting when feet begin to slip
 
-#### Sensing Limitations
-Working within the limitations of sensing systems:
+**Obstacle Detection**: Identifying obstacles in the environment.
 
-**Sensor noise and uncertainty**:
-- **Robust algorithms**: Algorithms that handle noisy data
-- **Uncertainty propagation**: Accounting for sensing uncertainty
-- **Sensor fusion**: Combining multiple sensors
-- **Validation**: Validating sensor information
+- **Size Classification**: Categorizing obstacles by size
+- **Traversability Assessment**: Determining if obstacles can be traversed
+- **Path Planning**: Planning paths around or over obstacles
+- **Risk Assessment**: Evaluating risks associated with obstacles
+- **Dynamic Obstacles**: Handling moving obstacles in the environment
 
-**Limited field of view**:
-- **Short-term planning**: Planning with limited lookahead
-- **Replanning**: Replanning as new information becomes available
-- **Safe exploration**: Safely exploring unknown terrain
-- **Active sensing**: Controlling sensors to gather needed information
+### Challenges in Terrain Adaptation
 
-#### Modeling Limitations
-Working with imperfect models of the robot and environment:
+**Perception Challenges**: Difficulties in sensing and understanding terrain.
 
-**Model uncertainty**:
-- **Robust control**: Control that works despite model errors
-- **Adaptive control**: Control that adapts to model errors
-- **Learning**: Learning to compensate for model errors
-- **Conservative planning**: Planning conservatively to account for errors
+- **Occlusions**: Parts of terrain not visible to sensors
+- **Sensor Limitations**: Limited range and accuracy of sensors
+- **Environmental Conditions**: Weather and lighting affecting sensing
+- **Real-time Processing**: Processing sensor data in real-time
+- **Uncertainty**: Dealing with uncertainty in terrain assessment
 
-**Contact modeling**:
-- **Friction models**: Modeling complex friction behavior
-- **Impact models**: Modeling impact and contact dynamics
-- **Compliance modeling**: Modeling surface compliance
-- **Slip modeling**: Modeling and preventing slip
+**Planning Challenges**: Difficulties in planning for complex terrain.
 
-### Applications and Case Studies
+- **Computational Complexity**: Complex algorithms requiring significant computation
+- **Real-time Requirements**: Meeting timing constraints for locomotion
+- **Optimality vs. Speed**: Balancing optimal solutions with speed
+- **Dynamic Environments**: Planning in changing environments
+- **Uncertainty**: Planning despite uncertainty in terrain properties
 
-#### Outdoor Navigation
-Terrain adaptation in outdoor environments:
+**Control Challenges**: Difficulties in controlling robots on complex terrain.
 
-**Natural terrain**: Forests, mountains, and rough terrain:
-- **Rock navigation**: Navigating around and over rocks
-- **Tree trunk walking**: Walking on fallen logs
-- **Stream crossing**: Crossing streams and puddles
-- **Slope navigation**: Climbing and descending slopes
+- **Model Uncertainty**: Differences between model and reality
+- **Disturbance Rejection**: Handling unexpected disturbances
+- **Stability**: Maintaining stability on challenging terrain
+- **Energy Efficiency**: Maintaining efficiency while ensuring stability
+- **Robustness**: Maintaining performance despite uncertainties
 
-**Urban environments**: Cities and built environments:
-- **Stair climbing**: Navigating stairs and steps
-- **Curb navigation**: Handling curbs and raised surfaces
-- **Construction sites**: Navigating construction zones
-- **Crowd navigation**: Moving through crowds and obstacles
+### Applications of Terrain Adaptation
 
-#### Specialized Applications
-Terrain adaptation for specific applications:
+**Search and Rescue**: Robots for emergency response applications.
 
-**Search and rescue**:
-- **Rubble navigation**: Moving through collapsed buildings
-- **Disaster response**: Operating in dangerous environments
-- **Victim location**: Finding and approaching victims
-- **Supply delivery**: Delivering supplies to hard-to-reach areas
+- **Disaster Sites**: Navigating through debris and rubble
+- **Rough Terrain**: Operating in natural disaster environments
+- **Building Search**: Navigating through damaged buildings
+- **Personnel Support**: Assisting human rescuers in dangerous areas
+- **Equipment Transport**: Carrying supplies and equipment
 
-**Exploration**:
-- **Planetary exploration**: Operating on other planets
-- **Underwater terrain**: Adapting to underwater environments
-- **Extreme environments**: Operating in harsh conditions
-- **Scientific missions**: Collecting data in difficult locations
+**Military Applications**: Robots for military operations.
+
+- **Reconnaissance**: Gathering intelligence in rough terrain
+- **Surveillance**: Monitoring areas with difficult access
+- **Logistics**: Transporting supplies in challenging terrain
+- **Explosive Detection**: Detecting and handling explosive devices
+- **Combat Support**: Supporting military operations
+
+**Scientific Exploration**: Robots for scientific missions.
+
+- **Space Exploration**: Planetary rovers for extraterrestrial exploration
+- **Deep Sea Exploration**: Underwater robots for ocean exploration
+- **Environmental Monitoring**: Robots for environmental studies
+- **Archaeological Applications**: Robots for archaeological sites
+- **Geological Surveys**: Robots for geological exploration
 
 ### Future Directions
 
-#### Advanced Perception
-Next-generation perception systems:
+The future of terrain adaptation and rough terrain navigation includes:
 
-**Multi-modal sensing**: Combining multiple sensing modalities:
-- **Vision and touch**: Combining visual and tactile sensing
-- **Acoustic sensing**: Using sound for terrain analysis
-- **Thermal sensing**: Using temperature information
-- **Electromagnetic sensing**: Using electromagnetic properties
+- **Learning-based Approaches**: Using machine learning to improve navigation
+- **Bio-inspired Methods**: More closely mimicking animal terrain navigation
+- **Advanced Sensing**: Better perception systems for terrain understanding
+- **Human-robot Collaboration**: Robots that work with humans in rough terrain
+- **Swarm Coordination**: Coordinated navigation of robot teams
 
-**Predictive perception**: Anticipating terrain properties:
-- **Surface property prediction**: Predicting properties of unseen terrain
-- **Stability prediction**: Predicting terrain stability
-- **Slip prediction**: Predicting likelihood of slip
-- **Risk assessment**: Assessing risks of different terrains
-
-#### Advanced Planning
-Next-generation planning algorithms:
-
-**Learning-based planning**: Using machine learning for planning:
-- **Neural planners**: Neural networks for planning
-- **Imitation learning**: Learning from expert planners
-- **Reinforcement learning**: Learning optimal planning policies
-- **Transfer learning**: Transferring planning knowledge
-
-**Hierarchical planning**: Planning at multiple levels:
-- **Global planning**: High-level path planning
-- **Local adaptation**: Local terrain adaptation
-- **Real-time adjustment**: Real-time adjustments
-- **Multi-scale planning**: Planning at different scales
-
-#### Human-Robot Collaboration
-Terrain adaptation in human-robot teams:
-
-**Shared control**: Humans and robots collaborating on navigation:
-- **Human guidance**: Humans guiding robot navigation
-- **Robot assistance**: Robots helping humans navigate
-- **Communication**: Effective communication about terrain
-- **Trust building**: Building trust in robot capabilities
-
-**Assistive applications**: Robots assisting human mobility:
-- **Prosthetics**: Terrain-adaptive prosthetic devices
-- **Exoskeletons**: Exoskeletons that adapt to terrain
-- **Mobility aids**: Walking aids with terrain adaptation
-- **Rehabilitation**: Terrain-based rehabilitation systems
-
-Effective terrain adaptation and footstep planning are essential for creating legged robots that can operate in real-world environments.
+Understanding terrain adaptation and rough terrain navigation is essential for creating robots that can operate effectively in unstructured environments.
 
 </div>
 </TabItem>
@@ -418,16 +272,16 @@ Effective terrain adaptation and footstep planning are essential for creating le
 
 ## Summary
 
-- Terrain adaptation enables legged robots to navigate challenging environments.
-- Environmental perception uses vision, lidar, and tactile sensing.
-- Footstep planning algorithms include grid-based, sampling-based, and optimization methods.
-- Advanced techniques involve predictive planning and reactive adaptation.
-- Gait adaptation modifies step parameters and selects different patterns.
-- Balance control handles perturbations and uses multi-contact strategies.
-- Learning-based approaches enable adaptation through experience.
-- Challenges include computational complexity and sensing limitations.
-- Applications span outdoor navigation, search and rescue, and exploration.
-- Future directions involve advanced perception and human-robot collaboration.
+- Terrain adaptation enables navigation of challenging environments
+- Terrain classification involves types and properties assessment
+- Footstep planning determines optimal foot placement locations
+- Gait adaptation adjusts movement patterns to terrain conditions
+- Navigation techniques include obstacle negotiation and stair climbing
+- Control strategies involve adaptive, impedance, and predictive control
+- Sensing includes 3D mapping and surface property estimation
+- Challenges include perception, planning, and control difficulties
+- Applications span search and rescue, military, and scientific exploration
+- Future directions involve learning-based and bio-inspired approaches
 
 </div>
 </TabItem>

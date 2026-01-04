@@ -1,7 +1,7 @@
 ---
 id: chapter-7
-title: "Introduction to Human Biomechanics for Robot Design"
-module: "Module 2: Biomechanics and Kinematics"
+title: "Humanoid Locomotion and Gait Planning"
+module: "Module 2: Locomotion and Mobility in Humanoid Design"
 lessonTab: true
 summaryTab: true
 duration: 15
@@ -31,217 +31,141 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 <TabItem value="lesson" label="Full Lesson" default>
 <div className="lesson-content">
 
-## Lesson: Introduction to Human Biomechanics for Robot Design
+## Lesson: Humanoid Locomotion and Gait Planning
 
-### Understanding Biomechanics in Humanoid Design
+### Introduction to Humanoid Locomotion
 
-Biomechanics is the study of the structure, function, and motion of the mechanical aspects of biological systems, particularly the human body. In humanoid robot design, biomechanics provides the fundamental principles for creating robots that can move and function like humans. Understanding human biomechanics is essential for designing robots that can operate effectively in human environments, interact naturally with humans, and perform tasks that require human-like capabilities.
+Humanoid locomotion refers to the methods by which humanoid robots achieve movement, particularly bipedal walking. This is one of the most challenging aspects of humanoid robotics, as it requires balancing, coordination, and adaptability to various terrains and conditions.
 
-Biomechanics encompasses:
-- **Kinematics**: The study of motion without considering forces
-- **Kinetics**: The study of forces that cause motion
-- **Statics**: The study of forces in equilibrium
-- **Material properties**: How biological materials respond to forces
+Key challenges in humanoid locomotion include:
 
-### The Human Skeletal System
+- **Balance Maintenance**: Keeping the robot stable during movement
+- **Terrain Adaptation**: Adjusting gait for different surfaces and obstacles
+- **Energy Efficiency**: Minimizing power consumption during locomotion
+- **Real-time Control**: Making adjustments quickly enough to maintain stability
+- **Safety**: Ensuring safe movement around humans and obstacles
 
-#### Bone Structure and Function
-The human skeleton provides the structural framework for the body and enables movement:
+### Types of Locomotion
 
-**Bone Composition**: Human bones are living tissues composed of:
-- **Collagen**: A protein that provides flexibility and tensile strength
-- **Calcium phosphate**: A mineral that provides compressive strength
-- **Bone cells**: Osteoblasts, osteocytes, and osteoclasts that maintain bone health
+**Static Walking**: The robot maintains stability at all times, with at least one foot always in contact with the ground. This is slower but more stable.
 
-**Types of Bones**: Different bone types serve different functions:
-- **Long bones**: Femur, tibia, humerus - for support and movement
-- **Short bones**: Carpals, tarsals - for stability and limited motion
-- **Flat bones**: Skull, ribs - for protection and muscle attachment
-- **Irregular bones**: Vertebrae, pelvis - for complex functions
+**Dynamic Walking**: The robot may have moments of instability, similar to human walking. This is more efficient but requires sophisticated control.
 
-**Joint Types**: The connections between bones enable different types of movement:
-- **Fibrous joints**: Fixed joints like skull sutures
-- **Cartilaginous joints**: Slightly moveable joints like intervertebral discs
-- **Synovial joints**: Freely moveable joints like knees and elbows
+**Running**: Involves periods where both feet are off the ground, requiring even more advanced control.
 
-#### Skeletal Architecture
-The human skeleton is optimized for specific functions:
+**Climbing**: Moving up stairs, ladders, or other elevated surfaces.
 
-**Axial skeleton**: The central support structure including skull, spine, and ribcage:
-- **Spine**: Composed of 24 vertebrae with intervertebral discs for flexibility
-- **Ribcage**: Protects vital organs while allowing respiratory movement
-- **Skull**: Protects the brain with specialized features for sensory organs
+**Transitioning**: Moving between different types of locomotion or navigating obstacles.
 
-**Appendicular skeleton**: The limbs and their connections to the axial skeleton:
-- **Upper limbs**: Shoulders, arms, forearms, and hands for manipulation
-- **Lower limbs**: Hips, thighs, legs, and feet for locomotion
-- **Girdles**: Shoulder and pelvic girdles connecting limbs to trunk
+### Gait Planning Fundamentals
 
-### The Human Muscular System
+Gait planning involves determining the sequence of movements that will achieve locomotion:
 
-#### Muscle Structure and Function
-Muscles are responsible for generating force and movement:
+**Footstep Planning**: Determining where and when to place each foot.
 
-**Muscle Fiber Types**: Different fibers have different properties:
-- **Type I (Slow-twitch)**: Endurance fibers for sustained activity
-- **Type IIa (Fast-twitch)**: Power fibers for moderate force and speed
-- **Type IIx (Fast-twitch)**: Speed fibers for maximum force and speed
+**Center of Mass (CoM) Trajectory**: Planning the path of the robot's center of mass during movement.
 
-**Muscle Architecture**: How muscles are organized affects their function:
-- **Fiber orientation**: Parallel, pennate, or convergent arrangements
-- **Fiber length**: Affects range of motion and force generation
-- **Pennation angle**: Affects force transmission efficiency
+**Zero Moment Point (ZMP) Trajectory**: Planning the ZMP path to ensure stability.
 
-#### Muscle Groups and Functions
-Muscles work in coordinated groups:
+**Joint Trajectory Planning**: Determining the movement of all joints to achieve the desired gait.
 
-**Antagonistic pairs**: Muscles that work in opposition:
-- **Flexors and extensors**: For joint movement in opposite directions
-- **Protractors and retractors**: For movement toward and away from midline
-- **Rotators**: For rotational movement around joint axes
+### Walking Patterns
 
-**Synergistic groups**: Muscles that work together:
-- **Prime movers**: Primary muscles responsible for movement
-- **Fixators**: Muscles that stabilize parts of the body
-- **Neutralizers**: Muscles that prevent unwanted movements
+**Periodic Gaits**: Regular, repeating patterns of movement, such as normal walking.
 
-### Joint Mechanics
+**Aperiodic Gaits**: Non-repeating patterns, such as stepping over obstacles.
 
-#### Degrees of Freedom
-Joints allow movement along specific axes:
+**Symmetric Gaits**: Both legs follow similar patterns.
 
-**Uniaxial joints**: Movement along one axis:
-- **Hinge joints**: Elbow and knee - flexion and extension
-- **Pivot joints**: Neck and forearms - rotation
+**Asymmetric Gaits**: Legs follow different patterns, useful for turning or navigating obstacles.
 
-**Biaxial joints**: Movement along two axes:
-- **Condyloid joints**: Wrist - flexion/extension and abduction/adduction
-- **Saddle joints**: Thumb - similar to condyloid with more range
+### Control Strategies
 
-**Multiaxial joints**: Movement along multiple axes:
-- **Ball and socket joints**: Shoulder and hip - all directions of movement
+**ZMP-Based Control**: Maintains the ZMP within the support polygon for stability.
 
-#### Joint Range of Motion
-Different joints have different ranges of motion:
+**Capture Point Control**: Uses the capture point concept to maintain balance.
 
-**Anatomical position**: The standard reference position (standing, facing forward, arms at sides):
-- **Flexion/Extension**: Movement in the sagittal plane
-- **Abduction/Adduction**: Movement in the frontal plane
-- **Rotation**: Movement in the transverse plane
+**Model Predictive Control (MPC)**: Predicts future states and optimizes control inputs.
 
-### Biomechanical Principles in Human Movement
+**Virtual Model Control**: Uses simplified models to generate control commands.
 
-#### Leverage and Mechanical Advantage
-The human body uses levers to amplify force or movement:
+**Central Pattern Generators (CPGs)**: Neural network models that generate rhythmic patterns.
 
-**Lever classes**: Three types of levers in the human body:
-- **First class**: Fulcrum between effort and load (head nodding)
-- **Second class**: Load between fulcrum and effort (calf raises)
-- **Third class**: Effort between fulcrum and load (elbow flexion)
+### Balance Control
 
-**Trade-offs**: The human body typically favors range of motion over force:
-- **Speed advantage**: Muscles can produce rapid movements
-- **Force disadvantage**: Muscles must generate significant force
-- **Efficiency considerations**: Energy cost of movement patterns
+Balance control is critical for stable locomotion:
 
-#### Force Transmission
-How forces are transmitted through the body:
+**Ankle Strategy**: Using ankle joints to maintain balance for small disturbances.
 
-**Tension and compression**: Different forces on different structures:
-- **Tensile forces**: Muscles and ligaments resist pulling forces
-- **Compressive forces**: Bones resist pushing forces
-- **Shear forces**: Forces that cause sliding between structures
+**Hip Strategy**: Using hip joints for larger disturbances.
 
-**Force distribution**: How loads are distributed:
-- **Joint reaction forces**: Forces transmitted through joints
-- **Muscle forces**: Forces generated by muscle contraction
-- **External forces**: Gravity, contact forces, and applied loads
+**Stepping Strategy**: Taking a step to restore balance when other strategies are insufficient.
 
-### Biomechanical Considerations for Robot Design
+**Arm Swing**: Using arm movements to assist with balance.
 
-#### Anthropomorphic Design
-Mimicking human biomechanical principles:
+### Terrain Adaptation
 
-**Joint configurations**: Designing robot joints to match human movement patterns:
-- **Six degrees of freedom**: Matching human shoulder and hip capabilities
-- **Range of motion**: Ensuring robot joints can achieve human-like ranges
-- **Load capacity**: Designing joints to handle similar forces as human joints
+Humanoid robots must adapt to various terrains:
 
-**Limb proportions**: Matching human proportions for environmental compatibility:
-- **Segment ratios**: Maintaining similar ratios between body segments
-- **Center of mass**: Positioning for human-like stability and movement
-- **Reach envelopes**: Ensuring robots can access the same spaces as humans
+**Flat Ground**: The simplest case, but still requires sophisticated control.
 
-#### Biomimetic Approaches
-Learning from biological solutions:
+**Uneven Terrain**: Adjusting foot placement and body posture for stability.
 
-**Compliant mechanisms**: Mimicking the compliance of biological systems:
-- **Series elastic actuators**: Mimicking muscle-tendon compliance
-- **Variable stiffness**: Mimicking the ability to change joint stiffness
-- **Energy storage**: Mimicking the energy storage in tendons
+**Stairs**: Requires specific gait patterns and precise foot placement.
 
-**Distributed actuation**: Learning from muscle distribution:
-- **Redundant actuators**: Multiple actuators for each degree of freedom
-- **Parallel mechanisms**: Multiple pathways for force transmission
-- **Coordinated control**: Centralized and distributed control systems
+**Slopes**: Adjusting body orientation and gait for inclines and declines.
 
-### Challenges in Biomechanical Design
+**Slippery Surfaces**: Adjusting gait parameters for reduced traction.
 
-#### Force and Power Requirements
-Matching human capabilities presents challenges:
+### Energy Efficiency
 
-**Power density**: Human muscles have high power-to-weight ratios:
-- **Actuator selection**: Choosing actuators that match muscle capabilities
-- **Heat dissipation**: Managing heat from high-power actuators
-- **Energy efficiency**: Minimizing energy consumption
+Efficient locomotion is crucial for practical humanoid robots:
 
-**Force transmission**: Efficiently transmitting forces through robot structures:
-- **Structural design**: Designing lightweight yet strong structures
-- **Joint design**: Ensuring joints can handle required forces
-- **Transmission systems**: Efficiently transferring power to joints
+**Passive Dynamics**: Using the robot's natural dynamics to reduce energy consumption.
 
-#### Material Properties
-Matching biological material properties:
+**Optimized Trajectories**: Planning movements that minimize energy use.
 
-**Compliance**: Biological materials have specific compliance characteristics:
-- **Elastic properties**: Mimicking the elastic behavior of biological materials
-- **Damping properties**: Matching energy dissipation characteristics
-- **Nonlinear properties**: Replicating the nonlinear behavior of biological materials
+**Regenerative Systems**: Recovering energy during certain phases of locomotion.
 
-**Self-healing**: Biological materials can self-repair:
-- **Adaptive materials**: Materials that can adapt to damage
-- **Maintenance systems**: Systems for detecting and addressing damage
-- **Redundancy**: Building in redundancy to handle component failure
+**Gait Selection**: Choosing the most efficient gait for specific conditions.
 
-### Future Directions in Biomechanical Design
+### Challenges and Limitations
 
-#### Advanced Materials
-New materials that better mimic biological properties:
+Several challenges remain in humanoid locomotion:
 
-**Smart materials**: Materials that respond to environmental stimuli:
-- **Shape memory alloys**: Materials that return to original shape when heated
-- **Electroactive polymers**: Materials that change shape when electrically stimulated
-- **Magnetorheological fluids**: Materials whose properties change with magnetic fields
+**Computational Complexity**: Real-time gait planning and control require significant computational resources.
 
-**Bio-inspired materials**: Materials that mimic biological properties:
-- **Artificial muscles**: Materials that contract like biological muscles
-- **Synthetic tendons**: Materials with tendon-like properties
-- **Artificial cartilage**: Materials for joint surfaces
+**Model Accuracy**: Control systems depend on accurate models of the robot and environment.
 
-#### Computational Modeling
-Advanced modeling techniques:
+**Environmental Uncertainty**: Dealing with unknown or changing environments.
 
-**Musculoskeletal models**: Detailed models of human movement:
-- **Multi-body dynamics**: Modeling the human body as interconnected rigid bodies
-- **Muscle models**: Detailed models of muscle contraction and force generation
-- **Optimization**: Finding optimal movement patterns and muscle activations
+**Robustness**: Maintaining stability despite model errors or disturbances.
 
-**Simulation environments**: Testing designs before physical implementation:
-- **Virtual prototyping**: Testing designs in simulated environments
-- **Human-in-the-loop**: Including human operators in simulations
-- **Safety validation**: Ensuring safe interaction through simulation
+**Human-like Movement**: Achieving natural, human-like walking patterns.
 
-Understanding human biomechanics is fundamental to creating humanoid robots that can move and function effectively like humans.
+### Applications
+
+Humanoid locomotion has various applications:
+
+**Assistive Devices**: Exoskeletons and prosthetics for human mobility assistance.
+
+**Search and Rescue**: Navigating complex environments for emergency response.
+
+**Service Robotics**: Moving through human environments for various tasks.
+
+**Research**: Understanding human locomotion and balance control.
+
+### Future Directions
+
+The future of humanoid locomotion includes:
+
+- **Learning-based Approaches**: Using machine learning to improve gait patterns
+- **Bio-inspired Control**: More closely mimicking human locomotion strategies
+- **Enhanced Sensing**: Better perception of terrain and environment
+- **Adaptive Systems**: Automatically adjusting gait based on conditions
+- **Human-Robot Collaboration**: Moving together with humans in shared spaces
+
+Understanding locomotion and gait planning is essential for creating humanoid robots that can navigate human environments effectively.
 
 </div>
 </TabItem>
@@ -250,14 +174,16 @@ Understanding human biomechanics is fundamental to creating humanoid robots that
 
 ## Summary
 
-- Biomechanics studies the mechanical aspects of biological systems, especially the human body.
-- The human skeleton provides structure and enables movement through various bone types and joints.
-- Muscles generate force and movement through different fiber types and coordinated groups.
-- Joints have different degrees of freedom and ranges of motion.
-- Biomechanical principles include leverage, force transmission, and mechanical advantage.
-- Robot design can use anthropomorphic and biomimetic approaches.
-- Challenges include force/power requirements and material properties.
-- Future directions involve advanced materials and computational modeling.
+- Humanoid locomotion involves balancing, coordination, and terrain adaptation
+- Types include static, dynamic walking, running, and climbing
+- Gait planning involves footstep, CoM, ZMP, and joint trajectory planning
+- Control strategies include ZMP-based, MPC, and CPG approaches
+- Balance control uses ankle, hip, and stepping strategies
+- Terrain adaptation handles flat ground, uneven surfaces, stairs, and slopes
+- Energy efficiency involves passive dynamics and optimized trajectories
+- Challenges include computational complexity and environmental uncertainty
+- Applications include assistive devices, search and rescue, and service robotics
+- Future directions involve learning-based and bio-inspired approaches
 
 </div>
 </TabItem>

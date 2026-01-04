@@ -1,0 +1,232 @@
+---
+id: chapter-17
+title: "Tool Use and Dextrous Manipulation"
+module: "Module 3: Manipulation and Grasping Systems"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Tool Use and Dextrous Manipulation
+
+### Introduction to Tool Use and Dextrous Manipulation
+
+Tool use represents one of the most sophisticated forms of manipulation, requiring not only the ability to grasp and control objects but also to understand their function and apply them appropriately to achieve specific goals. Dextrous manipulation involves the precise control of objects and tools with the hands, requiring fine motor skills and coordination.
+
+Key aspects of tool use and dextrous manipulation include:
+
+- **Tool Recognition**: Identifying and understanding different tools
+- **Functional Understanding**: Knowing how to use tools effectively
+- **Grasp Adaptation**: Adjusting grasps based on tool requirements
+- **Force Control**: Applying appropriate forces when using tools
+- **Skill Transfer**: Applying learned skills to new tools and tasks
+
+### Human Tool Use as Inspiration
+
+Human tool use provides the model for robotic systems:
+
+**Tool Recognition**: Humans can identify tools and their functions quickly.
+
+**Functional Understanding**: Understanding the purpose and proper use of tools.
+
+**Grasp Adaptation**: Adjusting hand posture based on tool requirements.
+
+**Force Control**: Applying appropriate forces for different tasks.
+
+**Skill Learning**: Acquiring new tool-use skills through practice.
+
+### Types of Tools and Their Requirements
+
+**Cutting Tools**: Require precise control and appropriate force application.
+
+**Gripping Tools**: Need stable grasps and coordinated manipulation.
+
+**Rotating Tools**: Require rotational control and torque management.
+
+**Striking Tools**: Need impact control and safety considerations.
+
+**Measuring Tools**: Require precision and careful handling.
+
+**Assembly Tools**: Need fine positioning and force control.
+
+### Grasp Adaptation for Tools
+
+**Power Grasps**: Firm grasps for tools requiring significant force.
+
+**Precision Grasps**: Fine grasps for tools requiring precise positioning.
+
+**Hook Grasps**: For carrying tools or objects.
+
+**Lateral Grasps**: For tools requiring side grip.
+
+**Tripod Grasps**: Using thumb and two fingers for precision tasks.
+
+**Cylindrical Grasps**: For tools with cylindrical handles.
+
+### Tool Recognition and Classification
+
+**Visual Recognition**: Using vision to identify tools and their orientation.
+
+**Functional Classification**: Understanding the tool's purpose and use.
+
+**Physical Properties**: Recognizing weight, size, and material properties.
+
+**Contextual Understanding**: Understanding how tools fit into tasks.
+
+**Learning from Experience**: Improving tool recognition over time.
+
+### Force Control in Tool Use
+
+**Impedance Control**: Controlling the mechanical impedance of the hand-tool system.
+
+**Admittance Control**: Controlling the motion response to applied forces.
+
+**Force Limiting**: Preventing excessive forces during tool use.
+
+**Compliance Control**: Adjusting compliance based on task requirements.
+
+**Safety Considerations**: Ensuring safe force application.
+
+### Dextrous Manipulation Techniques
+
+**In-hand Manipulation**: Reorienting objects within the hand without releasing them.
+
+**Regrasping**: Adjusting the grasp during manipulation.
+
+**Multi-finger Coordination**: Coordinating multiple fingers for complex tasks.
+
+**Tactile Feedback**: Using tactile sensing for precise control.
+
+**Visual Servoing**: Using vision to guide manipulation.
+
+### Control Strategies
+
+**Impedance Control**: Adjusting the mechanical impedance for different tasks.
+
+**Adaptive Control**: Adjusting control parameters based on tool properties.
+
+**Learning-based Control**: Using machine learning to improve tool use.
+
+**Model-Based Control**: Using models of tools and tasks for control.
+
+**Hybrid Control**: Combining different control approaches.
+
+### Challenges in Tool Use
+
+**Uncertainty**: Dealing with uncertainty in tool properties and task requirements.
+
+**Safety**: Ensuring safe operation when using potentially dangerous tools.
+
+**Learning**: Developing systems that can learn new tool-use skills.
+
+**Generalization**: Applying learned skills to new tools and tasks.
+
+**Real-time Requirements**: Making decisions quickly enough for responsive behavior.
+
+### Sensory Integration
+
+**Visual Feedback**: Using vision to guide tool use and manipulation.
+
+**Tactile Feedback**: Using tactile sensors for precise control.
+
+**Force Feedback**: Using force sensors to control applied forces.
+
+**Proprioceptive Feedback**: Using joint position sensors for precise control.
+
+**Audio Feedback**: Using sound to detect tool operation status.
+
+### Applications
+
+Tool use and dextrous manipulation have numerous applications:
+
+**Manufacturing**: Using tools for assembly, inspection, and maintenance.
+
+**Healthcare**: Using medical instruments and tools for patient care.
+
+**Construction**: Using construction tools for building and repair.
+
+**Food Preparation**: Using kitchen tools for cooking and food preparation.
+
+**Art and Craft**: Using artistic tools for creative activities.
+
+### Human-Robot Collaboration
+
+**Tool Handover**: Safely transferring tools between humans and robots.
+
+**Collaborative Tool Use**: Using tools together with humans.
+
+**Safety Considerations**: Ensuring safe interaction during tool use.
+
+**Communication**: Non-verbal communication through tool use.
+
+**Trust Building**: Establishing trust through safe tool use.
+
+### Learning and Skill Acquisition
+
+**Imitation Learning**: Learning tool use by observing humans.
+
+**Reinforcement Learning**: Improving tool use through trial and error.
+
+**Transfer Learning**: Applying learned skills to new tools.
+
+**Social Learning**: Learning through interaction with humans.
+
+**Adaptive Control**: Adjusting behavior based on experience.
+
+### Future Directions
+
+The future of tool use and dextrous manipulation includes:
+
+- **Learning-based Approaches**: Using machine learning to improve tool use
+- **Bio-inspired Methods**: More closely mimicking human tool use
+- **Enhanced Sensing**: Better integration of multiple sensory modalities
+- **Human-Robot Collaboration**: Safe and effective tool use with humans
+- **Autonomous Skill Learning**: Robots that learn tool-use skills autonomously
+
+Understanding tool use and dextrous manipulation is essential for creating humanoid robots capable of complex manipulation tasks.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Tool use requires recognition, functional understanding, and appropriate control
+- Human tool use provides model for recognition, adaptation, and skill learning
+- Tool types include cutting, gripping, rotating, striking, measuring, and assembly
+- Grasp adaptation involves power, precision, hook, lateral, tripod, and cylindrical grasps
+- Recognition involves visual, functional, and contextual understanding
+- Force control includes impedance, admittance, and safety considerations
+- Dextrous techniques include in-hand manipulation, regrasping, and coordination
+- Control strategies include impedance, adaptive, and learning-based approaches
+- Challenges include uncertainty, safety, learning, and real-time requirements
+- Applications span manufacturing, healthcare, construction, and food preparation
+
+</div>
+</TabItem>
+</Tabs>

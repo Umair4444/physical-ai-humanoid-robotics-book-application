@@ -1,0 +1,165 @@
+---
+id: chapter-15
+title: "Stereo Vision and Depth Estimation"
+module: "Module 3: Advanced Computer Vision Techniques for Robotics"
+lessonTab: true
+summaryTab: true
+duration: 15
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly>
+  {() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .markdown h1:first-of-type {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }}
+</BrowserOnly>
+
+<Tabs className="tabs-container">
+<TabItem value="lesson" label="Full Lesson" default>
+<div className="lesson-content">
+
+## Lesson: Stereo Vision and Depth Estimation
+
+### Introduction to Stereo Vision
+
+Stereo vision is a technique that mimics human binocular vision to estimate depth information from two or more images of the same scene taken from different viewpoints. In robotics, stereo vision provides crucial depth information that enables robots to understand 3D structure, navigate safely, and manipulate objects with spatial awareness.
+
+The fundamental principle of stereo vision is triangulation: given the position of a point in two different images and the relative positions of the cameras, the 3D position of the point can be determined geometrically.
+
+### Stereo Vision Geometry
+
+#### Camera Model
+In a stereo system, two cameras are positioned with a known baseline distance between them. The optical axes of the cameras are typically parallel, though they can be converged for specific applications.
+
+#### Epipolar Geometry
+Epipolar geometry describes the geometric relationship between two cameras and the corresponding points in their images. The epipolar constraint states that for any point in one image, its corresponding point in the other image must lie on a specific line called the epipolar line.
+
+#### Disparity
+Disparity is the difference in image position of the same 3D point when viewed from two different camera positions. Depth is inversely proportional to disparity: closer objects have larger disparities, while distant objects have smaller disparities.
+
+### Stereo Matching Algorithms
+
+#### Block-based Matching
+Block-based matching algorithms compare small windows (blocks) of pixels between the left and right images to find corresponding points. Common similarity measures include Sum of Absolute Differences (SAD), Sum of Squared Differences (SSD), and Normalized Cross Correlation (NCC).
+
+#### Semi-Global Block Matching (SGBM)
+SGBM improves upon simple block matching by incorporating global consistency constraints. It minimizes a cost function that includes both data terms (matching costs) and smoothness terms (penalties for disparity discontinuities).
+
+#### Graph Cuts
+Graph cut algorithms formulate stereo matching as an energy minimization problem. They use graph-based optimization techniques to find the disparity map that minimizes a global energy function.
+
+#### Belief Propagation
+Belief propagation algorithms use probabilistic inference to estimate disparities. They propagate information about likely disparities throughout the image in an iterative process.
+
+### Depth Estimation Techniques
+
+#### Dense Depth Estimation
+Dense depth estimation computes depth for every pixel in the image. This provides a complete depth map but can be computationally intensive and may produce noisy estimates in textureless regions.
+
+#### Sparse Depth Estimation
+Sparse depth estimation computes depth only for distinctive features in the image. This approach is computationally efficient and robust but provides incomplete depth information.
+
+#### Multi-scale Approaches
+Multi-scale techniques compute depth at multiple resolutions, starting with coarse estimates and refining them at finer scales. This approach can handle large disparities while maintaining accuracy.
+
+### Applications in Robotics
+
+#### Navigation and Obstacle Avoidance
+Stereo vision enables robots to detect obstacles and navigate safely in 3D environments. Depth information helps robots plan collision-free paths and avoid hazards.
+
+#### Manipulation and Grasping
+Robots use stereo vision to determine the 3D position and orientation of objects for precise manipulation and grasping tasks. Accurate depth information is essential for successful interaction with objects.
+
+#### 3D Mapping
+Stereo vision contributes to 3D mapping by providing depth information that can be fused with other sensors to create comprehensive environment models.
+
+#### Human-Robot Interaction
+Depth information from stereo vision helps robots understand spatial relationships with humans, enabling safer and more natural interactions.
+
+### Challenges in Robotic Stereo Vision
+
+#### Computational Complexity
+Stereo matching algorithms can be computationally intensive, especially for real-time applications on resource-constrained robotic platforms.
+
+#### Textureless Regions
+Areas with little texture or repetitive patterns are challenging for stereo matching algorithms, as there may be insufficient information to establish reliable correspondences.
+
+#### Occlusions
+Objects visible in one camera may be occluded in the other, making stereo matching impossible in these regions.
+
+#### Calibration Sensitivity
+Stereo vision systems are sensitive to camera calibration accuracy. Small errors in calibration parameters can lead to significant depth estimation errors.
+
+#### Lighting Conditions
+Performance can degrade under challenging lighting conditions, such as strong backlighting or varying illumination between cameras.
+
+### Deep Learning Approaches
+
+#### Stereo Matching Networks
+Deep learning approaches use convolutional neural networks to learn feature representations for stereo matching. These networks can learn to match features that are difficult for traditional algorithms to handle.
+
+#### End-to-End Depth Estimation
+Some approaches use deep networks to directly estimate depth from stereo images without explicit feature matching. These networks learn to map image pairs to depth maps directly.
+
+#### Multi-view Stereo
+Deep learning approaches can also handle multi-view stereo, where depth is estimated from more than two camera views, potentially improving accuracy and robustness.
+
+### Evaluation Metrics
+
+#### Depth Accuracy
+Depth accuracy is typically measured using metrics such as Root Mean Square Error (RMSE), Mean Absolute Error (MAE), and percentage of pixels with depth errors below a threshold.
+
+#### Processing Speed
+For robotic applications, processing speed is crucial. Metrics include frames per second (FPS) and processing time per frame.
+
+#### Robustness
+Robustness is evaluated by testing performance under various conditions, including different lighting, textures, and environmental conditions.
+
+### Future Directions
+
+#### Real-time Performance
+Future developments will focus on achieving real-time stereo processing on embedded robotic platforms through efficient architectures and hardware acceleration.
+
+#### Learning-based Approaches
+Integration of learning-based methods that can adapt to specific robotic environments and tasks, potentially improving performance in challenging scenarios.
+
+#### Event-based Stereo
+Using event cameras for stereo vision, which could provide high temporal resolution depth estimation with low latency.
+
+#### Multi-modal Fusion
+Combining stereo vision with other depth sensing modalities (e.g., LiDAR, structured light) to improve robustness and accuracy.
+
+Understanding stereo vision and depth estimation is essential for developing robots with rich 3D perception capabilities.
+
+</div>
+</TabItem>
+<TabItem value="summary" label="Summary">
+<div className="summary-content">
+
+## Summary
+
+- Stereo vision estimates depth using images from multiple viewpoints, mimicking human binocular vision.
+- Key concepts include epipolar geometry, disparity, and triangulation.
+- Stereo matching algorithms include block-based matching, SGBM, graph cuts, and belief propagation.
+- Applications in robotics include navigation, manipulation, 3D mapping, and human-robot interaction.
+- Challenges include computational complexity, textureless regions, and calibration sensitivity.
+- Deep learning approaches offer new possibilities for stereo matching and depth estimation.
+- Evaluation metrics include depth accuracy, processing speed, and robustness.
+- Future directions include real-time performance and multi-modal fusion.
+
+</div>
+</TabItem>
+</Tabs>

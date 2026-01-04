@@ -1,6 +1,6 @@
 ---
 id: chapter-10
-title: "Dynamic Walking and Gait Generation"
+title: "Balance and Stability Control in Legged Systems"
 module: "Module 2: Legged Locomotion and Bipedal Walking"
 lessonTab: true
 summaryTab: true
@@ -31,342 +31,253 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 <TabItem value="lesson" label="Full Lesson" default>
 <div className="lesson-content">
 
-## Lesson: Dynamic Walking and Gait Generation
-
-### Introduction to Dynamic Walking
-
-Dynamic walking is a form of locomotion that relies on the dynamic properties of the system to achieve efficient and stable movement. Unlike static walking, where the center of mass is always positioned within the support polygon, dynamic walking allows the center of mass to move outside the support base, relying on active control and dynamic effects to maintain stability. This approach can result in more human-like, energy-efficient, and faster walking patterns.
-
-Dynamic walking principles include:
-- **Dynamic balance**: Maintaining balance through controlled motion
-- **Passive dynamics**: Utilizing natural dynamics for efficient movement
-- **Active control**: Using control systems to maintain stability
-- **Energy efficiency**: Minimizing energy consumption through dynamic effects
-
-### Passive Dynamic Walking
-
-#### Principles of Passive Dynamic Walking
-Walking based on the natural dynamics of the system without active control:
-
-**Inverted pendulum mechanics**:
-- **Single support**: Leg behaves like an inverted pendulum during stance
-- **Energy conservation**: Energy exchange between potential and kinetic energy
-- **Natural frequency**: System has a natural walking frequency
-- **Gravity utilization**: Using gravity to assist forward progression
-
-**Limit cycle walking**:
-- **Stable periodic motion**: System converges to stable periodic gait
-- **Energy input**: Minimal energy needed to maintain gait
-- **Robustness**: Inherent stability to small disturbances
-- **Speed control**: Speed controlled by slope or energy input
-
-#### Advantages of Passive Dynamics
-Benefits of utilizing natural system dynamics:
-
-**Energy efficiency**: 
-- **Minimal actuation**: Reduced need for active actuation
-- **Natural motion**: Movement follows natural system dynamics
-- **Energy storage**: Utilizing elastic elements for energy storage
-- **Optimal trajectories**: Natural trajectories are often optimal
-
-**Stability**:
-- **Inherent stability**: Natural dynamics provide stability
-- **Robustness**: Stable to small disturbances
-- **Predictable behavior**: Natural dynamics are well understood
-- **Simple control**: Reduced control complexity
-
-#### Limitations of Passive Walking
-Constraints of purely passive approaches:
-
-**Terrain limitations**:
-- **Flat surfaces**: Works best on flat, even surfaces
-- **Obstacle sensitivity**: Sensitive to terrain variations
-- **Slope dependence**: Speed depends on terrain slope
-- **Surface conditions**: Sensitive to surface properties
-
-**Control limitations**:
-- **Speed control**: Limited ability to control walking speed
-- **Direction control**: Limited ability to change direction
-- **Disturbance rejection**: Limited ability to handle large disturbances
-- **Adaptability**: Limited adaptability to changing conditions
-
-### Active Dynamic Walking
-
-#### Controlled Dynamic Walking
-Combining passive dynamics with active control:
-
-**Active energy input**:
-- **Actuator control**: Using actuators to add energy to the system
-- **Timing control**: Controlling when energy is added
-- **Magnitude control**: Controlling how much energy is added
-- **Optimization**: Optimizing energy input for efficiency
-
-**Active balance control**:
-- **Feedback control**: Using sensor feedback for balance
-- **Predictive control**: Predicting and preventing balance loss
-- **Adaptive control**: Adapting to changing conditions
-- **Robust control**: Maintaining stability despite uncertainties
-
-#### Gait Generation Approaches
-Methods for generating dynamic walking gaits:
-
-**Trajectory optimization**:
-- **Direct collocation**: Discretizing continuous trajectories
-- **Pseudospectral methods**: Using orthogonal polynomials
-- **Multiple shooting**: Dividing trajectory into segments
-- **Optimization criteria**: Minimizing energy, maximizing stability
-
-**Model-based control**:
-- **Inverted pendulum models**: Using simplified models for control
-- **Linear inverted pendulum**: Linearized models for easier control
-- **Spring-mass models**: Incorporating leg compliance
-- **Predictive control**: Using models for predictive control
-
-### Gait Generation Techniques
-
-#### Zero Moment Point (ZMP) Based Walking
-Using ZMP as the primary control variable:
-
-**ZMP reference generation**:
-- **Foot placement**: Determining where feet should be placed
-- **ZMP trajectory**: Planning ZMP trajectory for stability
-- **Timing control**: Controlling step timing and duration
-- **Smooth transitions**: Ensuring smooth ZMP transitions
-
-**Whole-body motion control**:
-- **CoM control**: Controlling center of mass motion
-- **Angular momentum**: Managing whole-body angular momentum
-- **Posture control**: Maintaining stable posture
-- **Coordination**: Coordinating all body parts
-
-#### Capture Point Based Walking
-Using capture point for gait generation:
-
-**Capture point planning**:
-- **Step location**: Planning where to place feet
-- **Balance recovery**: Ensuring stability through stepping
-- **Predictive control**: Using capture point for prediction
-- **Stability margins**: Maintaining stability margins
-
-**Dynamic balance**: 
-- **CoM control**: Controlling center of mass dynamics
-- **Momentum management**: Managing linear and angular momentum
-- **Step timing**: Controlling when to take steps
-- **Recovery planning**: Planning for balance recovery
-
-#### Spring-Loaded Inverted Pendulum (SLIP) Based Walking
-Incorporating leg compliance in gait generation:
-
-**Compliant leg model**:
-- **Spring behavior**: Modeling leg as a spring
-- **Energy storage**: Utilizing elastic energy storage
-- **Impact absorption**: Absorbing impact forces
-- **Natural dynamics**: Exploiting natural leg dynamics
-
-**SLIP control**:
-- **Apex control**: Controlling motion at flight apex
-- **Touchdown control**: Controlling leg placement at touchdown
-- **Energy management**: Managing energy throughout gait cycle
-- **Stability**: Ensuring stable periodic motion
-
-### Central Pattern Generators (CPGs)
-
-#### Biological Inspiration
-Learning from biological neural networks:
-
-**Neural oscillators**:
-- **Rhythmic patterns**: Generating rhythmic movement patterns
-- **Phase relationships**: Maintaining phase relationships between joints
-- **Adaptability**: Adapting to different speeds and conditions
-- **Robustness**: Maintaining function despite disturbances
-
-**Network properties**:
-- **Coupling**: Connections between oscillators
-- **Synchronization**: Coordinated activity across network
-- **Plasticity**: Ability to learn and adapt
-- **Modulation**: Adjusting patterns based on inputs
-
-#### CPG Implementation in Robotics
-Implementing CPG concepts in robot control:
-
-**Oscillator networks**:
-- **Half-center oscillators**: Simple two-neuron networks
-- **Ring networks**: Networks for multi-joint coordination
-- **Chain networks**: Networks for sequential activation
-- **Adaptive networks**: Networks that learn and adapt
-
-**Control integration**:
-- **Sensory feedback**: Incorporating sensory information
-- **Higher-level control**: Integrating with higher-level commands
-- **Learning mechanisms**: Incorporating learning capabilities
-- **Modulation**: Adjusting patterns based on context
-
-### Advanced Gait Generation Methods
-
-#### Machine Learning Approaches
-Using learning methods for gait generation:
-
-**Reinforcement learning**:
-- **Reward functions**: Defining rewards for good walking
-- **Policy learning**: Learning optimal walking policies
-- **Exploration**: Exploring different walking strategies
-- **Generalization**: Learning to generalize to new conditions
-
-**Imitation learning**:
-- **Demonstration learning**: Learning from expert demonstrations
-- **Behavioral cloning**: Cloning demonstrated behavior
-- **Inverse reinforcement learning**: Learning reward functions
-- **Transfer learning**: Transferring learning to new robots
-
-**Neural networks**:
-- **Recurrent networks**: Networks for temporal sequences
-- **Reservoir computing**: Using fixed networks with trainable readouts
-- **Deep reinforcement learning**: Combining deep learning with RL
-- **Generative models**: Learning to generate gait patterns
-
-#### Optimization-Based Approaches
-Using mathematical optimization for gait generation:
-
-**Nonlinear optimization**:
-- **Trajectory optimization**: Optimizing complete movement trajectories
-- **Model predictive control**: Optimizing over prediction horizon
-- **Multi-objective optimization**: Balancing multiple objectives
-- **Constraint handling**: Managing physical and stability constraints
-
-**Evolutionary algorithms**:
-- **Genetic algorithms**: Evolving gait parameters
-- **Genetic programming**: Evolving gait generation programs
-- **Multi-objective evolution**: Evolving for multiple objectives
-- **Co-evolution**: Evolving multiple components together
-
-### Gait Adaptation and Learning
-
-#### Terrain Adaptation
-Adapting gait to different terrains:
-
-**Terrain classification**:
-- **Visual analysis**: Using vision to classify terrain
-- **Force sensing**: Using force sensors to detect terrain properties
-- **Acoustic sensing**: Using sound to detect terrain
-- **Machine learning**: Learning to classify terrain
-
-**Adaptive control**:
-- **Parameter adjustment**: Adjusting gait parameters based on terrain
-- **Pattern selection**: Selecting appropriate gait patterns
-- **Learning adaptation**: Learning to adapt to new terrains
-- **Robust control**: Maintaining stability despite terrain changes
-
-#### Disturbance Recovery
-Recovering from external disturbances:
-
-**Disturbance detection**:
-- **State monitoring**: Monitoring robot state for disturbances
-- **Model-based detection**: Using models to detect deviations
-- **Anomaly detection**: Detecting unexpected behavior
-- **Predictive detection**: Predicting potential disturbances
-
-**Recovery strategies**:
-- **Reactive control**: Reacting to detected disturbances
-- **Predictive control**: Predicting and preventing instability
-- **Recovery gaits**: Specialized gaits for recovery
-- **Learning recovery**: Learning effective recovery strategies
-
-### Gait Evaluation and Metrics
-
-#### Performance Metrics
-Quantifying gait quality:
-
-**Stability metrics**:
-- **ZMP margin**: Distance to stability boundaries
-- **Capture point margin**: Stability margins for recovery
-- **Floquet multipliers**: Stability of periodic orbits
-- **Lyapunov exponents**: Measures of dynamic stability
-
-**Efficiency metrics**:
-- **Cost of transport**: Energy per unit distance and weight
-- **Power consumption**: Rate of energy consumption
-- **Mechanical efficiency**: How efficiently energy is used
-- **Control efficiency**: Efficiency of control algorithms
-
-#### Quality Metrics
-Assessing gait quality beyond stability and efficiency:
-
-**Smoothness**: How smooth the motion appears:
-- **Jerk minimization**: Minimizing rate of acceleration change
-- **Naturalness**: How natural the motion appears
-- **Harmonicity**: Coordination between different body parts
-
-**Human-likeness**: How similar to human gait:
-- **Kinematic similarity**: Similarity to human joint patterns
-- **Kinetic similarity**: Similarity to human force patterns
-- **Temporal similarity**: Similarity to human timing patterns
-- **Energetic similarity**: Similarity to human energy patterns
-
-### Implementation Challenges
-
-#### Computational Complexity
-Managing computational requirements:
-
-**Real-time constraints**:
-- **Control frequency**: Need for high-frequency control updates
-- **Computation time**: Algorithms must complete within time constraints
-- **Prediction requirements**: Need for fast, accurate predictions
-- **Optimization**: Solving optimization problems in real-time
-
-**Model complexity**:
-- **High-dimensional models**: Many degrees of freedom to control
-- **Nonlinear dynamics**: Complex nonlinear equations
-- **Multi-body systems**: Interactions between multiple bodies
-- **Contact mechanics**: Complex contact and impact models
-
-#### Hardware Limitations
-Working within hardware constraints:
-
-**Actuator limitations**:
-- **Torque limits**: Maximum torque that actuators can provide
-- **Speed limits**: Maximum speed of actuators
-- **Power limits**: Maximum power consumption allowed
-- **Backlash and friction**: Non-ideal actuator behavior
-
-**Sensor limitations**:
-- **Noise and drift**: Imperfect sensor measurements
-- **Latency**: Delay in sensor measurements
-- **Accuracy**: Limited measurement accuracy
-- **Reliability**: Sensor failures and malfunctions
+## Lesson: Balance and Stability Control in Legged Systems
+
+### Introduction to Balance and Stability Control
+
+Balance and stability control are critical for the successful operation of legged robotic systems. Unlike wheeled systems that maintain continuous contact with the ground, legged robots must manage dynamic balance during locomotion, making stability control significantly more complex. Effective balance control enables legged robots to operate safely and efficiently in various environments while maintaining stability during movement and in response to disturbances.
+
+Key aspects of balance and stability control in legged systems include:
+
+- **Dynamic Balance**: Maintaining stability during active movement
+- **Disturbance Recovery**: Recovering from unexpected perturbations
+- **Multi-contact Transitions**: Managing transitions between different contact states
+- **Real-time Control**: Meeting strict timing requirements for stable locomotion
+- **Energy Efficiency**: Maintaining balance while minimizing energy consumption
+
+### Mathematical Foundations
+
+**Zero Moment Point (ZMP)**: A fundamental concept for balance control in legged systems.
+
+- **Definition**: Point where the sum of moments of active forces equals zero
+- **Stability Condition**: ZMP must remain within the support polygon
+- **Calculation**: ZMP = (x + h/g * ẍ, y + h/g * ÿ) where h is height, g is gravity
+- **Application**: Used extensively in bipedal robot control
+- **Limitations**: May not be sufficient for all dynamic conditions
+
+**Capture Point**: A point where the robot can step to stop its momentum.
+
+- **Definition**: Point where the robot can step to come to a stop
+- **Calculation**: Capture Point = CoM position + CoM velocity * √(h/g)
+- **Application**: Used for dynamic balance and gait planning
+- **Advantage**: More intuitive than ZMP for some applications
+- **Limitations**: Assumes linear inverted pendulum model
+
+**Linear Inverted Pendulum Model (LIPM)**: A simplified model for balance analysis.
+
+- **Assumptions**: Constant height, point mass, linearized dynamics
+- **Equations**: ẍ = g/h * (x - zmp), ÿ = g/h * (y - zmp)
+- **Simplicity**: Allows for analytical solutions
+- **Applications**: Used for gait planning and balance control
+- **Limitations**: Simplified assumptions may not hold in practice
+
+**Cart-Table Model**: An extension of LIPM that includes vertical motion.
+
+- **Vertical Motion**: Allows for changes in center of mass height
+- **Applications**: Useful for robots that change height during locomotion
+- **Complexity**: More complex than LIPM but more realistic
+- **Control**: Enables more sophisticated balance strategies
+- **Flexibility**: Better represents real-world balance scenarios
+
+### Balance Control Strategies
+
+**Ankle Strategy**: Using ankle joints as pivot points to maintain balance for small disturbances.
+
+- **Inverted Pendulum**: Model where body sways over fixed feet
+- **Ankle Torques**: Torques applied at ankle joints to maintain balance
+- **Small Disturbances**: Effective for small perturbations
+- **Limitations**: Limited effectiveness for large disturbances
+- **Energy Efficiency**: Generally more energy efficient than other strategies
+
+**Hip Strategy**: Using hip joints to maintain balance for larger disturbances.
+
+- **Body Sway**: Moving the upper body to counteract disturbances
+- **Hip Torques**: Torques applied at hip joints
+- **Larger Disturbances**: Effective for larger perturbations than ankle strategy
+- **Energy Consumption**: Generally higher energy consumption than ankle strategy
+- **Coordination**: Requires coordination with other joints
+
+**Stepping Strategy**: Taking a step to expand the support base when other strategies are insufficient.
+
+- **Recovery Step**: Taking a step to prevent a fall
+- **Step Location**: Determining where to place the recovery step
+- **Timing**: When to initiate the recovery step
+- **Effectiveness**: Most effective for large disturbances
+- **Recovery Time**: May require significant time to recover
+
+**Suspension Strategy**: Using arm movements and other body parts to help maintain balance.
+
+- **Arm Swinging**: Using arm movements to counteract disturbances
+- **Trunk Movement**: Using torso movement for balance
+- **Coordination**: Coordinating multiple body parts for balance
+- **Complementary**: Often used with other strategies
+- **Flexibility**: Provides additional balance control options
+
+### Control Approaches
+
+**Feedback Control**: Using sensor measurements to adjust the robot's posture.
+
+- **Proportional Control**: Control action proportional to error
+- **PID Control**: Proportional-Integral-Derivative control
+- **State Feedback**: Using complete state information for control
+- **Stability**: Ensures stable response to disturbances
+- **Implementation**: Relatively straightforward to implement
+
+**Feedforward Control**: Anticipating disturbances and adjusting posture proactively.
+
+- **Predictive Control**: Predicting future states and adjusting accordingly
+- **Gait Planning**: Planning balance adjustments in advance
+- **Disturbance Anticipation**: Anticipating known disturbances
+- **Performance**: Can provide better performance than feedback alone
+- **Model Dependency**: Requires accurate models of the system
+
+**Impedance Control**: Controlling the robot's mechanical impedance.
+
+- **Stiffness Control**: Adjusting how the robot responds to forces
+- **Damping Control**: Conting energy dissipation
+- **Adaptive Impedance**: Adjusting impedance based on conditions
+- **Safety**: Provides inherent safety through compliance
+- **Flexibility**: Allows for variable interaction characteristics
+
+**Model Predictive Control (MPC)**: Using models to predict and optimize future behavior.
+
+- **Prediction Horizon**: How far ahead the controller looks
+- **Optimization**: Optimizing future behavior based on model
+- **Constraints**: Handling constraints on states and inputs
+- **Computational Requirements**: Higher computational requirements
+- **Performance**: Can provide excellent performance with proper tuning
+
+### Multi-legged Balance Control
+
+**Quadrupedal Balance**: Balance strategies for four-legged robots.
+
+- **Support Polygon**: Larger support polygon provides more stability
+- **Gait Adaptation**: Adjusting gaits for balance requirements
+- **Load Distribution**: Distributing weight across four legs
+- **Redundancy**: Ability to maintain balance with fewer legs
+- **Terrain Adaptation**: Better adaptation to uneven terrain
+
+**Hexapodal Balance**: Balance strategies for six-legged robots.
+
+- **Tripod Gait**: Very stable gait with three legs always in contact
+- **Fault Tolerance**: Ability to continue operation with damaged legs
+- **Stability**: High stability with multiple contact points
+- **Complexity**: More complex coordination requirements
+- **Energy**: Higher energy consumption due to more legs
+
+**Multi-contact Transitions**: Managing transitions between different contact states.
+
+- **Liftoff**: Controlling the transition from contact to swing phase
+- **Touchdown**: Controlling the transition from swing to contact phase
+- **Impact Mitigation**: Reducing impact forces during contact transitions
+- **Smooth Transitions**: Ensuring smooth transitions between states
+- **Stability Maintenance**: Maintaining stability during transitions
+
+### Sensory Integration for Balance
+
+**Inertial Measurement Units (IMUs)**: Providing information about orientation and acceleration.
+
+- **Gyroscopes**: Measure angular velocity
+- **Accelerometers**: Measure linear acceleration
+- **Orientation**: Determine body orientation relative to gravity
+- **Integration**: Combine measurements to estimate state
+- **Drift Correction**: Correcting for sensor drift over time
+
+**Force/Torque Sensors**: Measuring ground reaction forces and joint torques.
+
+- **Foot Sensors**: Measure forces at contact points
+- **ZMP Calculation**: Calculate ZMP from force measurements
+- **Contact Detection**: Detect when contact occurs
+- **Slip Detection**: Detect when feet slip
+- **Load Distribution**: Understanding how weight is distributed
+
+**Proprioceptive Sensors**: Providing information about joint positions and velocities.
+
+- **Encoders**: Measure joint angles
+- **Joint Position**: Determine robot configuration
+- **Velocity Estimation**: Estimate joint velocities
+- **State Estimation**: Combine with other sensors for complete state
+- **Calibration**: Ensuring accurate sensor measurements
+
+**Vision Systems**: Providing information about the environment and relative position.
+
+- **Visual Odometry**: Estimate motion using visual information
+- **Obstacle Detection**: Detect obstacles that might affect balance
+- **Terrain Analysis**: Analyze terrain for safe foot placement
+- **External Reference**: Use visual landmarks for orientation
+- **Depth Information**: Understanding 3D environment structure
+
+### Challenges in Balance Control
+
+**Real-time Requirements**: Balance control must operate with very strict timing constraints.
+
+- **Control Frequency**: Balance control often requires high-frequency updates
+- **Computation Time**: Calculations must complete within time constraints
+- **Sensor Latency**: Delays in sensor measurements affect control
+- **Actuator Dynamics**: Delays in actuator response affect control
+- **System Integration**: Coordinating multiple systems within timing constraints
+
+**Model Uncertainty**: Real robots differ from their mathematical models.
+
+- **Parameter Errors**: Errors in mass, inertia, and other parameters
+- **Unmodeled Dynamics**: Dynamics not included in the model
+- **Environmental Uncertainty**: Uncertainty about the environment
+- **Adaptation**: Systems that adapt to model errors
+- **Robustness**: Maintaining stability despite model errors
+
+**Environmental Disturbances**: Robots must operate in environments with disturbances.
+
+- **External Forces**: Pushes, pulls, and other external forces
+- **Terrain Variations**: Uneven or changing terrain
+- **Dynamic Environments**: Moving obstacles or changing conditions
+- **Robustness**: Systems that maintain stability despite disturbances
+- **Recovery**: Ability to recover from disturbances
+
+**Multi-contact Scenarios**: Balance during complex contact situations.
+
+- **Multiple Support Points**: When the robot has multiple contact points
+- **Changing Contacts**: When contacts are made or broken
+- **Contact Forces**: Managing forces at multiple contact points
+- **Complexity**: Significantly more complex than single contact
+- **Transitions**: Managing transitions between contact states
+
+### Applications of Balance Control
+
+**Humanoid Robotics**: Balance in two-legged robots.
+
+- **Bipedal Walking**: Maintaining balance during two-legged locomotion
+- **Human Interaction**: Maintaining balance during human interaction
+- **Manipulation**: Balancing while manipulating objects
+- **Stair Climbing**: Maintaining balance on stairs and steps
+- **Obstacle Negotiation**: Balancing while avoiding obstacles
+
+**Quadrupedal Robotics**: Balance in four-legged robots.
+
+- **Rough Terrain**: Maintaining balance on uneven surfaces
+- **Dynamic Gaits**: High-speed gaits that require dynamic balance
+- **Load Carrying**: Maintaining balance while carrying loads
+- **Human Interaction**: Balancing during physical human-robot interaction
+- **Search and Rescue**: Balancing in challenging environments
+
+**Assistive Technologies**: Balance in devices that assist human mobility.
+
+- **Exoskeletons**: Maintaining balance in wearable devices
+- **Prosthetics**: Balance control in artificial limbs
+- **Rehabilitation**: Balance training and assistance devices
+- **Mobility Aids**: Devices that assist with human balance
+- **Therapeutic Applications**: Balance therapy and training
 
 ### Future Directions
 
-#### Advanced Control Methods
-Emerging control approaches:
+The future of balance and stability control in legged systems includes:
 
-**Bio-inspired control**:
-- **Neuromorphic computing**: Brain-inspired computing for control
-- **Synaptic plasticity**: Learning through synaptic changes
-- **Hierarchical control**: Multiple levels of control
-- **Emergent behavior**: Complex behavior from simple rules
+- **Learning-based Control**: Using machine learning to improve balance
+- **Bio-inspired Approaches**: More closely mimicking biological balance systems
+- **Adaptive Systems**: Systems that adapt to changing conditions
+- **Human-Robot Collaboration**: Balancing during physical human-robot interaction
+- **Swarm Robotics**: Coordinated balance in multi-robot systems
 
-**Hybrid approaches**:
-- **Model-free learning**: Learning without explicit models
-- **Model-based learning**: Combining models with learning
-- **Hierarchical optimization**: Multi-level optimization
-- **Adaptive autonomy**: Adapting level of autonomy
-
-#### New Technologies
-Emerging technologies for dynamic walking:
-
-**Advanced actuators**:
-- **Artificial muscles**: Actuators that behave like biological muscles
-- **Variable impedance**: Actuators with controllable stiffness
-- **Series elastic**: Improved series elastic actuators
-- **Fluidic actuators**: Pneumatic and hydraulic systems
-
-**Advanced sensing**:
-- **Tactile sensing**: Advanced touch sensing for ground contact
-- **Proprioceptive sensing**: Better sensing of robot state
-- **Environmental sensing**: Enhanced perception of environment
-- **Predictive sensing**: Sensing that predicts future states
-
-Dynamic walking and gait generation are critical for creating efficient and stable bipedal robots.
+Understanding balance and stability control is essential for creating legged robots that can operate safely and effectively in real-world environments.
 
 </div>
 </TabItem>
@@ -375,16 +286,15 @@ Dynamic walking and gait generation are critical for creating efficient and stab
 
 ## Summary
 
-- Dynamic walking uses system dynamics for efficient, stable movement.
-- Passive dynamic walking relies on natural system dynamics.
-- Active dynamic walking combines passive dynamics with active control.
-- Gait generation techniques include ZMP, capture point, and SLIP methods.
-- Central pattern generators provide rhythmic movement patterns.
-- Advanced methods use machine learning and optimization.
-- Adaptation includes terrain adaptation and disturbance recovery.
-- Evaluation uses stability, efficiency, and quality metrics.
-- Challenges include computational complexity and hardware limitations.
-- Future directions involve bio-inspired control and new technologies.
+- Balance control is critical for legged robot stability and safety
+- Mathematical foundations include ZMP, capture point, and LIPM
+- Control strategies include ankle, hip, stepping, and suspension approaches
+- Control approaches involve feedback, feedforward, and MPC methods
+- Multi-legged systems offer enhanced stability and redundancy
+- Sensory integration involves IMUs, force sensors, and proprioception
+- Challenges include real-time requirements and model uncertainty
+- Applications span humanoid, quadrupedal, and assistive robotics
+- Future directions involve learning-based and bio-inspired approaches
 
 </div>
 </TabItem>
