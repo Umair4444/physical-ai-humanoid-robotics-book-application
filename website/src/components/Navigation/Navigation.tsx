@@ -58,7 +58,14 @@ const Navigation: React.FC = () => {
         {/* Logo - Always visible */}
         <div className={styles.navLogo}>
           <Link to="/" aria-label="Home">
-            <span className={styles.logoText}>AI Robotics</span>
+            <div className={styles.logoContainer}>
+              <img
+                src="/img/book-1.png"
+                alt="AI Robotics Book Logo"
+                className={styles.logoImage}
+              />
+              <span className={styles.logoText}>AI Robotics</span>
+            </div>
           </Link>
         </div>
 

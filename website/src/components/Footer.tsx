@@ -104,7 +104,13 @@ const Footer: React.FC = () => {
           {/* Brand and Description */}
           <div className={styles.footerBrandSection}>
             <h3 className={styles.footerBrandTitle}>
-              <span className="mr-2">🤖</span>
+              <img
+                src="/img/book-1.png"
+                alt="Book Icon"
+                className={styles.footerBrandIcon}
+                width="32"
+                height="32"
+              />
               <span className={styles.footerBrandTitleGradient}>
                 AI Robotics
               </span>

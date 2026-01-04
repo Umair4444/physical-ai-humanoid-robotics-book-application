@@ -46,6 +46,18 @@
   align-items: center;
 }
 
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoImage {
+  height: 2rem;
+  width: auto;
+  max-width: 2rem;
+}
+
 .logoText {
   font-weight: bold;
   font-size: 1.2rem;
@@ -53,6 +65,18 @@
   text-decoration: none;
   padding: 0px 6px;
 }
+
+/* Mobile styles - hide text, show only logo */
+@media (max-width: 540px) {
+  .logoText {
+    display: none;
+  }
+
+  .logoContainer {
+    gap: 0;
+  }
+}
+
 
 .navActions {
   display: flex;

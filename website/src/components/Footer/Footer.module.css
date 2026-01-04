@@ -33,6 +33,16 @@
   align-items: center;
 }
 
+.footerBrandIcon {
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.footerBrandIcon:hover {
+  transform: scale(1.1);
+}
+
 .footerBrandTitleGradient {
   background: linear-gradient(90deg, #2563EB 0%, #DC2626 100%); /* Blue to Red gradient for AI Robotics theme */
   -webkit-background-clip: text;
