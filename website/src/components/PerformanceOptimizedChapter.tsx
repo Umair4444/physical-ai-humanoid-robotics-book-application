@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { ChapterLayout } from './ChapterLayout';
-import { ContentService } from '../services/ContentService';
+import { ContentService } from '../services/contentService';
 import { Chapter } from '../types/module';
-import { ChapterContent } from '../services/ContentService';
+import { ChapterContent } from '../services/contentService';
 
 // Function to convert ChapterContent to Chapter type for compatibility with existing components
 function adaptChapterContentToChapter(chapterContent: ChapterContent): Chapter {

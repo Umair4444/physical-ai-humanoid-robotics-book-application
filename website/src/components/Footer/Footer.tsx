@@ -1,7 +1,7 @@
 import React from 'react';
-import { useTheme } from '../contexts/ThemeContext';
-import { useLanguage } from '../contexts/LanguageContext';
-import styles from './Footer/Footer.module.css';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useLanguage } from '../../contexts/LanguageContext';
+import styles from './Footer.module.css';
 
 // SVG Icons for social media
 const TwitterIcon = () => (
