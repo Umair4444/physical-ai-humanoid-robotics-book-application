@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import Footer from './Footer';
+import Footer from '@site/src/components/Footer/Footer';
 import { ThemeApplier } from './ThemeApplier/ThemeApplier';
 import Navigation from './Navigation/Navigation';
 import ScrollTopButton from './ScrollButton/ScrollTopButton';
